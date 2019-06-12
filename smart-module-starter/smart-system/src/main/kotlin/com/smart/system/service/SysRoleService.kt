@@ -7,9 +7,9 @@ import com.smart.system.model.SysUserDO
 /**
  *
  * @author ming
- * 2019/6/12 下午2:31
+ * 2019/6/12 下午3:48
  */
-interface SysUserService : BaseService<SysUserDO> {
+interface SysRoleService : BaseService<SysRoleDO> {
 
-    fun queryUserRole(userIdList: List<String>): Map<String, List<SysRoleDO>>
+    fun queryRoleUser(roleIdList: List<String>): Map<String, List<SysUserDO>>
 }

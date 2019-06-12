@@ -14,6 +14,10 @@ import java.util.*
 @TableName("sys_user")
 class SysUserDO : BaseModel() {
 
+    companion object {
+        private const val serialVersionUID = 1560324095977L
+    }
+
     @TableId(type = IdType.UUID)
     var userId: String? = null
 
@@ -39,7 +43,7 @@ class SysUserDO : BaseModel() {
 
     var createUserId: String? = null
 
-    var createTime: Date? = null
+    var createTime: Date = Date()
 
     var updateUserId: String? = null
 
