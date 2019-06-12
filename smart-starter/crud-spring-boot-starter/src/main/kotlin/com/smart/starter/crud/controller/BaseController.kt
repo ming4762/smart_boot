@@ -60,9 +60,9 @@ open class BaseController<K : BaseService<T>, T : BaseModel> {
             val page = this.doPage(parameters)
             val wrapper = MybatisUtil.createQueryWrapperFromParameters<T>(parameters, this.getModelType())
             // 添加keyword查询
-            val keyword = parameters[keywordField] as String
+            val keyword = parameters[keywordField] as String?
             if (!StringUtils.isEmpty(keyword)) {
-                this.addKeyword(wrapper, keyword)
+                this.addKeyword(wrapper, keyword!!)
             }
             val data = this.service.list(wrapper, parameters, page != null)
             if (page != null) {
@@ -212,9 +212,9 @@ open class BaseController<K : BaseService<T>, T : BaseModel> {
      * @return 排序字段
      */
     protected fun analysisOrder(parameters: Map<String, Any?>): String? {
-        val sortName = parameters[SORT_NAME] as String
+        val sortName = parameters[SORT_NAME] as String?
         if (!StringUtils.isEmpty(sortName)) {
-            val sortOrder = parameters[SORT_ORDER] as String
+            val sortOrder = parameters[SORT_ORDER] as String?
             // 解析数据库字段
             val orderMessage = StringBuilder()
 
