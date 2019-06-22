@@ -55,7 +55,7 @@ open class BaseController<K : BaseService<T>, T : BaseModel> {
      */
     @RequestMapping("list")
     @ResponseBody
-    protected fun list(@RequestBody parameters: Map<String, Any?>): Result<Any?> {
+    protected open fun list(@RequestBody parameters: Map<String, Any?>): Result<Any?> {
         try {
             val page = this.doPage(parameters)
             val wrapper = MybatisUtil.createQueryWrapperFromParameters<T>(parameters, this.getModelType())
@@ -84,7 +84,7 @@ open class BaseController<K : BaseService<T>, T : BaseModel> {
      */
     @RequestMapping("/delete")
     @ResponseBody
-    protected fun delete(@RequestBody deleteObject: T): Result<Int?> {
+    protected open fun delete(@RequestBody deleteObject: T): Result<Int?> {
         try {
             return Result.success(this.service.delete(deleteObject))
         } catch (e: Exception) {
@@ -99,7 +99,7 @@ open class BaseController<K : BaseService<T>, T : BaseModel> {
      */
     @RequestMapping("/get")
     @ResponseBody
-    protected operator fun get(@RequestBody t: T): Result<T?> {
+    protected open operator fun get(@RequestBody t: T): Result<T?> {
         try {
             return Result.success(this.service.get(t))
         } catch (e: Exception) {
@@ -114,7 +114,7 @@ open class BaseController<K : BaseService<T>, T : BaseModel> {
      */
     @RequestMapping("/saveUpdate")
     @ResponseBody
-    protected fun saveUpdate(@RequestBody t: T): Result<Any?> {
+    protected open fun saveUpdate(@RequestBody t: T): Result<Any?> {
         try {
             return Result.success(this.service.saveOrUpdate(t))
         } catch (e: Exception) {
@@ -130,7 +130,7 @@ open class BaseController<K : BaseService<T>, T : BaseModel> {
      */
     @RequestMapping("/save")
     @ResponseBody
-    protected fun save(@RequestBody t: T): Result<Boolean?> {
+    protected open fun save(@RequestBody t: T): Result<Boolean?> {
         try {
             return Result.success(this.service.save(t))
         } catch (e: Exception) {
@@ -145,7 +145,7 @@ open class BaseController<K : BaseService<T>, T : BaseModel> {
      */
     @RequestMapping("/batchSave")
     @ResponseBody
-    protected fun batchSave(@RequestBody tList: List<T>): Result<Boolean?> {
+    protected open fun batchSave(@RequestBody tList: List<T>): Result<Boolean?> {
         try {
             return Result.success(this.service.saveBatch(tList))
         } catch (e: Exception) {
@@ -160,7 +160,7 @@ open class BaseController<K : BaseService<T>, T : BaseModel> {
      */
     @RequestMapping("/update")
     @ResponseBody
-    protected fun update(@RequestBody t: T): Result<Boolean?> {
+    protected open fun update(@RequestBody t: T): Result<Boolean?> {
         try {
             return Result.success(this.service.updateById(t))
         } catch (e: Exception) {
@@ -177,12 +177,12 @@ open class BaseController<K : BaseService<T>, T : BaseModel> {
      */
     @RequestMapping("/batchDelete")
     @ResponseBody
-    protected fun batchDelete(@RequestBody deleteObjects: List<T>): Result<Any?> {
-        try {
-            return Result.success(this.service.batchDelete(deleteObjects))
+    protected open fun batchDelete(@RequestBody deleteObjects: List<T>): Result<Any?> {
+        return try {
+            Result.success(this.service.batchDelete(deleteObjects))
         } catch (e: Exception) {
             e.printStackTrace()
-            return Result.failure("批量删除时发生错误", 0)
+            Result.failure("批量删除时发生错误", 0)
         }
 
     }
@@ -192,7 +192,7 @@ open class BaseController<K : BaseService<T>, T : BaseModel> {
      * @param parameterSet 前台参数
      * @return 分页结果
      */
-    protected fun doPage(parameterSet: Map<String, Any?>): Page<T>? {
+    protected open fun doPage(parameterSet: Map<String, Any?>): Page<T>? {
         var page: Page<T>? = null
         if (parameterSet[PAGE_SIZE] != null) {
             val limit = parameterSet[PAGE_SIZE] as Int
@@ -211,7 +211,7 @@ open class BaseController<K : BaseService<T>, T : BaseModel> {
      * @param parameters 前台参数
      * @return 排序字段
      */
-    protected fun analysisOrder(parameters: Map<String, Any?>): String? {
+    protected open fun analysisOrder(parameters: Map<String, Any?>): String? {
         val sortName = parameters[SORT_NAME] as String?
         if (!StringUtils.isEmpty(sortName)) {
             val sortOrder = parameters[SORT_ORDER] as String?
@@ -240,7 +240,7 @@ open class BaseController<K : BaseService<T>, T : BaseModel> {
      * 获取实体类类型
      * @return
      */
-    protected fun getModelType(): Type {
+    protected open fun getModelType(): Type {
         return (this.javaClass.genericSuperclass as ParameterizedType).actualTypeArguments[1]
     }
 
