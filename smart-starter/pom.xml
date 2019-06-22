@@ -19,6 +19,8 @@
     <modules>
         <!--crud启动器-->
         <module>crud-spring-boot-starter</module>
+        <!--文件启动器-->
+        <module>file-spring-boot-starter</module>
     </modules>
 
     <dependencies>
