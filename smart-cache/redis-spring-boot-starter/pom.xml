@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.smart</groupId>
+        <artifactId>smart-cache</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+    </parent>
+    <artifactId>redis-spring-boot-starter</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>redis-spring-boot-starter</name>
+    <description>redis启动器</description>
+
+    <properties>
+
+    </properties>
+
+    <dependencies>
+        <!--启动器配置-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-autoconfigure</artifactId>
+        </dependency>
+
+        <!--引入redis支持-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
+        </dependency>
+
+        <!--缓存工具包-->
+        <dependency>
+            <groupId>com.smart</groupId>
+            <artifactId>smart-cache-common</artifactId>
+            <version>${smart-cache-common.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-pool2</artifactId>
+            <version>${commons-pool2.version}</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+    </build>
+
+</project>
