@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.smart</groupId>
+        <artifactId>smart-shiro</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+    </parent>
+    <artifactId>shiro-redis</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>shiro-redis</name>
+    <description>shiro redis 集成工具包</description>
+
+    <properties>
+
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.shiro</groupId>
+            <artifactId>shiro-cache</artifactId>
+            <version>${shiro.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.shiro</groupId>
+            <artifactId>shiro-core</artifactId>
+            <version>${shiro.version}</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <!--引入redis缓存-->
+        <dependency>
+            <groupId>com.smart</groupId>
+            <artifactId>redis-spring-boot-starter</artifactId>
+            <version>${redis-spring-boot-starter.version}</version>
+        </dependency>
+
+    </dependencies>
+
+    <build>
+    </build>
+
+</project>
