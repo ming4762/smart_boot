@@ -6,30 +6,27 @@ import com.baomidou.mybatisplus.annotation.TableName
 import com.smart.starter.crud.model.BaseModel
 import java.util.*
 
-/**
- * 角色表
- * @author ming
- * 2019/6/12 下午3:20
- */
-@TableName("sys_role")
-class SysRoleDO : BaseModel() {
+@TableName("sys_menu")
+open class SysMenuDO : BaseModel() {
 
     companion object {
-        private const val serialVersionUID = 1560324063474L
+        private const val serialVersionUID = 2077003576466260943L
     }
 
     @TableId(type = IdType.UUID)
-    var roleId: String? = null
+    var menuId: String? = null
 
-    var roleName: String? = null
+    var menuName: String? = null
 
-    var remark: String? = null
+    var parentId: String? = null
+
+    var icon: String? = null
+
+    var seq: Int? = null
+
+    var menuConfigId: String? = null
 
     var createTime: Date? = null
-
-    var roleType: String? = null
-
-    var enable: Boolean = true
 
     var createUserId: String? = null
 
@@ -37,6 +34,5 @@ class SysRoleDO : BaseModel() {
 
     var updateUserId: String? = null
 
-    var seq: Int? = null
-
+    var functionId: String? = null
 }

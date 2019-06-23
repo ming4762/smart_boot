@@ -19,10 +19,21 @@
     <properties>
         <java.version>1.8</java.version>
         <kotlin.version>1.2.71</kotlin.version>
+        <!--shiro版本-->
+        <shiro.version>1.4.1</shiro.version>
         <!--smart-common 版本-->
         <smart-common.version>0.0.1-SNAPSHOT</smart-common.version>
+        <!--系统模块版本-->
+        <smart-system.version>0.0.1-SNAPSHOT</smart-system.version>
+        <!--缓存工具包版本-->
+        <smart-cache-common.version>0.0.1-SNAPSHOT</smart-cache-common.version>
         <!--crud启动器版本-->
         <crud-spring-boot-starter.version>0.0.1-SNAPSHOT</crud-spring-boot-starter.version>
+        <shiro-redis.version>0.0.1-SNAPSHOT</shiro-redis.version>
+        <smart-auth-common.version>0.0.1-SNAPSHOT</smart-auth-common.version>
+        <!--redis-spring-boot-starter.version-->
+        <redis-spring-boot-starter.version>0.0.1-SNAPSHOT</redis-spring-boot-starter.version>
+        <commons-io.commons-io.version>2.6</commons-io.commons-io.version>
     </properties>
 
     <modules>
@@ -30,8 +41,6 @@
         <module>smart-common</module>
         <!--模块启动器-->
         <module>smart-module-starter</module>
-        <!--ui模块-->
-        <module>smart-module-ui</module>
         <!--启动器模块-->
         <module>smart-starter</module>
     </modules>

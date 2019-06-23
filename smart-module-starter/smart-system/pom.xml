@@ -18,11 +18,20 @@
     </properties>
 
     <dependencies>
-        <!--引入crud启动器-->
+
+
+        <!--引入shiro支持-->
+        <dependency>
+            <groupId>org.apache.shiro</groupId>
+            <artifactId>shiro-core</artifactId>
+            <version>${shiro.version}</version>
+        </dependency>
+
+        <!--引入auth common-->
         <dependency>
             <groupId>com.smart</groupId>
-            <artifactId>crud-spring-boot-starter</artifactId>
-            <version>${crud-spring-boot-starter.version}</version>
+            <artifactId>smart-auth-common</artifactId>
+            <version>${smart-auth-common.version}</version>
         </dependency>
     </dependencies>
 

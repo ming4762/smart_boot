@@ -6,7 +6,6 @@ import com.smart.system.mapper.SysRoleMapper
 import com.smart.system.mapper.SysUserMapper
 import com.smart.system.mapper.SysUserRoleMapper
 import com.smart.system.model.SysRoleDO
-import com.smart.system.model.SysUserDO
 import com.smart.system.model.SysUserRoleDO
 import com.smart.system.service.SysUserService
 import org.springframework.beans.factory.annotation.Autowired
