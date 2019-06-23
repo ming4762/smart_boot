@@ -8,4 +8,8 @@ import com.smart.cache.common.service.CacheService
  * 2019/6/22 下午3:26
  */
 interface RedisService : CacheService {
+
+    fun keys(prefixKey: String): Set<String>?
+
+    fun matchDelete(prefixKey: String)
 }

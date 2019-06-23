@@ -150,5 +150,24 @@ class RedisServiceImpl : RedisService {
         this.redisTemplate.delete(keys)
     }
 
+    /**
+     * 匹配获取所有key
+     * @param prefixKey
+     * @return
+     */
+    override fun keys(prefixKey: String): Set<String>? {
+        return redisTemplate.keys(prefixKey + "*")
+    }
+
+    /**
+     * 匹配删除
+     * @param prefixKey
+     */
+    override fun matchDelete(prefixKey: String) {
+        val keys = this.keys(prefixKey)
+        if (keys != null && keys.isNotEmpty()) {
+            this.batchDelete(keys)
+        }
+    }
 
 }

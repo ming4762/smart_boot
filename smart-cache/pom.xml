@@ -13,8 +13,12 @@
     <packaging>pom</packaging>
     <description>缓存工具包</description>
 
-    <properties>
+    <modules>
+        <module>smart-cache-common</module>
+        <module>redis-spring-boot-starter</module>
+    </modules>
 
+    <properties>
     </properties>
 
     <dependencies>

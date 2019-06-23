@@ -27,6 +27,7 @@ class RedisAutoConfiguration {
      * 创建redisTemplate
      */
     @Bean
+    @ConditionalOnMissingBean(RedisTemplate :: class)
     fun redisTemplate(factory: RedisConnectionFactory): RedisTemplate<String, Any> {
         val redisTemplate = RedisTemplate<String, Any>()
         redisTemplate.setConnectionFactory(factory)
