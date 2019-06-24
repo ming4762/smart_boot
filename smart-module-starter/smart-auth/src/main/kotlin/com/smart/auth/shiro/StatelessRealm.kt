@@ -1,6 +1,7 @@
 package com.smart.auth.shiro
 
 import com.baomidou.mybatisplus.extension.kotlin.KtQueryWrapper
+import com.smart.auth.common.model.SysUserDO
 import com.smart.system.service.SysUserService
 import org.apache.shiro.authc.*
 import org.apache.shiro.authz.AuthorizationInfo
