@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+    <!--vue引入 TODO: 生产环境改为min-->
+    <div th:fragment="common-resources-vue">
+        <script src="/vue/2.6.10/vue.js" th:src="@{/vue/2.6.10/vue.js}"></script>
+    </div>
+
+    <!--element-ui 引入-->
+    <div th:fragment="common-resources-element-js">
+        <script src="/element-ui/2.9.2/index.js" th:src="@{/element-ui/2.9.2/index.js}"></script>
+    </div>
+    <div th:fragment="common-resources-element-css">
+        <link rel="stylesheet" href="/element-ui/2.9.2/index.css" th:href="@{/element-ui/2.9.2/index.css}"></link>
+    </div>
+    <!--requireJS TODO: 生产环境改为min-->
+    <div th:fragment="common-resources-requireJS">
+        <script th:src="@{/requireJS/2.3.6/require.js}"></script>
+    </div>
+
+</body>
+</html>
