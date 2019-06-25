@@ -11,7 +11,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-define(["require", "exports", "ComponentBuilder", "utils/ApiService"], function (require, exports, ComponentBuilder_1, ApiService_1) {
+define(["require", "exports", "ComponentBuilder", "utils/ApiService", "mixins/MessageMixins"], function (require, exports, ComponentBuilder_1, ApiService_1, MessageMixins_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var UsernameLogin = /** @class */ (function (_super) {
@@ -19,6 +19,14 @@ define(["require", "exports", "ComponentBuilder", "utils/ApiService"], function 
         function UsernameLogin() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
+        /**
+         * 混入
+         */
+        UsernameLogin.prototype.mixins = function () {
+            return [
+                new MessageMixins_1.default().build()
+            ];
+        };
         /**
          * 返回数据
          */
@@ -51,6 +59,8 @@ define(["require", "exports", "ComponentBuilder", "utils/ApiService"], function 
                             ApiService_1.default.postAjax('public/login', _this.loginFormModel)
                                 .then(function (data) {
                                 console.log(data);
+                            }).catch(function (error) {
+                                _this.errorMessage(error.message, error);
                             });
                         }
                     });

@@ -7,30 +7,20 @@
         <artifactId>smart-ui</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
-    <artifactId>smart-ui-common</artifactId>
+    <artifactId>smart-ui-library</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>smart-ui-common</name>
+    <name>smart-ui-library</name>
     <description>Demo project for Spring Boot</description>
 
     <properties>
     </properties>
 
     <dependencies>
-        <!--引入ui工具包-->
-        <dependency>
-            <groupId>com.smart</groupId>
-            <artifactId>smart-ui-utils</artifactId>
-            <version>${smart-ui-utils.version}</version>
-        </dependency>
-        <!--引入library-->
-        <dependency>
-            <groupId>com.smart</groupId>
-            <artifactId>smart-ui-library</artifactId>
-            <version>${smart-ui-library.version}</version>
-        </dependency>
+
     </dependencies>
 
     <build>
+
     </build>
 
 </project>

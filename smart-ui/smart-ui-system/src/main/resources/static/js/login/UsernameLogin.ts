@@ -2,7 +2,18 @@
 import ComponentBuilder from 'ComponentBuilder'
 // @ts-ignore
 import ApiService from 'utils/ApiService'
+// @ts-ignore
+import MessageMixins from 'mixins/MessageMixins'
 export default class UsernameLogin extends ComponentBuilder {
+
+  /**
+   * 混入
+   */
+  protected mixins (): any[] {
+    return [
+        new MessageMixins().build()
+    ]
+  }
 
   /**
    * 返回数据
@@ -36,6 +47,8 @@ export default class UsernameLogin extends ComponentBuilder {
             ApiService.postAjax('public/login', this.loginFormModel)
                 .then(data => {
                   console.log(data)
+                }).catch(error => {
+                  this.errorMessage(error.message, error)
                 })
           }
         })
