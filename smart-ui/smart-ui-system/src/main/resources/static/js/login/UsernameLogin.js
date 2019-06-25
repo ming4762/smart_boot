@@ -11,9 +11,19 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-define(["require", "exports", "ComponentBuilder", "utils/ApiService", "mixins/MessageMixins"], function (require, exports, ComponentBuilder_1, ApiService_1, MessageMixins_1) {
+define(["require", "exports", "ComponentBuilder", "utils/ApiService", "mixins/MessageMixins", "utils/Md5Utils"], function (require, exports, ComponentBuilder_1, ApiService_1, MessageMixins_1, Md5Utils_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
+    /**
+     * 创建密码
+     * @param username
+     * @param password
+     */
+    var createPassword = function (username, password) {
+        var salt = '1qazxsw2';
+        var passwordValue = username + password + salt;
+        return Md5Utils_1.default.md5(passwordValue, 2);
+    };
     var UsernameLogin = /** @class */ (function (_super) {
         __extends(UsernameLogin, _super);
         function UsernameLogin() {
@@ -56,8 +66,10 @@ define(["require", "exports", "ComponentBuilder", "utils/ApiService", "mixins/Me
                     var _this = this;
                     this.$refs['form'].validate(function (valid) {
                         if (valid) {
-                            ApiService_1.default.postAjax('public/login', _this.loginFormModel)
-                                .then(function (data) {
+                            ApiService_1.default.postAjax('public/login', {
+                                username: _this.loginFormModel.username,
+                                password: createPassword(_this.loginFormModel.username, _this.loginFormModel.password)
+                            }).then(function (data) {
                                 console.log(data);
                             }).catch(function (error) {
                                 _this.errorMessage(error.message, error);

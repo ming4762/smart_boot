@@ -4,6 +4,21 @@ import ComponentBuilder from 'ComponentBuilder'
 import ApiService from 'utils/ApiService'
 // @ts-ignore
 import MessageMixins from 'mixins/MessageMixins'
+// 引入MD5工具类
+// @ts-ignore
+import Md5Utils from 'utils/Md5Utils'
+
+/**
+ * 创建密码
+ * @param username
+ * @param password
+ */
+const createPassword = (username: string, password: string): string => {
+  const salt = '1qazxsw2'
+  const passwordValue = username + password + salt
+  return Md5Utils.md5(passwordValue, 2)
+}
+
 export default class UsernameLogin extends ComponentBuilder {
 
   /**
@@ -44,12 +59,14 @@ export default class UsernameLogin extends ComponentBuilder {
       handleLogin: function () {
         this.$refs['form'].validate(valid => {
           if (valid) {
-            ApiService.postAjax('public/login', this.loginFormModel)
-                .then(data => {
-                  console.log(data)
-                }).catch(error => {
-                  this.errorMessage(error.message, error)
-                })
+            ApiService.postAjax('public/login', {
+              username: this.loginFormModel.username,
+              password: createPassword(this.loginFormModel.username, this.loginFormModel.password)
+            }).then(data => {
+              console.log(data)
+            }).catch(error => {
+              this.errorMessage(error.message, error)
+            })
           }
         })
       }
