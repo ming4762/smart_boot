@@ -6,12 +6,13 @@
     <!--引入element ui-->
     <div th:replace="/common/common-resources :: common-resources-element-css"></div>
     <!--<link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">-->
-    <link rel="stylesheet" th:href="@{/css/common.css}">
+    <link rel="stylesheet" th:href="@{/css/common.css}"/>
+    <link rel="stylesheet" th:href="@{/css/layout/layout.css}"/>
 </head>
 <body>
 
-    <div>
-        这是首页
+    <div id="home-container" class="full-height">
+        <layout-vue/>
     </div>
 <!--引入axios-->
 <script th:src="@{/axios/0.19.0/axios.min.js}"></script>
@@ -22,5 +23,7 @@
 <div th:replace="/common/common-resources :: common-resources-requireJS"></div>
 
 <script th:src="@{/js/common.js}"></script>
+<!--引入页面js-->
+<script th:src="@{/js/home/homePage.js}"></script>
 </body>
 </html>

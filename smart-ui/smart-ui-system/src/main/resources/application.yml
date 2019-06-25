@@ -1,0 +1,3 @@
+smart:
+  ui:
+    apiURL: http://localhost:8086/

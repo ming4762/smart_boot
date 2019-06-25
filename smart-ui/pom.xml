@@ -10,7 +10,14 @@
     <artifactId>smart-ui</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>smart-ui</name>
+    <packaging>pom</packaging>
     <description>Demo project for Spring Boot</description>
+
+    <modules>
+        <module>smart-ui-common</module>
+        <module>smart-ui-system</module>
+        <module>smart-ui-utils</module>
+    </modules>
 
     <properties>
 
