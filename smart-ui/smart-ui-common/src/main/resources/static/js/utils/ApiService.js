@@ -2,7 +2,8 @@ define(["require", "exports", "utils/StoreUtil"], function (require, exports, St
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var service = axios.create({
-        baseURL: StoreUtil_1.default.getStore('API_URL'),
+        // baseURL: StoreUtil.getStore('API_URL'),
+        baseURL: localStorage.getItem('API_URL'),
         timeout: 10000
     });
     /**

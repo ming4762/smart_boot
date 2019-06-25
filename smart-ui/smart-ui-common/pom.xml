@@ -16,7 +16,12 @@
     </properties>
 
     <dependencies>
-
+        <!--引入ui工具包-->
+        <dependency>
+            <groupId>com.smart</groupId>
+            <artifactId>smart-ui-utils</artifactId>
+            <version>${smart-ui-utils.version}</version>
+        </dependency>
     </dependencies>
 
     <build>

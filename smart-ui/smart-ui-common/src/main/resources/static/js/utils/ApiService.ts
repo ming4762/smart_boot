@@ -3,7 +3,8 @@ declare var axios
 import StoreUtil from 'utils/StoreUtil'
 
 const service = axios.create({
-    baseURL: StoreUtil.getStore('API_URL'),
+    // baseURL: StoreUtil.getStore('API_URL'),
+    baseURL: localStorage.getItem('API_URL'),
     timeout: 10000
 })
 
