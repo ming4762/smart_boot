@@ -35,4 +35,12 @@ class SystemController {
     fun home(@RequestParam parameter: Map<String, Any?>): ModelAndView {
         return ModelAndView("system/home/home", parameter)
     }
+
+    /**
+     * 跳转到用户
+     */
+    @RequestMapping("/user")
+    fun user(@RequestParam parameter: Map<String, Any?>): ModelAndView {
+        return ModelAndView("system/user/user", parameter)
+    }
 }

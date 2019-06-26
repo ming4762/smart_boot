@@ -1,5 +1,5 @@
 ready(function () {
-    require(['login/login'], function ({Login}) {
+    require(['system/login/login'], function ({Login}) {
         var login = new Login()
         login.init()
     })

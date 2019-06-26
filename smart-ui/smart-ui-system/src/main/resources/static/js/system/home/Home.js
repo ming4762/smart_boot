@@ -1,4 +1,4 @@
-define(["require", "exports", "layout/Layout", "utils/StoreUtil"], function (require, exports, Layout_1, StoreUtil_1) {
+define(["require", "exports", "system/layout/Layout", "utils/StoreUtil"], function (require, exports, Layout_1, StoreUtil_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     // 默认的样式

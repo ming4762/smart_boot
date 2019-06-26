@@ -1,4 +1,4 @@
-import Layout from 'layout/Layout'
+import Layout from 'system/layout/Layout'
 // @ts-ignore
 import StoreUtil from 'utils/StoreUtil'
 // 默认的样式

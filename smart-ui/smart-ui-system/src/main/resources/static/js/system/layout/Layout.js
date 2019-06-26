@@ -11,7 +11,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-define(["require", "exports", "ComponentBuilder", "layout/navbar/Navbar", "layout/sidebar/SideBar"], function (require, exports, ComponentBuilder_1, Navbar_1, SideBar_1) {
+define(["require", "exports", "ComponentBuilder", "system/layout/navbar/Navbar", "system/layout/sidebar/SideBar"], function (require, exports, ComponentBuilder_1, Navbar_1, SideBar_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     /**

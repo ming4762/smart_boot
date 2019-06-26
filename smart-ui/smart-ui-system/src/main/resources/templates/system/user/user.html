@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="UTF-8">
+  <title>用户管理</title>
+  <!--引入element ui-->
+  <div th:replace="/common/common-resources :: common-resources-element-css"></div>
+  <!--<link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">-->
+  <link rel="stylesheet" th:href="@{/css/common.css}"/>
+  <link rel="stylesheet" th:href="@{/css/plugins/table/smartTable.css}"/>
+</head>
+<body>
+  <div id="vue-container" class="full-height">
+    <home-main/>
+  </div>
+
+<!--引入axios-->
+<script th:src="@{/axios/0.19.0/axios.min.js}"></script>
+<!--引入vue-->
+<div th:replace="/common/common-resources :: common-resources-vue"></div>
+<!--引入element ui-->
+<div th:replace="/common/common-resources :: common-resources-element-js"></div>
+<div th:replace="/common/common-resources :: common-resources-requireJS"></div>
+
+<script th:src="@{/js/common.js}"></script>
+
+<script th:src="@{/js/system/user/userPage.js}"></script>
+</body>
+</html>

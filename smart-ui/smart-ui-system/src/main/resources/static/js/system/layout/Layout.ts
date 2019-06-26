@@ -2,8 +2,8 @@
 import ComponentBuilder from 'ComponentBuilder'
 declare var busVue
 
-import Navbar from 'layout/navbar/Navbar'
-import SideBar from 'layout/sidebar/SideBar'
+import Navbar from 'system/layout/navbar/Navbar'
+import SideBar from 'system/layout/sidebar/SideBar'
 
 /**
  * 框架主体
