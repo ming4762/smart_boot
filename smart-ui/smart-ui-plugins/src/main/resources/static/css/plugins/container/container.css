@@ -1,0 +1,18 @@
+.common-container {
+    padding: 15px;
+}
+
+.aside-header {
+    font-size: 14px;
+    border-bottom: 1px solid #dedfde;
+    font-weight: bold;
+    background-color: #fffbff;
+}
+.common-aside {
+    border:1px solid #dedfde;
+    overflow: hidden !important;
+}
+.aside-header-icon {
+    float: right;
+    top: 5px;
+}

@@ -1,0 +1,25 @@
+.cloud-table-left {
+    left: 0;
+    position: absolute;
+    height: auto;
+    overflow: hidden;
+}
+.cloud-table-right {
+    right: 0;
+    position: absolute;
+    height: auto;
+    overflow: hidden;
+}
+
+.cloud-table-menu {
+    position: relative;
+    width: 100%;
+    min-height: 40px
+}
+
+.cloud-table-pagination {
+    margin-top: 10px;
+}
+.table-search-container {
+    padding-top: 5px;
+}
