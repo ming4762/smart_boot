@@ -6,6 +6,9 @@ import SmartTableCRUD from 'plugins/table/SmartTableCRUD'
 import ApiService from 'utils/ApiService'
 // @ts-ignore
 import ValidateUtils from 'utils/ValidateUtils'
+// @ts-ignore
+import LayoutMixins from 'mixins/LayoutMixins'
+
 
 /**
  * 用户界面构建
@@ -51,9 +54,16 @@ export class User extends ComponentBuilder {
     }
   }
 
+  protected mixins () {
+    return [
+        new LayoutMixins().build()
+    ]
+  }
+
   protected data () {
     return {
       apiService: ApiService,
+      tableHeight: 0,
       /**
        * 表格配置
        */
@@ -228,9 +238,10 @@ export class User extends ComponentBuilder {
         deleteUrl="sys/user/batchDelete"
         saveUpdateUrl="sys/user/saveUpdate"
         :keys="['userId']"
-        tableName="系统用户"
+        tableName="系统用户" 
         :apiService="apiService"
         labelWidth="80px"
+        :height="clientHeight"
         :columnOptions="columnOptions">
         <!-- 状态status插槽 -->
         <template slot="table-status" slot-scope="{ row }">

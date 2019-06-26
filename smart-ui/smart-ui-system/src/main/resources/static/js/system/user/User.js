@@ -11,7 +11,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-define(["require", "exports", "ComponentBuilder", "plugins/table/SmartTableCRUD", "utils/ApiService", "utils/ValidateUtils"], function (require, exports, ComponentBuilder_1, SmartTableCRUD_1, ApiService_1, ValidateUtils_1) {
+define(["require", "exports", "ComponentBuilder", "plugins/table/SmartTableCRUD", "utils/ApiService", "utils/ValidateUtils", "mixins/LayoutMixins"], function (require, exports, ComponentBuilder_1, SmartTableCRUD_1, ApiService_1, ValidateUtils_1, LayoutMixins_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     /**
@@ -58,9 +58,15 @@ define(["require", "exports", "ComponentBuilder", "plugins/table/SmartTableCRUD"
                 callback();
             }
         };
+        User.prototype.mixins = function () {
+            return [
+                new LayoutMixins_1.default().build()
+            ];
+        };
         User.prototype.data = function () {
             return {
                 apiService: ApiService_1.default,
+                tableHeight: 0,
                 /**
                  * 表格配置
                  */
@@ -228,7 +234,7 @@ define(["require", "exports", "ComponentBuilder", "plugins/table/SmartTableCRUD"
             };
         };
         User.prototype.template = function () {
-            return "\n    <div style=\"padding: 15px;\">\n      <smart-table-crud\n        :defaultButtonConfig=\"defaultButtonConfig\"\n        queryUrl=\"sys/user/list\"\n        deleteUrl=\"sys/user/batchDelete\"\n        saveUpdateUrl=\"sys/user/saveUpdate\"\n        :keys=\"['userId']\"\n        tableName=\"\u7CFB\u7EDF\u7528\u6237\"\n        :apiService=\"apiService\"\n        labelWidth=\"80px\"\n        :columnOptions=\"columnOptions\">\n        <!-- \u72B6\u6001status\u63D2\u69FD -->\n        <template slot=\"table-status\" slot-scope=\"{ row }\">\n          <el-tag\n            :type=\"formatStatusType(row)\">{{formatStateValue(row)}}</el-tag>\n        </template>\n      </smart-table-crud>\n    </div>\n    ";
+            return "\n    <div style=\"padding: 15px;\">\n      <smart-table-crud\n        :defaultButtonConfig=\"defaultButtonConfig\"\n        queryUrl=\"sys/user/list\"\n        deleteUrl=\"sys/user/batchDelete\"\n        saveUpdateUrl=\"sys/user/saveUpdate\"\n        :keys=\"['userId']\"\n        tableName=\"\u7CFB\u7EDF\u7528\u6237\" \n        :apiService=\"apiService\"\n        labelWidth=\"80px\"\n        :height=\"clientHeight\"\n        :columnOptions=\"columnOptions\">\n        <!-- \u72B6\u6001status\u63D2\u69FD -->\n        <template slot=\"table-status\" slot-scope=\"{ row }\">\n          <el-tag\n            :type=\"formatStatusType(row)\">{{formatStateValue(row)}}</el-tag>\n        </template>\n      </smart-table-crud>\n    </div>\n    ";
         };
         return User;
     }(ComponentBuilder_1.default));
