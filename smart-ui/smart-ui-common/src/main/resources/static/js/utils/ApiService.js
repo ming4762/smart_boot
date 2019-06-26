@@ -6,11 +6,12 @@ define(["require", "exports", "utils/StoreUtil"], function (require, exports, St
         baseURL: localStorage.getItem('API_URL'),
         timeout: 10000
     });
+    var STORE_TOKEN_KEY = 'SMART_AUTHORIATION';
     /**
      * 获取token
      */
     var getToken = function () {
-        return StoreUtil_1.default.getStore('SMART_AUTHORIATION');
+        return StoreUtil_1.default.getStore(STORE_TOKEN_KEY);
     };
     /**
      * token请求头key
@@ -40,6 +41,13 @@ define(["require", "exports", "utils/StoreUtil"], function (require, exports, St
                 // @ts-ignore
                 return Promise.reject(error);
             });
+        };
+        /**
+         * 保存token操作
+         * @param token
+         */
+        ApiService.saveToken = function (token) {
+            StoreUtil_1.default.setStore(STORE_TOKEN_KEY, token, StoreUtil_1.default.SESSION_TYPE);
         };
         return ApiService;
     }());

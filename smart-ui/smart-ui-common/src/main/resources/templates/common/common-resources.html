@@ -22,6 +22,14 @@
     <div th:fragment="common-resources-requireJS">
         <script th:src="@{/requireJS/2.3.6/require.js}"></script>
     </div>
+    <!--获取项目跟路径-->
+    <div th:fragment="common-resources-contextPath">
+        <script type="text/javascript" th:inline="javascript">
+          /*<![CDATA[*/
+          var contextPath = /*[[@{/}]]*/ ''
+          /*]]>*/
+        </script>
+    </div>
 
 </body>
 </html>
