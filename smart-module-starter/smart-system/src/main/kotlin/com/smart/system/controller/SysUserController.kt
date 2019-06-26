@@ -1,10 +1,11 @@
 package com.smart.system.controller
 
+import com.smart.auth.common.model.SysUserDO
 import com.smart.common.message.Result
 import com.smart.starter.crud.controller.BaseController
 import com.smart.system.service.SysUserService
-import org.apache.shiro.authz.annotation.RequiresPermissions
 import org.springframework.stereotype.Controller
+import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 
 /**
@@ -16,8 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 @RequestMapping("/sys/user")
 class SysUserController : BaseController<SysUserService, SysUserDO>() {
 
-    @RequiresPermissions("123")
-    override fun list(parameters: Map<String, Any?>): Result<Any?> {
+    override fun list(@RequestBody parameters: Map<String, Any?>): Result<Any?> {
         return super.list(parameters)
     }
 }

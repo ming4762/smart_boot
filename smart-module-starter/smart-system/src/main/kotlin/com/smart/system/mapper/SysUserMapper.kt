@@ -1,5 +1,6 @@
 package com.smart.system.mapper
 
+import com.smart.auth.common.model.SysUserDO
 import com.smart.starter.crud.mapper.CloudBaseMapper
 
 /**

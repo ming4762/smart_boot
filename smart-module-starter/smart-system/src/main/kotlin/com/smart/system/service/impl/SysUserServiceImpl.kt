@@ -1,6 +1,7 @@
 package com.smart.system.service.impl
 
 import com.baomidou.mybatisplus.extension.kotlin.KtQueryWrapper
+import com.smart.auth.common.model.SysUserDO
 import com.smart.starter.crud.service.impl.BaseServiceImpl
 import com.smart.system.mapper.SysRoleMapper
 import com.smart.system.mapper.SysUserMapper
