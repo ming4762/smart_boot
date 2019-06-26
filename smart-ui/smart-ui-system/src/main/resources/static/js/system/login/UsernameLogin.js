@@ -70,7 +70,11 @@ define(["require", "exports", "ComponentBuilder", "utils/ApiService", "mixins/Me
                                 username: _this.loginFormModel.username,
                                 password: createPassword(_this.loginFormModel.username, _this.loginFormModel.password)
                             }).then(function (data) {
-                                console.log(data);
+                                // 保存token
+                                ApiService_1.default.saveToken(data.Authorization);
+                                // 跳转到主页 TODO：可配置
+                                console.log(_this);
+                                window.location.href = contextPath + "ui/system/home";
                             }).catch(function (error) {
                                 _this.errorMessage(error.message, error);
                             });

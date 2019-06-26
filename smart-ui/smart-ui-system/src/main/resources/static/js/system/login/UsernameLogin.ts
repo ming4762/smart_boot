@@ -7,6 +7,8 @@ import MessageMixins from 'mixins/MessageMixins'
 // 引入MD5工具类
 // @ts-ignore
 import Md5Utils from 'utils/Md5Utils'
+// 项目跟路径
+declare var contextPath: string
 
 /**
  * 创建密码
@@ -63,7 +65,11 @@ export default class UsernameLogin extends ComponentBuilder {
               username: this.loginFormModel.username,
               password: createPassword(this.loginFormModel.username, this.loginFormModel.password)
             }).then(data => {
-              console.log(data)
+              // 保存token
+              ApiService.saveToken(data.Authorization)
+              // 跳转到主页 TODO：可配置
+              console.log(this)
+              window.location.href = `${contextPath}ui/system/home`
             }).catch(error => {
               this.errorMessage(error.message, error)
             })
