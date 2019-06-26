@@ -2,22 +2,15 @@ define(["require", "exports", "utils/StoreUtil"], function (require, exports, St
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var service = axios.create({
-        // baseURL: StoreUtil.getStore('API_URL'),
         baseURL: localStorage.getItem('API_URL'),
         timeout: 10000
     });
     var STORE_TOKEN_KEY = 'SMART_AUTHORIATION';
-    /**
-     * 获取token
-     */
     var getToken = function () {
         return StoreUtil_1.default.getStore(STORE_TOKEN_KEY);
     };
-    /**
-     * token请求头key
-     */
     var TOKEN_KEY = 'Authorization';
-    var ApiService = /** @class */ (function () {
+    var ApiService = (function () {
         function ApiService() {
         }
         ApiService.postAjax = function (url, parameter) {
@@ -34,18 +27,12 @@ define(["require", "exports", "utils/StoreUtil"], function (require, exports, St
                     return result.data.data;
                 }
                 else {
-                    // @ts-ignore
                     return Promise.reject(result ? result.data : result);
                 }
             }).catch(function (error) {
-                // @ts-ignore
                 return Promise.reject(error);
             });
         };
-        /**
-         * 保存token操作
-         * @param token
-         */
         ApiService.saveToken = function (token) {
             StoreUtil_1.default.setStore(STORE_TOKEN_KEY, token, StoreUtil_1.default.SESSION_TYPE);
         };

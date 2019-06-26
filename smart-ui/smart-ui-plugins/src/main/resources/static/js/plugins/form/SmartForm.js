@@ -21,11 +21,6 @@ define(["require", "exports", "ComponentBuilder", "plugins/form/SmartFormItem"],
         number: 'change',
         radio: 'change'
     };
-    /**
-     * 创建验证规则
-     * @param column
-     * @returns {{trigger: (*|string), message: string, required: boolean}[]}
-     */
     var createRules = function (column) {
         var trigger = typeTriggerMap[column.type];
         return [{
@@ -34,40 +29,32 @@ define(["require", "exports", "ComponentBuilder", "plugins/form/SmartFormItem"],
                 message: "\u8BF7\u8F93\u5165" + column.label
             }];
     };
-    /**
-     * 表格组件
-     */
-    var SmartForm = /** @class */ (function (_super) {
+    var SmartForm = (function (_super) {
         __extends(SmartForm, _super);
         function SmartForm() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
         SmartForm.prototype.components = function () {
             return {
-                // @ts-ignore
                 'smart-form-item': new SmartFormItem_1.default().build()
             };
         };
         SmartForm.prototype.props = function () {
             return {
-                // 表格配置
                 columnOptions: {
                     type: Array,
                     required: true
                 },
-                // 数据绑定
                 model: {
                     type: Object,
                     default: function () {
                         return {};
                     }
                 },
-                // 是否是行内表单
                 inline: {
                     type: Boolean,
                     default: false
                 },
-                // from的label-width
                 labelWidth: {
                     type: String
                 }
@@ -75,36 +62,23 @@ define(["require", "exports", "ComponentBuilder", "plugins/form/SmartFormItem"],
         };
         SmartForm.prototype.data = function () {
             return {
-                // 表单验证规则
                 formRules: {},
-                // 行内表单显示列信息
                 showFormInlineColumns: [],
-                // 表单显示列信息
                 showFormColumns: [],
-                // 隐藏列信息
                 hiddenFormColumns: []
             };
         };
         SmartForm.prototype.created = function () {
-            // @ts-ignore
             this.convertColumnOption(this.columnOptions);
         };
         SmartForm.prototype.beforeMount = function () {
-            // @ts-ignore
             this.setDefaultValue();
         };
         SmartForm.prototype.beforeUpdate = function () {
-            // @ts-ignore
             this.setDefaultValue();
         };
-        /**
-         * 计算属性
-         */
         SmartForm.prototype.computed = function () {
             return {
-                /**
-                 * 列映射计算属性
-                 */
                 getColumnMap: function () {
                     var result = {};
                     this.showFormColumns.forEach(function (columns) {
@@ -117,9 +91,6 @@ define(["require", "exports", "ComponentBuilder", "plugins/form/SmartFormItem"],
                     });
                     return result;
                 },
-                /**
-                 * 验证规则计算属性
-                 */
                 getRules: function () {
                     var result = {};
                     for (var key in this.formRules) {
@@ -144,25 +115,16 @@ define(["require", "exports", "ComponentBuilder", "plugins/form/SmartFormItem"],
         };
         SmartForm.prototype.methods = function () {
             return {
-                /**
-                 * 转换列信息
-                 * @param options
-                 */
                 convertColumnOption: function (options) {
                     var _this = this;
-                    // 显示列
                     var showInlineColumns = [];
                     var showColumns = [];
-                    // 隐藏列
                     var hiddenFormColumns = [];
-                    // 验证规则
                     var formRules = {};
                     var index = 0;
                     options.forEach(function (item) {
-                        // 设置key
                         if (!item.key)
                             item.key = item.prop;
-                        // 设置默认类型
                         if (!item.type)
                             item.type = 'input';
                         if (item.visible === false) {
@@ -170,25 +132,20 @@ define(["require", "exports", "ComponentBuilder", "plugins/form/SmartFormItem"],
                         }
                         else {
                             if (_this.inline) {
-                                // 行内表单
                                 showInlineColumns.push(item);
                             }
                             else {
-                                // 非行内表单
-                                // 获取span，默认值24
                                 var span = item.span ? item.span : 24;
                                 if (index === 0) {
                                     showColumns.push([]);
                                 }
                                 showColumns[showColumns.length - 1].push(item);
                                 index = index + span;
-                                // 重启一行
                                 if (index === 24) {
                                     index = 0;
                                 }
                             }
                         }
-                        // 添加验证规则
                         if (item.rules) {
                             formRules[item.key] = item.rules;
                         }
@@ -198,32 +155,20 @@ define(["require", "exports", "ComponentBuilder", "plugins/form/SmartFormItem"],
                     this.hiddenFormColumns = hiddenFormColumns;
                     this.formRules = formRules;
                 },
-                // 是否使用插槽
                 useSolt: function (item) {
                     return this.$scopedSlots[item.key];
                 },
-                /**
-                 * 设置默认值
-                 */
                 setDefaultValue: function () {
                     var _this = this;
-                    console.log(this);
                     this.columnOptions.forEach(function (column) {
                         if (column.defaultValue !== null && column.defaultValue !== undefined && (_this.model[column.key] === null || _this.model[column.key] === undefined)) {
                             _this.$set(_this.model, column.key, column.defaultValue);
                         }
                     });
                 },
-                /**
-                 * 重置表单
-                 */
                 reset: function () {
                     this.$refs['form'].resetFields();
                 },
-                /**
-                 * 验证表单
-                 * @param callback
-                 */
                 validate: function (callback) {
                     if (callback) {
                         this.$refs['form'].validate(function (valid, field) {

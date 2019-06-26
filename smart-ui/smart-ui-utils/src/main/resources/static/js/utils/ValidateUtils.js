@@ -1,24 +1,14 @@
 define(["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    /**
-     * 验证工具类
-     * @author zhongming
-     * @since 3.0
-     */
-    var ValidateUtils = /** @class */ (function () {
+    var ValidateUtils = (function () {
         function ValidateUtils() {
         }
-        /**
-         * 验证手机号
-         * @param phone 电话号码
-         */
         ValidateUtils.validateMobile = function (phone) {
             var list = [];
             var result = false;
             var msg = '';
             var isPhone = /^0\d{2,3}-?\d{7,8}$/;
-            // 增加134 减少|1349[0-9]{7}，增加181,增加145，增加17[678]
             var isMob = /^((\+?86)|(\(\+86\)))?(13[0123456789][0-9]{8}|15[012356789][0-9]{8}|18[012356789][0-9]{8}|14[57][0-9]{8}|17[3678][0-9]{8})$/;
             if (!ValidateUtils.validateNull(phone)) {
                 if (phone.length === 11) {
@@ -40,10 +30,6 @@ define(["require", "exports"], function (require, exports) {
             list.push(msg);
             return list;
         };
-        /**
-         * 验证是否为null
-         * @param value
-         */
         ValidateUtils.validateNull = function (value) {
             if (typeof value === 'boolean') {
                 return false;
@@ -83,12 +69,6 @@ define(["require", "exports"], function (require, exports) {
             var reg = /^[A-Za-z]+$/;
             return reg.test(str);
         };
-        /**
-         * vue验证手机号
-         * @param rule 验证规则
-         * @param value 手机号
-         * @param callback 回调
-         */
         ValidateUtils.vueValidateMobile = function (rule, value, callback) {
             var result = ValidateUtils.validateMobile(value);
             if (result[0] === false) {

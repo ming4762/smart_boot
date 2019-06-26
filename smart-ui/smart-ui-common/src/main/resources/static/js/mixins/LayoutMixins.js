@@ -14,7 +14,7 @@ var __extends = (this && this.__extends) || (function () {
 define(["require", "exports", "ComponentBuilder", "utils/ResizeHandler"], function (require, exports, ComponentBuilder_1, ResizeHandler_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    var LayoutMixins = /** @class */ (function (_super) {
+    var LayoutMixins = (function (_super) {
         __extends(LayoutMixins, _super);
         function LayoutMixins() {
             return _super !== null && _super.apply(this, arguments) || this;
@@ -24,13 +24,9 @@ define(["require", "exports", "ComponentBuilder", "utils/ResizeHandler"], functi
                 clientHeight: 0
             };
         };
-        /**
-         * 加载前状态
-         */
         LayoutMixins.prototype.beforeMount = function () {
             var $this = this;
             $this.clientHeight = document.body.clientHeight;
-            // 绑定事件
             ResizeHandler_1.default.bind(function () {
                 $this.clientHeight = document.body.clientHeight;
             });

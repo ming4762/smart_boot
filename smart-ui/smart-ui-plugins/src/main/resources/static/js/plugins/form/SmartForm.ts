@@ -197,7 +197,6 @@ export default class SmartForm extends ComponentBuilder {
        * 设置默认值
        */
       setDefaultValue: function () {
-        console.log(this)
         this.columnOptions.forEach(column => {
           if (column.defaultValue !== null && column.defaultValue !== undefined && (this.model[column.key] === null || this.model[column.key] === undefined)) {
             this.$set(this.model, column.key, column.defaultValue)

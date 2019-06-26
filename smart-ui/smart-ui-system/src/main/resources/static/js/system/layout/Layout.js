@@ -14,28 +14,17 @@ var __extends = (this && this.__extends) || (function () {
 define(["require", "exports", "ComponentBuilder", "system/layout/navbar/Navbar", "system/layout/sidebar/SideBar"], function (require, exports, ComponentBuilder_1, Navbar_1, SideBar_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    /**
-     * 框架主体
-     */
-    var Layout = /** @class */ (function (_super) {
+    var Layout = (function (_super) {
         __extends(Layout, _super);
         function Layout() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
-        /**
-         * 创建组件
-         */
         Layout.prototype.components = function () {
             return {
-                // @ts-ignore
                 'navbar': new Navbar_1.default().build(),
-                // @ts-ignore
                 'SideBar': new SideBar_1.default().build()
             };
         };
-        /**
-         * 计算属性
-         */
         Layout.prototype.computed = function () {
             return {
                 getBus: function () {
@@ -51,9 +40,6 @@ define(["require", "exports", "ComponentBuilder", "system/layout/navbar/Navbar",
                 }
             };
         };
-        /**
-         * 创建模板
-         */
         Layout.prototype.template = function () {
             return "\n<div :class=\"getClassObj\" class=\"full-height app-wrapper\">\n  <!--\u4FA7\u8FB9\u680F\u7EC4\u4EF6-->\n  <SideBar class=\"sidebar-container\"/>\n  <div class=\"main-container full-height main-outer\">\n    <!--\u9876\u90E8-->\n    <div class=\"top-div\">\n      <!--\u9876\u90E8\u83DC\u5355-->\n      <navbar/>\n    </div>\n  </div>\n</div>\n    ";
         };

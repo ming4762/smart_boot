@@ -14,7 +14,7 @@ var __extends = (this && this.__extends) || (function () {
 define(["require", "exports", "ComponentBuilder"], function (require, exports, ComponentBuilder_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    var SmartContainer = /** @class */ (function (_super) {
+    var SmartContainer = (function (_super) {
         __extends(SmartContainer, _super);
         function SmartContainer() {
             return _super !== null && _super.apply(this, arguments) || this;

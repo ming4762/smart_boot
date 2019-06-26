@@ -14,33 +14,23 @@ var __extends = (this && this.__extends) || (function () {
 define(["require", "exports", "ComponentBuilder"], function (require, exports, ComponentBuilder_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    /**
-     * form列
-     */
-    var SmartFormItem = /** @class */ (function (_super) {
+    var SmartFormItem = (function (_super) {
         __extends(SmartFormItem, _super);
         function SmartFormItem() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
-        /**
-         * props
-         */
         SmartFormItem.prototype.props = function () {
             return {
                 column: {
                     required: true,
                     type: Object
                 },
-                // 绑定model
                 model: {
                     required: true,
                     type: Object
                 }
             };
         };
-        /**
-         * 模板
-         */
         SmartFormItem.prototype.template = function () {
             var vModel = 'v-model="model[column.key]"';
             return "\n    <el-form-item\n      :label=\"column.label\"\n      :prop=\"column.key\">\n      <el-switch " + this.createVIf('boolean') + " " + vModel + "/>\n      <el-select " + this.createVIf('select') + " " + vModel + " placeholder='\u8BF7\u9009\u62E9'>\n        <el-option\n          v-for=\"(dic, index) in (column.dicData ? column.dicData : [])\"\n          :label=\"dic.label\"\n          :value=\"dic.value\"\n          :key=\"index + 'option'\"/>\n      </el-select>\n      <el-input-number " + this.createVIf('number') + " " + vModel + " :disabled=\"column.disabled\"/>\n      <el-radio-group " + this.createVIf('radio') + " " + vModel + ">\n        <el-radio\n          v-for=\"(dic, index) in (column.dicData ? column.dicData : [])\"\n          :label=\"dic.label\" \n          :key=\"index + 'radio'\">{{dic.value}}</el-radio>\n      </el-radio-group>\n      <el-input placeholder='\u8BF7\u8F93\u5165\u5BC6\u7801' " + this.createVIf('password') + " " + vModel + " show-password/>\n      <el-input type='textarea' " + this.createVIf('textarea') + " " + vModel + " :placeholder=\"'\u8BF7\u8F93\u5165' + column.label\"/>\n      <el-input :placeholder=\"'\u8BF7\u8F93\u5165' + column.label\" " + this.createVIf('input') + " " + vModel + "/>\n    </el-form-item>\n    ";
@@ -48,7 +38,6 @@ define(["require", "exports", "ComponentBuilder"], function (require, exports, C
         SmartFormItem.prototype.createVIf = function (type) {
             return "v-if=\"column.type === '" + type + "'\"";
         };
-        // 组件名称
         SmartFormItem.NAME = 'smart-form-item';
         return SmartFormItem;
     }(ComponentBuilder_1.default));

@@ -1,62 +1,32 @@
 define(["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    /**
-     * 组件构造器
-     */
-    var ComponentBuilder = /** @class */ (function () {
+    var ComponentBuilder = (function () {
         function ComponentBuilder() {
         }
-        /**
-         * 数据构造方法
-         */
         ComponentBuilder.prototype.data = function () {
             return {};
         };
-        /**
-         * props
-         */
         ComponentBuilder.prototype.props = function () {
             return {};
         };
-        /**
-         * 模板构造器
-         */
         ComponentBuilder.prototype.template = function () {
             return '';
         };
-        /**
-         * 方法
-         */
         ComponentBuilder.prototype.methods = function () {
             return {};
         };
-        /**
-         * 组件
-         */
         ComponentBuilder.prototype.components = function () {
             return {};
         };
-        /**
-         * 计算属性
-         */
         ComponentBuilder.prototype.computed = function () {
             return {};
         };
-        /**
-         * 混入
-         */
         ComponentBuilder.prototype.mixins = function () {
             return [];
         };
         ComponentBuilder.prototype.watch = function () { };
-        /**
-         * 生命周期钩子创建完毕状态
-         */
         ComponentBuilder.prototype.created = function () { };
-        /**
-         * 创建组件
-         */
         ComponentBuilder.prototype.build = function () {
             var component = {
                 template: this.template(),

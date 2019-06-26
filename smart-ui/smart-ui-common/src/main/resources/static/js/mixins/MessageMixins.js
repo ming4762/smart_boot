@@ -14,22 +14,13 @@ var __extends = (this && this.__extends) || (function () {
 define(["require", "exports", "ComponentBuilder"], function (require, exports, ComponentBuilder_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    var MessageMixins = /** @class */ (function (_super) {
+    var MessageMixins = (function (_super) {
         __extends(MessageMixins, _super);
         function MessageMixins() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
-        /**
-         * 方法
-         */
         MessageMixins.prototype.methods = function () {
             return {
-                /**
-                 * 发送错误信息
-                 * @param message
-                 * @param error
-                 * @param options
-                 */
                 errorMessage: function (message, error, options) {
                     console.error(error);
                     var defaultParameter = {
@@ -37,18 +28,11 @@ define(["require", "exports", "ComponentBuilder"], function (require, exports, C
                         message: message,
                         type: 'error'
                     };
-                    // @ts-ignore
                     var parameter = options ? Object.assign(defaultParameter, options) : defaultParameter;
                     this.$message(parameter);
                 },
-                /**
-                 * 发送成功消息
-                 * @param message
-                 * @param options
-                 */
                 successMessage: function (message, options) {
                     var defaultParameter = { message: message, type: 'success' };
-                    // @ts-ignore
                     var parameter = options ? Object.assign(defaultParameter, options) : defaultParameter;
                     this.$message(parameter);
                 }

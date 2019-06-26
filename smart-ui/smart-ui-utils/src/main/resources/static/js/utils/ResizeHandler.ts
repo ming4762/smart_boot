@@ -19,7 +19,7 @@ export default class ResizeHandler {
   }
 
   /**
-   * 添加时间
+   * 添加事件
    */
   private static addListener () {
     window.addEventListener('resize', this.resize)

@@ -14,35 +14,23 @@ var __extends = (this && this.__extends) || (function () {
 define(["require", "exports", "ComponentBuilder", "mixins/ThemeMixins"], function (require, exports, ComponentBuilder_1, ThemeMixins_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    /**
-     * 侧边栏组件
-     */
-    var SideBar = /** @class */ (function (_super) {
+    var SideBar = (function (_super) {
         __extends(SideBar, _super);
         function SideBar() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
         SideBar.prototype.data = function () {
             return {
-                // 激活的菜单
                 activeIndex: ''
             };
         };
-        /**
-         * 混入
-         */
         SideBar.prototype.mixins = function () {
             return [
-                // @ts-ignore
                 new ThemeMixins_1.default().build()
             ];
         };
-        /**
-         * 计算属性
-         */
         SideBar.prototype.computed = function () {
             return {
-                // 侧边栏底部演示计算属性
                 getSidebarHeaderStyle: function () {
                     return "background-color:" + this.getTopColor;
                 }

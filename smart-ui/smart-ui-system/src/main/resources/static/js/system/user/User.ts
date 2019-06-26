@@ -63,7 +63,6 @@ export class User extends ComponentBuilder {
   protected data () {
     return {
       apiService: ApiService,
-      tableHeight: 0,
       /**
        * 表格配置
        */
@@ -229,6 +228,17 @@ export class User extends ComponentBuilder {
     }
   }
 
+  protected computed () {
+    return {
+      /**
+       * 计算表格高度
+       */
+      computedTableHeight () {
+        return this.clientHeight - 30
+      }
+    }
+  }
+
   protected template () {
     return `
     <div style="padding: 15px;">
@@ -241,7 +251,7 @@ export class User extends ComponentBuilder {
         tableName="系统用户" 
         :apiService="apiService"
         labelWidth="80px"
-        :height="clientHeight"
+        :height="computedTableHeight"
         :columnOptions="columnOptions">
         <!-- 状态status插槽 -->
         <template slot="table-status" slot-scope="{ row }">

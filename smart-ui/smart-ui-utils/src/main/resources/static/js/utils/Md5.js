@@ -1,59 +1,7 @@
-/*
-
-TypeScript Md5
-==============
-
-Based on work by
-* Joseph Myers: http://www.myersdaily.org/joseph/javascript/md5-text.html
-* André Cruz: https://github.com/satazor/SparkMD5
-* Raymond Hill: https://github.com/gorhill/yamd5.js
-
-Effectively a TypeScrypt re-write of Raymond Hill JS Library
-
-The MIT License (MIT)
-
-Copyright (C) 2014 Raymond Hill
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
-
-
-
-            DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE
-                    Version 2, December 2004
-
- Copyright (C) 2015 André Cruz <amdfcruz@gmail.com>
-
- Everyone is permitted to copy and distribute verbatim or modified
- copies of this license document, and changing it is allowed as long
- as the name is changed.
-
-            DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE
-   TERMS AND CONDITIONS FOR COPYING, DISTRIBUTION AND MODIFICATION
-
-  0. You just DO WHAT THE FUCK YOU WANT TO.
-
-
-*/
 define(["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    var Md5 = /** @class */ (function () {
+    var Md5 = (function () {
         function Md5() {
             this._state = new Int32Array(4);
             this._buffer = new ArrayBuffer(68);
@@ -61,7 +9,6 @@ define(["require", "exports"], function (require, exports) {
             this._buffer32 = new Uint32Array(this._buffer, 0, 17);
             this.start();
         }
-        // One time hashing functions
         Md5.hashStr = function (str, raw) {
             if (raw === void 0) { raw = false; }
             return this.onePassHasher
@@ -100,7 +47,6 @@ define(["require", "exports"], function (require, exports) {
             var b = x[1];
             var c = x[2];
             var d = x[3];
-            // ff()
             a += (b & c | ~b & d) + k[0] - 680876936 | 0;
             a = (a << 7 | a >>> 25) + b | 0;
             d += (a & b | ~a & c) + k[1] - 389564586 | 0;
@@ -133,7 +79,6 @@ define(["require", "exports"], function (require, exports) {
             c = (c << 17 | c >>> 15) + d | 0;
             b += (c & d | ~c & a) + k[15] + 1236535329 | 0;
             b = (b << 22 | b >>> 10) + c | 0;
-            // gg()
             a += (b & d | c & ~d) + k[1] - 165796510 | 0;
             a = (a << 5 | a >>> 27) + b | 0;
             d += (a & c | b & ~c) + k[6] - 1069501632 | 0;
@@ -166,7 +111,6 @@ define(["require", "exports"], function (require, exports) {
             c = (c << 14 | c >>> 18) + d | 0;
             b += (c & a | d & ~a) + k[12] - 1926607734 | 0;
             b = (b << 20 | b >>> 12) + c | 0;
-            // hh()
             a += (b ^ c ^ d) + k[5] - 378558 | 0;
             a = (a << 4 | a >>> 28) + b | 0;
             d += (a ^ b ^ c) + k[8] - 2022574463 | 0;
@@ -199,7 +143,6 @@ define(["require", "exports"], function (require, exports) {
             c = (c << 16 | c >>> 16) + d | 0;
             b += (c ^ d ^ a) + k[2] - 995338651 | 0;
             b = (b << 23 | b >>> 9) + c | 0;
-            // ii()
             a += (c ^ (b | ~d)) + k[0] - 198630844 | 0;
             a = (a << 6 | a >>> 26) + b | 0;
             d += (b ^ (a | ~c)) + k[7] + 1126891415 | 0;
@@ -243,9 +186,6 @@ define(["require", "exports"], function (require, exports) {
             this._state.set(Md5.stateIdentity);
             return this;
         };
-        // Char to code point to to array conversion:
-        // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/charCodeAt
-        // #Example.3A_Fixing_charCodeAt_to_handle_non-Basic-Multilingual-Plane_characters_if_their_presence_earlier_in_the_string_is_unknown
         Md5.prototype.appendStr = function (str) {
             var buf8 = this._buffer8;
             var buf32 = this._buffer32;
@@ -368,8 +308,6 @@ define(["require", "exports"], function (require, exports) {
                 Md5._md5cycle(this._state, buf32);
                 buf32.set(Md5.buffer32Identity);
             }
-            // Do the final computation based on the tail and length
-            // Beware that the final length may not fit in 32 bits so we take care of that
             dataBitsLen = this._dataLength * 8;
             if (dataBitsLen <= 0xFFFFFFFF) {
                 buf32[14] = dataBitsLen;
@@ -387,12 +325,10 @@ define(["require", "exports"], function (require, exports) {
             Md5._md5cycle(this._state, buf32);
             return raw ? this._state : Md5._hex(this._state);
         };
-        // Private Static Variables
         Md5.stateIdentity = new Int32Array([1732584193, -271733879, -1732584194, 271733878]);
         Md5.buffer32Identity = new Int32Array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
         Md5.hexChars = '0123456789abcdef';
         Md5.hexOut = [];
-        // Permanent instance is to use for one-call hashing
         Md5.onePassHasher = new Md5();
         return Md5;
     }());

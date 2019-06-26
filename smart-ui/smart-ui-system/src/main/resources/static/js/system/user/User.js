@@ -14,36 +14,22 @@ var __extends = (this && this.__extends) || (function () {
 define(["require", "exports", "ComponentBuilder", "plugins/table/SmartTableCRUD", "utils/ApiService", "utils/ValidateUtils", "mixins/LayoutMixins"], function (require, exports, ComponentBuilder_1, SmartTableCRUD_1, ApiService_1, ValidateUtils_1, LayoutMixins_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    /**
-     * 用户界面构建
-     */
-    var User = /** @class */ (function (_super) {
+    var User = (function (_super) {
         __extends(User, _super);
         function User() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
-        /**
-         * 初始化方法
-         */
         User.prototype.init = function () {
             this.initVue();
         };
-        /**
-         * 初始化vue
-         */
         User.prototype.initVue = function () {
-            // @ts-ignore
             this.vue = new Vue({
                 el: '#vue-container',
                 components: {
-                    // @ts-ignore
                     'home-main': this.build()
                 }
             });
         };
-        /**
-         * 验证手机号
-         */
         User.validateMobile = function (rule, value, callback) {
             if (value && value.trim() !== '') {
                 var result = ValidateUtils_1.default.validateMobile(value.trim());
@@ -66,10 +52,6 @@ define(["require", "exports", "ComponentBuilder", "plugins/table/SmartTableCRUD"
         User.prototype.data = function () {
             return {
                 apiService: ApiService_1.default,
-                tableHeight: 0,
-                /**
-                 * 表格配置
-                 */
                 columnOptions: [
                     {
                         prop: 'userId',
@@ -179,7 +161,6 @@ define(["require", "exports", "ComponentBuilder", "plugins/table/SmartTableCRUD"
                         }
                     }
                 ],
-                // 默认按钮配置
                 defaultButtonConfig: {
                     add: {
                         rowShow: false,
@@ -233,8 +214,15 @@ define(["require", "exports", "ComponentBuilder", "plugins/table/SmartTableCRUD"
                 }
             };
         };
+        User.prototype.computed = function () {
+            return {
+                computedTableHeight: function () {
+                    return this.clientHeight - 30;
+                }
+            };
+        };
         User.prototype.template = function () {
-            return "\n    <div style=\"padding: 15px;\">\n      <smart-table-crud\n        :defaultButtonConfig=\"defaultButtonConfig\"\n        queryUrl=\"sys/user/list\"\n        deleteUrl=\"sys/user/batchDelete\"\n        saveUpdateUrl=\"sys/user/saveUpdate\"\n        :keys=\"['userId']\"\n        tableName=\"\u7CFB\u7EDF\u7528\u6237\" \n        :apiService=\"apiService\"\n        labelWidth=\"80px\"\n        :height=\"clientHeight\"\n        :columnOptions=\"columnOptions\">\n        <!-- \u72B6\u6001status\u63D2\u69FD -->\n        <template slot=\"table-status\" slot-scope=\"{ row }\">\n          <el-tag\n            :type=\"formatStatusType(row)\">{{formatStateValue(row)}}</el-tag>\n        </template>\n      </smart-table-crud>\n    </div>\n    ";
+            return "\n    <div style=\"padding: 15px;\">\n      <smart-table-crud\n        :defaultButtonConfig=\"defaultButtonConfig\"\n        queryUrl=\"sys/user/list\"\n        deleteUrl=\"sys/user/batchDelete\"\n        saveUpdateUrl=\"sys/user/saveUpdate\"\n        :keys=\"['userId']\"\n        tableName=\"\u7CFB\u7EDF\u7528\u6237\" \n        :apiService=\"apiService\"\n        labelWidth=\"80px\"\n        :height=\"computedTableHeight\"\n        :columnOptions=\"columnOptions\">\n        <!-- \u72B6\u6001status\u63D2\u69FD -->\n        <template slot=\"table-status\" slot-scope=\"{ row }\">\n          <el-tag\n            :type=\"formatStatusType(row)\">{{formatStateValue(row)}}</el-tag>\n        </template>\n      </smart-table-crud>\n    </div>\n    ";
         };
         return User;
     }(ComponentBuilder_1.default));

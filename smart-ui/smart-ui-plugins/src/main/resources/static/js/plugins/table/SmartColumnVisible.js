@@ -14,7 +14,7 @@ var __extends = (this && this.__extends) || (function () {
 define(["require", "exports", "ComponentBuilder", "utils/CommonUtils"], function (require, exports, ComponentBuilder_1, CommonUtils_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    var SmartColumnVisible = /** @class */ (function (_super) {
+    var SmartColumnVisible = (function (_super) {
         __extends(SmartColumnVisible, _super);
         function SmartColumnVisible() {
             return _super !== null && _super.apply(this, arguments) || this;
@@ -25,7 +25,6 @@ define(["require", "exports", "ComponentBuilder", "utils/CommonUtils"], function
                     type: Object,
                     default: function () { return {}; }
                 },
-                // 列数
                 lineNumber: {
                     type: Number,
                     default: 4
@@ -38,18 +37,13 @@ define(["require", "exports", "ComponentBuilder", "utils/CommonUtils"], function
             };
         };
         SmartColumnVisible.prototype.beforeMount = function () {
-            // @ts-ignore
             var columnShow = CommonUtils_1.default.clone(this.columnShow);
             for (var column in columnShow) {
-                // @ts-ignore
                 this.$set(this.result, column, !columnShow[column]['hidden']);
             }
         };
         SmartColumnVisible.prototype.watch = function () {
             return {
-                /**
-                 * 监控结果变化
-                 */
                 result: {
                     deep: true,
                     handler: function (_new) {
@@ -63,16 +57,9 @@ define(["require", "exports", "ComponentBuilder", "utils/CommonUtils"], function
         };
         SmartColumnVisible.prototype.computed = function () {
             return {
-                /**
-                 * 计算列数
-                 */
                 computedSpanNumber: function () {
                     return 24 / this.lineNumber;
                 },
-                /**
-                 * 计算表格显示
-                 * @returns {Array}
-                 */
                 computedColumnShow: function () {
                     var result = [];
                     var i = 0;
@@ -89,9 +76,6 @@ define(["require", "exports", "ComponentBuilder", "utils/CommonUtils"], function
                 }
             };
         };
-        /**
-         * 模板构造器
-         */
         SmartColumnVisible.prototype.template = function () {
             return "\n    <div>\n      <el-row :key=\"index + 'out'\" v-for=\"(columnGroup, index) in computedColumnShow\">\n        <el-col :span=\"computedSpanNumber\" :key=\"index + 'in'\" v-for=\"(column, index) in columnGroup\">\n          <el-checkbox\n              :label=\"column.name\"\n              v-model=\"result[column.key]\"\n          ></el-checkbox>\n        </el-col>\n      </el-row>\n    </div>\n    ";
         };

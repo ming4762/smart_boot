@@ -14,47 +14,36 @@ var __extends = (this && this.__extends) || (function () {
 define(["require", "exports", "ComponentBuilder", "utils/CommonUtils"], function (require, exports, ComponentBuilder_1, CommonUtils_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    /**
-     * 表格组件
-     * @author zhongming
-     */
-    var SmartTable = /** @class */ (function (_super) {
+    var SmartTable = (function (_super) {
         __extends(SmartTable, _super);
         function SmartTable() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
         SmartTable.prototype.props = function () {
             return {
-                // 表格列配置
                 columnOptions: {
                     required: true
                 },
-                // 是否显示复选框
                 selection: {
                     type: Boolean,
                     default: true
                 },
-                // 是否显示序号
                 showIndex: {
                     type: Boolean,
                     default: true
                 },
-                // 是否为斑马纹
                 stripe: {
                     type: Boolean,
                     default: true
                 },
-                // 是否显示边框
                 border: {
                     type: Boolean,
                     default: true
                 },
-                // 表格类型
                 type: {
                     type: String,
                     default: 'normal'
                 },
-                // 表格数据
                 data: {
                     type: Array
                 },
@@ -66,9 +55,7 @@ define(["require", "exports", "ComponentBuilder", "utils/CommonUtils"], function
         };
         SmartTable.prototype.data = function () {
             return {
-                // 标识是否有左侧列冻结
                 leftFixed: false,
-                // 表格数据
                 tableData: []
             };
         };
@@ -89,7 +76,6 @@ define(["require", "exports", "ComponentBuilder", "utils/CommonUtils"], function
         };
         SmartTable.prototype.computed = function () {
             return {
-                // 复选框/序号列计算属性
                 getSelectionIndexColumns: function () {
                     var columns = [];
                     if (this.selection === true) {
@@ -111,14 +97,11 @@ define(["require", "exports", "ComponentBuilder", "utils/CommonUtils"], function
                     }
                     return columns;
                 },
-                // 表格列计算属性
                 getColumns: function () {
                     var _this = this;
                     var columns = [];
                     this.columnOptions.forEach(function (item) {
-                        // @ts-ignore
                         var column = Object.assign({}, item);
-                        // 显示的列才加入
                         if (column.visible !== false) {
                             if (!column.align)
                                 column.align = 'center';
@@ -132,7 +115,6 @@ define(["require", "exports", "ComponentBuilder", "utils/CommonUtils"], function
                     });
                     return columns;
                 },
-                // 获取表格的key
                 getRowKey: function () {
                     var _this = this;
                     if (this.keys.length === 1) {

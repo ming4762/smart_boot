@@ -14,9 +14,6 @@ var __extends = (this && this.__extends) || (function () {
 define(["require", "exports", "ComponentBuilder"], function (require, exports, ComponentBuilder_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    /**
-     * 侧边栏样式
-     */
     var sideBarTheme = {
         dark: {
             'background-color': '#304156',
@@ -31,42 +28,22 @@ define(["require", "exports", "ComponentBuilder"], function (require, exports, C
             'active-text-color': '#4391f4'
         }
     };
-    /**
-     * 样式混入
-     */
-    var ThemeMixins = /** @class */ (function (_super) {
+    var ThemeMixins = (function (_super) {
         __extends(ThemeMixins, _super);
         function ThemeMixins() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
-        /**
-         * 计算属性
-         */
         ThemeMixins.prototype.computed = function () {
             return {
-                /**
-                 * 获取消息总线
-                 */
                 getBus: function () {
-                    // @ts-ignore
                     return busVue;
                 },
-                /**
-                 * 获取顶部样式
-                 */
                 getTopColor: function () {
                     return this.getBus.theme.topColor;
                 },
-                /**
-                 * 获取侧边栏样式
-                 */
                 getSideBarTheme: function () {
                     return sideBarTheme[this.getBus.theme.menuTheme];
                 },
-                /**
-                 * 获取顶部文字颜色
-                 * TODO:待完善
-                 */
                 getTopTextColor: function () {
                     return sideBarTheme.dark['text-color'];
                 }
