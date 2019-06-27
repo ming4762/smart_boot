@@ -16,6 +16,10 @@ export default class FlexAside extends ComponentBuilder {
       asideWidth: {
         type: String,
         default: '200px'
+      },
+      hasAsideHeader: {
+        type: Boolean,
+        default: true
       }
     }
   }
@@ -62,15 +66,16 @@ export default class FlexAside extends ComponentBuilder {
 
   protected template () {
     return `
-    <el-container class="common-full-height">
+    <el-container class="full-height">
       <!--  添加动画效果  -->
       <el-aside
         :width="getAsideWidth"
-        class="common-full-height common-aside">
+        class="full-height common-aside">
         <el-header
-            :height="asideHeaderHeight"
-            :style="getAsideHeaderLineHeight"
-            class="aside-header">
+          v-if="hasAsideHeader"
+          :height="asideHeaderHeight"
+          :style="getAsideHeaderLineHeight"
+          class="aside-header">
         <span
             v-show="asideVisible">{{asideTitle}}</span>
           <i
@@ -79,7 +84,7 @@ export default class FlexAside extends ComponentBuilder {
             :style="getAsideHeaderLineHeight"
             class="el-icon-d-arrow-right cousor-pointer aside-header-icon"></i>
         </el-header>
-        <div class="common-full-height" v-show="asideVisible">
+        <div class="full-height" v-show="asideVisible">
           <slot name="aside"/>
         </div>
       </el-aside>

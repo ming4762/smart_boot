@@ -55,3 +55,21 @@ CREATE TABLE `sys_user_role` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 INSERT INTO sys_user_role VALUES ('1', '1', '1', now(), '1', null, NULL);
+
+
+--组织机构表
+CREATE TABLE `sys_organ` (
+  `organ_id` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '部门ID',
+  `organ_code` varchar(50) NOT NULL COMMENT '组织代码',
+  `organ_name` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '部门名称',
+  `short_name` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '部门简称',
+  `leader_id` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '负责人ID',
+  `description` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '描述',
+  `parent_id` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '0' COMMENT '上级ID',
+  `create_time` datetime NOT NULL,
+  `create_user_id` varchar(50) NOT NULL,
+  `update_time` datetime DEFAULT NULL,
+  `update_user_id` varchar(50) DEFAULT NULL,
+  `top_parent_id` varchar(50) NOT NULL COMMENT '顶级ID',
+  PRIMARY KEY (`organ_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;

@@ -29,6 +29,10 @@ define(["require", "exports", "ComponentBuilder"], function (require, exports, C
                 asideWidth: {
                     type: String,
                     default: '200px'
+                },
+                hasAsideHeader: {
+                    type: Boolean,
+                    default: true
                 }
             };
         };
@@ -59,7 +63,7 @@ define(["require", "exports", "ComponentBuilder"], function (require, exports, C
             };
         };
         FlexAside.prototype.template = function () {
-            return "\n    <el-container class=\"common-full-height\">\n      <!--  \u6DFB\u52A0\u52A8\u753B\u6548\u679C  -->\n      <el-aside\n        :width=\"getAsideWidth\"\n        class=\"common-full-height common-aside\">\n        <el-header\n            :height=\"asideHeaderHeight\"\n            :style=\"getAsideHeaderLineHeight\"\n            class=\"aside-header\">\n        <span\n            v-show=\"asideVisible\">{{asideTitle}}</span>\n          <i\n            @click=\"handleShowHideAside\"\n            :class=\"getAsideHeaderIconClass\"\n            :style=\"getAsideHeaderLineHeight\"\n            class=\"el-icon-d-arrow-right cousor-pointer aside-header-icon\"></i>\n        </el-header>\n        <div class=\"common-full-height\" v-show=\"asideVisible\">\n          <slot name=\"aside\"/>\n        </div>\n      </el-aside>\n      <el-main style=\"padding: 0;\" class=\"common-main\">\n        <slot/>\n      </el-main>\n    </el-container>\n    ";
+            return "\n    <el-container class=\"full-height\">\n      <!--  \u6DFB\u52A0\u52A8\u753B\u6548\u679C  -->\n      <el-aside\n        :width=\"getAsideWidth\"\n        class=\"full-height common-aside\">\n        <el-header\n          v-if=\"hasAsideHeader\"\n          :height=\"asideHeaderHeight\"\n          :style=\"getAsideHeaderLineHeight\"\n          class=\"aside-header\">\n        <span\n            v-show=\"asideVisible\">{{asideTitle}}</span>\n          <i\n            @click=\"handleShowHideAside\"\n            :class=\"getAsideHeaderIconClass\"\n            :style=\"getAsideHeaderLineHeight\"\n            class=\"el-icon-d-arrow-right cousor-pointer aside-header-icon\"></i>\n        </el-header>\n        <div class=\"full-height\" v-show=\"asideVisible\">\n          <slot name=\"aside\"/>\n        </div>\n      </el-aside>\n      <el-main style=\"padding: 0;\" class=\"common-main\">\n        <slot/>\n      </el-main>\n    </el-container>\n    ";
         };
         return FlexAside;
     }(ComponentBuilder_1.default));

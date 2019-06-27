@@ -1,5 +1,5 @@
 declare var axios
-
+// @ts-ignore
 import StoreUtil from 'utils/StoreUtil'
 
 const service = axios.create({

@@ -1,0 +1,16 @@
+
+.organ-aside-search {
+    padding: 22px 20px;
+    border-bottom: 1px solid #e4eaec;
+}
+.organ-aside-search input {
+    border-radius: 22px;
+}
+
+.organ-aside-search i {
+    font-weight: bold;
+}
+.organ-aside-add {
+    padding: 22px 20px;
+    border-top: 1px solid #e4eaec;
+}
