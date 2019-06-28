@@ -24,6 +24,13 @@ define(["require", "exports", "ComponentBuilder", "utils/ResizeHandler"], functi
                 clientHeight: 0
             };
         };
+        LayoutMixins.prototype.computed = function () {
+            return {
+                computedTableHeight: function () {
+                    return this.clientHeight - 30;
+                }
+            };
+        };
         LayoutMixins.prototype.beforeMount = function () {
             var $this = this;
             $this.clientHeight = document.body.clientHeight;

@@ -12,6 +12,17 @@ export default class LayoutMixins extends ComponentBuilder {
     }
   }
 
+  protected computed () {
+    return {
+      /**
+       * 计算表格高度
+       */
+      computedTableHeight () {
+        return this.clientHeight - 30
+      }
+    }
+  }
+
   /**
    * 加载前状态
    */
