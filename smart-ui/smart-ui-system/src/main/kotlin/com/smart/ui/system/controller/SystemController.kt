@@ -51,4 +51,12 @@ class SystemController {
     fun organ(@RequestParam parameter: Map<String, Any?>): ModelAndView {
         return ModelAndView("system/organ/organ", parameter)
     }
+
+    /**
+     * 跳转到角色管理页面
+     */
+    @RequestMapping("/role")
+    fun role(@RequestParam parameter: Map<String, Any?>): ModelAndView {
+        return ModelAndView("system/role/role", parameter)
+    }
 }
