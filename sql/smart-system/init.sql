@@ -73,3 +73,17 @@ CREATE TABLE `sys_organ` (
   `top_parent_id` varchar(50) NOT NULL COMMENT '顶级ID',
   PRIMARY KEY (`organ_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- 日志表
+CREATE TABLE `sys_log` (
+  `log_id` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '日志ID',
+  `user_id` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '用户名',
+  `operation` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '操作',
+  `use_time` int(11) NOT NULL COMMENT '用时',
+  `method` text CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '方法',
+  `params` longtext CHARACTER SET utf8 COLLATE utf8_general_ci COMMENT '参数',
+  `ip` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT 'IP',
+  `create_time` datetime NOT NULL COMMENT '创建时间',
+  `request_path` varchar(255) NOT NULL COMMENT '请求路径',
+  PRIMARY KEY (`log_id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;

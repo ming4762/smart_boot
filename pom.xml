@@ -29,6 +29,8 @@
         <smart-cache-common.version>0.0.1-SNAPSHOT</smart-cache-common.version>
         <!--crud启动器版本-->
         <crud-spring-boot-starter.version>0.0.1-SNAPSHOT</crud-spring-boot-starter.version>
+        <!--日志启动器-->
+        <log-spring-boot-starter.version>0.0.1-SNAPSHOT</log-spring-boot-starter.version>
         <shiro-redis.version>0.0.1-SNAPSHOT</shiro-redis.version>
         <smart-auth-common.version>0.0.1-SNAPSHOT</smart-auth-common.version>
         <!--redis-spring-boot-starter.version-->
@@ -40,7 +42,7 @@
 
     <modules>
         <!--common包-->
-        <module>smart-common</module>
+        <module>smart-commons</module>
         <!--模块启动器-->
         <module>smart-module-starter</module>
         <!--启动器模块-->
