@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.smart</groupId>
+        <artifactId>smart-starter</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+    </parent>
+    <artifactId>log-spring-boot-starter</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>log-spring-boot-starter</name>
+    <description>日志启动器</description>
+
+    <properties>
+    </properties>
+
+    <dependencies>
+        <!--引入crud启动器-->
+        <dependency>
+            <groupId>com.smart</groupId>
+            <artifactId>crud-spring-boot-starter</artifactId>
+            <version>${crud-spring-boot-starter.version}</version>
+        </dependency>
+
+        <!--AOP支持-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-aop</artifactId>
+        </dependency>
+
+        <!--引入认证工具包-->
+        <dependency>
+            <groupId>com.smart</groupId>
+            <artifactId>smart-auth-common</artifactId>
+            <version>${smart-auth-common.version}</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+    </build>
+
+</project>
