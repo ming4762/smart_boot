@@ -12,7 +12,7 @@ import java.util.*
  * 2019/6/12 下午3:20
  */
 @TableName("sys_role")
-class SysRoleDO : BaseModel() {
+open class SysRoleDO : BaseModel() {
 
     companion object {
         private const val serialVersionUID = 1560324063474L

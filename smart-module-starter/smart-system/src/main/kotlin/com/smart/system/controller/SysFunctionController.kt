@@ -2,7 +2,6 @@ package com.smart.system.controller
 
 import com.smart.common.message.Result
 import com.smart.common.model.Tree
-import com.smart.common.utils.TreeUtils
 import com.smart.starter.crud.controller.BaseController
 import com.smart.system.model.SysFunctionDO
 import com.smart.system.service.SysFunctionService
@@ -22,22 +21,19 @@ class SysFunctionController : BaseController<SysFunctionService, SysFunctionDO>(
     /**
      * 查询功能树形结构
      */
-    @RequestMapping("/listAllTree")
-    fun listAllTree(@RequestBody parameters: Map<String, Any?>): Result<Any?> {
-        val result = this.list(parameters)
-        val list = result.data
-        if (list != null && list is List<*> && list.isNotEmpty()) {
-            list as List<SysFunctionDO>
-            return Result.success(TreeUtils.build(
-                    list.map {
-                        val tree = Tree<SysFunctionDO>()
-                        tree.id = it.functionId
-                        tree.text = it.functionName
-                        tree.`object` = it
-                        return@map tree
-                    }
-            ))
+//    @RequiresPermissions("system:function:query")
+    @RequestMapping("/queryFunctionTree")
+    fun queryFunctionTree(@RequestBody parameters: Map<String, Any?>): Result<List<Tree<SysFunctionDO>>?> {
+        return try {
+            val menuId = parameters["menuId"]
+            if (menuId == null) {
+                Result.success(this.service.queryAllFunctionTree(parameters))
+            } else {
+                Result.success(this.service.queryWithChildren(parameters))
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Result.failure(e.message)
         }
-        return result
     }
 }

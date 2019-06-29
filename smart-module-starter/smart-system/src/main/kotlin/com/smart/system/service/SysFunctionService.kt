@@ -9,12 +9,12 @@ interface SysFunctionService : BaseService<SysFunctionDO> {
     /**
      * 查询所有树形结构
      */
-    fun queryAllFunctionTree(parameters: Map<String, Any?>): Tree<SysFunctionDO>?
+    fun queryAllFunctionTree(parameters: Map<String, Any?>): List<Tree<SysFunctionDO>>
 
     /**
      * 查询功能和下级
      */
-    fun queryWithChildren(parameters: Map<String, Any?>): Tree<SysFunctionDO>?
+    fun queryWithChildren(parameters: Map<String, Any?>): List<Tree<SysFunctionDO>>
 
     /**
      * 查询功能和下级

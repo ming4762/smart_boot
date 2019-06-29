@@ -1,12 +1,14 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns:th="http://www.springframework.org/schema/data/jaxb">
 <head>
   <meta charset="UTF-8">
-  <title>用户管理</title>
+  <title>功能管理</title>
   <!--引入element ui-->
   <div th:replace="/common/common-resources :: common-resources-element-css"></div>
   <link rel="stylesheet" th:href="@{/css/common.css}"/>
   <link rel="stylesheet" th:href="@{/css/plugins/table/smartTable.css}"/>
+  <!--引入图标样式-->
+  <div th:replace="/common/common-resources :: common-resources-font-awesome"></div>
 </head>
 <body>
   <div id="vue-container" class="full-height">
@@ -23,6 +25,6 @@
 
 <script th:src="@{/js/common.js}"></script>
 
-<script th:src="@{/js/system/user/userPage.js}"></script>
+<script th:src="@{/js/system/function/functionPage.js}"></script>
 </body>
 </html>

@@ -33,6 +33,13 @@
             <artifactId>smart-auth-common</artifactId>
             <version>${smart-auth-common.version}</version>
         </dependency>
+
+        <!--引入日志启动器-->
+        <dependency>
+            <groupId>com.smart</groupId>
+            <artifactId>log-spring-boot-starter</artifactId>
+            <version>${log-spring-boot-starter.version}</version>
+        </dependency>
     </dependencies>
 
     <build>

@@ -59,4 +59,12 @@ class SystemController {
     fun role(@RequestParam parameter: Map<String, Any?>): ModelAndView {
         return ModelAndView("system/role/role", parameter)
     }
+
+    /**
+     * 跳转到功能管理页面
+     */
+    @RequestMapping("/function")
+    fun function(@RequestParam parameter: Map<String, Any?>): ModelAndView {
+        return ModelAndView("system/function/function", parameter)
+    }
 }

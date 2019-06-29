@@ -232,7 +232,7 @@ class SysFunctionServiceImpl : BaseServiceImpl<SysFunctionMapper, SysFunctionDO>
     /**
      * 查询所有树形结构
      */
-    override fun queryAllFunctionTree(parameters: Map<String, Any?>): Tree<SysFunctionDO>? {
+    override fun queryAllFunctionTree(parameters: Map<String, Any?>): List<Tree<SysFunctionDO>> {
         // 判断查询菜单功能还是非菜单功能
         var isMenu = parameters["isMenu"] as Boolean?
         if (isMenu == null) {
@@ -250,13 +250,13 @@ class SysFunctionServiceImpl : BaseServiceImpl<SysFunctionMapper, SysFunctionDO>
             tree.parentId = it.parentId
             return@map tree
         }.collect(Collectors.toList())
-        return TreeUtils.build(treeList)
+        return TreeUtils.buildList(treeList, "0")
     }
 
     /**
      * 查询功能和下级
      */
-    override fun queryWithChildren(parameters: Map<String, Any?>): Tree<SysFunctionDO>? {
+    override fun queryWithChildren(parameters: Map<String, Any?>): List<Tree<SysFunctionDO>> {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 }

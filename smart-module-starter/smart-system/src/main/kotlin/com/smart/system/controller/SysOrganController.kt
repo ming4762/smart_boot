@@ -5,6 +5,7 @@ import com.smart.common.model.Tree
 import com.smart.starter.crud.controller.BaseController
 import com.smart.system.model.SysOrganDO
 import com.smart.system.service.SysOrganService
+import org.apache.shiro.authz.annotation.RequiresPermissions
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController
 class SysOrganController : BaseController<SysOrganService, SysOrganDO>() {
 
     // TODO: 权限
+    @RequiresPermissions("sys:organ:query")
     @RequestMapping("/listTree")
     fun listTree(@RequestBody topParentIdList: List<String>): Result<Map<String, List<Tree<SysOrganDO>>?>?> {
         return try {
