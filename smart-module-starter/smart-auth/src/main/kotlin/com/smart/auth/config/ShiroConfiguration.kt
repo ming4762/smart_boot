@@ -41,6 +41,10 @@ class ShiroConfiguration {
     @Value("\${smart.auth.cacheType:redis}")
     private lateinit var cacheType: String
 
+    // 是否是开发模式
+    @Value("\${smart.auth.development:false}")
+    private var development: Boolean = false
+
     /**
      * 创建shiro拦截器
      */
@@ -53,7 +57,12 @@ class ShiroConfiguration {
         filters["optionsAdoptFilter"] = OptionsAdoptFilter()
         shiroFilterFactoryBean.filters = filters
         // 设置拦截器链
-        shiroFilterFactoryBean.filterChainDefinitionMap = this.createFilterChainDefinitionMap()
+        if (this.development) {
+            // 开发模式不拦截请求
+            shiroFilterFactoryBean.filterChainDefinitionMap = linkedMapOf("/**" to "anon")
+        } else {
+            shiroFilterFactoryBean.filterChainDefinitionMap = this.createFilterChainDefinitionMap()
+        }
         return shiroFilterFactoryBean
     }
 
