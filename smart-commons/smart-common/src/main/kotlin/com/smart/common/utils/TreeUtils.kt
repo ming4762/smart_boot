@@ -1,8 +1,7 @@
 package com.smart.common.utils
 
 import com.smart.common.model.Tree
-import java.util.ArrayList
-import java.util.HashMap
+import java.util.*
 
 /**
  * 属性数据工具类
@@ -57,9 +56,9 @@ object TreeUtils {
      * 构建树形列表
      */
     @JvmStatic
-    fun <T> buildList(nodes: List<Tree<T>>?, idParam: String): List<Tree<T>>? {
+    fun <T> buildList(nodes: List<Tree<T>>?, idParam: String): List<Tree<T>> {
         if (nodes == null) {
-            return null
+            return emptyList()
         }
         val topNodes = ArrayList<Tree<T>>()
         for (children in nodes) {
