@@ -1,0 +1,11 @@
+.fa {
+    margin: 5px;
+    padding: 5px;
+    cursor: pointer;
+    font-size: 18px;
+    border-radius: 3px;
+}
+.fa:hover {
+    background-color: #1d9d74;
+    color: #ffffff;
+}

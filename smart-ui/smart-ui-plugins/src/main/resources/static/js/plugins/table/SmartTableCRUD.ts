@@ -913,7 +913,18 @@ export default class SmartTableCRUD extends ComponentBuilder {
           :label-width="labelWidth"
           :columnOptions="addEditFromColumnOptions"
           v-loading="addEditDialog.loading"
-          ref="addEditForm"></smart-form>
+          ref="addEditForm">
+          <!--form插槽-->
+          <template
+            v-for="(value, key) in getFormSolts"
+            slot-scope="{column, model}"
+            :slot="value">
+            <slot
+              :column="column"
+              :model="model"
+              :name="key"></slot>
+          </template>
+        </smart-form>
         <div slot="footer">
           <el-button @click="addEditDialog.visible = false">取 消</el-button>
           <el-button type="primary" @click="saveUpdate">保存</el-button>
