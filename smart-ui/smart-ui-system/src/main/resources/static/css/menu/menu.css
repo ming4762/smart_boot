@@ -1,0 +1,44 @@
+.menu-config-container{
+    width: 800px;
+    margin: auto;
+    padding-top: 80px;
+}
+.menu-confg-col {
+    height: 100px;
+}
+.menu-config-card {
+    height: 100px;
+    text-align: center;
+}
+.menu-config-add-card {
+    line-height: 100px;
+}
+.menu-config-card .el-card__body {
+    padding: 0;
+    height: 100%;
+}
+
+.menu-config-row {
+    margin-bottom: 20px;
+}
+
+.menu-config-card :hover {
+    cursor: pointer;
+}
+.menu-config-show-card {
+    font-size: 22px;
+}
+.menu-config-edit-container {
+    height: 22px;
+}
+.menu-config-edit-container .edit-button {
+    padding-right: 10px;
+    padding-top: 3px;
+    text-align: right;
+    font-size: 14px;
+}
+.menu-config-edit-container span {
+    padding: 0 5px;
+    background-color: #148cae;
+}
+

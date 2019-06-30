@@ -67,4 +67,12 @@ class SystemController {
     fun function(@RequestParam parameter: Map<String, Any?>): ModelAndView {
         return ModelAndView("system/function/function", parameter)
     }
+
+    /**
+     * 跳转菜单分类管理页面
+     */
+    @RequestMapping("/menuConfig")
+    fun menuConfig(@RequestParam parameter: Map<String, Any?>): ModelAndView {
+        return ModelAndView("system/menu/menuConfig", parameter)
+    }
 }
