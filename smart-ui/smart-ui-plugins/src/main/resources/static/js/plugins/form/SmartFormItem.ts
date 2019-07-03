@@ -1,62 +1,52 @@
-// @ts-ignore
-import ComponentBuilder from 'ComponentBuilder'
+
+const createVIf = (type) => {
+  return `v-if="column.type === '${type}'"`
+}
 
 /**
- * form列
+ * 创建模板
  */
-export default class SmartFormItem extends ComponentBuilder {
-  // 组件名称
-  public static NAME: string = 'smart-form-item'
-
-  /**
-   * props
-   */
-  protected props (): any {
-    return {
-      column: {
-        required: true,
-        type: Object
-      },
-      // 绑定model
-      model: {
-        required: true,
-        type: Object
-      }
-    }
-  }
-
-  /**
-   * 模板
-   */
-  protected template () {
-    const vModel = 'v-model="model[column.key]"'
-    return `
+const createTemplate = () => {
+  const vModel = 'v-model="model[column.key]"'
+  const disabled = ':disabled="column.disabled"'
+  return `
     <el-form-item
       :label="column.label"
       :prop="column.key">
-      <el-switch ${this.createVIf('boolean')} ${vModel}/>
-      <el-select ${this.createVIf('select')} ${vModel} placeholder='请选择'>
+      <el-switch ${createVIf('boolean')} ${vModel}/>
+      <el-select ${createVIf('select')} ${vModel} placeholder='请选择'>
         <el-option
           v-for="(dic, index) in (column.dicData ? column.dicData : [])"
           :label="dic.label"
           :value="dic.value"
           :key="index + 'option'"/>
       </el-select>
-      <el-input-number ${this.createVIf('number')} ${vModel} :disabled="column.disabled"/>
-      <el-radio-group ${this.createVIf('radio')} ${vModel}>
+      <el-input-number ${createVIf('number')} ${vModel} :disabled="column.disabled"/>
+      <el-radio-group ${createVIf('radio')} ${vModel}>
         <el-radio
           v-for="(dic, index) in (column.dicData ? column.dicData : [])"
           :label="dic.label" 
           :key="index + 'radio'">{{dic.value}}</el-radio>
       </el-radio-group>
-      <el-input placeholder='请输入密码' ${this.createVIf('password')} ${vModel} show-password/>
-      <el-input type='textarea' ${this.createVIf('textarea')} ${vModel} :placeholder="'请输入' + column.label"/>
-      <el-input :placeholder="'请输入' + column.label" ${this.createVIf('input')} ${vModel}/>
+      <el-input placeholder='请输入密码' ${createVIf('password')} ${vModel} show-password/>
+      <el-input type='textarea' ${createVIf('textarea')} ${vModel} :placeholder="'请输入' + column.label"/>
+      <el-input ${disabled} :placeholder="'请输入' + column.label" ${createVIf('input')} ${vModel}/>
     </el-form-item>
     `
-  }
+}
 
-  private createVIf (type): string {
-    return `v-if="column.type === '${type}'"`
-  }
+export default {
+  name: 'smart-form-item',
+  props: {
+    column: {
+      required: true,
+      type: Object
+    },
+    // 绑定model
+    model: {
+      required: true,
+      type: Object
+    }
+  },
+  template: createTemplate()
 }

@@ -1,61 +1,47 @@
-// @ts-ignore
-import ComponentBuilder from 'ComponentBuilder'
 
-/**
- * 顶部按钮组
- */
-export default class SmartButtonGroup extends ComponentBuilder {
-
-  protected props () {
-    return {
-      // 左侧solt是否在group内
-      leftInGroup: {
-        type: Boolean,
-        default: true
-      },
-      // 是否有左侧按钮
-      hasLeft: {
-        type: Boolean,
-        default: true
-      },
-      // 是否有右侧按钮
-      hasRight: {
-        type: Boolean,
-        default: true
-      },
-      addShow: {
-        type: Boolean,
-        default: true
-      },
-      editShow: {
-        type: Boolean,
-        default: true
-      },
-      deleteShow: {
-        type: Boolean,
-        default: true
+export default {
+  props: {
+    // 左侧solt是否在group内
+    leftInGroup: {
+      type: Boolean,
+      default: true
+    },
+    // 是否有左侧按钮
+    hasLeft: {
+      type: Boolean,
+      default: true
+    },
+    // 是否有右侧按钮
+    hasRight: {
+      type: Boolean,
+      default: true
+    },
+    addShow: {
+      type: Boolean,
+      default: true
+    },
+    editShow: {
+      type: Boolean,
+      default: true
+    },
+    deleteShow: {
+      type: Boolean,
+      default: true
+    }
+  },
+  methods: {
+    /**
+     * 点击按钮触发事件
+     */
+    handleClickButtonGroup: function (ident) {
+      const listener = 'button-click'
+      if (this.$listeners[listener]) {
+        this.$emit(listener, ident)
       }
     }
-  }
-
-  protected methods () {
-    return {
-      /**
-       * 点击按钮触发事件
-       */
-      handleClickButtonGroup: function (ident) {
-        const listener = 'button-click'
-        if (this.$listeners[listener]) {
-          this.$emit(listener, ident)
-        }
-      }
-    }
-  }
-
-  protected template () {
-    //TODO: 中文使用I18N
-    return `
-    <div>
+  },
+  template: `
+  <div>
       <div v-if="hasLeft" class="cloud-table-left">
         <el-button-group>
           <el-button
@@ -110,7 +96,6 @@ export default class SmartButtonGroup extends ComponentBuilder {
           <slot name="buttonRight"></slot>
         </template>
       </div>
-</div>
-    `
-  }
+    </div>
+  `
 }
