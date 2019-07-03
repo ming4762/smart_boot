@@ -1,9 +1,11 @@
 package com.smart.auth.controller
 
 import com.smart.auth.AuthProperties
-import com.smart.auth.constants.AuthConstants
+import com.smart.auth.common.constants.AuthConstants
+import com.smart.auth.common.utils.AuthUtils
 import com.smart.auth.model.po.LoginPO
 import com.smart.common.message.Result
+import com.smart.system.service.SysUserService
 import org.apache.shiro.SecurityUtils
 import org.apache.shiro.authc.UsernamePasswordToken
 import org.slf4j.LoggerFactory
@@ -30,6 +32,10 @@ class LoginController {
 
     @Autowired
     private lateinit var authProperties: AuthProperties
+
+    @Autowired
+    private lateinit var userService: SysUserService
+
 
     /**
      * 登录接口
@@ -66,15 +72,27 @@ class LoginController {
             } else if (type == AuthConstants.LOGIN_MOBILE_TYPE) {
                 session.timeout = this.authProperties.session.timeout.mobile * 1000
             }
+            val permissionList = this.queryUserPremissionList()
+            session.setAttribute(AuthConstants.PERMISSION, permissionList)
             // 返回数据
             Result.success(mapOf(
                     // token信息
-                    HttpHeaders.AUTHORIZATION to session.id.toString()
+                    HttpHeaders.AUTHORIZATION to session.id.toString(),
+                    "permission" to permissionList
                     // todo:其他信息待完善
             ))
         } catch (e: Exception) {
             e.printStackTrace()
             Result.failure(e.message)
         }
+    }
+
+    /**
+     * 查询用户权限信息
+     */
+    private fun queryUserPremissionList(): Set<String> {
+        val userId = AuthUtils.getCurrentUserId() ?: return setOf()
+        val premissionMap: Map<String, Set<String>> = this.userService.queryPermissionList(listOf(userId))
+        return premissionMap[userId] ?: setOf()
     }
 }

@@ -1,7 +1,9 @@
 package com.smart.auth.shiro
 
 import com.baomidou.mybatisplus.extension.kotlin.KtQueryWrapper
+import com.smart.auth.common.constants.AuthConstants
 import com.smart.auth.common.model.SysUserDO
+import com.smart.auth.common.utils.AuthUtils
 import com.smart.system.service.SysUserService
 import org.apache.shiro.authc.*
 import org.apache.shiro.authz.AuthorizationInfo
@@ -50,7 +52,12 @@ class StatelessRealm : AuthorizingRealm() {
     override fun doGetAuthorizationInfo(principalCollection: PrincipalCollection): AuthorizationInfo {
         val info = SimpleAuthorizationInfo()
         val user = getAvailablePrincipal(principalCollection) as SysUserDO?
-        //TODO: 获取用户权限
+        // 获取用户权限
+        if (user != null) {
+            val userId = user.userId!!
+            var permissionList = AuthUtils.getSession()?.getAttribute(AuthConstants.PERMISSION) as Set<String>? ?: setOf()
+            info.addStringPermissions(permissionList)
+        }
         return info
     }
 
@@ -58,11 +65,18 @@ class StatelessRealm : AuthorizingRealm() {
      * 获取缓存的key
      */
     override fun getAuthorizationCacheKey(principals: PrincipalCollection?): Any {
-        // 获取用户信息
-        val user = getAvailablePrincipal(principals) as SysUserDO?
-        if (user != null) {
-            return "authorization_cache_key:" + user.userId!!
+        val session = AuthUtils.getSession()
+        if (session != null) {
+            return "authorization_cache_key:" + session.id
         }
         return super.getAuthorizationCacheKey(principals)
+    }
+
+    /**
+     * 查询用户权限信息
+     */
+    private fun queryUserPermissionList(userId: String): Set<String> {
+        val permissionMap: Map<String, Set<String>> = this.sysUserService.queryPermissionList(listOf(userId))
+        return permissionMap[userId] ?: setOf()
     }
 }
