@@ -3,8 +3,11 @@ package com.smart.system.controller
 import com.smart.common.message.Result
 import com.smart.common.model.Tree
 import com.smart.starter.crud.controller.BaseController
+import com.smart.starter.log.annotation.Log
 import com.smart.system.model.SysFunctionDO
 import com.smart.system.service.SysFunctionService
+import org.apache.shiro.authz.annotation.Logical
+import org.apache.shiro.authz.annotation.RequiresPermissions
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
@@ -21,7 +24,7 @@ class SysFunctionController : BaseController<SysFunctionService, SysFunctionDO>(
     /**
      * 查询功能树形结构
      */
-//    @RequiresPermissions("system:function:query")
+    @RequiresPermissions("system:function:query")
     @RequestMapping("/queryFunctionTree")
     fun queryFunctionTree(@RequestBody parameters: Map<String, Any?>): Result<List<Tree<SysFunctionDO>>?> {
         return try {
@@ -35,5 +38,22 @@ class SysFunctionController : BaseController<SysFunctionService, SysFunctionDO>(
             e.printStackTrace()
             Result.failure(e.message)
         }
+    }
+
+    @RequiresPermissions("system:function:query")
+    override fun list(parameters: Map<String, Any?>): Result<Any?> {
+        return super.list(parameters)
+    }
+
+    @RequiresPermissions("system:function:save", "system:function:update", logical = Logical.OR)
+    @Log("保存/修改功能")
+    override fun saveUpdate(t: SysFunctionDO): Result<Any?> {
+        return super.saveUpdate(t)
+    }
+
+    @RequiresPermissions("system:function:delete")
+    @Log("删除功能")
+    override fun batchDelete(deleteObjects: List<SysFunctionDO>): Result<Any?> {
+        return super.batchDelete(deleteObjects)
     }
 }

@@ -7,10 +7,15 @@ import com.smart.system.mapper.SysRoleMapper
 import com.smart.system.mapper.SysUserMapper
 import com.smart.system.mapper.SysUserRoleMapper
 import com.smart.system.model.SysRoleDO
+import com.smart.system.model.SysRoleMenuFunctionDO
 import com.smart.system.model.SysUserRoleDO
+import com.smart.system.service.SysFunctionService
+import com.smart.system.service.SysMenuConfigService
+import com.smart.system.service.SysRoleMenuFunctionService
 import com.smart.system.service.SysUserService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
+import org.springframework.util.StringUtils
 
 /**
  *
@@ -25,6 +30,15 @@ class SysUserServiceImpl : BaseServiceImpl<SysUserMapper, SysUserDO>(), SysUserS
 
     @Autowired
     private lateinit var sysRoleMapper: SysRoleMapper
+
+    @Autowired
+    private lateinit var menuConfigService: SysMenuConfigService
+
+    @Autowired
+    private lateinit var roleMenuFunctionService: SysRoleMenuFunctionService
+
+    @Autowired
+    private lateinit var functionService: SysFunctionService
 
     /**
      * 查询用户角色
@@ -59,5 +73,77 @@ class SysUserServiceImpl : BaseServiceImpl<SysUserMapper, SysUserDO>(), SysUserS
                 return@let roleListNew
             }
         }.toMap()
+    }
+
+    /**
+     * 查询用户权限信息
+     * TODO: 单用户ID测试成功，多用户ID未测试
+     */
+    override fun queryPermissionList(userIdList: List<String>): Map<String, Set<String>> {
+        if (userIdList.isEmpty()) return mapOf()
+        // 查询人员的菜单配置信息
+        val userMenuConfigMap = this.menuConfigService.queryUserMenuConfig(userIdList)
+        // 查询人员的角色信息
+        val userRoleWrapper = KtQueryWrapper(SysUserRoleDO :: class.java)
+        if (userIdList.size == 1) userRoleWrapper.eq(SysUserRoleDO :: userId, userIdList[0]) else userRoleWrapper.`in`(SysUserRoleDO :: userId, userIdList)
+        val userRoleMap = this.sysUserRoleMapper.selectList(userRoleWrapper)
+                .groupBy { it.userId!! }
+                .map { it.key to it.value.map { it.roleId!! } }
+                .toMap()
+        val roleIdList = mutableSetOf<String>()
+        userRoleMap.values.forEach {
+            roleIdList.addAll(it)
+        }
+        val menuConfigIdList = userMenuConfigMap.values.map { it.configId!! }.toSet()
+        if (roleIdList.isNotEmpty()) {
+            // 通过角色、菜单配置查询功能信息
+            val wrapper = KtQueryWrapper(SysRoleMenuFunctionDO :: class.java)
+                    .eq(SysRoleMenuFunctionDO::type, SysRoleMenuFunctionDO.TYPE_FUNCTION)
+            if (menuConfigIdList.size ==1) {
+                wrapper.eq(SysRoleMenuFunctionDO :: menuConfigId, menuConfigIdList.first())
+            } else {
+                wrapper.`in`(SysRoleMenuFunctionDO :: menuConfigId, menuConfigIdList)
+            }
+            // 设置角色ID条件
+            if (roleIdList.size == 1) {
+                wrapper.eq(SysRoleMenuFunctionDO :: roleId, roleIdList.first())
+            } else {
+                wrapper.`in`(SysRoleMenuFunctionDO :: roleId, roleIdList)
+            }
+            // 执行查询
+            val roleMenuFunctionMap = this.roleMenuFunctionService.list(wrapper)
+                    .groupBy { "${it.menuConfigId}${it.roleId}" }
+                    .map { it.key to it.value.map { it.menuFunctionId!! } }
+                    .toMap()
+            // 查询功能对应的功能权限
+            val functionIdList = mutableListOf<String>()
+            roleMenuFunctionMap.values.forEach {
+                functionIdList.addAll(it)
+            }
+            val functionList = if (functionIdList.isEmpty()) listOf() else this.functionService.listByIds(functionIdList)
+            val fuctionIdPermissionMap = mutableMapOf<String, String>()
+            functionList.forEach {
+                if (!StringUtils.isEmpty(it.premission)) {
+                    fuctionIdPermissionMap[it.functionId!!] = it.premission!!
+                }
+            }
+            // 获取configId roleId to permission
+            val roleMenuPermissionMap = roleMenuFunctionMap.map {
+                it.key to it.value.mapNotNull { functionId ->
+                    fuctionIdPermissionMap[functionId]
+                }
+            }.toMap()
+            // 获取人员与configId，roleId关系
+            val userToConfigIdRoleIdMap = userRoleMap.map {
+                val configId = userMenuConfigMap.getValue(it.key).configId!!
+                val permissionSet = mutableSetOf<String>()
+                it.value.forEach { roleId ->
+                    permissionSet.addAll(roleMenuPermissionMap["$configId$roleId"] ?: setOf())
+                }
+                it.key to permissionSet
+            }.toMap()
+            return userToConfigIdRoleIdMap
+        }
+        return mapOf()
     }
 }

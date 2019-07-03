@@ -2,7 +2,9 @@ package com.smart.system.service.impl
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper
 import com.baomidou.mybatisplus.extension.kotlin.KtQueryWrapper
+import com.baomidou.mybatisplus.extension.kotlin.KtUpdateWrapper
 import com.smart.auth.common.utils.AuthUtils
+import com.smart.common.utils.UUIDGenerator
 import com.smart.starter.crud.service.impl.BaseServiceImpl
 import com.smart.system.mapper.SysMenuConfigMapper
 import com.smart.system.mapper.SysMenuMapper
@@ -28,9 +30,40 @@ class SysMenuConfigServiceImpl : BaseServiceImpl<SysMenuConfigMapper, SysMenuCon
      */
     @Transactional(rollbackFor = [Exception::class])
     override fun saveOrUpdate(entity: SysMenuConfigDO): Boolean {
-        entity.createTime = Date()
-        entity.createUserId = AuthUtils.getCurrentUserId()
-        return super.saveOrUpdate(entity)
+        val result: Boolean
+        var isAdd = false
+        if (entity.configId == null) {
+            isAdd = true
+            entity.configId = UUIDGenerator.getUUID()
+        } else if (this.getById(entity.configId) == null) {
+            isAdd = true
+        }
+        // 激活菜单
+        if (entity.status == true) {
+            this.activeConfig(entity)
+        }
+        if (isAdd) {
+            entity.createTime = Date()
+            entity.createUserId = AuthUtils.getCurrentUserId()
+            // 设置状态
+            if (entity.status == null) {
+                entity.status = false
+            }
+            // 执行保存操作
+            result = this.save(entity)
+        } else {
+            // 执行保存操作
+            val updateWrapper = KtUpdateWrapper(SysMenuConfigDO :: class.java)
+            updateWrapper.set(SysMenuConfigDO :: configName, entity.configName)
+                    .set(SysMenuConfigDO :: seq, entity.seq)
+                    .eq(SysMenuConfigDO :: configId, entity.configId)
+            result = this.update(updateWrapper)
+        }
+        // 修改状态
+        if (entity.status == true) {
+            this.activeConfig(entity)
+        }
+        return result
     }
 
     /**
@@ -73,20 +106,38 @@ class SysMenuConfigServiceImpl : BaseServiceImpl<SysMenuConfigMapper, SysMenuCon
     /**
      * 查询人员的菜单配置信息
      */
-    override fun queryUserMenuConfig(userId: String): SysMenuConfigDO? {
+    override fun queryUserMenuConfig(userIdList: List<String>): Map<String, SysMenuConfigDO> {
+        if(userIdList.isEmpty()) return mapOf()
         // 查询人员的菜单配置
         val userConfigWrapper = KtQueryWrapper(SysMenuConfigDO :: class.java)
-        userConfigWrapper.eq(SysMenuConfigDO :: userId, userId)
                 .eq(SysMenuConfigDO :: status, true)
-        val userConfig = this.baseMapper.selectOne(userConfigWrapper)
-        if (userConfig != null) {
-            return userConfig
+        if (userIdList.size == 1) {
+            userConfigWrapper.eq(SysMenuConfigDO :: userId, userIdList[0])
         } else {
-            // 如果人员的菜单配置不存在，查询系统的菜单配置
-            val configWrapper = KtQueryWrapper(SysMenuConfigDO :: class.java)
-            configWrapper.eq(SysMenuConfigDO :: status, true)
-                    .isNull(SysMenuConfigDO :: userId)
-            return this.baseMapper.selectOne(configWrapper)
+            userConfigWrapper.`in`(SysMenuConfigDO :: userId, userIdList)
         }
+        val userConfigMap = this.list(userConfigWrapper).map {
+            it.userId to it
+        }.toMap()
+        // 默认的菜单配置
+        var defaultConfig: SysMenuConfigDO? = null
+        return userIdList.map {
+            var config = userConfigMap[it]
+            if (config == null) {
+                if (defaultConfig == null) defaultConfig = this.queryDefaultConfig()
+                config = defaultConfig
+            }
+            return@map it to config!!
+        }.toMap()
+    }
+
+    /**
+     * 查询系统默认菜单配置
+     */
+    private fun queryDefaultConfig(): SysMenuConfigDO {
+        val configWrapper = KtQueryWrapper(SysMenuConfigDO :: class.java)
+        configWrapper.eq(SysMenuConfigDO :: status, true)
+                .isNull(SysMenuConfigDO :: userId)
+        return this.baseMapper.selectOne(configWrapper)
     }
 }

@@ -10,5 +10,5 @@ interface SysMenuConfigService : BaseService<SysMenuConfigDO> {
     /**
      * 查询人员的菜单配置信息
      */
-    fun queryUserMenuConfig(userId: String): SysMenuConfigDO?
+    fun queryUserMenuConfig(userIdList: List<String>): Map<String, SysMenuConfigDO>
 }

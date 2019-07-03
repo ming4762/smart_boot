@@ -55,7 +55,7 @@ class SysMenuServiceImpl : BaseServiceImpl<SysMenuMapper, SysMenuDO>(), SysMenuS
 //        userId = "1"
         if (userId != null) {
             // 查询人员的配置信息，如果人员没有菜单配置，则使用系统菜单配置
-            val configId: String? = this.menuConfigService.queryUserMenuConfig(userId)?.configId
+            val configId = this.menuConfigService.queryUserMenuConfig(arrayListOf(userId))[userId]!!.configId
             if (configId != null) {
                 // 查询人员对应角色ID列表
                 val roleWrapper = KtQueryWrapper(SysUserRoleDO :: class.java)
@@ -89,7 +89,6 @@ class SysMenuServiceImpl : BaseServiceImpl<SysMenuMapper, SysMenuDO>(), SysMenuS
                         // 将菜单转为树形实体
                         val menuTreeList = menuList.map {
                             val menuVo = BeanMapUtils.createFromParent(it, SysMenuVO :: class.java)
-//                            val menuVo = MenuVo(it)
                             if (functionMap != null && functionMap[it.functionId] != null) {
                                 menuVo.url = functionMap[it.functionId]
                             }
@@ -100,7 +99,6 @@ class SysMenuServiceImpl : BaseServiceImpl<SysMenuMapper, SysMenuDO>(), SysMenuS
                         return TreeUtils.buildList(menuTreeList, "0")
                     }
                 }
-
             }
         }
         return null
@@ -110,12 +108,10 @@ class SysMenuServiceImpl : BaseServiceImpl<SysMenuMapper, SysMenuDO>(), SysMenuS
      * 查询菜单列表和菜单包含的功能
      */
     override fun listWithFunction(parameters: Map<String, Any?>): List<SysMenuVO>? {
-//        return this.baseMapper.listWithFunction(parameters)
         val queryWrapper = MybatisUtil.createQueryWrapperFromParameters(parameters, SysMenuDO :: class.java)
         val menuListBase = this.list(queryWrapper.orderByAsc(MybatisUtil.getDbField(SysMenuDO :: seq)))
         val menuList = menuListBase.map {
             return@map BeanMapUtils.createFromParent(it, SysMenuVO :: class.java)
-//             return@map MenuVo(it)
         }
         val functionIdList = mutableListOf<String>()
         // 获取菜单对应的功能
@@ -124,24 +120,32 @@ class SysMenuServiceImpl : BaseServiceImpl<SysMenuMapper, SysMenuDO>(), SysMenuS
                 functionIdList.add(it.functionId!!)
             }
         }
-        // 查询本级
-        val wrapper = KtQueryWrapper(SysFunctionDO :: class.java)
-        wrapper.`in`(SysFunctionDO :: functionId, functionIdList)
-        val functionList = this.functionService.list(wrapper)
-        if (functionList != null) {
+        var functionList = listOf<SysFunctionDO>()
+        if (functionIdList.size > 0) {
+            // 查询本级
+            val wrapper = KtQueryWrapper(SysFunctionDO :: class.java)
+            if (functionIdList.size == 1) {
+                wrapper.eq(SysFunctionDO :: functionId, functionIdList[0])
+            } else {
+                wrapper.`in`(SysFunctionDO :: functionId, functionIdList)
+            }
+            functionList = this.functionService.list(wrapper)
+        }
+
+        if (functionList.isNotEmpty()) {
             // 查询下级
             val childWrapper = KtQueryWrapper(SysFunctionDO :: class.java)
             childWrapper.`in`(SysFunctionDO :: parentId, functionIdList)
             val childFunctionList = this.functionService.list(childWrapper)
             if (childFunctionList != null) {
                 // 将下级分组，并设置到function
-                val childrenMap = childFunctionList.stream().collect(Collectors.groupingBy(SysFunctionDO :: parentId))
+                val childrenMap = childFunctionList.groupBy { it.parentId }
                 functionList.forEach {
                     it.children = childrenMap[it.functionId]
                 }
             }
             // 将功能列表转为Map
-            val functionMap = functionList.stream().collect(Collectors.toMap(SysFunctionDO :: functionId, { it }))
+            val functionMap = functionList.map { it.functionId to it }.toMap()
             menuList.forEach {
                 if (it.functionId != null) {
                     it.function = functionMap[it.functionId]

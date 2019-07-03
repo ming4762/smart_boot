@@ -12,4 +12,9 @@ import com.smart.system.model.SysRoleDO
 interface SysUserService : BaseService<SysUserDO> {
 
     fun queryUserRole(userIdList: List<String>): Map<String, List<SysRoleDO>>
+
+    /**
+     * 查询用户权限信息
+     */
+    fun queryPermissionList(userIdList: List<String>): Map<String, Set<String>>
 }

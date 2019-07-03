@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("sys/organ")
 class SysOrganController : BaseController<SysOrganService, SysOrganDO>() {
 
-    // TODO: 权限
     @RequiresPermissions("sys:organ:query")
     @RequestMapping("/listTree")
     fun listTree(@RequestBody topParentIdList: List<String>): Result<Map<String, List<Tree<SysOrganDO>>?>?> {

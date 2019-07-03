@@ -2,6 +2,7 @@ package com.smart.system.service.impl
 
 import com.baomidou.mybatisplus.core.conditions.Wrapper
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper
+import com.baomidou.mybatisplus.extension.kotlin.KtQueryWrapper
 import com.smart.auth.common.utils.AuthUtils
 import com.smart.common.model.Tree
 import com.smart.common.utils.TreeUtils
@@ -37,8 +38,8 @@ class SysFunctionServiceImpl : BaseServiceImpl<SysFunctionMapper, SysFunctionDO>
      * 重写list方法
      */
     override fun list(queryWrapper: Wrapper<SysFunctionDO>?): MutableList<SysFunctionDO> {
-        queryWrapper as QueryWrapper
-        queryWrapper.orderByAsc(MybatisUtil.getDbField(SysFunctionDO :: seq))
+        queryWrapper as KtQueryWrapper<SysFunctionDO>
+        queryWrapper.orderByAsc(SysFunctionDO :: seq)
         return super<BaseServiceImpl>.list(queryWrapper)
     }
 

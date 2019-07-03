@@ -39,4 +39,5 @@ open class SysRoleDO : BaseModel() {
 
     var seq: Int? = null
 
+    var organId: String? = null
 }
