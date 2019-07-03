@@ -101,7 +101,7 @@ class SysRoleController : BaseController<SysRoleService, SysRoleDO>() {
     /**
      * 更新角色对应的人员信息
      */
-//    @RequiresPermissions("system:role:updateUser")
+    @RequiresPermissions("system:role:updateUser")
     @RequestMapping("/updateUser")
     @Log("更新角色人员信息")
     fun updateUser(@RequestBody parameters: Map<String, List<String>>): Result<Boolean?> {
@@ -116,7 +116,7 @@ class SysRoleController : BaseController<SysRoleService, SysRoleDO>() {
     /**
      * 获取角色授权信息
      */
-//    @RequiresPermissions("system:role:query")
+    @RequiresPermissions("system:role:query")
     @PostMapping("/queryAuthentication")
     fun queryAuthentication(@RequestBody roleMenuFunction: SysRoleMenuFunctionDO): Result<List<SysRoleMenuFunctionDO>?> {
         try {
@@ -133,7 +133,7 @@ class SysRoleController : BaseController<SysRoleService, SysRoleDO>() {
     /**
      * 角色授权
      */
-//    @RequiresPermissions("system:role:authorize")
+    @RequiresPermissions("system:role:authorize")
     @PostMapping("/authorize")
     @Log("角色授权")
     fun authorize(@RequestBody list: List<SysRoleMenuFunctionDO>): Result<Boolean?> {

@@ -41,19 +41,19 @@ class SysFunctionController : BaseController<SysFunctionService, SysFunctionDO>(
     }
 
     @RequiresPermissions("system:function:query")
-    override fun list(parameters: Map<String, Any?>): Result<Any?> {
+    override fun list(@RequestBody parameters: Map<String, Any?>): Result<Any?> {
         return super.list(parameters)
     }
 
     @RequiresPermissions("system:function:save", "system:function:update", logical = Logical.OR)
     @Log("保存/修改功能")
-    override fun saveUpdate(t: SysFunctionDO): Result<Any?> {
+    override fun saveUpdate(@RequestBody t: SysFunctionDO): Result<Any?> {
         return super.saveUpdate(t)
     }
 
     @RequiresPermissions("system:function:delete")
     @Log("删除功能")
-    override fun batchDelete(deleteObjects: List<SysFunctionDO>): Result<Any?> {
+    override fun batchDelete(@RequestBody deleteObjects: List<SysFunctionDO>): Result<Any?> {
         return super.batchDelete(deleteObjects)
     }
 }
