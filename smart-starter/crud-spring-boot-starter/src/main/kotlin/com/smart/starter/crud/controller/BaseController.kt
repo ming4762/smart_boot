@@ -85,11 +85,11 @@ open class BaseController<K : BaseService<T>, T : BaseModel> {
     @RequestMapping("/delete")
     @ResponseBody
     protected open fun delete(@RequestBody deleteObject: T): Result<Int?> {
-        try {
-            return Result.success(this.service.delete(deleteObject))
+        return try {
+            Result.success(this.service.delete(deleteObject))
         } catch (e: Exception) {
             e.printStackTrace()
-            return Result.failure("删除单个对象时发生错误", 0)
+            Result.failure("删除单个对象时发生错误", 0)
         }
 
     }
@@ -100,11 +100,11 @@ open class BaseController<K : BaseService<T>, T : BaseModel> {
     @RequestMapping("/get")
     @ResponseBody
     protected open operator fun get(@RequestBody t: T): Result<T?> {
-        try {
-            return Result.success(this.service.get(t))
+        return try {
+            Result.success(this.service.get(t))
         } catch (e: Exception) {
             e.printStackTrace()
-            return Result.failure(e.message)
+            Result.failure(e.message)
         }
 
     }
@@ -115,11 +115,11 @@ open class BaseController<K : BaseService<T>, T : BaseModel> {
     @RequestMapping("/saveUpdate")
     @ResponseBody
     protected open fun saveUpdate(@RequestBody t: T): Result<Any?> {
-        try {
-            return Result.success(this.service.saveOrUpdate(t))
+        return try {
+            Result.success(this.service.saveOrUpdate(t))
         } catch (e: Exception) {
             e.printStackTrace()
-            return Result.failure("保存更新时发生错误", false)
+            Result.failure("保存更新时发生错误", false)
         }
 
     }
@@ -131,11 +131,11 @@ open class BaseController<K : BaseService<T>, T : BaseModel> {
     @RequestMapping("/save")
     @ResponseBody
     protected open fun save(@RequestBody t: T): Result<Boolean?> {
-        try {
-            return Result.success(this.service.save(t))
+        return try {
+            Result.success(this.service.save(t))
         } catch (e: Exception) {
             e.printStackTrace()
-            return Result.failure(e.message, false)
+            Result.failure(e.message, false)
         }
 
     }
@@ -146,11 +146,11 @@ open class BaseController<K : BaseService<T>, T : BaseModel> {
     @RequestMapping("/batchSave")
     @ResponseBody
     protected open fun batchSave(@RequestBody tList: List<T>): Result<Boolean?> {
-        try {
-            return Result.success(this.service.saveBatch(tList))
+        return try {
+            Result.success(this.service.saveBatch(tList))
         } catch (e: Exception) {
             e.printStackTrace()
-            return Result.failure(e.message, false)
+            Result.failure(e.message, false)
         }
 
     }
@@ -160,14 +160,11 @@ open class BaseController<K : BaseService<T>, T : BaseModel> {
      */
     @RequestMapping("/update")
     @ResponseBody
-    protected open fun update(@RequestBody t: T): Result<Boolean?> {
-        try {
-            return Result.success(this.service.updateById(t))
-        } catch (e: Exception) {
-            e.printStackTrace()
-            return Result.failure(e.message, false)
-        }
-
+    protected open fun update(@RequestBody t: T): Result<Boolean?> = try {
+        Result.success(this.service.updateById(t))
+    } catch (e: Exception) {
+        e.printStackTrace()
+        Result.failure(e.message, false)
     }
 
     /**
@@ -227,7 +224,7 @@ open class BaseController<K : BaseService<T>, T : BaseModel> {
                             .append(sort.order)
                             .append(",")
                 }
-                if (orderMessage.length > 0) {
+                if (orderMessage.isNotEmpty()) {
                     orderMessage.deleteCharAt(orderMessage.length - 1)
                 }
                 return orderMessage.toString()
@@ -252,7 +249,7 @@ open class BaseController<K : BaseService<T>, T : BaseModel> {
         // 获取实体类的实际类型
         val tClass = MybatisUtil.getModelClass(this.getModelType())
         if (tClass != null) {
-            val fieldList = Arrays.asList<Field>(*tClass.getFields())
+            val fieldList = Arrays.asList<Field>(*tClass.fields)
             // 遍历添加liken
             fieldList.forEach { field -> wrapper.like(field.name, keyword) }
         }
