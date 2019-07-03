@@ -9,6 +9,7 @@ import com.smart.starter.crud.model.BaseModel
 import com.smart.starter.crud.service.BaseService
 import com.smart.starter.crud.utils.MybatisUtil
 import org.slf4j.LoggerFactory
+import java.io.Serializable
 import java.lang.reflect.ParameterizedType
 import java.lang.reflect.Type
 import java.util.stream.Collectors
@@ -122,6 +123,19 @@ open class BaseServiceImpl<K: CloudBaseMapper<T>, T: BaseModel> : ServiceImpl<K,
             }
         }
         return null
+    }
+
+    override fun queryDetail(t: T): T? {
+        return get(t)
+    }
+
+    /**
+     * 通过ID查询
+     */
+    override fun listByIds(idList: MutableCollection<out Serializable>): MutableCollection<T> {
+        if (idList.isEmpty()) return mutableListOf()
+        if (idList.size == 1) return mutableListOf(this.getById(idList.first()))
+        return super.listByIds(idList)
     }
 
 

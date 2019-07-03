@@ -27,6 +27,11 @@ interface BaseService<T: BaseModel> : IService<T> {
     fun get(t: T): T?
 
     /**
+     * 查询详情
+     */
+    fun queryDetail(t: T): T?
+
+    /**
      * 查询方法
      */
     fun list(queryWrapper: Wrapper<T>, parameters: Map<String, Any?>, paging: Boolean = false): List<T>
