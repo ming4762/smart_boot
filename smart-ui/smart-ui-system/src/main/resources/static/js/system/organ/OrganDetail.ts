@@ -9,7 +9,7 @@ export default class OrganDetail extends ComponentBuilder {
 
   protected mixins () {
     return [
-      new MessageMixins().build()
+      MessageMixins
     ]
   }
 

@@ -32,15 +32,15 @@ define(["require", "exports", "ComponentBuilder", "plugins/container/FlexAside",
         };
         Organ.prototype.components = function () {
             return {
-                'flex-aside': new FlexAside_1.default().build(),
-                'organ-tree': new OrganTree_1.default().build(),
+                'flex-aside': FlexAside_1.default,
+                'organ-tree': OrganTree_1.default,
                 'smart-form': new SmartForm_1.default().build(),
                 'organ-detail': new OrganDetail_1.default().build()
             };
         };
         Organ.prototype.mixins = function () {
             return [
-                new MessageMixins_1.default().build()
+                MessageMixins_1.default
             ];
         };
         Organ.prototype.data = function () {

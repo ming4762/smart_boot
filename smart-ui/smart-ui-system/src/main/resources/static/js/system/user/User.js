@@ -46,7 +46,7 @@ define(["require", "exports", "ComponentBuilder", "plugins/table/SmartTableCRUD"
         };
         User.prototype.mixins = function () {
             return [
-                new LayoutMixins_1.default().build()
+                LayoutMixins_1.default
             ];
         };
         User.prototype.data = function () {
@@ -177,7 +177,7 @@ define(["require", "exports", "ComponentBuilder", "plugins/table/SmartTableCRUD"
         };
         User.prototype.components = function () {
             return {
-                'smart-table-crud': new SmartTableCRUD_1.default().build()
+                'smart-table-crud': SmartTableCRUD_1.default
             };
         };
         User.prototype.methods = function () {

@@ -56,7 +56,7 @@ export class User extends ComponentBuilder {
 
   protected mixins () {
     return [
-        new LayoutMixins().build()
+        LayoutMixins
     ]
   }
 
@@ -189,7 +189,7 @@ export class User extends ComponentBuilder {
 
   protected components () {
     return {
-      'smart-table-crud': new SmartTableCRUD().build()
+      'smart-table-crud': SmartTableCRUD
     }
   }
 

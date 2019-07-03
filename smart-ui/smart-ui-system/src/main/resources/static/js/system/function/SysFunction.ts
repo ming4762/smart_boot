@@ -39,14 +39,14 @@ export class SysFunction extends ComponentBuilder {
 
   protected components () {
     return {
-      'smart-table-crud': new SmartTableCRUD().build(),
-      'smart-icon-select': new SmartIconSelect().build()
+      'smart-table-crud': SmartTableCRUD,
+      'smart-icon-select': SmartIconSelect
     }
   }
 
   protected mixins () {
     return [
-      new LayoutMixins().build()
+      LayoutMixins
     ]
   }
 

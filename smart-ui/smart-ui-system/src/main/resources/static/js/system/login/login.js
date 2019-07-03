@@ -11,7 +11,7 @@ define(["require", "exports", "./UsernameLogin"], function (require, exports, Us
             this.vue = new Vue({
                 el: '#login-container',
                 components: {
-                    'username-login': new UsernameLogin_1.default().build()
+                    'username-login': UsernameLogin_1.default
                 }
             });
         };

@@ -9,40 +9,29 @@ export default {
   ],
   data () {
     return {
-      organTreeData: []
+      treeData: []
     }
   },
   mounted () {
     this.load()
   },
-  computed: {
-    computedOrganTreeData () {
-      return [
-        {
-          id: '0',
-          text: '组织根',
-          object: {
-            organId: '0',
-          },
-          children: this.organTreeData
-        }
-      ]
-    }
-  },
   methods: {
-    /**
-     * 加载数据
-     */
+    // 获取节点的样式
+    getIconClass (type) {
+      if (type === 'role') {
+        return 'el-icon-user'
+      } else {
+        return 'el-icon-school'
+      }
+    },
     load () {
       // 加载数据
-      ApiService.postAjax('sys/organ/listTree', [])
+      ApiService.postAjax('sys/role/listAllTreeWithOrgan', {})
           .then(data => {
-            // @ts-ignore
-            this.organTreeData = data['0']
+            this.treeData = [data]
           }).catch(error => {
-        // @ts-ignore
-        this.errorMessage('加载部门数据失败', error)
-      })
+            this.errorMessage('加载角色树失败', error)
+          })
     }
   },
   template: `
@@ -51,10 +40,10 @@ export default {
     :expand-on-click-node="false"
     node-key="id"
     :default-expanded-keys="['0']"
-    :data="computedOrganTreeData">
+    :data="treeData">
     <template v-slot="{data}">
       <div>
-        <i class="el-icon-school"></i>
+        <i :class="getIconClass(data.attributes ? data.attributes.type : '')"></i>
         <span class="el-tree-node__label">{{data.text}}</span>
       </div>
     </template>

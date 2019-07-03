@@ -21,7 +21,7 @@ define(["require", "exports", "ComponentBuilder", "utils/ApiService", "mixins/Me
         }
         OrganDetail.prototype.mixins = function () {
             return [
-                new MessageMixins_1.default().build()
+                MessageMixins_1.default
             ];
         };
         OrganDetail.prototype.props = function () {

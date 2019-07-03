@@ -22,7 +22,7 @@ export class Login {
       el: '#login-container',
       components: {
         // @ts-ignore
-        'username-login': new UsernameLogin().build()
+        'username-login': UsernameLogin
       }
     })
   }

@@ -11,7 +11,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-define(["require", "exports", "ComponentBuilder", "mixins/LayoutMixins", "plugins/table/SmartTableCRUD", "utils/ApiService", "utils/TimeUtils"], function (require, exports, ComponentBuilder_1, LayoutMixins_1, SmartTableCRUD_1, ApiService_1, TimeUtils_1) {
+define(["require", "exports", "ComponentBuilder", "plugins/container/FlexAside", "system/role/RoleTreeWithOrgan", "system/role/RoleDetail", "utils/ApiService", "utils/TimeUtils", "mixins/PermissionMixins"], function (require, exports, ComponentBuilder_1, FlexAside_1, RoleTreeWithOrgan_1, RoleDetail_1, ApiService_1, TimeUtils_1, PermissionMixins_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var roleTypeMap = {
@@ -37,12 +37,14 @@ define(["require", "exports", "ComponentBuilder", "mixins/LayoutMixins", "plugin
         };
         Role.prototype.mixins = function () {
             return [
-                new LayoutMixins_1.default().build()
+                new PermissionMixins_1.default().build()
             ];
         };
         Role.prototype.components = function () {
             return {
-                'smart-table-crud': new SmartTableCRUD_1.default().build()
+                'flex-aside': FlexAside_1.default,
+                'role-tree': RoleTreeWithOrgan_1.default,
+                'role-detail': RoleDetail_1.default
             };
         };
         Role.prototype.data = function () {
@@ -158,23 +160,39 @@ define(["require", "exports", "ComponentBuilder", "mixins/LayoutMixins", "plugin
                         }
                     }
                 ],
-                defaultButtonConfig: {
-                    add: {
-                        rowShow: false,
-                        permission: 'system:role:save'
-                    },
-                    delete: {
-                        rowShow: false,
-                        permission: 'system:role:delete'
-                    },
-                    edit: {
-                        permission: 'system:role:update'
+                searchValue: '',
+                activeTab: 'detail',
+                selectedOrgan: {},
+                selectRole: {}
+            };
+        };
+        Role.prototype.methods = function () {
+            return {
+                handleShowSetUser: function (role) {
+                    console.log(role);
+                },
+                handleShowAuthorizeDialog: function (role) {
+                    console.log(role);
+                },
+                handleClickRoleTree: function (roleOrgan) {
+                    var type = roleOrgan.attributes ? roleOrgan.attributes.type : '';
+                    if (type === 'role') {
+                        this.selectRole = roleOrgan;
                     }
+                    else if (type === 'organ') {
+                        this.selectedOrgan = roleOrgan;
+                    }
+                },
+                handleAddRole: function () {
+                    this.selectRole = {};
+                },
+                handleAfterSave: function () {
+                    this.$refs['roleTree'].load();
                 }
             };
         };
         Role.prototype.template = function () {
-            return "\n    <div style=\"padding: 15px\">\n      <smart-table-crud\n        :defaultButtonConfig=\"defaultButtonConfig\"\n        queryUrl=\"sys/role/listWithAll\"\n        deleteUrl=\"sys/role/batchDelete\"\n        saveUpdateUrl=\"sys/role/saveUpdate\"\n        :keys=\"['roleId']\"\n        tableName=\"\u89D2\u8272\" \n        :apiService=\"apiService\"\n        labelWidth=\"80px\"\n        :height=\"computedTableHeight\"\n        :columnOptions=\"columnOptions\">\n        <!--\u89D2\u8272\u7C7B\u578B\u63D2\u69FD-->\n        <template v-slot:table-roleType=\"{row}\">\n          <el-tag>{{roleTypeMap[row.roleType]}}</el-tag>\n        </template>\n        <!--\u89D2\u8272\u72B6\u6001\u63D2\u69FD-->\n        <template v-slot:table-enable=\"{row}\">\n          <el-switch\n            v-model=\"row.enable\"\n            disabled\n            active-color=\"#13ce66\"\n            inactive-color=\"#ff4949\">\n          </el-switch>\n        </template>\n      </smart-table-crud>\n    </div>\n    ";
+            return "\n    <flex-aside\n      :hasAsideHeader=\"false\">\n      <template slot=\"aside\">\n        <div class=\"organ-aside full-height\">\n          <div class=\"organ-aside-search\">\n            <el-input\n              v-model=\"searchValue\"\n              suffix-icon=\"el-icon-search\"\n              placeholder=\"\u641C\u7D22\u90E8\u95E8\"></el-input>\n          </div>\n          <!--\u90E8\u95E8\u6811-->\n          <div style=\"height: calc(100% - 190px); padding-top: 22px\">\n            <role-tree\n              ref=\"roleTree\"\n              @node-click=\"handleClickRoleTree\"/>\n          </div>\n          <!--\u6DFB\u52A0\u6309\u94AE-->\n          <!--  TODO: v-if=\"validatePermission('system:role:add')\" -->\n          <div \n            class=\"organ-aside-add\">\n            <el-button \n              type=\"primary\"\n              @click=\"handleAddRole\"\n              style=\"width: 100%\"\n              icon=\"el-icon-plus\">\u6DFB\u52A0\u89D2\u8272</el-button>\n          </div>\n        </div>\n      </template>\n      <!--\u4E3B\u9898\u90E8\u5206-->\n      <template>\n        <div style=\"padding: 15px\">\n          <role-detail\n            @after-save=\"handleAfterSave\"\n            :organId=\"selectedOrgan.id\"\n            :organName=\"selectedOrgan.text\"\n            :roleId=\"selectRole.id\"/>\n        </div>\n      </template>\n      <!--\u6DFB\u52A0\u89D2\u8272\u5F39\u7A97-->\n    </flex-aside>\n    ";
         };
         return Role;
     }(ComponentBuilder_1.default));

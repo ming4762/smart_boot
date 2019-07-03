@@ -32,13 +32,13 @@ define(["require", "exports", "ComponentBuilder", "plugins/table/SmartTableCRUD"
         };
         SysFunction.prototype.components = function () {
             return {
-                'smart-table-crud': new SmartTableCRUD_1.default().build(),
-                'smart-icon-select': new SmartIconSelect_1.default().build()
+                'smart-table-crud': SmartTableCRUD_1.default,
+                'smart-icon-select': SmartIconSelect_1.default
             };
         };
         SysFunction.prototype.mixins = function () {
             return [
-                new LayoutMixins_1.default().build()
+                LayoutMixins_1.default
             ];
         };
         SysFunction.format = function (data, key) {

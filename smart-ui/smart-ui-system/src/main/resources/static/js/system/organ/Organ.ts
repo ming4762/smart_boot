@@ -37,9 +37,9 @@ export class Organ extends ComponentBuilder {
    */
   protected components () {
     return {
-      'flex-aside': new FlexAside().build(),
+      'flex-aside': FlexAside,
       // @ts-ignore
-      'organ-tree': new OrganTree().build(),
+      'organ-tree': OrganTree,
       'smart-form':new SmartForm().build(),
       // @ts-ignore
       'organ-detail': new OrganDetail().build()
@@ -48,7 +48,7 @@ export class Organ extends ComponentBuilder {
 
   protected mixins () {
     return [
-      new MessageMixins().build()
+      MessageMixins
     ]
   }
 
