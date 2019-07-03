@@ -45,6 +45,10 @@ class SysLogDO : BaseModel() {
 
     var requestPath: String? = null
 
+    var statusCode: Int = 200
+
+    var errorMessage: String? = null
+
     companion object {
 
         private const val serialVersionUID = -6051958861759640801L

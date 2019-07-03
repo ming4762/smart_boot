@@ -2,6 +2,7 @@ package com.smart.starter.log.aspect
 
 import com.alibaba.fastjson.JSON
 import com.smart.auth.common.utils.AuthUtils
+import com.smart.common.message.Result
 import com.smart.common.utils.IPUtils
 import com.smart.starter.log.annotation.Log
 import com.smart.starter.log.model.SysLogDO
@@ -19,6 +20,7 @@ import java.util.*
 /**
  * 日志切面
  * @author ming
+ * TODO:异常捕获
  * 2019/6/28 下午4:23
  */
 @Aspect
@@ -43,12 +45,12 @@ class LogAspect {
         // 执行时长(毫秒)
         val time = System.currentTimeMillis() - beginTime
         //异步保存日志
-        this.saveLog(point, time)
+        this.saveLog(point, time, result)
         return result
     }
 
     @Throws(InterruptedException::class)
-    private fun saveLog(joinPoint: ProceedingJoinPoint, time: Long) {
+    private fun saveLog(joinPoint: ProceedingJoinPoint, time: Long, result: Any) {
         val sysLog = SysLogDO()
         // 设置用户
         sysLog.userId = AuthUtils.getCurrentUserId()
@@ -76,6 +78,15 @@ class LogAspect {
         sysLog.ip = IPUtils.getIpAddr(request)
         sysLog.createTime = Date()
         sysLog.requestPath = request.servletPath
+        // 设置code码
+        if (result is Result<*>) {
+            result.code?.let {
+                sysLog.statusCode = it
+            }
+            if (!result.ok) {
+                sysLog.errorMessage = result.message
+            }
+        }
         this.logService.save(sysLog)
     }
 }
