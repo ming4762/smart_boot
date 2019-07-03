@@ -43,18 +43,13 @@ INSERT into sys_role (role_id, role_name, remark, create_time, create_user_id, s
 
 -- 创建用户角色表
 CREATE TABLE `sys_user_role` (
-  `id` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT 'ID',
-  `user_id` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '用户ID',
-  `role_id` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '角色ID',
-  `create_time` datetime NOT NULL COMMENT '创建时间',
-  `create_user_id` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '创建用户ID',
-  `update_time` datetime DEFAULT NULL COMMENT '更新时间',
-  `update_user_id` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '更新用户ID',
-  PRIMARY KEY (`id`),
+  `user_id` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '用户ID',
+  `role_id` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '角色ID',
+  PRIMARY KEY (`user_id`,`role_id`),
   UNIQUE KEY `user_id_role_id` (`user_id`,`role_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-INSERT INTO sys_user_role VALUES ('1', '1', '1', now(), '1', null, NULL);
+INSERT INTO sys_user_role VALUES ('1', '1');
 
 
 --组织机构表
@@ -72,6 +67,13 @@ CREATE TABLE `sys_organ` (
   `update_user_id` varchar(50) DEFAULT NULL,
   `top_parent_id` varchar(50) NOT NULL COMMENT '顶级ID',
   PRIMARY KEY (`organ_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- 组织机构角色表
+CREATE TABLE `sys_organ_role` (
+  `organ_id` varchar(50) NOT NULL,
+  `role_id` varchar(50) NOT NULL,
+  PRIMARY KEY (`organ_id`,`role_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- 日志表
