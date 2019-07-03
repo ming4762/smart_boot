@@ -21,12 +21,12 @@ define(["require", "exports", "PageBuilder", "utils/ApiService", "mixins/Message
         }
         MenuConfig.prototype.components = function () {
             return {
-                'smart-form': new SmartForm_1.default().build()
+                'smart-form': SmartForm_1.default
             };
         };
         MenuConfig.prototype.mixins = function () {
             return [
-                new MessageMixins_1.default().build()
+                MessageMixins_1.default
             ];
         };
         MenuConfig.prototype.data = function () {

@@ -18,13 +18,13 @@ export class MenuConfig extends PageBuilder {
 
   protected components () {
     return {
-      'smart-form': new SmartForm().build()
+      'smart-form': SmartForm
     }
   }
 
   protected mixins () {
     return [
-        new MessageMixins().build()
+        MessageMixins
     ]
   }
 
