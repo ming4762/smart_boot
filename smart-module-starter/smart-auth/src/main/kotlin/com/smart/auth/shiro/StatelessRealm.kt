@@ -54,8 +54,7 @@ class StatelessRealm : AuthorizingRealm() {
         val user = getAvailablePrincipal(principalCollection) as SysUserDO?
         // 获取用户权限
         if (user != null) {
-            val userId = user.userId!!
-            var permissionList = AuthUtils.getSession()?.getAttribute(AuthConstants.PERMISSION) as Set<String>? ?: setOf()
+            val permissionList = AuthUtils.getSession()?.getAttribute(AuthConstants.PERMISSION) as Set<String>? ?: setOf()
             info.addStringPermissions(permissionList)
         }
         return info
@@ -70,13 +69,5 @@ class StatelessRealm : AuthorizingRealm() {
             return "authorization_cache_key:" + session.id
         }
         return super.getAuthorizationCacheKey(principals)
-    }
-
-    /**
-     * 查询用户权限信息
-     */
-    private fun queryUserPermissionList(userId: String): Set<String> {
-        val permissionMap: Map<String, Set<String>> = this.sysUserService.queryPermissionList(listOf(userId))
-        return permissionMap[userId] ?: setOf()
     }
 }
