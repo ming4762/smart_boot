@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.smart</groupId>
-        <artifactId>smart_boot</artifactId>
+        <artifactId>smart-commons</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
     <artifactId>smart-auth-common</artifactId>
