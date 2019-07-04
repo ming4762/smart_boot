@@ -28,4 +28,5 @@ target
 ### VS Code ###
 .vscode/
 /smart-test/
+/smart-test2/
 smart-ui-test
