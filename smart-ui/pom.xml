@@ -22,7 +22,8 @@
     </modules>
 
     <properties>
-
+        <smart-ui-common.version>0.0.1-SNAPSHOT</smart-ui-common.version>
+        <smart-ui-plugins.version>0.0.1-SNAPSHOT</smart-ui-plugins.version>
     </properties>
 
     <dependencies>

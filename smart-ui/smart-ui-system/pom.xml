@@ -21,15 +21,14 @@
         <dependency>
             <groupId>com.smart</groupId>
             <artifactId>smart-ui-common</artifactId>
-            <!--TODO: 版本号管理-->
-            <version>0.0.1-SNAPSHOT</version>
+            <version>${smart-ui-common.version}</version>
         </dependency>
         <dependency>
             <groupId>com.smart</groupId>
             <artifactId>smart-ui-plugins</artifactId>
-            <!--TODO: 版本号管理-->
-            <version>0.0.1-SNAPSHOT</version>
+            <version>${smart-ui-plugins.version}</version>
         </dependency>
+        <!--todo:正式环境下移除-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-devtools</artifactId>

@@ -1,10 +1,8 @@
-// @ts-ignore
-import ComponentBuilder from 'ComponentBuilder'
 
 /**
  * 页面构造函数
  */
-export default class PageBuilder extends ComponentBuilder {
+export default class PageBuilder {
 
   public vue: any
 
@@ -13,6 +11,10 @@ export default class PageBuilder extends ComponentBuilder {
    */
   public init () {
     this.initVue()
+  }
+
+  protected build () {
+    return {}
   }
 
   /**
