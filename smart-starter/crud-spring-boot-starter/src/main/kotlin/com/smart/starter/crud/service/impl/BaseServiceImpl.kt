@@ -9,6 +9,7 @@ import com.smart.starter.crud.model.BaseModel
 import com.smart.starter.crud.service.BaseService
 import com.smart.starter.crud.utils.MybatisUtil
 import org.slf4j.LoggerFactory
+import org.springframework.transaction.annotation.Transactional
 import java.io.Serializable
 import java.lang.reflect.ParameterizedType
 import java.lang.reflect.Type

@@ -7,7 +7,6 @@ import com.smart.common.message.Result
 import com.smart.starter.crud.model.BaseModel
 import com.smart.starter.crud.service.BaseService
 import com.smart.starter.crud.utils.MybatisUtil
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.util.StringUtils
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
@@ -22,7 +21,7 @@ import java.util.*
  * @author ming
  * 2019/6/12 上午11:20
  */
-open class BaseController<K : BaseService<T>, T : BaseModel> {
+open class BaseController<K : BaseService<T>, T : BaseModel> : BaseListParameterController<K, T>() {
 
     private val PAGE_SIZE = "limit"
     private val OFFSET = "offset"
@@ -36,8 +35,8 @@ open class BaseController<K : BaseService<T>, T : BaseModel> {
      */
     private val keywordField = "keyword"
 
-    @Autowired
-    protected lateinit var service: K
+//    @Autowired
+//    protected lateinit var service: K
 
     /**
      * 注册日期转换工具
@@ -140,20 +139,20 @@ open class BaseController<K : BaseService<T>, T : BaseModel> {
 
     }
 
-    /**
-     * 批量保存
-     */
-    @RequestMapping("/batchSave")
-    @ResponseBody
-    protected open fun batchSave(@RequestBody tList: List<T>): Result<Boolean?> {
-        return try {
-            Result.success(this.service.saveBatch(tList))
-        } catch (e: Exception) {
-            e.printStackTrace()
-            Result.failure(e.message, false)
-        }
-
-    }
+//    /**
+//     * 批量保存
+//     */
+//    @RequestMapping("/batchSave")
+//    @ResponseBody
+//    protected open fun batchSave(@RequestBody tList: List<T>): Result<Boolean?> {
+//        return try {
+//            Result.success(this.service.saveBatch(tList))
+//        } catch (e: Exception) {
+//            e.printStackTrace()
+//            Result.failure(e.message, false)
+//        }
+//
+//    }
 
     /**
      * 更新
@@ -167,22 +166,22 @@ open class BaseController<K : BaseService<T>, T : BaseModel> {
         Result.failure(e.message, false)
     }
 
-    /**
-     * 批量删除
-     * @param deleteObjects
-     * @return
-     */
-    @RequestMapping("/batchDelete")
-    @ResponseBody
-    protected open fun batchDelete(@RequestBody deleteObjects: List<T>): Result<Any?> {
-        return try {
-            Result.success(this.service.batchDelete(deleteObjects))
-        } catch (e: Exception) {
-            e.printStackTrace()
-            Result.failure("批量删除时发生错误", 0)
-        }
-
-    }
+//    /**
+//     * 批量删除
+//     * @param deleteObjects
+//     * @return
+//     */
+//    @RequestMapping("/batchDelete")
+//    @ResponseBody
+//    protected open fun batchDelete(@RequestBody deleteObjects: List<T>): Result<Any?> {
+//        return try {
+//            Result.success(this.service.batchDelete(deleteObjects))
+//        } catch (e: Exception) {
+//            e.printStackTrace()
+//            Result.failure("批量删除时发生错误", 0)
+//        }
+//
+//    }
 
     /**
      * 执行分期

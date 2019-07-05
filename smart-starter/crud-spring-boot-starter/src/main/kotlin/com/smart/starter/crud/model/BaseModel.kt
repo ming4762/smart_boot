@@ -8,6 +8,5 @@ import java.io.Serializable
  * @author ming
  * 2019/6/12 上午10:36
  */
-abstract class BaseModel : Serializable {
-
+open class BaseModel : Serializable {
 }
