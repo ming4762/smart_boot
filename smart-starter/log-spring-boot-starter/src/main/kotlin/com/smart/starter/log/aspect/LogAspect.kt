@@ -2,9 +2,9 @@ package com.smart.starter.log.aspect
 
 import com.alibaba.fastjson.JSON
 import com.smart.auth.common.utils.AuthUtils
+import com.smart.common.log.annotation.Log
 import com.smart.common.message.Result
 import com.smart.common.utils.IPUtils
-import com.smart.starter.log.annotation.Log
 import com.smart.starter.log.model.SysLogDO
 import com.smart.starter.log.service.SysLogService
 import org.aspectj.lang.ProceedingJoinPoint
@@ -32,7 +32,7 @@ class LogAspect {
     /**
      * 切面
      */
-    @Pointcut("@annotation(com.smart.starter.log.annotation.Log)")
+    @Pointcut("@annotation(com.smart.common.log.annotation.Log)")
     fun logPointCut() {
     }
 

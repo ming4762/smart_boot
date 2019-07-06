@@ -35,6 +35,13 @@
             <artifactId>smart-auth-common</artifactId>
             <version>${smart-auth-common.version}</version>
         </dependency>
+
+        <!--引入日志common-->
+        <dependency>
+            <groupId>com.smart</groupId>
+            <artifactId>smart-log-common</artifactId>
+            <version>${smart-log-common.version}</version>
+        </dependency>
     </dependencies>
 
     <build>

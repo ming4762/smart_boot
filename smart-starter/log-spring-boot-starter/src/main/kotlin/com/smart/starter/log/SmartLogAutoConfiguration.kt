@@ -15,7 +15,7 @@ import org.springframework.context.annotation.Configuration
 @Configuration
 @EnableConfigurationProperties(LogProperties :: class)
 @ComponentScan
-@MapperScan("com.smart.starter.log.mapper")
+@MapperScan("com.smart.starter.log.mapper", sqlSessionTemplateRef = "systemSqlSessionTemplate")
 class SmartLogAutoConfiguration {
 
     /**

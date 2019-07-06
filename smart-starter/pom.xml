@@ -21,6 +21,8 @@
         <module>crud-spring-boot-starter</module>
         <!--文件启动器-->
         <module>file-spring-boot-starter</module>
+        <module>log-spring-boot-starter</module>
+        <module>queue-spring-boot-starter</module>
     </modules>
 
     <dependencies>

@@ -1,4 +1,4 @@
-package com.smart.starter.log.annotation
+package com.smart.common.log.annotation
 
 /**
  * 日志注解，添加该注解的类或方法实现日志
