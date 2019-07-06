@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.smart</groupId>
+        <artifactId>smart-ui</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+    </parent>
+    <artifactId>smart-ui-quartz</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>smart-ui-quartz</name>
+    <description>Demo project for Spring Boot</description>
+
+    <properties>
+
+    </properties>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>com.smart</groupId>
+            <artifactId>smart-ui-plugins</artifactId>
+            <version>${smart-ui-plugins.version}</version>
+        </dependency>
+        <!--引入ui common包-->
+        <dependency>
+            <groupId>com.smart</groupId>
+            <artifactId>smart-ui-common</artifactId>
+            <version>${smart-ui-common.version}</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+
+    </build>
+
+</project>
