@@ -6,6 +6,7 @@ import com.smart.system.mapper.SysUserRoleMapper
 import com.smart.system.model.SysUserRoleDO
 import com.smart.system.service.SysUserRoleService
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 import java.util.stream.Collectors
 import kotlin.reflect.KMutableProperty1
 
@@ -37,5 +38,15 @@ class SysUserRoleServiceImpl : BaseServiceImpl<SysUserRoleMapper, SysUserRoleDO>
         ).stream().collect(Collectors.groupingBy(kMutableProperty1))
                 .map { it.key!! to it.value }
                 .toMap()
+    }
+
+    @Transactional(value = "systemTransactionManager")
+    override fun saveOrUpdate(entity: SysUserRoleDO?): Boolean {
+        return super.saveOrUpdate(entity)
+    }
+
+    @Transactional(value = "systemTransactionManager")
+    override fun batchDelete(tList: List<SysUserRoleDO>): Int {
+        return super.batchDelete(tList)
     }
 }

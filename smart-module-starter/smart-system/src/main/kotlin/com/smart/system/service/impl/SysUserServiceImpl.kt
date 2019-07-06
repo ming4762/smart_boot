@@ -2,6 +2,8 @@ package com.smart.system.service.impl
 
 import com.baomidou.mybatisplus.extension.kotlin.KtQueryWrapper
 import com.smart.auth.common.model.SysUserDO
+import com.smart.auth.common.utils.AuthUtils
+import com.smart.common.utils.security.MD5Utils
 import com.smart.starter.crud.service.impl.BaseServiceImpl
 import com.smart.system.mapper.SysRoleMapper
 import com.smart.system.mapper.SysUserMapper
@@ -15,7 +17,9 @@ import com.smart.system.service.SysRoleMenuFunctionService
 import com.smart.system.service.SysUserService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 import org.springframework.util.StringUtils
+import java.util.*
 
 /**
  *
@@ -145,5 +149,42 @@ class SysUserServiceImpl : BaseServiceImpl<SysUserMapper, SysUserDO>(), SysUserS
             return userToConfigIdRoleIdMap
         }
         return mapOf()
+    }
+
+    @Transactional(value = "systemTransactionManager")
+    override fun batchDelete(tList: List<SysUserDO>): Int {
+        return super.batchDelete(tList)
+    }
+
+    @Transactional(value = "systemTransactionManager")
+    override fun saveOrUpdate(entity: SysUserDO): Boolean {
+        var isAdd = false
+        if (entity.userId == null) {
+            isAdd = true
+        } else if (this.getById(entity.userId) == null) {
+            isAdd = true
+        }
+        return if (isAdd) {
+            entity.createTime = Date()
+            entity.createUserId = AuthUtils.getCurrentUserId()
+            entity.password = this.createDefaultPassword(entity)
+            this.save(entity)
+        } else {
+            entity.updateTime = Date()
+            entity.updateUserId = AuthUtils.getCurrentUserId()
+            this.updateById(entity)
+        }
+    }
+
+    /**
+     * 创建默认的密码
+     */
+    private fun createDefaultPassword(user: SysUserDO): String {
+        val password = user.username + "123456"
+        return MD5Utils.md5(user.username + password + SALT, 2)
+    }
+
+    companion object {
+        private const val SALT = "1qazxsw2"
     }
 }

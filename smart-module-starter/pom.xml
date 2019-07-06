@@ -18,6 +18,8 @@
     </properties>
 
     <modules>
+        <module>smart-auth</module>
+        <module>smart-quartz</module>
         <!--系统模块-->
         <module>smart-system</module>
     </modules>

@@ -1,9 +1,9 @@
 package com.smart.system.controller
 
+import com.smart.common.log.annotation.Log
 import com.smart.common.message.Result
 import com.smart.common.model.Tree
 import com.smart.starter.crud.controller.BaseController
-import com.smart.starter.log.annotation.Log
 import com.smart.system.model.SysFunctionDO
 import com.smart.system.service.SysFunctionService
 import org.apache.shiro.authz.annotation.Logical
