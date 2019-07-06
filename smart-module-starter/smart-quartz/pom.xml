@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.smart</groupId>
+		<artifactId>smart-module-starter</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
+	<artifactId>smart-quartz</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>smart-quartz</name>
+	<description>定时任务模块</description>
+
+	<properties>
+
+	</properties>
+
+	<dependencies>
+		<!--quartz支持-->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-quartz</artifactId>
+		</dependency>
+
+		<!--引入crud启动器-->
+		<dependency>
+			<groupId>com.smart</groupId>
+			<artifactId>crud-spring-boot-starter</artifactId>
+			<version>${crud-spring-boot-starter.version}</version>
+		</dependency>
+
+		<!--引入日志common-->
+		<dependency>
+			<groupId>com.smart</groupId>
+			<artifactId>smart-log-common</artifactId>
+			<version>${smart-log-common.version}</version>
+		</dependency>
+	</dependencies>
+
+	<build>
+
+	</build>
+
+</project>
