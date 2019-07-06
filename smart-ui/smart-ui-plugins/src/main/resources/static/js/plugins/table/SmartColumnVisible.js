@@ -12,6 +12,11 @@ define(["require", "exports", "utils/CommonUtils"], function (require, exports, 
                 default: 4
             }
         },
+        data: function () {
+            return {
+                result: {}
+            };
+        },
         beforeMount: function () {
             var columnShow = CommonUtils_1.default.clone(this.columnShow);
             for (var column in columnShow) {

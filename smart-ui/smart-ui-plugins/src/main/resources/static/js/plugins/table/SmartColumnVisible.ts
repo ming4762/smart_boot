@@ -13,6 +13,11 @@ export default {
       default: 4
     }
   },
+  data () {
+    return {
+      result: {}
+    }
+  },
   beforeMount () {
     // @ts-ignore
     let columnShow = CommonUtils.clone(this.columnShow)
