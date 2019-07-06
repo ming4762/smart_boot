@@ -1,4 +1,4 @@
-package com.smart.starter.queue.handler
+package com.smart.common.queue.handler
 
 /**
  * 队列执行器

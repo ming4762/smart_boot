@@ -4,31 +4,19 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.smart</groupId>
-        <artifactId>smart-starter</artifactId>
+        <artifactId>smart-commons</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
-    <artifactId>queue-spring-boot-starter</artifactId>
+    <artifactId>smart-queue-common</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>queue-spring-boot-starter</name>
+    <name>smart-queue-common</name>
     <description>Demo project for Spring Boot</description>
 
     <properties>
+        <java.version>1.8</java.version>
     </properties>
 
     <dependencies>
-        <!--引入common工具包-->
-        <dependency>
-            <groupId>com.smart</groupId>
-            <artifactId>smart-common</artifactId>
-            <version>${smart-common.version}</version>
-        </dependency>
-
-        <!--引入common包-->
-        <dependency>
-            <groupId>com.smart</groupId>
-            <artifactId>smart-queue-common</artifactId>
-            <version>${smart-queue-common.version}</version>
-        </dependency>
     </dependencies>
 
     <build>

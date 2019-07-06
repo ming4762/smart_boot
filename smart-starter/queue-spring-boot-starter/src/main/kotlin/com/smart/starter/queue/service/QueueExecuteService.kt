@@ -1,7 +1,7 @@
 package com.smart.starter.queue.service
 
+import com.smart.common.queue.handler.QueueTaskHandler
 import com.smart.starter.queue.QueueProperties
-import com.smart.starter.queue.handler.QueueTaskHandler
 import org.slf4j.LoggerFactory
 import java.util.concurrent.Executors
 import javax.annotation.PostConstruct
@@ -16,7 +16,7 @@ class QueueExecuteService(val queueProperties: QueueProperties) {
 
     companion object {
         private val LOGGER = LoggerFactory.getLogger(QueueExecuteService :: class.java)
-        private const val DEFAULT_QUEUE_NAME = "default"
+        const val DEFAULT_QUEUE_NAME = "default"
     }
 
     // 队列容器
@@ -131,6 +131,16 @@ class QueueExecuteService(val queueProperties: QueueProperties) {
             LOGGER.info("线程池关闭，重新初始化线程池及任务")
         }
         return true
+    }
+
+    /**
+     * 移除队列
+     */
+    fun removeQueue(queueName: String = DEFAULT_QUEUE_NAME) {
+        // 关闭队列线程
+        this.queueContainer[queueName]?.threadExecutor?.shutdownNow()
+        this.queueContainer[queueName]?.running = false
+        this.queueContainer.remove(queueName)
     }
 
     /**

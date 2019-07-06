@@ -1,6 +1,6 @@
 package com.smart.starter.queue.service
 
-import com.smart.starter.queue.handler.QueueTaskHandler
+import com.smart.common.queue.handler.QueueTaskHandler
 import java.util.concurrent.Executors
 import java.util.concurrent.LinkedBlockingQueue
 
