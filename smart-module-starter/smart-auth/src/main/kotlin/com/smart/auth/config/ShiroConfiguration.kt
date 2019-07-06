@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.context.annotation.Lazy
 import org.springframework.util.StringUtils
 import javax.servlet.Filter
 
@@ -49,7 +50,7 @@ class ShiroConfiguration {
      * 创建shiro拦截器
      */
     @Bean
-    fun shirFilter(securityManager: SecurityManager): ShiroFilterFactoryBean {
+    fun shiroFilter(securityManager: SecurityManager): ShiroFilterFactoryBean {
         val shiroFilterFactoryBean = ShiroFilterFactoryBean()
         shiroFilterFactoryBean.securityManager = securityManager
         // 设置自定义拦截器
@@ -77,7 +78,7 @@ class ShiroConfiguration {
      * 配置核心事物管理器
      */
     @Bean
-    fun securityManager(@Autowired redisService: RedisService): SecurityManager {
+    fun securityManager(@Autowired @Lazy redisService: RedisService): SecurityManager {
         val securityManager = DefaultWebSecurityManager()
         securityManager.setRealm(statelessRealm())
         // 使用自定义session 管理器
