@@ -8,14 +8,14 @@ define(["require", "exports", "plugins/icon/SmartIconList"], function (require, 
         props: {
             value: String
         },
-        data: function () {
+        data() {
             return {
                 iconDialogShow: false,
                 icon: ''
             };
         },
         watch: {
-            icon: function (_new, old) {
+            icon(_new, old) {
                 if (_new !== old) {
                     this.$emit('input', _new);
                     this.iconDialogShow = false;
@@ -23,10 +23,30 @@ define(["require", "exports", "plugins/icon/SmartIconList"], function (require, 
             }
         },
         methods: {
-            handleShowIconDialog: function () {
+            handleShowIconDialog() {
                 this.iconDialogShow = true;
             }
         },
-        template: "\n  <el-row>\n    <el-col :span=\"11\">\n      <el-input placeholder=\"\u8BF7\u9009\u62E9\u56FE\u6807\" v-model=\"value\">\n      </el-input>\n    </el-col>\n    <el-col :span=\"2\">\n      <i :class=\"value\"></i>\n    </el-col>\n    <el-col :span=\"1\">\n      &ensp; \n    </el-col>\n    <el-col :span=\"10\">\n      <el-button type=\"primary\" @click=\"handleShowIconDialog\">\u9009\u62E9\u56FE\u6807</el-button>\n    </el-col>\n\n    <el-dialog append-to-body :visible.sync=\"iconDialogShow\">\n      <smart-icon-list :icon.sync=\"icon\"></smart-icon-list>\n    </el-dialog>\n  </el-row>\n  "
+        template: `
+  <el-row>
+    <el-col :span="11">
+      <el-input placeholder="请选择图标" v-model="value">
+      </el-input>
+    </el-col>
+    <el-col :span="2">
+      <i :class="value"></i>
+    </el-col>
+    <el-col :span="1">
+      &ensp; 
+    </el-col>
+    <el-col :span="10">
+      <el-button type="primary" @click="handleShowIconDialog">选择图标</el-button>
+    </el-col>
+
+    <el-dialog append-to-body :visible.sync="iconDialogShow">
+      <smart-icon-list :icon.sync="icon"></smart-icon-list>
+    </el-dialog>
+  </el-row>
+  `
     };
 });

@@ -17,7 +17,7 @@ define(["require", "exports"], function (require, exports) {
                 default: true
             }
         },
-        data: function () {
+        data() {
             return {
                 name: name,
                 asideVisible: true
@@ -25,7 +25,7 @@ define(["require", "exports"], function (require, exports) {
         },
         computed: {
             getAsideHeaderLineHeight: function () {
-                return "line-height: " + this.asideHeaderHeight + ";";
+                return `line-height: ${this.asideHeaderHeight};`;
             },
             getAsideHeaderIconClass: function () {
                 return this.asideVisible ? 'el-icon-d-arrow-left' : 'el-icon-d-arrow-right';
@@ -39,6 +39,33 @@ define(["require", "exports"], function (require, exports) {
                 this.asideVisible = !this.asideVisible;
             }
         },
-        template: "\n  <el-container class=\"full-height\">\n    <!--  \u6DFB\u52A0\u52A8\u753B\u6548\u679C  -->\n    <el-aside\n      :width=\"getAsideWidth\"\n      class=\"full-height common-aside\">\n      <el-header\n        v-if=\"hasAsideHeader\"\n        :height=\"asideHeaderHeight\"\n        :style=\"getAsideHeaderLineHeight\"\n        class=\"aside-header\">\n      <span\n          v-show=\"asideVisible\">{{asideTitle}}</span>\n        <i\n          @click=\"handleShowHideAside\"\n          :class=\"getAsideHeaderIconClass\"\n          :style=\"getAsideHeaderLineHeight\"\n          class=\"el-icon-d-arrow-right cousor-pointer aside-header-icon\"></i>\n      </el-header>\n      <div class=\"full-height\" v-show=\"asideVisible\">\n        <slot name=\"aside\"/>\n      </div>\n    </el-aside>\n    <el-main style=\"padding: 0;\" class=\"common-main\">\n      <slot/>\n    </el-main>\n  </el-container>\n  "
+        template: `
+  <el-container class="full-height">
+    <!--  添加动画效果  -->
+    <el-aside
+      :width="getAsideWidth"
+      class="full-height common-aside">
+      <el-header
+        v-if="hasAsideHeader"
+        :height="asideHeaderHeight"
+        :style="getAsideHeaderLineHeight"
+        class="aside-header">
+      <span
+          v-show="asideVisible">{{asideTitle}}</span>
+        <i
+          @click="handleShowHideAside"
+          :class="getAsideHeaderIconClass"
+          :style="getAsideHeaderLineHeight"
+          class="el-icon-d-arrow-right cousor-pointer aside-header-icon"></i>
+      </el-header>
+      <div class="full-height" v-show="asideVisible">
+        <slot name="aside"/>
+      </div>
+    </el-aside>
+    <el-main style="padding: 0;" class="common-main">
+      <slot/>
+    </el-main>
+  </el-container>
+  `
     };
 });

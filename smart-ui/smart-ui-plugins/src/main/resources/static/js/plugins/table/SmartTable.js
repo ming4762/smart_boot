@@ -34,7 +34,7 @@ define(["require", "exports", "utils/CommonUtils"], function (require, exports, 
                 required: true
             }
         },
-        data: function () {
+        data() {
             return {
                 leftFixed: false,
                 tableData: []
@@ -44,7 +44,7 @@ define(["require", "exports", "utils/CommonUtils"], function (require, exports, 
             useSolt: function (item) {
                 return this.$scopedSlots[item.key];
             },
-            getColumnValue: function (column, row, $column, $index) {
+            getColumnValue(column, row, $column, $index) {
                 if (column.formatter) {
                     return column.formatter(row, $column, row[column.key], $index);
                 }
@@ -55,7 +55,7 @@ define(["require", "exports", "utils/CommonUtils"], function (require, exports, 
         },
         computed: {
             getSelectionIndexColumns: function () {
-                var columns = [];
+                const columns = [];
                 if (this.selection === true) {
                     columns.push({
                         key: 'selection',
@@ -76,10 +76,9 @@ define(["require", "exports", "utils/CommonUtils"], function (require, exports, 
                 return columns;
             },
             getColumns: function () {
-                var _this = this;
-                var columns = [];
-                this.columnOptions.forEach(function (item) {
-                    var column = Object.assign({}, item);
+                const columns = [];
+                this.columnOptions.forEach(item => {
+                    const column = Object.assign({}, item);
                     if (column.visible !== false) {
                         if (!column.align)
                             column.align = 'center';
@@ -88,23 +87,69 @@ define(["require", "exports", "utils/CommonUtils"], function (require, exports, 
                         columns.push(column);
                     }
                     if (item.fixed === true || item.fixed === 'left') {
-                        _this.leftFixed = true;
+                        this.leftFixed = true;
                     }
                 });
                 return columns;
             },
             getRowKey: function () {
-                var _this = this;
                 if (this.keys.length === 1) {
                     return this.keys[0];
                 }
                 else {
-                    return function (row) {
-                        return JSON.stringify(CommonUtils_1.default.getObjectByKeys(_this.keys, [row])[0]);
+                    return (row) => {
+                        return JSON.stringify(CommonUtils_1.default.getObjectByKeys(this.keys, [row])[0]);
                     };
                 }
             }
         },
-        template: "\n  <el-table\n    v-bind=\"$attrs\"\n    v-on=\"$listeners\"\n    :data=\"data\" \n    :row-key=\"getRowKey\"\n    :border=\"border\"\n    :stripe=\"stripe\">\n    <!--\u904D\u5386\u590D\u9009\u6846-->\n    <el-table-column\n      v-for=\"column in getSelectionIndexColumns\"\n      :key=\"column.key\"\n      :align=\"column.align\"\n      :fixed=\"leftFixed\"\n      :label=\"column.label\"\n      :width=\"column.width\"\n      :type=\"column.type\"/>\n    <!--\u904D\u5386\u5176\u4ED6\u5217-->\n    <el-table-column\n      v-for=\"item in getColumns\"\n      :key=\"item.key\"\n      :prop=\"item.prop\"\n      :width=\"item.width\"\n      :minWidth=\"item.minWidth\"\n      :fixed=\"item.fixed\"\n      :render-header=\"item.renderHeader\"\n      :sortable=\"item.sortable === true ? 'custom' : false\"\n      :resizable=\"item.resizable\"\n      :formatter=\"item.formatter\"\n      :align=\"item.align\"\n      :header-align=\"item.headerAlign\"\n      :class-name=\"item.className\"\n      :label-class-name=\"item.labelClassName\"\n      :label=\"item.label\">\n      <template slot-scope=\"{ row, column, $index }\">\n        <slot\n          v-if=\"useSolt(item)\"\n          :row=\"row\"\n          :name=\"item.key\"\n          :column=\"column\"\n          :$index=\"$index\"></slot>\n        <span v-else>\n          {{getColumnValue(item, row, column, $index)}}\n        </span>  \n      </template>\n    </el-table-column>\n  </el-table>\n  "
+        template: `
+  <el-table
+    v-bind="$attrs"
+    v-on="$listeners"
+    :data="data" 
+    :row-key="getRowKey"
+    :border="border"
+    :stripe="stripe">
+    <!--遍历复选框-->
+    <el-table-column
+      v-for="column in getSelectionIndexColumns"
+      :key="column.key"
+      :align="column.align"
+      :fixed="leftFixed"
+      :label="column.label"
+      :width="column.width"
+      :type="column.type"/>
+    <!--遍历其他列-->
+    <el-table-column
+      v-for="item in getColumns"
+      :key="item.key"
+      :prop="item.prop"
+      :width="item.width"
+      :minWidth="item.minWidth"
+      :fixed="item.fixed"
+      :render-header="item.renderHeader"
+      :sortable="item.sortable === true ? 'custom' : false"
+      :resizable="item.resizable"
+      :formatter="item.formatter"
+      :align="item.align"
+      :header-align="item.headerAlign"
+      :class-name="item.className"
+      :label-class-name="item.labelClassName"
+      :label="item.label">
+      <template slot-scope="{ row, column, $index }">
+        <slot
+          v-if="useSolt(item)"
+          :row="row"
+          :name="item.key"
+          :column="column"
+          :$index="$index"></slot>
+        <span v-else>
+          {{getColumnValue(item, row, column, $index)}}
+        </span>  
+      </template>
+    </el-table-column>
+  </el-table>
+  `
     };
 });

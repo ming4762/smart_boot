@@ -5,21 +5,21 @@ define(["require", "exports", "utils/CommonUtils"], function (require, exports, 
         props: {
             columnShow: {
                 type: Object,
-                default: function () { return {}; }
+                default: () => { return {}; }
             },
             lineNumber: {
                 type: Number,
                 default: 4
             }
         },
-        data: function () {
+        data() {
             return {
                 result: {}
             };
         },
-        beforeMount: function () {
-            var columnShow = CommonUtils_1.default.clone(this.columnShow);
-            for (var column in columnShow) {
+        beforeMount() {
+            let columnShow = CommonUtils_1.default.clone(this.columnShow);
+            for (let column in columnShow) {
                 this.$set(this.result, column, !columnShow[column]['hidden']);
             }
         },
@@ -27,7 +27,7 @@ define(["require", "exports", "utils/CommonUtils"], function (require, exports, 
             result: {
                 deep: true,
                 handler: function (_new) {
-                    var listener = 'result-change';
+                    const listener = 'result-change';
                     if (this.$listeners[listener]) {
                         this.$emit(listener, _new);
                     }
@@ -39,13 +39,13 @@ define(["require", "exports", "utils/CommonUtils"], function (require, exports, 
                 return 24 / this.lineNumber;
             },
             computedColumnShow: function () {
-                var result = [];
-                var i = 0;
-                for (var column in this.columnShow) {
+                let result = [];
+                let i = 0;
+                for (let column in this.columnShow) {
                     if (i % this.lineNumber === 0) {
                         result.push([]);
                     }
-                    var object = this.columnShow[column];
+                    let object = this.columnShow[column];
                     object['key'] = column;
                     result[result.length - 1].push(object);
                     i++;
@@ -53,6 +53,17 @@ define(["require", "exports", "utils/CommonUtils"], function (require, exports, 
                 return result;
             }
         },
-        template: "\n  <div>\n    <el-row :key=\"index + 'out'\" v-for=\"(columnGroup, index) in computedColumnShow\">\n      <el-col :span=\"computedSpanNumber\" :key=\"index + 'in'\" v-for=\"(column, index) in columnGroup\">\n        <el-checkbox\n            :label=\"column.name\"\n            v-model=\"result[column.key]\"\n        ></el-checkbox>\n      </el-col>\n    </el-row>\n  </div>\n  "
+        template: `
+  <div>
+    <el-row :key="index + 'out'" v-for="(columnGroup, index) in computedColumnShow">
+      <el-col :span="computedSpanNumber" :key="index + 'in'" v-for="(column, index) in columnGroup">
+        <el-checkbox
+            :label="column.name"
+            v-model="result[column.key]"
+        ></el-checkbox>
+      </el-col>
+    </el-row>
+  </div>
+  `
     };
 });

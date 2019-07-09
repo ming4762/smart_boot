@@ -1,7 +1,7 @@
 define(["require", "exports", "mixins/MessageMixins", "utils/CommonUtils", "plugins/form/SmartForm", "plugins/table/SmartButtonGroup", "plugins/table/SmartTable", "plugins/table/SmartColumnVisible"], function (require, exports, MessageMixins_1, CommonUtils_1, SmartForm_1, SmartButtonGroup_1, SmartTable_1, SmartColumnVisible_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    var validatePermission = function (permission, permissions) {
+    const validatePermission = (permission, permissions) => {
         if (!permissions || permission === undefined || permission === null || permission === '') {
             return true;
         }
@@ -64,7 +64,7 @@ define(["require", "exports", "mixins/MessageMixins", "utils/CommonUtils", "plug
             },
             pageSizes: {
                 type: Array,
-                default: function () { return [10, 20, 40, 100, 200]; }
+                default: () => { return [10, 20, 40, 100, 200]; }
             },
             pageSize: {
                 type: Number,
@@ -83,7 +83,7 @@ define(["require", "exports", "mixins/MessageMixins", "utils/CommonUtils", "plug
             queryParameterFormatter: Function,
             headerRowStyle: {
                 type: Object,
-                default: function () {
+                default: () => {
                     return {
                         'background-color': '#f2f2f2'
                     };
@@ -95,14 +95,14 @@ define(["require", "exports", "mixins/MessageMixins", "utils/CommonUtils", "plug
             },
             permissions: Array
         },
-        created: function () {
-            var _this = this;
+        created() {
+            const _this = this;
             _this.convertColumnOption();
             _this.order.sortName = _this.defaultSortColumn;
             _this.order.sortOrder = _this.defaultSortOrder;
         },
-        mounted: function () {
-            var _this = this;
+        mounted() {
+            const _this = this;
             if (!_this.data) {
                 _this.load();
             }
@@ -110,7 +110,7 @@ define(["require", "exports", "mixins/MessageMixins", "utils/CommonUtils", "plug
                 _this.tableData = _this.data;
             }
         },
-        data: function () {
+        data() {
             return {
                 columnVisibleOption: {},
                 tableColumnOptions: [],
@@ -146,29 +146,28 @@ define(["require", "exports", "mixins/MessageMixins", "utils/CommonUtils", "plug
         },
         methods: {
             convertColumnOption: function () {
-                var _this_1 = this;
-                var tableColumnOptions = [];
-                var addEditFromColumnOptions = [];
-                var searchFormColumnOptions = [];
-                this.columnOptions.forEach(function (item) {
+                const tableColumnOptions = [];
+                const addEditFromColumnOptions = [];
+                const searchFormColumnOptions = [];
+                this.columnOptions.forEach(item => {
                     if (!item.key)
                         item.key = item.prop;
-                    var commonColumn = {
+                    const commonColumn = {
                         key: item.key,
                         label: item.label,
                         prop: item.prop,
                         type: item.type
                     };
-                    var tableColumn = Object.assign({}, commonColumn, item.table);
+                    const tableColumn = Object.assign({}, commonColumn, item.table);
                     tableColumnOptions.push(tableColumn);
-                    var addEditFromColumn = Object.assign({}, commonColumn, item.form);
+                    const addEditFromColumn = Object.assign({}, commonColumn, item.form);
                     addEditFromColumnOptions.push(addEditFromColumn);
                     if (item.search) {
                         searchFormColumnOptions.push(Object.assign({}, commonColumn, item.search));
-                        _this_1.searchSymbol[item.key] = item.search.symbol ? item.search.symbol : '=';
+                        this.searchSymbol[item.key] = item.search.symbol ? item.search.symbol : '=';
                     }
                     if (item.table.displayControl !== false) {
-                        _this_1.columnVisibleOption[item.key] = {
+                        this.columnVisibleOption[item.key] = {
                             name: item.label,
                             hidden: item.table.visible === false
                         };
@@ -199,13 +198,12 @@ define(["require", "exports", "mixins/MessageMixins", "utils/CommonUtils", "plug
                 this.addEditFromColumnOptions = addEditFromColumnOptions;
             },
             createQueryParameter: function () {
-                var _this_1 = this;
-                var parameters = Object.assign({}, this.queryParameters, this.order);
+                let parameters = Object.assign({}, this.queryParameters, this.order);
                 if (this.searchWithSymbol) {
-                    Object.keys(this.searchModel).forEach(function (key) {
-                        var value = _this_1.searchModel[key];
-                        var symbol = _this_1.searchSymbol[key];
-                        var searchKey = key + "@" + symbol;
+                    Object.keys(this.searchModel).forEach(key => {
+                        const value = this.searchModel[key];
+                        const symbol = this.searchSymbol[key];
+                        const searchKey = `${key}@${symbol}`;
                         parameters[searchKey] = value;
                     });
                 }
@@ -218,7 +216,7 @@ define(["require", "exports", "mixins/MessageMixins", "utils/CommonUtils", "plug
                 return parameters;
             },
             dealData: function (data) {
-                var result;
+                let result;
                 if (this.paging === true) {
                     this.page.total = data['total'];
                     result = data['rows'];
@@ -229,31 +227,30 @@ define(["require", "exports", "mixins/MessageMixins", "utils/CommonUtils", "plug
                 return result;
             },
             load: function () {
-                var _this_1 = this;
                 this.tableLoading = true;
                 if (this.$listeners['before-load']) {
                     this.$emit('before-load');
                 }
-                var parameter = this.createQueryParameter();
+                let parameter = this.createQueryParameter();
                 if (this.queryParameterFormatter) {
                     parameter = this.queryParameterFormatter(parameter);
                 }
                 this.apiService.postAjax(this.queryUrl, parameter)
-                    .then(function (data) {
-                    _this_1.tableLoading = false;
-                    var dealData = _this_1.dealData(data);
-                    if (_this_1.tableDataFormatter) {
-                        dealData = _this_1.tableDataFormatter(dealData);
+                    .then(data => {
+                    this.tableLoading = false;
+                    let dealData = this.dealData(data);
+                    if (this.tableDataFormatter) {
+                        dealData = this.tableDataFormatter(dealData);
                     }
-                    _this_1.tableData = dealData;
-                }).catch(function (error) {
-                    _this_1.tableLoading = false;
-                    _this_1.errorMessage('加载数据失败', error);
+                    this.tableData = dealData;
+                }).catch(error => {
+                    this.tableLoading = false;
+                    this.errorMessage('加载数据失败', error);
                 });
             },
             handleSortChange: function (option) {
-                var prop = option.prop;
-                var order = option.order;
+                let prop = option.prop;
+                let order = option.order;
                 if (order) {
                     order === 'ascending' ? (order = 'asc') : (order = 'desc');
                     this.order.sortName = prop;
@@ -272,18 +269,17 @@ define(["require", "exports", "mixins/MessageMixins", "utils/CommonUtils", "plug
                 this.handleAddEditDialogShow('add', row);
             },
             handleAddEditDialogShow: function (ident, row) {
-                var _this_1 = this;
-                var callBack = function (model) {
-                    _this_1.oldAddEditModel = Object.assign({}, _this_1.addEditModel);
-                    _this_1.addEditDialog.visible = true;
-                    if (_this_1.$refs['addEditForm']) {
-                        _this_1.$refs['addEditForm'].reset();
+                const callBack = model => {
+                    this.oldAddEditModel = Object.assign({}, this.addEditModel);
+                    this.addEditDialog.visible = true;
+                    if (this.$refs['addEditForm']) {
+                        this.$refs['addEditForm'].reset();
                     }
                     if (model) {
-                        _this_1.addEditModel = model;
+                        this.addEditModel = model;
                     }
                     else {
-                        _this_1.getOne(ident, row);
+                        this.getOne(ident, row);
                     }
                 };
                 this.addEditModel = {};
@@ -297,14 +293,14 @@ define(["require", "exports", "mixins/MessageMixins", "utils/CommonUtils", "plug
             handleBeforeEdit: function (row) {
                 if (row)
                     this.selectedRow = row;
-                var rowList = [];
+                let rowList = [];
                 if (row) {
                     rowList.push(row);
                 }
                 else {
                     rowList = this.selectionList;
                 }
-                var notifyMessage = '';
+                let notifyMessage = '';
                 if (rowList.length === 0) {
                     notifyMessage = '请选择一条要修改的数据';
                 }
@@ -324,9 +320,8 @@ define(["require", "exports", "mixins/MessageMixins", "utils/CommonUtils", "plug
                 }
             },
             handleDelete: function (row) {
-                var _this_1 = this;
-                var _this = this;
-                var rowList = [];
+                const _this = this;
+                let rowList = [];
                 if (row) {
                     this.selectedRow = row;
                     rowList.push(row);
@@ -343,9 +338,9 @@ define(["require", "exports", "mixins/MessageMixins", "utils/CommonUtils", "plug
                         rowList = this.selectionList;
                     }
                 }
-                var deleteList = CommonUtils_1.default.getObjectByKeys(this.keys, rowList);
+                const deleteList = CommonUtils_1.default.getObjectByKeys(this.keys, rowList);
                 if (rowList.length > 0) {
-                    var warningMessage = "\u60A8\u786E\u5B9A\u8981\u5220\u9664\u3010" + rowList.length + "\u3011\u6761\u6570\u636E\u5417\uFF1F";
+                    let warningMessage = `您确定要删除【${rowList.length}】条数据吗？`;
                     if (this.deleteWarning) {
                         warningMessage = this.deleteWarning(rowList);
                     }
@@ -353,16 +348,16 @@ define(["require", "exports", "mixins/MessageMixins", "utils/CommonUtils", "plug
                         confirmButtonText: '确定',
                         cancelButtonText: '取消',
                         type: 'warning'
-                    }).then(function () {
-                        return _this.apiService.postAjax(_this_1.deleteUrl, deleteList);
-                    }).then(function (result) {
-                        if (_this_1.$listeners['after-delete']) {
-                            _this_1.$emit('after-delete', result);
+                    }).then(() => {
+                        return _this.apiService.postAjax(this.deleteUrl, deleteList);
+                    }).then(result => {
+                        if (this.$listeners['after-delete']) {
+                            this.$emit('after-delete', result);
                         }
-                        _this_1.load();
-                    }).catch(function (error) {
+                        this.load();
+                    }).catch(error => {
                         if (error !== 'cancel') {
-                            _this_1.errorMessage('删除时发生错误', error);
+                            this.errorMessage('删除时发生错误', error);
                         }
                     });
                 }
@@ -379,23 +374,22 @@ define(["require", "exports", "mixins/MessageMixins", "utils/CommonUtils", "plug
                 this.load();
             },
             getOne: function (ident, row) {
-                var _this_1 = this;
                 if (ident === 'edit') {
-                    var get_1 = !!this.getUrl;
-                    var parameters_1 = {};
-                    if (get_1) {
-                        parameters_1 = CommonUtils_1.default.getObjectByKeys(this.keys, [row])[0];
+                    const get = !!this.getUrl;
+                    let parameters = {};
+                    if (get) {
+                        parameters = CommonUtils_1.default.getObjectByKeys(this.keys, [row])[0];
                     }
                     else {
-                        this.keys.forEach(function (key) {
-                            parameters_1[key + '@='] = row[key];
+                        this.keys.forEach(key => {
+                            parameters[key + '@='] = row[key];
                         });
                     }
-                    this.apiService.postAjax(get_1 ? this.getUrl : this.queryUrl, parameters_1)
-                        .then(function (result) {
+                    this.apiService.postAjax(get ? this.getUrl : this.queryUrl, parameters)
+                        .then(result => {
                         if (result) {
-                            var model = get_1 ? result : (result.length === 1 ? result[0] : {});
-                            _this_1.addEditModel = model;
+                            const model = get ? result : (result.length === 1 ? result[0] : {});
+                            this.addEditModel = model;
                         }
                     });
                 }
@@ -412,11 +406,10 @@ define(["require", "exports", "mixins/MessageMixins", "utils/CommonUtils", "plug
                 this.dealColumnVisible();
             },
             dealColumnVisible: function () {
-                var _this_1 = this;
-                this.tableColumnOptions.forEach(function (item) {
-                    var columnVisible = _this_1.columnVisibleResult[item.key];
+                this.tableColumnOptions.forEach(item => {
+                    const columnVisible = this.columnVisibleResult[item.key];
                     if (columnVisible !== undefined && columnVisible !== null) {
-                        _this_1.$set(item, 'visible', columnVisible);
+                        this.$set(item, 'visible', columnVisible);
                     }
                 });
             },
@@ -451,42 +444,41 @@ define(["require", "exports", "mixins/MessageMixins", "utils/CommonUtils", "plug
                 this.searchDivVisible = !this.searchDivVisible;
             },
             saveUpdate: function (event) {
-                var _this_1 = this;
                 this.$refs['addEditForm'].validate()
-                    .then(function (validate) {
+                    .then(validate => {
                     if (validate === true) {
-                        _this_1.addEditDialog.loading = true;
-                        if (_this_1.addEditDialog.isAdd) {
-                            var listener = 'before-add';
-                            if (_this_1.$listeners[listener]) {
-                                _this_1.$emit(listener, _this_1.addEditModel);
+                        this.addEditDialog.loading = true;
+                        if (this.addEditDialog.isAdd) {
+                            const listener = 'before-add';
+                            if (this.$listeners[listener]) {
+                                this.$emit(listener, this.addEditModel);
                             }
                         }
                         else {
-                            var listener = 'before-edit';
-                            if (_this_1.$listeners[listener]) {
-                                _this_1.$emit(listener, _this_1.addEditModel, _this_1.oldAddEditModel);
+                            const listener = 'before-edit';
+                            if (this.$listeners[listener]) {
+                                this.$emit(listener, this.addEditModel, this.oldAddEditModel);
                             }
                         }
-                        return _this_1.apiService.postAjax(_this_1.saveUpdateUrl, _this_1.addEditModel);
+                        return this.apiService.postAjax(this.saveUpdateUrl, this.addEditModel);
                     }
-                }).then(function (result) {
-                    _this_1.addEditDialog.loading = false;
-                    _this_1.addEditDialog.visible = false;
-                    _this_1.$notify({
+                }).then(result => {
+                    this.addEditDialog.loading = false;
+                    this.addEditDialog.visible = false;
+                    this.$notify({
                         title: '保存成功',
                         message: '',
                         type: 'success'
                     });
-                    _this_1.load();
-                }).catch(function (error) {
-                    _this_1.addEditDialog.loading = false;
-                    _this_1.errorMessage("\u4FDD\u5B58" + _this_1.tableName + "\u53D1\u751F\u9519\u8BEF", error);
+                    this.load();
+                }).catch(error => {
+                    this.addEditDialog.loading = false;
+                    this.errorMessage(`保存${this.tableName}发生错误`, error);
                 });
             },
             isButtonShow: function (buttonConfig) {
-                var topShow = true;
-                var rowShow = true;
+                let topShow = true;
+                let rowShow = true;
                 if (buttonConfig.rowShow === false || !validatePermission(buttonConfig.permission, this.permissions)) {
                     rowShow = false;
                 }
@@ -498,7 +490,7 @@ define(["require", "exports", "mixins/MessageMixins", "utils/CommonUtils", "plug
         },
         computed: {
             getPaginationStyle: function () {
-                var style = '';
+                let style = '';
                 switch (this.position) {
                     case 'left':
                         style = 'float: left;';
@@ -512,7 +504,7 @@ define(["require", "exports", "mixins/MessageMixins", "utils/CommonUtils", "plug
                 return style;
             },
             getTableHeight: function () {
-                var height = this.height;
+                let height = this.height;
                 if (height) {
                     if (this.hasTopLeft === true || this.hasTopRight === true) {
                         height = height - 40;
@@ -527,7 +519,7 @@ define(["require", "exports", "mixins/MessageMixins", "utils/CommonUtils", "plug
                 }
             },
             getDefaultButtonShow: function () {
-                var result = {
+                let result = {
                     add: {
                         row: true,
                         top: true
@@ -541,11 +533,11 @@ define(["require", "exports", "mixins/MessageMixins", "utils/CommonUtils", "plug
                         top: true
                     }
                 };
-                var defaultButton = this.defaultButtonConfig;
+                let defaultButton = this.defaultButtonConfig;
                 if (defaultButton) {
-                    for (var key in result) {
+                    for (let key in result) {
                         if (defaultButton[key]) {
-                            var showConfig = this.isButtonShow(defaultButton[key]);
+                            let showConfig = this.isButtonShow(defaultButton[key]);
                             result[key].top = showConfig[0];
                             result[key].row = showConfig[1];
                         }
@@ -554,8 +546,8 @@ define(["require", "exports", "mixins/MessageMixins", "utils/CommonUtils", "plug
                 return result;
             },
             getTableColumnSolt: function () {
-                var result = {};
-                for (var key in this.$scopedSlots) {
+                const result = {};
+                for (let key in this.$scopedSlots) {
                     if (key.indexOf('table-') === 0) {
                         result[key] = key.substring(6);
                     }
@@ -563,8 +555,8 @@ define(["require", "exports", "mixins/MessageMixins", "utils/CommonUtils", "plug
                 return result;
             },
             getFormSolts: function () {
-                var result = {};
-                for (var key in this.$scopedSlots) {
+                let result = {};
+                for (let key in this.$scopedSlots) {
                     if (key.indexOf('form-') === 0) {
                         result[key] = key.substring(5);
                     }
@@ -572,8 +564,8 @@ define(["require", "exports", "mixins/MessageMixins", "utils/CommonUtils", "plug
                 return result;
             },
             getSearchSolts: function () {
-                var result = {};
-                for (var key in this.$scopedSlots) {
+                let result = {};
+                for (let key in this.$scopedSlots) {
                     if (key.indexOf('search-') === 0) {
                         result[key] = key.substring(7);
                     }
@@ -581,6 +573,167 @@ define(["require", "exports", "mixins/MessageMixins", "utils/CommonUtils", "plug
                 return result;
             }
         },
-        template: "\n  <div>\n    <!--\u641C\u7D22form-->\n    <transition v-if=\"searchFormColumnOptions.length > 0\" name=\"fade\">\n      <div className=\"table-search-container\" v-show=\"searchDivVisible\">\n        <smart-form\n          :columnOptions=\"searchFormColumnOptions\"\n          :model=\"searchModel\"\n          size=\"small\"\n          inline\n          ref=\"searchForm\">\n          <!--\u904D\u5386\u63D2\u69FD-->\n          <template\n            v-for=\"(value, key) in getSearchSolts\"\n            slot-scope=\"{column, model}\"\n            :slot=\"value\">\n            <slot\n              :column=\"column\"\n              :model=\"model\"\n              :name=\"key\"></slot>\n          </template>\n          <!--\u641C\u7D22\u91CD\u7F6E\u63D2\u69FD-->\n          <template v-slot:search-button=\"{model}\">\n            <el-form-item>\n              <el-button\n                type=\"primary\"\n                @click=\"handleSearch\"\n                icon=\"el-icon-search\">\u67E5\u8BE2</el-button>\n            </el-form-item>\n          </template>\n          <template v-slot:reset-button=\"{model}\">\n            <el-form-item>\n              <el-button\n                type=\"info\"\n                @click=\"handleRestSearch\"\n                icon=\"el-icon-delete\">\u91CD\u7F6E</el-button>\n            </el-form-item>\n          </template>\n        </smart-form>\n      </div>\n    </transition>\n    <!--\u64CD\u4F5C\u7EC4-->\n    <smart-button-group\n      v-if=\"hasTopLeft || hasTopRight\"\n      :has-left=\"hasTopLeft\"\n      :has-right=\"hasTopRight\"\n      :add-show=\"getDefaultButtonShow.add.top\"\n      :edit-show=\"getDefaultButtonShow.edit.top\"\n      :delete-show=\"getDefaultButtonShow.delete.top\"\n      @button-click=\"handleClickGroupButton\"\n      class=\"cloud-table-menu\">\n      <!--\u6309\u94AE\u63D2\u69FD-->\n      <template slot=\"buttonLeft\">\n        <slot name=\"top-left\"></slot>\n      </template>\n      <template slot=\"buttonRight\">\n        <slot name=\"top-right\"></slot>\n      </template>\n    </smart-button-group>\n    \n    <!--\u8868\u683C\u4E3B\u4F53-->\n    <smart-table\n      v-bind=\"$attrs\"\n      v-on=\"$listeners\"\n      v-loading=\"tableLoading\"\n      :keys=\"keys\"\n      :data=\"tableData\"\n      :columnOptions=\"tableColumnOptions\"\n      :height=\"getTableHeight\"\n      @sort-change=\"handleSortChange\"\n      @selection-change=\"handleSelectionChange\"\n      :header-row-style=\"headerRowStyle\">\n      <!--\u64CD\u4F5C\u5217\u63D2\u69FD-->\n      <template v-if=\"hasOpreaColumn\" slot=\"operation_ming\" slot-scope=\"{row, column, $index}\">\n        <el-tooltip v-if=\"getDefaultButtonShow.add.row\" effect=\"dark\" content=\"\u6DFB\u52A0\" placement=\"top\">\n          <el-button\n            size=\"mini\"\n            type=\"primary\"\n            icon=\"el-icon-plus\"\n            @click=\"handleBeforeAdd(row)\"/>\n        </el-tooltip>\n        <el-tooltip v-if=\"getDefaultButtonShow.edit.row\" effect=\"dark\" content=\"\u7F16\u8F91\" placement=\"top\">\n          <el-button\n            size=\"mini\"\n            type=\"warning\"\n            icon=\"el-icon-edit\"\n            @click=\"handleBeforeEdit(row)\"/>\n        </el-tooltip>\n        <el-tooltip effect=\"dark\" content=\"\u5220\u9664\" placement=\"top\">\n          <el-button\n            v-if=\"getDefaultButtonShow.delete.row\"\n            size=\"mini\"\n            type=\"danger\"\n            icon=\"el-icon-delete\"\n            @click=\"handleDelete(row)\"/>\n        </el-tooltip>\n        <slot\n          :row=\"row\"\n          :column=\"column\"\n          :$index=\"$index\"\n          name=\"row-operation\"/>\n      </template>\n      <!--\u8868\u683C\u5217\u63D2\u69FD--> \n      <template\n        slot-scope=\"{row, column, $index}\"\n        :slot=\"value\"\n        v-for=\"(value, key) in getTableColumnSolt\">\n        <slot :column=\"column\" :row=\"row\" :$index=\"$index\" :name=\"key\"></slot>\n      </template>\n    </smart-table>\n    <!--\u5206\u9875\u5668-->\n    <div\n      :style=\"getPaginationStyle\"\n      class=\"cloud-table-pagination\"\n      v-if=\"paging\">\n      <el-pagination\n        :page-sizes=\"pageSizes\"\n        :page-size=\"pageSize\"\n        :layout=\"pageLayout\"\n        :total=\"page.total\"\n        :current-page=\"1\"\n        @current-change=\"handleCurrentChange\"\n        @size-change=\"handleSizeChange\"/>  \n    </div>\n    <!--\u5217\u663E\u793A\u9690\u85CF\u5F39\u7A97-->\n    <el-dialog\n      title=\"\u9009\u62E9\u5217\"\n      :visible.sync=\"columnVisibleDialogVisible\"\n      append-to-body>\n      <smart-table-column-visible\n        @result-change=\"handleColumnVisibleResult\"\n        :column-show=\"columnVisibleOption\"></smart-table-column-visible>\n    </el-dialog>\n    <!--\u6DFB\u52A0\u4FEE\u6539\u5F39\u7A97-->\n    <el-dialog\n      append-to-body\n      :visible.sync=\"addEditDialog.visible\"\n      :title=\"getAddEditDialogTitle()\">\n      <smart-form\n        :model=\"addEditModel\"\n        :label-width=\"labelWidth\"\n        :columnOptions=\"addEditFromColumnOptions\"\n        v-loading=\"addEditDialog.loading\"\n        ref=\"addEditForm\">\n        <!--form\u63D2\u69FD-->\n        <template\n          v-for=\"(value, key) in getFormSolts\"\n          slot-scope=\"{column, model}\"\n          :slot=\"value\">\n          <slot\n            :column=\"column\"\n            :model=\"model\"\n            :name=\"key\"></slot>\n        </template>\n      </smart-form>\n      <div slot=\"footer\">\n        <el-button @click=\"addEditDialog.visible = false\">\u53D6 \u6D88</el-button>\n        <el-button type=\"primary\" @click=\"saveUpdate\">\u4FDD\u5B58</el-button>\n      </div>  \n    </el-dialog>\n  </div>\n  "
+        template: `
+  <div>
+    <!--搜索form-->
+    <transition v-if="searchFormColumnOptions.length > 0" name="fade">
+      <div className="table-search-container" v-show="searchDivVisible">
+        <smart-form
+          :columnOptions="searchFormColumnOptions"
+          :model="searchModel"
+          size="small"
+          inline
+          ref="searchForm">
+          <!--遍历插槽-->
+          <template
+            v-for="(value, key) in getSearchSolts"
+            slot-scope="{column, model}"
+            :slot="value">
+            <slot
+              :column="column"
+              :model="model"
+              :name="key"></slot>
+          </template>
+          <!--搜索重置插槽-->
+          <template v-slot:search-button="{model}">
+            <el-form-item>
+              <el-button
+                type="primary"
+                @click="handleSearch"
+                icon="el-icon-search">查询</el-button>
+            </el-form-item>
+          </template>
+          <template v-slot:reset-button="{model}">
+            <el-form-item>
+              <el-button
+                type="info"
+                @click="handleRestSearch"
+                icon="el-icon-delete">重置</el-button>
+            </el-form-item>
+          </template>
+        </smart-form>
+      </div>
+    </transition>
+    <!--操作组-->
+    <smart-button-group
+      v-if="hasTopLeft || hasTopRight"
+      :has-left="hasTopLeft"
+      :has-right="hasTopRight"
+      :add-show="getDefaultButtonShow.add.top"
+      :edit-show="getDefaultButtonShow.edit.top"
+      :delete-show="getDefaultButtonShow.delete.top"
+      @button-click="handleClickGroupButton"
+      class="cloud-table-menu">
+      <!--按钮插槽-->
+      <template slot="buttonLeft">
+        <slot name="top-left"></slot>
+      </template>
+      <template slot="buttonRight">
+        <slot name="top-right"></slot>
+      </template>
+    </smart-button-group>
+    
+    <!--表格主体-->
+    <smart-table
+      v-bind="$attrs"
+      v-on="$listeners"
+      v-loading="tableLoading"
+      :keys="keys"
+      :data="tableData"
+      :columnOptions="tableColumnOptions"
+      :height="getTableHeight"
+      @sort-change="handleSortChange"
+      @selection-change="handleSelectionChange"
+      :header-row-style="headerRowStyle">
+      <!--操作列插槽-->
+      <template v-if="hasOpreaColumn" slot="operation_ming" slot-scope="{row, column, $index}">
+        <el-tooltip v-if="getDefaultButtonShow.add.row" effect="dark" content="添加" placement="top">
+          <el-button
+            size="mini"
+            type="primary"
+            icon="el-icon-plus"
+            @click="handleBeforeAdd(row)"/>
+        </el-tooltip>
+        <el-tooltip v-if="getDefaultButtonShow.edit.row" effect="dark" content="编辑" placement="top">
+          <el-button
+            size="mini"
+            type="warning"
+            icon="el-icon-edit"
+            @click="handleBeforeEdit(row)"/>
+        </el-tooltip>
+        <el-tooltip effect="dark" content="删除" placement="top">
+          <el-button
+            v-if="getDefaultButtonShow.delete.row"
+            size="mini"
+            type="danger"
+            icon="el-icon-delete"
+            @click="handleDelete(row)"/>
+        </el-tooltip>
+        <slot
+          :row="row"
+          :column="column"
+          :$index="$index"
+          name="row-operation"/>
+      </template>
+      <!--表格列插槽--> 
+      <template
+        slot-scope="{row, column, $index}"
+        :slot="value"
+        v-for="(value, key) in getTableColumnSolt">
+        <slot :column="column" :row="row" :$index="$index" :name="key"></slot>
+      </template>
+    </smart-table>
+    <!--分页器-->
+    <div
+      :style="getPaginationStyle"
+      class="cloud-table-pagination"
+      v-if="paging">
+      <el-pagination
+        :page-sizes="pageSizes"
+        :page-size="pageSize"
+        :layout="pageLayout"
+        :total="page.total"
+        :current-page="1"
+        @current-change="handleCurrentChange"
+        @size-change="handleSizeChange"/>  
+    </div>
+    <!--列显示隐藏弹窗-->
+    <el-dialog
+      title="选择列"
+      :visible.sync="columnVisibleDialogVisible"
+      append-to-body>
+      <smart-table-column-visible
+        @result-change="handleColumnVisibleResult"
+        :column-show="columnVisibleOption"></smart-table-column-visible>
+    </el-dialog>
+    <!--添加修改弹窗-->
+    <el-dialog
+      append-to-body
+      :visible.sync="addEditDialog.visible"
+      :title="getAddEditDialogTitle()">
+      <smart-form
+        :model="addEditModel"
+        :label-width="labelWidth"
+        :columnOptions="addEditFromColumnOptions"
+        v-loading="addEditDialog.loading"
+        ref="addEditForm">
+        <!--form插槽-->
+        <template
+          v-for="(value, key) in getFormSolts"
+          slot-scope="{column, model}"
+          :slot="value">
+          <slot
+            :column="column"
+            :model="model"
+            :name="key"></slot>
+        </template>
+      </smart-form>
+      <div slot="footer">
+        <el-button @click="addEditDialog.visible = false">取 消</el-button>
+        <el-button type="primary" @click="saveUpdate">保存</el-button>
+      </div>  
+    </el-dialog>
+  </div>
+  `
     };
 });

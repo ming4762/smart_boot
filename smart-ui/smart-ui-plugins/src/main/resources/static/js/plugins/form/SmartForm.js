@@ -1,19 +1,19 @@
 define(["require", "exports", "plugins/form/SmartFormItem"], function (require, exports, SmartFormItem_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    var typeTriggerMap = {
+    const typeTriggerMap = {
         input: 'blur',
         select: 'change',
         boolean: 'change',
         number: 'change',
         radio: 'change'
     };
-    var createRules = function (column) {
-        var trigger = typeTriggerMap[column.type];
+    const createRules = (column) => {
+        const trigger = typeTriggerMap[column.type];
         return [{
                 required: true,
                 trigger: trigger || 'change',
-                message: "\u8BF7\u8F93\u5165" + column.label
+                message: `请输入${column.label}`
             }];
     };
     exports.default = {
@@ -28,7 +28,7 @@ define(["require", "exports", "plugins/form/SmartFormItem"], function (require, 
             },
             model: {
                 type: Object,
-                default: function () {
+                default: () => {
                     return {};
                 }
             },
@@ -40,7 +40,7 @@ define(["require", "exports", "plugins/form/SmartFormItem"], function (require, 
                 type: String
             }
         },
-        data: function () {
+        data() {
             return {
                 formRules: {},
                 showFormInlineColumns: [],
@@ -48,32 +48,32 @@ define(["require", "exports", "plugins/form/SmartFormItem"], function (require, 
                 hiddenFormColumns: []
             };
         },
-        created: function () {
+        created() {
             this.convertColumnOption(this.columnOptions);
         },
-        beforeMount: function () {
+        beforeMount() {
             this.setDefaultValue();
         },
-        beforeUpdate: function () {
+        beforeUpdate() {
             this.setDefaultValue();
         },
         computed: {
             getColumnMap: function () {
-                var result = {};
-                this.showFormColumns.forEach(function (columns) {
-                    columns.forEach(function (item) {
+                const result = {};
+                this.showFormColumns.forEach(columns => {
+                    columns.forEach(item => {
                         result[item.key] = item;
                     });
                 });
-                this.showFormInlineColumns.forEach(function (item) {
+                this.showFormInlineColumns.forEach(item => {
                     result[item.key] = item;
                 });
                 return result;
             },
             getRules: function () {
-                var result = {};
-                for (var key in this.formRules) {
-                    var item = this.formRules[key];
+                const result = {};
+                for (let key in this.formRules) {
+                    const item = this.formRules[key];
                     if (typeof item === 'boolean' && item === true) {
                         result[key] = createRules(this.getColumnMap[key]);
                     }
@@ -91,13 +91,12 @@ define(["require", "exports", "plugins/form/SmartFormItem"], function (require, 
         },
         methods: {
             convertColumnOption: function (options) {
-                var _this = this;
-                var showInlineColumns = [];
-                var showColumns = [];
-                var hiddenFormColumns = [];
-                var formRules = {};
-                var index = 0;
-                options.forEach(function (item) {
+                const showInlineColumns = [];
+                const showColumns = [];
+                const hiddenFormColumns = [];
+                const formRules = {};
+                let index = 0;
+                options.forEach(item => {
                     if (!item.key)
                         item.key = item.prop;
                     if (!item.type)
@@ -106,11 +105,11 @@ define(["require", "exports", "plugins/form/SmartFormItem"], function (require, 
                         hiddenFormColumns.push(item);
                     }
                     else {
-                        if (_this.inline) {
+                        if (this.inline) {
                             showInlineColumns.push(item);
                         }
                         else {
-                            var span = item.span ? item.span : 24;
+                            let span = item.span ? item.span : 24;
                             if (index === 0) {
                                 showColumns.push([]);
                             }
@@ -134,10 +133,9 @@ define(["require", "exports", "plugins/form/SmartFormItem"], function (require, 
                 return this.$scopedSlots[item.key];
             },
             setDefaultValue: function () {
-                var _this = this;
-                this.columnOptions.forEach(function (column) {
-                    if (column.defaultValue !== null && column.defaultValue !== undefined && (_this.model[column.key] === null || _this.model[column.key] === undefined)) {
-                        _this.$set(_this.model, column.key, column.defaultValue);
+                this.columnOptions.forEach(column => {
+                    if (column.defaultValue !== null && column.defaultValue !== undefined && (this.model[column.key] === null || this.model[column.key] === undefined)) {
+                        this.$set(this.model, column.key, column.defaultValue);
                     }
                 });
             },
@@ -146,7 +144,7 @@ define(["require", "exports", "plugins/form/SmartFormItem"], function (require, 
             },
             validate: function (callback) {
                 if (callback) {
-                    this.$refs['form'].validate(function (valid, field) {
+                    this.$refs['form'].validate((valid, field) => {
                         callback(valid, field);
                     });
                 }
@@ -155,6 +153,60 @@ define(["require", "exports", "plugins/form/SmartFormItem"], function (require, 
                 }
             }
         },
-        template: "\n  <el-form\n    v-bind=\"$attrs\"\n    v-on=\"$listeners\"\n    :model=\"model\"\n    :label-width=\"labelWidth\"\n    :inline=\"inline\"\n    ref=\"form\"\n    :rules=\"getRules\">\n    <!--  \u904D\u5386\u9690\u85CF\u5217  -->\n    <div v-if=\"hiddenFormColumns.length > 0\" style=\"display: none\">\n      <el-form-item\n        v-for=\"item in hiddenFormColumns\"\n        :label=\"item.label\"\n        :key=\"item.key\">\n        <el-input v-model=\"model[item.prop]\"></el-input>\n      </el-form-item>\n    </div>\n    <!--  \u904D\u5386\u884C\u5185\u5217  -->\n    <div :key=\"index + 'inline'\" v-for=\"(column, index) in showFormInlineColumns\">\n      <template v-if=\"useSolt(column)\">\n        <slot\n          :column=\"column\"\n          :model=\"model\"\n          :name=\"column.key\"></slot>\n      </template>\n      <smart-form-item\n        :model=\"model\"\n        :column=\"column\"\n        :name=\"column.key\"\n        v-else/>\n    </div>\n    <!--  \u904D\u5386\u975E\u884C\u5185\u5217  -->\n    <el-row\n      v-for=\"(columns, index1) in showFormColumns\"\n      :key=\"index1 + 'row'\">\n      <el-col\n        v-for=\"(column, index2) in columns\"\n        :span=\"column.span\"\n        :key=\"index2 + 'col'\">\n        <template v-if=\"useSolt(column)\">\n          <slot\n            :column=\"column\"\n            :model=\"model\"\n            :name=\"column.key\"></slot>\n        </template>\n        <smart-form-item\n          :model=\"model\"\n          :column=\"column\"\n          :name=\"column.key\"\n          v-else/>\n      </el-col>\n    </el-row>\n  </el-form>\n  "
+        template: `
+  <el-form
+    v-bind="$attrs"
+    v-on="$listeners"
+    :model="model"
+    :label-width="labelWidth"
+    :inline="inline"
+    ref="form"
+    :rules="getRules">
+    <!--  遍历隐藏列  -->
+    <div v-if="hiddenFormColumns.length > 0" style="display: none">
+      <el-form-item
+        v-for="item in hiddenFormColumns"
+        :label="item.label"
+        :key="item.key">
+        <el-input v-model="model[item.prop]"></el-input>
+      </el-form-item>
+    </div>
+    <!--  遍历行内列  -->
+    <div :key="index + 'inline'" v-for="(column, index) in showFormInlineColumns">
+      <template v-if="useSolt(column)">
+        <slot
+          :column="column"
+          :model="model"
+          :name="column.key"></slot>
+      </template>
+      <smart-form-item
+        :model="model"
+        :column="column"
+        :name="column.key"
+        v-else/>
+    </div>
+    <!--  遍历非行内列  -->
+    <el-row
+      v-for="(columns, index1) in showFormColumns"
+      :key="index1 + 'row'">
+      <el-col
+        v-for="(column, index2) in columns"
+        :span="column.span"
+        :key="index2 + 'col'">
+        <template v-if="useSolt(column)">
+          <slot
+            :column="column"
+            :model="model"
+            :name="column.key"></slot>
+        </template>
+        <smart-form-item
+          :model="model"
+          :column="column"
+          :name="column.key"
+          v-else/>
+      </el-col>
+    </el-row>
+  </el-form>
+  `
     };
 });

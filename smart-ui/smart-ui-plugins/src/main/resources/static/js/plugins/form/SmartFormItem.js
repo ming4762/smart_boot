@@ -1,13 +1,36 @@
 define(["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    var createVIf = function (type) {
-        return "v-if=\"column.type === '" + type + "'\"";
+    const createVIf = (type) => {
+        return `v-if="column.type === '${type}'"`;
     };
-    var createTemplate = function () {
-        var vModel = 'v-model="model[column.key]"';
-        var disabled = ':disabled="column.disabled"';
-        return "\n    <el-form-item\n      :label=\"column.label\"\n      :prop=\"column.key\">\n      <el-switch " + createVIf('boolean') + " " + vModel + "/>\n      <el-select " + createVIf('select') + " " + vModel + " placeholder='\u8BF7\u9009\u62E9'>\n        <el-option\n          v-for=\"(dic, index) in (column.dicData ? column.dicData : [])\"\n          :label=\"dic.label\"\n          :value=\"dic.value\"\n          :key=\"index + 'option'\"/>\n      </el-select>\n      <el-input-number " + createVIf('number') + " " + vModel + " :disabled=\"column.disabled\"/>\n      <el-radio-group " + createVIf('radio') + " " + vModel + ">\n        <el-radio\n          v-for=\"(dic, index) in (column.dicData ? column.dicData : [])\"\n          :label=\"dic.label\" \n          :key=\"index + 'radio'\">{{dic.value}}</el-radio>\n      </el-radio-group>\n      <el-input placeholder='\u8BF7\u8F93\u5165\u5BC6\u7801' " + createVIf('password') + " " + vModel + " show-password/>\n      <el-input type='textarea' " + createVIf('textarea') + " " + vModel + " :placeholder=\"'\u8BF7\u8F93\u5165' + column.label\"/>\n      <el-input " + disabled + " :placeholder=\"'\u8BF7\u8F93\u5165' + column.label\" " + createVIf('input') + " " + vModel + "/>\n    </el-form-item>\n    ";
+    const createTemplate = () => {
+        const vModel = 'v-model="model[column.key]"';
+        const disabled = ':disabled="column.disabled"';
+        return `
+    <el-form-item
+      :label="column.label"
+      :prop="column.key">
+      <el-switch ${createVIf('boolean')} ${vModel}/>
+      <el-select ${createVIf('select')} ${vModel} placeholder='请选择'>
+        <el-option
+          v-for="(dic, index) in (column.dicData ? column.dicData : [])"
+          :label="dic.label"
+          :value="dic.value"
+          :key="index + 'option'"/>
+      </el-select>
+      <el-input-number ${createVIf('number')} ${vModel} :disabled="column.disabled"/>
+      <el-radio-group ${createVIf('radio')} ${vModel}>
+        <el-radio
+          v-for="(dic, index) in (column.dicData ? column.dicData : [])"
+          :label="dic.label" 
+          :key="index + 'radio'">{{dic.value}}</el-radio>
+      </el-radio-group>
+      <el-input placeholder='请输入密码' ${createVIf('password')} ${vModel} show-password/>
+      <el-input type='textarea' ${createVIf('textarea')} ${vModel} :placeholder="'请输入' + column.label"/>
+      <el-input ${disabled} :placeholder="'请输入' + column.label" ${createVIf('input')} ${vModel}/>
+    </el-form-item>
+    `;
     };
     exports.default = {
         name: 'smart-form-item',
