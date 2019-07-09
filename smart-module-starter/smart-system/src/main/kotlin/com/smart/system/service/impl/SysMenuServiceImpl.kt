@@ -49,55 +49,51 @@ class SysMenuServiceImpl : BaseServiceImpl<SysMenuMapper, SysMenuDO>(), SysMenuS
     /**
      * 查询用户菜单
      */
-    override fun queryUserMenu(): List<Tree<SysMenuVO>>? {
-        // 获取用户ID
-        val userId = AuthUtils.getCurrentUserId()
+    override fun queryUserMenu(userId: String): List<Tree<SysMenuVO>>? {
 //        userId = "1"
-        if (userId != null) {
-            // 查询人员的配置信息，如果人员没有菜单配置，则使用系统菜单配置
-            val configId = this.menuConfigService.queryUserMenuConfig(arrayListOf(userId))[userId]!!.configId
-            if (configId != null) {
-                // 查询人员对应角色ID列表
-                val roleWrapper = KtQueryWrapper(SysUserRoleDO :: class.java)
-                roleWrapper.eq(SysUserRoleDO :: userId, userId)
-                val roleIdList = this.userRoleMapper.selectList(roleWrapper)?.map { it.roleId!! }
-                // 根据角色、菜单配置查询菜单信息
-                if (roleIdList != null && roleIdList.isNotEmpty()) {
-                    val roleMenuWrapper = KtQueryWrapper(SysRoleMenuFunctionDO :: class.java).eq(SysRoleMenuFunctionDO :: menuConfigId, configId)
-                            .`in`(SysRoleMenuFunctionDO :: roleId, roleIdList)
-                            .eq(SysRoleMenuFunctionDO :: type, "menu")
-                    val menuIdList = this.roleMenuFunctionMapper.selectList(roleMenuWrapper)?.map { it.menuFunctionId!! }
-                    if (menuIdList != null) {
-                        // 根据菜单ID集合查询菜单
-                        val menuList = this.list(
-                                KtQueryWrapper(SysMenuDO::class.java).`in`(SysMenuDO :: menuId, menuIdList)
-                                        .orderByAsc(SysMenuDO :: seq)
-                        )
-                        // 查询菜单对应的功能
-                        val functionIdList = mutableListOf<String>()
-                        menuList.forEach { menu ->
-                            menu.functionId?.let { functionIdList.add(it) }
-                        }
-                        var functionMap: Map<String?, String?>? = null
-                        if (functionIdList.isNotEmpty()) {
-                            // 查询功能并转为map
-                            functionMap = this.functionService.list(
-                                    KtQueryWrapper(SysFunctionDO::class.java).`in`(SysFunctionDO :: functionId, functionIdList)
-                            ).stream().collect(Collectors.toMap(SysFunctionDO :: functionId) {if (it.url == null) "" else it.url})
-                            // 循环遍历设置
-                        }
-                        // 将菜单转为树形实体
-                        val menuTreeList = menuList.map {
-                            val menuVo = BeanMapUtils.createFromParent(it, SysMenuVO :: class.java)
-                            if (functionMap != null && functionMap[it.functionId] != null) {
-                                menuVo.url = functionMap[it.functionId]
-                            }
-                            return@map this.convertMenu2Tree(menuVo)
-                        }
-
-                        // 构造树形结构
-                        return TreeUtils.buildList(menuTreeList, "0")
+        // 查询人员的配置信息，如果人员没有菜单配置，则使用系统菜单配置
+        val configId = this.menuConfigService.queryUserMenuConfig(arrayListOf(userId)).getValue(userId).configId
+        if (configId != null) {
+            // 查询人员对应角色ID列表
+            val roleWrapper = KtQueryWrapper(SysUserRoleDO :: class.java)
+            roleWrapper.eq(SysUserRoleDO :: userId, userId)
+            val roleIdList = this.userRoleMapper.selectList(roleWrapper)?.map { it.roleId!! }
+            // 根据角色、菜单配置查询菜单信息
+            if (roleIdList != null && roleIdList.isNotEmpty()) {
+                val roleMenuWrapper = KtQueryWrapper(SysRoleMenuFunctionDO :: class.java).eq(SysRoleMenuFunctionDO :: menuConfigId, configId)
+                        .`in`(SysRoleMenuFunctionDO :: roleId, roleIdList)
+                        .eq(SysRoleMenuFunctionDO :: type, "menu")
+                val menuIdList = this.roleMenuFunctionMapper.selectList(roleMenuWrapper)?.map { it.menuFunctionId!! }
+                if (menuIdList != null) {
+                    // 根据菜单ID集合查询菜单
+                    val menuList = this.list(
+                            KtQueryWrapper(SysMenuDO::class.java).`in`(SysMenuDO :: menuId, menuIdList.distinct())
+                                    .orderByAsc(SysMenuDO :: seq)
+                    )
+                    // 查询菜单对应的功能
+                    val functionIdList = mutableListOf<String>()
+                    menuList.forEach { menu ->
+                        menu.functionId?.let { functionIdList.add(it) }
                     }
+                    var functionMap: Map<String?, String?>? = null
+                    if (functionIdList.isNotEmpty()) {
+                        // 查询功能并转为map
+                        functionMap = this.functionService.list(
+                                KtQueryWrapper(SysFunctionDO::class.java).`in`(SysFunctionDO :: functionId, functionIdList.distinct())
+                        ).stream().collect(Collectors.toMap(SysFunctionDO :: functionId) {if (it.url == null) "" else it.url})
+                        // 循环遍历设置
+                    }
+                    // 将菜单转为树形实体
+                    val menuTreeList = menuList.map {
+                        val menuVo = BeanMapUtils.createFromParent(it, SysMenuVO :: class.java)
+                        if (functionMap != null && functionMap[it.functionId] != null) {
+                            menuVo.url = functionMap[it.functionId]
+                        }
+                        return@map this.convertMenu2Tree(menuVo)
+                    }
+
+                    // 构造树形结构
+                    return TreeUtils.buildList(menuTreeList, "0")
                 }
             }
         }

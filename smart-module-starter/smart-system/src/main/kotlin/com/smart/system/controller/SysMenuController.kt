@@ -1,6 +1,8 @@
 package com.smart.system.controller
 
+import com.smart.auth.common.utils.AuthUtils
 import com.smart.common.message.Result
+import com.smart.common.model.Tree
 import com.smart.starter.crud.controller.BaseController
 import com.smart.system.model.SysMenuDO
 import com.smart.system.model.vo.SysMenuVO
@@ -30,6 +32,24 @@ class SysMenuController : BaseController<SysMenuService, SysMenuDO>() {
         } catch (e: Exception) {
             e.printStackTrace()
             Result.failure(e.message, null)
+        }
+    }
+
+    /**
+     * 查询用户菜单
+     */
+    @RequestMapping("/queryUserMenu")
+    fun queryUserMenu(): Result<List<Tree<SysMenuVO>>?> {
+        return try {
+            val userId = AuthUtils.getCurrentUserId()
+            if (userId == null) {
+                Result.success(null)
+            } else {
+                Result.success(this.service.queryUserMenu(userId))
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Result.failure(e.message)
         }
     }
 }
