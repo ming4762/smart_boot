@@ -1,22 +1,9 @@
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    }
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 define(["require", "exports", "ComponentBuilder", "utils/StoreUtil", "Constants"], function (require, exports, ComponentBuilder_1, StoreUtil_1, Constants_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    var validateOne = function (permissions, allPermissions) {
-        var result = false;
-        for (var i in permissions) {
+    const validateOne = (permissions, allPermissions) => {
+        let result = false;
+        for (let i in permissions) {
             if (allPermissions.indexOf(permissions[i]) !== -1) {
                 result = true;
                 break;
@@ -24,9 +11,9 @@ define(["require", "exports", "ComponentBuilder", "utils/StoreUtil", "Constants"
         }
         return result;
     };
-    var validateAll = function (permissions, allPermissions) {
-        var result = true;
-        for (var i in permissions) {
+    const validateAll = (permissions, allPermissions) => {
+        let result = true;
+        for (let i in permissions) {
             if (allPermissions.indexOf(permissions[i]) === -1) {
                 result = false;
                 break;
@@ -34,27 +21,23 @@ define(["require", "exports", "ComponentBuilder", "utils/StoreUtil", "Constants"
         }
         return result;
     };
-    var PermissionMixins = (function (_super) {
-        __extends(PermissionMixins, _super);
-        function PermissionMixins() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
-        PermissionMixins.prototype.computed = function () {
+    class PermissionMixins extends ComponentBuilder_1.default {
+        computed() {
             return {
-                computedUserPermission: function () {
+                computedUserPermission() {
                     return StoreUtil_1.default.getStore(Constants_1.STORE_KEYS.USER_PREMISSION) || [];
                 }
             };
-        };
-        PermissionMixins.prototype.methods = function () {
+        }
+        methods() {
             return {
-                validatePermission: function (permission) {
+                validatePermission(permission) {
                     if (permission === undefined || permission === null || permission === '') {
                         return true;
                     }
                     return this.computedUserPermission.indexOf(permission) !== -1;
                 },
-                validatePermissions: function (permissions, all) {
+                validatePermissions(permissions, all) {
                     if (permissions.length === 0) {
                         return true;
                     }
@@ -66,8 +49,7 @@ define(["require", "exports", "ComponentBuilder", "utils/StoreUtil", "Constants"
                     }
                 }
             };
-        };
-        return PermissionMixins;
-    }(ComponentBuilder_1.default));
+        }
+    }
     exports.default = PermissionMixins;
 });

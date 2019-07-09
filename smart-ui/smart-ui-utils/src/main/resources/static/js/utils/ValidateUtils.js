@@ -1,15 +1,13 @@
 define(["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    var ValidateUtils = (function () {
-        function ValidateUtils() {
-        }
-        ValidateUtils.validateMobile = function (phone) {
-            var list = [];
-            var result = false;
-            var msg = '';
-            var isPhone = /^0\d{2,3}-?\d{7,8}$/;
-            var isMob = /^((\+?86)|(\(\+86\)))?(13[0123456789][0-9]{8}|15[012356789][0-9]{8}|18[012356789][0-9]{8}|14[57][0-9]{8}|17[3678][0-9]{8})$/;
+    class ValidateUtils {
+        static validateMobile(phone) {
+            let list = [];
+            let result = false;
+            let msg = '';
+            const isPhone = /^0\d{2,3}-?\d{7,8}$/;
+            const isMob = /^((\+?86)|(\(\+86\)))?(13[0123456789][0-9]{8}|15[012356789][0-9]{8}|18[012356789][0-9]{8}|14[57][0-9]{8}|17[3678][0-9]{8})$/;
             if (!ValidateUtils.validateNull(phone)) {
                 if (phone.length === 11) {
                     if (isPhone.test(phone)) {
@@ -29,8 +27,8 @@ define(["require", "exports"], function (require, exports) {
             list.push(result);
             list.push(msg);
             return list;
-        };
-        ValidateUtils.validateNull = function (value) {
+        }
+        static validateNull(value) {
             if (typeof value === 'boolean') {
                 return false;
             }
@@ -48,37 +46,36 @@ define(["require", "exports"], function (require, exports) {
                 return false;
             }
             return false;
-        };
-        ValidateUtils.isValidUsername = function (str) {
-            var validMap = ['admin', 'editor'];
+        }
+        static isValidUsername(str) {
+            const validMap = ['admin', 'editor'];
             return validMap.indexOf(str.trim()) >= 0;
-        };
-        ValidateUtils.validateURL = function (textval) {
-            var urlregex = /^(https?|ftp):\/\/([a-zA-Z0-9.-]+(:[a-zA-Z0-9.&%$-]+)*@)*((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9][0-9]?)(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}|([a-zA-Z0-9-]+\.)*[a-zA-Z0-9-]+\.(com|edu|gov|int|mil|net|org|biz|arpa|info|name|pro|aero|coop|museum|[a-zA-Z]{2}))(:[0-9]+)*(\/($|[a-zA-Z0-9.,?'\\+&%$#=~_-]+))*$/;
+        }
+        static validateURL(textval) {
+            const urlregex = /^(https?|ftp):\/\/([a-zA-Z0-9.-]+(:[a-zA-Z0-9.&%$-]+)*@)*((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9][0-9]?)(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}|([a-zA-Z0-9-]+\.)*[a-zA-Z0-9-]+\.(com|edu|gov|int|mil|net|org|biz|arpa|info|name|pro|aero|coop|museum|[a-zA-Z]{2}))(:[0-9]+)*(\/($|[a-zA-Z0-9.,?'\\+&%$#=~_-]+))*$/;
             return urlregex.test(textval);
-        };
-        ValidateUtils.validateLowerCase = function (str) {
-            var reg = /^[a-z]+$/;
+        }
+        static validateLowerCase(str) {
+            const reg = /^[a-z]+$/;
             return reg.test(str);
-        };
-        ValidateUtils.validateUpperCase = function (str) {
-            var reg = /^[A-Z]+$/;
+        }
+        static validateUpperCase(str) {
+            const reg = /^[A-Z]+$/;
             return reg.test(str);
-        };
-        ValidateUtils.validatAlphabets = function (str) {
-            var reg = /^[A-Za-z]+$/;
+        }
+        static validatAlphabets(str) {
+            const reg = /^[A-Za-z]+$/;
             return reg.test(str);
-        };
-        ValidateUtils.vueValidateMobile = function (rule, value, callback) {
-            var result = ValidateUtils.validateMobile(value);
-            if (result[0] === false) {
-                return callback(new Error(result[1]));
-            }
-            else {
-                callback();
-            }
-        };
-        return ValidateUtils;
-    }());
+        }
+    }
+    ValidateUtils.vueValidateMobile = (rule, value, callback) => {
+        const result = ValidateUtils.validateMobile(value);
+        if (result[0] === false) {
+            return callback(new Error(result[1]));
+        }
+        else {
+            callback();
+        }
+    };
     exports.default = ValidateUtils;
 });

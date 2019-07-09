@@ -1,11 +1,9 @@
 define(["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    var StoreUtil = (function () {
-        function StoreUtil() {
-        }
-        StoreUtil.setStore = function (key, data, type) {
-            var dealData = {
+    class StoreUtil {
+        static setStore(key, data, type) {
+            let dealData = {
                 dataType: typeof data,
                 content: data,
                 type: type,
@@ -17,26 +15,25 @@ define(["require", "exports"], function (require, exports) {
             else {
                 window.localStorage.setItem(key, JSON.stringify(dealData));
             }
-        };
-        StoreUtil.clearSession = function () {
+        }
+        static clearSession() {
             window.sessionStorage.clear();
-        };
-        StoreUtil.getStore = function (key, debug) {
-            var data = window.localStorage.getItem(key);
+        }
+        static getStore(key, debug) {
+            let data = window.localStorage.getItem(key);
             if (data === undefined || data === null) {
                 data = window.sessionStorage.getItem(key);
             }
             if (data === undefined || data === null) {
                 return null;
             }
-            var dataObject = JSON.parse(data);
+            const dataObject = JSON.parse(data);
             if (debug) {
                 console.log(dataObject);
             }
             return dataObject['content'];
-        };
-        StoreUtil.SESSION_TYPE = 'session';
-        return StoreUtil;
-    }());
+        }
+    }
+    StoreUtil.SESSION_TYPE = 'session';
     exports.default = StoreUtil;
 });

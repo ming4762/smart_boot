@@ -3,19 +3,19 @@ define(["require", "exports"], function (require, exports) {
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.default = {
         methods: {
-            errorMessage: function (message, error, options) {
+            errorMessage(message, error, options) {
                 console.error(error);
-                var defaultParameter = {
+                const defaultParameter = {
                     showClose: true,
                     message: message,
                     type: 'error'
                 };
-                var parameter = options ? Object.assign(defaultParameter, options) : defaultParameter;
+                const parameter = options ? Object.assign(defaultParameter, options) : defaultParameter;
                 this.$message(parameter);
             },
-            successMessage: function (message, options) {
-                var defaultParameter = { message: message, type: 'success' };
-                var parameter = options ? Object.assign(defaultParameter, options) : defaultParameter;
+            successMessage(message, options) {
+                const defaultParameter = { message: message, type: 'success' };
+                const parameter = options ? Object.assign(defaultParameter, options) : defaultParameter;
                 this.$message(parameter);
             }
         }

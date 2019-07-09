@@ -1,24 +1,21 @@
 define(["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    var PageBuilder = (function () {
-        function PageBuilder() {
-        }
-        PageBuilder.prototype.init = function () {
+    class PageBuilder {
+        init() {
             this.initVue();
-        };
-        PageBuilder.prototype.build = function () {
+        }
+        build() {
             return {};
-        };
-        PageBuilder.prototype.initVue = function () {
+        }
+        initVue() {
             this.vue = new Vue({
                 el: '#vue-container',
                 components: {
                     'vue-main': this.build(),
                 }
             });
-        };
-        return PageBuilder;
-    }());
+        }
+    }
     exports.default = PageBuilder;
 });

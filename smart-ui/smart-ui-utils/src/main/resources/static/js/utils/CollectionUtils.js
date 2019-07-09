@@ -1,15 +1,12 @@
 define(["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    var CollectionUtils = (function () {
-        function CollectionUtils() {
-        }
-        CollectionUtils.group = function (list, groupHandle) {
-            var _this = this;
-            var result = new Map();
-            list.forEach(function (item) {
-                var value = _this.getValue(item, groupHandle);
-                var getValue = result.get(value);
+    class CollectionUtils {
+        static group(list, groupHandle) {
+            const result = new Map();
+            list.forEach(item => {
+                let value = this.getValue(item, groupHandle);
+                const getValue = result.get(value);
                 if (getValue) {
                     getValue.push(item);
                 }
@@ -18,38 +15,37 @@ define(["require", "exports"], function (require, exports) {
                 }
             });
             return result;
-        };
-        CollectionUtils.listToMap = function (list, keyHandle, valueHandle) {
-            var _this = this;
-            var result = new Map();
-            list.forEach(function (item) {
-                var key = _this.getValue(item, keyHandle);
-                var value = _this.getValue(item, valueHandle);
+        }
+        static listToMap(list, keyHandle, valueHandle) {
+            const result = new Map();
+            list.forEach(item => {
+                const key = this.getValue(item, keyHandle);
+                const value = this.getValue(item, valueHandle);
                 result.set(key, value);
             });
             return result;
-        };
-        CollectionUtils.mapToObject = function (map) {
-            var result = {};
-            map.forEach(function (value, key) {
+        }
+        static mapToObject(map) {
+            const result = {};
+            map.forEach((value, key) => {
                 result[key] = value;
             });
             return result;
-        };
-        CollectionUtils.getValue = function (item, handle) {
+        }
+        static getValue(item, handle) {
             if (typeof handle === 'function') {
                 return handle(item);
             }
             else {
                 return item[handle];
             }
-        };
-        CollectionUtils.splitArray = function (list, number) {
+        }
+        static splitArray(list, number) {
             if (!list)
                 return [];
-            var resultList = [];
-            var num = 0;
-            list.forEach(function (item) {
+            const resultList = [];
+            let num = 0;
+            list.forEach(item => {
                 if (num === 0) {
                     resultList.push([]);
                 }
@@ -60,8 +56,7 @@ define(["require", "exports"], function (require, exports) {
                 }
             });
             return resultList;
-        };
-        return CollectionUtils;
-    }());
+        }
+    }
     exports.default = CollectionUtils;
 });

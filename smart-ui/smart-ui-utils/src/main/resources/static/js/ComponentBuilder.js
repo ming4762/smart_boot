@@ -1,34 +1,32 @@
 define(["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    var ComponentBuilder = (function () {
-        function ComponentBuilder() {
+    class ComponentBuilder {
+        data() {
+            return {};
         }
-        ComponentBuilder.prototype.data = function () {
+        props() {
             return {};
-        };
-        ComponentBuilder.prototype.props = function () {
-            return {};
-        };
-        ComponentBuilder.prototype.template = function () {
+        }
+        template() {
             return '';
-        };
-        ComponentBuilder.prototype.methods = function () {
+        }
+        methods() {
             return {};
-        };
-        ComponentBuilder.prototype.components = function () {
+        }
+        components() {
             return {};
-        };
-        ComponentBuilder.prototype.computed = function () {
+        }
+        computed() {
             return {};
-        };
-        ComponentBuilder.prototype.mixins = function () {
+        }
+        mixins() {
             return [];
-        };
-        ComponentBuilder.prototype.watch = function () { };
-        ComponentBuilder.prototype.created = function () { };
-        ComponentBuilder.prototype.build = function () {
-            var component = {
+        }
+        watch() { }
+        created() { }
+        build() {
+            const component = {
                 template: this.template(),
                 data: this.data,
                 methods: this.methods(),
@@ -51,8 +49,7 @@ define(["require", "exports"], function (require, exports) {
                 component['beforeUpdate'] = this['beforeUpdate'];
             }
             return component;
-        };
-        return ComponentBuilder;
-    }());
+        }
+    }
     exports.default = ComponentBuilder;
 });

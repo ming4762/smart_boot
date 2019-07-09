@@ -2,20 +2,20 @@ define(["require", "exports", "utils/ResizeHandler"], function (require, exports
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.default = {
-        data: function () {
+        data() {
             return {
                 clientHeight: 0
             };
         },
         computed: {
-            computedTableHeight: function () {
+            computedTableHeight() {
                 return this.clientHeight - 30;
             }
         },
-        beforeMount: function () {
-            var $this = this;
+        beforeMount() {
+            const $this = this;
             $this.clientHeight = document.body.clientHeight;
-            ResizeHandler_1.default.bind(function () {
+            ResizeHandler_1.default.bind(() => {
                 $this.clientHeight = document.body.clientHeight;
             });
         }

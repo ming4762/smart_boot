@@ -9,6 +9,7 @@ define(["require", "exports"], function (require, exports) {
         OPEN_MENU_LIST: 'smart_open_menu_list',
         THEME_KEY: 'smart_theme',
         MENU_URL_MAP_KEY: 'smart_url_menu_map',
-        ACTIVE_TOP_MENU: 'smart_active_top_menu'
+        ACTIVE_TOP_MENU: 'smart_active_top_menu',
+        ACTIVE_MENU: 'smart_active_menu'
     };
 });

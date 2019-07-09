@@ -20,7 +20,7 @@ export default class PageBuilder {
   /**
    * 初始化vue
    */
-  private initVue () {
+  protected initVue () {
     // @ts-ignore
     this.vue = new Vue({
       el: '#vue-container',

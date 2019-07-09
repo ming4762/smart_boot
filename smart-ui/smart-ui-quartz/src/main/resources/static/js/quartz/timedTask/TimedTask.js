@@ -1,36 +1,18 @@
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    }
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 define(["require", "exports", "PageBuilder", "plugins/table/SmartTableCRUD", "utils/ApiService", "mixins/LayoutMixins", "mixins/MessageMixins"], function (require, exports, PageBuilder_1, SmartTableCRUD_1, ApiService_1, LayoutMixins_1, MessageMixins_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    var TimedTask = (function (_super) {
-        __extends(TimedTask, _super);
-        function TimedTask() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
-        TimedTask.prototype.build = function () {
+    class TimedTask extends PageBuilder_1.default {
+        build() {
             return page;
-        };
-        return TimedTask;
-    }(PageBuilder_1.default));
+        }
+    }
     exports.TimedTask = TimedTask;
-    var page = {
+    const page = {
         components: {
             'smart-table-crud': SmartTableCRUD_1.default
         },
         mixins: [LayoutMixins_1.default, MessageMixins_1.default],
-        data: function () {
+        data() {
             return {
                 apiService: ApiService_1.default,
                 columnOptions: [
@@ -104,31 +86,55 @@ define(["require", "exports", "PageBuilder", "plugins/table/SmartTableCRUD", "ut
             };
         },
         methods: {
-            handleOpenClose: function (task) {
-                var _this = this;
-                var used = !task.used;
-                var status = used ? '启用' : '关闭';
-                this.$confirm("\u786E\u5B9A\u8981" + status + "\u8BE5\u4EFB\u52A1\u5417?", '提示', {
+            handleOpenClose(task) {
+                const used = !task.used;
+                const status = used ? '启用' : '关闭';
+                this.$confirm(`确定要${status}该任务吗?`, '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
                     type: 'warning'
-                }).then(function () {
+                }).then(() => {
                     ApiService_1.default.postAjax('quartz/timeTask/openClose', [
                         {
                             taskId: task.taskId,
                             used: used
                         }
-                    ]).then(function () {
-                        _this.successMessage(status + "\u4EFB\u52A1\u6210\u529F");
-                        _this.$refs['table'].load();
-                    }).catch(function (error) {
+                    ]).then(() => {
+                        this.successMessage(`${status}任务成功`);
+                        this.$refs['table'].load();
+                    }).catch(error => {
                         if (error !== 'cancel') {
-                            _this.errorMessage(status + "\u4EFB\u52A1\u5931\u8D25", error);
+                            this.errorMessage(`${status}任务失败`, error);
                         }
                     });
                 });
             }
         },
-        template: "\n  <div style=\"padding: 15px;\">\n    <smart-table-crud\n      ref=\"table\"\n      queryUrl=\"quartz/timeTask/list\"\n      deleteUrl=\"quartz/timeTask/batchDelete\"\n      saveUpdateUrl=\"quartz/timeTask/saveUpdate\"\n      :keys=\"['taskId']\"\n      labelWidth=\"80px\"\n      :height=\"computedTableHeight\"\n      :columnOptions=\"columnOptions\"\n      tableName=\"\u5B9A\u65F6\u4EFB\u52A1\"\n      :defaultButtonConfig=\"defaultButtonConfig\"\n      :apiService=\"apiService\">\n      <template v-slot:table-used=\"{row}\">\n        <el-tag v-if=\"row.used === true\" type=\"success\">\u542F\u7528</el-tag>\n        <el-tag v-else type=\"danger\">\u5173\u95ED</el-tag>\n      </template>\n      <template v-slot:row-operation=\"{row}\">\n        <el-tooltip class=\"item\" effect=\"dark\" :content=\"row.used === true ? '\u5173\u95ED' : '\u542F\u7528'\" placement=\"top\">\n          <el-button @click=\"handleOpenClose(row)\" type=\"success\" :icon=\"row.used === true ? 'el-icon-video-pause' : 'el-icon-video-play'\" size=\"mini\"/>\n        </el-tooltip>\n          </template>\n    </smart-table-crud>\n  </div>\n  "
+        template: `
+  <div style="padding: 15px;">
+    <smart-table-crud
+      ref="table"
+      queryUrl="quartz/timeTask/list"
+      deleteUrl="quartz/timeTask/batchDelete"
+      saveUpdateUrl="quartz/timeTask/saveUpdate"
+      :keys="['taskId']"
+      labelWidth="80px"
+      :height="computedTableHeight"
+      :columnOptions="columnOptions"
+      tableName="定时任务"
+      :defaultButtonConfig="defaultButtonConfig"
+      :apiService="apiService">
+      <template v-slot:table-used="{row}">
+        <el-tag v-if="row.used === true" type="success">启用</el-tag>
+        <el-tag v-else type="danger">关闭</el-tag>
+      </template>
+      <template v-slot:row-operation="{row}">
+        <el-tooltip class="item" effect="dark" :content="row.used === true ? '关闭' : '启用'" placement="top">
+          <el-button @click="handleOpenClose(row)" type="success" :icon="row.used === true ? 'el-icon-video-pause' : 'el-icon-video-play'" size="mini"/>
+        </el-tooltip>
+          </template>
+    </smart-table-crud>
+  </div>
+  `
     };
 });

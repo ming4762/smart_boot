@@ -1,27 +1,25 @@
 define(["require", "exports", "utils/ValidateUtils"], function (require, exports, ValidateUtils_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    var TimeUtil = (function () {
-        function TimeUtil() {
-        }
-        TimeUtil.formatTime = function (time) {
+    class TimeUtil {
+        static formatTime(time) {
             if (ValidateUtils_1.default.validateNull(time)) {
                 return '';
             }
-            var date = new Date(time);
-            var year = date.getFullYear();
-            var month = date.getMonth() + 1;
-            var day = date.getDate();
-            var hour = date.getHours();
-            var minute = date.getMinutes();
-            var second = date.getSeconds();
+            const date = new Date(time);
+            const year = date.getFullYear();
+            const month = date.getMonth() + 1;
+            const day = date.getDate();
+            const hour = date.getHours();
+            const minute = date.getMinutes();
+            const second = date.getSeconds();
             return year + '-' + (month < 10 ? ('0' + month) : month) + '-' + (day < 10 ? ('0' + day) : day) + ' ' + (hour < 10 ? ('0' + hour) : hour) + ':' + (minute < 10 ? ('0' + minute) : minute) + ':' + (second < 10 ? ('0' + second) : second);
-        };
-        TimeUtil.convertMsec = function (msec) {
-            var second = 0;
-            var minute = 0;
-            var hour = 0;
-            var day = 0;
+        }
+        static convertMsec(msec) {
+            let second = 0;
+            let minute = 0;
+            let hour = 0;
+            let day = 0;
             if (msec > 1000) {
                 second = parseInt(msec / 1000 + '', 0);
                 if (second > 60) {
@@ -37,7 +35,7 @@ define(["require", "exports", "utils/ValidateUtils"], function (require, exports
                     hour = parseInt(hour % 24 + '', 0);
                 }
             }
-            var result = second + '秒';
+            let result = second + '秒';
             if (minute > 0) {
                 result = minute + '分钟' + result;
             }
@@ -48,15 +46,15 @@ define(["require", "exports", "utils/ValidateUtils"], function (require, exports
                 result = day + '天' + result;
             }
             return result;
-        };
-        TimeUtil.contrastTime = function (contrastTime, beContrastTime) {
-            var result = '';
+        }
+        static contrastTime(contrastTime, beContrastTime) {
+            let result = '';
             if (!beContrastTime) {
                 beContrastTime = new Date().getTime();
             }
-            var isBefore = contrastTime < beContrastTime;
-            var str = isBefore ? '前' : '后';
-            var difference = Math.abs(beContrastTime - contrastTime);
+            let isBefore = contrastTime < beContrastTime;
+            let str = isBefore ? '前' : '后';
+            let difference = Math.abs(beContrastTime - contrastTime);
             if (difference < 60 * 1000) {
                 if (isBefore) {
                     result = '刚刚';
@@ -81,18 +79,17 @@ define(["require", "exports", "utils/ValidateUtils"], function (require, exports
                 result = parseInt(difference / (1000 * 60 * 60 * 24 * 365) + '', 10) + '年' + str;
             }
             return result;
-        };
-        TimeUtil.formatDate = function (time) {
+        }
+        static formatDate(time) {
             if (ValidateUtils_1.default.validateNull(time)) {
                 return '';
             }
-            var date = new Date(time);
-            var year = date.getFullYear();
-            var month = date.getMonth() + 1;
-            var day = date.getDate();
+            let date = new Date(time);
+            let year = date.getFullYear();
+            let month = date.getMonth() + 1;
+            let day = date.getDate();
             return year + '-' + (month < 10 ? ('0' + month) : month) + '-' + (day < 10 ? ('0' + day) : day);
-        };
-        return TimeUtil;
-    }());
+        }
+    }
     exports.default = TimeUtil;
 });
