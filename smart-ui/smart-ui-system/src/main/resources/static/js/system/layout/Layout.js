@@ -1,49 +1,102 @@
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    }
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-define(["require", "exports", "ComponentBuilder", "system/layout/navbar/Navbar", "system/layout/sidebar/SideBar"], function (require, exports, ComponentBuilder_1, Navbar_1, SideBar_1) {
+define(["require", "exports", "utils/ApiService", "mixins/MessageMixins", "system/layout/navbar/Navbar", "system/layout/sidebar/SideBar", "system/layout/TagsView/TagsView", "system/layout/mainPage/PageContainer"], function (require, exports, ApiService_1, MessageMixins_1, Navbar_1, SideBar_1, TagsView_1, PageContainer_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    var Layout = (function (_super) {
-        __extends(Layout, _super);
-        function Layout() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
-        Layout.prototype.components = function () {
-            return {
-                'navbar': new Navbar_1.default().build(),
-                'SideBar': new SideBar_1.default().build()
-            };
-        };
-        Layout.prototype.computed = function () {
-            return {
-                getBus: function () {
-                    return busVue;
-                },
-                getClassObj: function () {
-                    return {
-                        hideSidebar: !this.getBus.sidebar.opened,
-                        openSidebar: this.getBus.sidebar.opened,
-                        withoutAnimation: this.getBus.sidebar.withoutAnimation,
-                        mobile: this.getBus.device === 'Mobile'
+    exports.default = {
+        components: {
+            'navbar': Navbar_1.default,
+            'SideBar': SideBar_1.default,
+            'tags-view': TagsView_1.default,
+            'page-container': PageContainer_1.default
+        },
+        mixins: [
+            MessageMixins_1.default
+        ],
+        mounted() {
+            this.loadUserMenu();
+        },
+        computed: {
+            getBus() {
+                return busVue;
+            },
+            getClassObj() {
+                return {
+                    hideSidebar: !this.getBus.sidebar.opened,
+                    openSidebar: this.getBus.sidebar.opened,
+                    withoutAnimation: this.getBus.sidebar.withoutAnimation,
+                    mobile: this.getBus.device === 'Mobile'
+                };
+            }
+        },
+        methods: {
+            loadUserMenu() {
+                ApiService_1.default.postAjax('sys/menu/queryUserMenu', {})
+                    .then(data => {
+                    const resultList = [];
+                    if (data !== null) {
+                        const menuUrlMap = {};
+                        this.dealMenuData(data, resultList, null, menuUrlMap);
+                    }
+                    this.getBus.setUserMenulist(resultList);
+                }).catch(error => {
+                    this.errorMessage('记载菜单数据失败，请刷新重试', error);
+                });
+            },
+            dealMenuData(menuList, resultList, topId, menuUrlMap) {
+                menuList.forEach(menu => {
+                    let topIdNew = '';
+                    topId === null ? topIdNew = menu.id : topIdNew = topId;
+                    const url = this.getUrl(menu.object.url);
+                    const dealMenu = {
+                        id: menu.id,
+                        name: menu.text,
+                        icon: menu.object.icon,
+                        path: url,
+                        isCatalog: menu.object.functionId === null,
+                        topId: topIdNew,
+                        children: []
                     };
+                    if (url !== null) {
+                        menuUrlMap[url] = dealMenu;
+                    }
+                    resultList.push(dealMenu);
+                    if (menu.children && menu.children.length > 0) {
+                        this.dealMenuData(menu.children, dealMenu.children, topIdNew, menuUrlMap);
+                    }
+                });
+            },
+            getUrl(url) {
+                if (url !== null) {
+                    if (url.startsWith('/')) {
+                        return url;
+                    }
+                    else if (url.startsWith('http')) {
+                        return url;
+                    }
+                    else {
+                        return '/' + url;
+                    }
                 }
-            };
-        };
-        Layout.prototype.template = function () {
-            return "\n<div :class=\"getClassObj\" class=\"full-height app-wrapper\">\n  <!--\u4FA7\u8FB9\u680F\u7EC4\u4EF6-->\n  <SideBar class=\"sidebar-container\"/>\n  <div class=\"main-container full-height main-outer\">\n    <!--\u9876\u90E8-->\n    <div class=\"top-div\">\n      <!--\u9876\u90E8\u83DC\u5355-->\n      <navbar/>\n    </div>\n  </div>\n</div>\n    ";
-        };
-        return Layout;
-    }(ComponentBuilder_1.default));
-    exports.default = Layout;
+                return null;
+            }
+        },
+        template: `
+  <div :class="getClassObj" class="full-height app-wrapper">
+    <!--侧边栏组件-->
+    <SideBar class="sidebar-container"/>
+    <div class="main-container full-height main-outer">
+      <!--顶部-->
+      <div class="top-div">
+        <!--顶部菜单-->
+        <navbar/>
+        <!--打开的菜单列表-->
+        <tags-view/>
+      </div>
+      <!--页面主体-->
+      <section class="app-main">
+        <page-container/>
+      </section>
+    </div>
+  </div>
+  `
+    };
 });

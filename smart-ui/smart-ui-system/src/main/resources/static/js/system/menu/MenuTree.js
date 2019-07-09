@@ -8,7 +8,7 @@ define(["require", "exports"], function (require, exports) {
                 type: Array
             }
         },
-        data: function () {
+        data() {
             return {
                 treeProps: {
                     children: 'children',
@@ -17,13 +17,22 @@ define(["require", "exports"], function (require, exports) {
             };
         },
         methods: {
-            getCheckedNodes: function (leafOnly, includeHalfChecked) {
+            getCheckedNodes(leafOnly, includeHalfChecked) {
                 return this.$refs['role_menu_tree'].getCheckedNodes(leafOnly, includeHalfChecked);
             },
-            setCheckedKeys: function (keys, leafOnly) {
+            setCheckedKeys(keys, leafOnly) {
                 this.$refs['role_menu_tree'].setCheckedKeys(keys, leafOnly);
             }
         },
-        template: "\n  <el-tree\n    ref=\"role_menu_tree\"\n    :data=\"data\"\n    :props=\"treeProps\"\n    :default-expanded-keys=\"['0']\"\n    show-checkbox\n    node-key=\"menuId\">\n  </el-tree>\n  "
+        template: `
+  <el-tree
+    ref="role_menu_tree"
+    :data="data"
+    :props="treeProps"
+    :default-expanded-keys="['0']"
+    show-checkbox
+    node-key="menuId">
+  </el-tree>
+  `
     };
 });

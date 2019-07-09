@@ -5,16 +5,16 @@ define(["require", "exports", "utils/ApiService", "mixins/MessageMixins"], funct
         mixins: [
             MessageMixins_1.default
         ],
-        data: function () {
+        data() {
             return {
                 organTreeData: []
             };
         },
-        mounted: function () {
+        mounted() {
             this.load();
         },
         computed: {
-            computedOrganTreeData: function () {
+            computedOrganTreeData() {
                 return [
                     {
                         id: '0',
@@ -28,16 +28,29 @@ define(["require", "exports", "utils/ApiService", "mixins/MessageMixins"], funct
             }
         },
         methods: {
-            load: function () {
-                var _this = this;
+            load() {
                 ApiService_1.default.postAjax('sys/organ/listTree', [])
-                    .then(function (data) {
-                    _this.organTreeData = data['0'];
-                }).catch(function (error) {
-                    _this.errorMessage('加载部门数据失败', error);
+                    .then(data => {
+                    this.organTreeData = data['0'];
+                }).catch(error => {
+                    this.errorMessage('加载部门数据失败', error);
                 });
             }
         },
-        template: "\n  <el-tree\n    v-on=\"$listeners\"\n    :expand-on-click-node=\"false\"\n    node-key=\"id\"\n    :default-expanded-keys=\"['0']\"\n    :data=\"computedOrganTreeData\">\n    <template v-slot=\"{data}\">\n      <div>\n        <i class=\"el-icon-school\"></i>\n        <span class=\"el-tree-node__label\">{{data.text}}</span>\n      </div>\n    </template>\n  </el-tree>\n  "
+        template: `
+  <el-tree
+    v-on="$listeners"
+    :expand-on-click-node="false"
+    node-key="id"
+    :default-expanded-keys="['0']"
+    :data="computedOrganTreeData">
+    <template v-slot="{data}">
+      <div>
+        <i class="el-icon-school"></i>
+        <span class="el-tree-node__label">{{data.text}}</span>
+      </div>
+    </template>
+  </el-tree>
+  `
     };
 });

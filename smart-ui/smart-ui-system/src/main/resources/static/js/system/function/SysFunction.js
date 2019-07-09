@@ -1,50 +1,33 @@
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    }
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 define(["require", "exports", "ComponentBuilder", "plugins/table/SmartTableCRUD", "utils/ApiService", "mixins/LayoutMixins", "plugins/icon/SmartIconSelect", "utils/ValidateUtils", "utils/TreeUtils"], function (require, exports, ComponentBuilder_1, SmartTableCRUD_1, ApiService_1, LayoutMixins_1, SmartIconSelect_1, ValidateUtils_1, TreeUtils_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    var SysFunction = (function (_super) {
-        __extends(SysFunction, _super);
-        function SysFunction() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
-        SysFunction.prototype.init = function () {
+    class SysFunction extends ComponentBuilder_1.default {
+        init() {
             this.initVue();
-        };
-        SysFunction.prototype.initVue = function () {
+        }
+        initVue() {
             this.vue = new Vue({
                 el: '#vue-container',
                 components: {
                     'home-main': this.build()
                 }
             });
-        };
-        SysFunction.prototype.components = function () {
+        }
+        components() {
             return {
                 'smart-table-crud': SmartTableCRUD_1.default,
                 'smart-icon-select': SmartIconSelect_1.default
             };
-        };
-        SysFunction.prototype.mixins = function () {
+        }
+        mixins() {
             return [
                 LayoutMixins_1.default
             ];
-        };
-        SysFunction.format = function (data, key) {
+        }
+        static format(data, key) {
             return data;
-        };
-        SysFunction.prototype.data = function () {
+        }
+        data() {
             return {
                 apiService: ApiService_1.default,
                 columnOptions: [
@@ -159,10 +142,10 @@ define(["require", "exports", "ComponentBuilder", "plugins/table/SmartTableCRUD"
                 ],
                 defaultButtonConfig: {}
             };
-        };
-        SysFunction.prototype.methods = function () {
+        }
+        methods() {
             return {
-                handleAddEditDialogShow: function (ident, model, callBack, row) {
+                handleAddEditDialogShow(ident, model, callBack, row) {
                     if (ident === 'add') {
                         if (ValidateUtils_1.default.validateNull(row)) {
                             model.parentId = '0';
@@ -178,7 +161,7 @@ define(["require", "exports", "ComponentBuilder", "plugins/table/SmartTableCRUD"
                         callBack();
                     }
                 },
-                formatIcon: function (row) {
+                formatIcon(row) {
                     if (row['icon']) {
                         return row['icon'] + ' fa-lg';
                     }
@@ -186,7 +169,7 @@ define(["require", "exports", "ComponentBuilder", "plugins/table/SmartTableCRUD"
                         return '';
                     }
                 },
-                formatTypeClass: function (type) {
+                formatTypeClass(type) {
                     if (type === '0') {
                         return '';
                     }
@@ -197,7 +180,7 @@ define(["require", "exports", "ComponentBuilder", "plugins/table/SmartTableCRUD"
                         return 'warning';
                     }
                 },
-                formatTypeName: function (type) {
+                formatTypeName(type) {
                     if (type === '0') {
                         return '目录';
                     }
@@ -208,15 +191,58 @@ define(["require", "exports", "ComponentBuilder", "plugins/table/SmartTableCRUD"
                         return '按钮';
                     }
                 },
-                handleTableDataFormatter: function (tableData) {
+                handleTableDataFormatter(tableData) {
                     return TreeUtils_1.default.convertList2Tree(tableData, ['functionId', 'parentId'], '0');
                 }
             };
-        };
-        SysFunction.prototype.template = function () {
-            return "\n    <div style=\"padding: 15px;\">\n      <smart-table-crud\n        :defaultButtonConfig=\"defaultButtonConfig\"\n        queryUrl=\"sys/function/list\"\n        deleteUrl=\"sys/function/batchDelete\"\n        saveUpdateUrl=\"sys/function/saveUpdate\"\n        :keys=\"['functionId']\"\n        :paging=\"false\"\n        defaultSortColumn=\"seq\"\n        :tableDataFormatter=\"handleTableDataFormatter\"\n        tableName=\"\u529F\u80FD\" \n        :apiService=\"apiService\"\n        @add-edit-dialog-show=\"handleAddEditDialogShow\"\n        labelWidth=\"80px\"\n        :height=\"computedTableHeight\"\n        :columnOptions=\"columnOptions\">\n        <!-- \u8868\u683C\u4E0A\u7EA7\u83DC\u5355\u63D2\u69FD -->\n        <template slot=\"form-parentId\" slot-scope=\" {model }\">\n          <el-form-item label=\"\u4E0A\u7EA7\u529F\u80FD\">\n            <el-input style=\"display: none;\" v-model=\"model.parentId\"></el-input>\n            <el-input :disabled=\"true\" :value=\"model.parentName\"></el-input>\n          </el-form-item>\n        </template>\n         <!-- \u56FE\u6807form\u63D2\u69FD -->\n        <template slot=\"form-icon\" slot-scope=\"{ model }\">\n          <el-form-item label=\"\u56FE\u68071\">\n            <smart-icon-select v-model=\"model.icon\"></smart-icon-select>\n          </el-form-item>\n        </template>\n        <!-- \u56FE\u6807\u63D2\u69FD -->\n        <template slot-scope=\"{row}\" slot=\"table-icon\">\n          <i :class=\"formatIcon(row)\"></i>\n        </template>\n        <!-- \u7C7B\u578B\u63D2\u69FD -->\n        <template slot-scope=\"{row}\" slot=\"table-functionType\">\n          <el-tag :type=\"formatTypeClass(row.functionType)\">{{formatTypeName(row.functionType)}}</el-tag>\n        </template>\n        <!-- \u662F\u5426\u83DC\u5355\u8868\u683C\u63D2\u69FD -->\n        <template slot-scope=\"{row}\" slot=\"table-menuIs\">\n          <i :class=\"row['menuIs'] === true ? 'el-icon-success' : 'el-icon-error'\"></i>\n        </template>\n      </smart-table-crud>\n    </div>\n    ";
-        };
-        return SysFunction;
-    }(ComponentBuilder_1.default));
+        }
+        template() {
+            return `
+    <div style="padding: 15px;">
+      <smart-table-crud
+        :defaultButtonConfig="defaultButtonConfig"
+        queryUrl="sys/function/list"
+        deleteUrl="sys/function/batchDelete"
+        saveUpdateUrl="sys/function/saveUpdate"
+        :keys="['functionId']"
+        :paging="false"
+        defaultSortColumn="seq"
+        :tableDataFormatter="handleTableDataFormatter"
+        tableName="功能" 
+        :apiService="apiService"
+        @add-edit-dialog-show="handleAddEditDialogShow"
+        labelWidth="80px"
+        :height="computedTableHeight"
+        :columnOptions="columnOptions">
+        <!-- 表格上级菜单插槽 -->
+        <template slot="form-parentId" slot-scope=" {model }">
+          <el-form-item label="上级功能">
+            <el-input style="display: none;" v-model="model.parentId"></el-input>
+            <el-input :disabled="true" :value="model.parentName"></el-input>
+          </el-form-item>
+        </template>
+         <!-- 图标form插槽 -->
+        <template slot="form-icon" slot-scope="{ model }">
+          <el-form-item label="图标1">
+            <smart-icon-select v-model="model.icon"></smart-icon-select>
+          </el-form-item>
+        </template>
+        <!-- 图标插槽 -->
+        <template slot-scope="{row}" slot="table-icon">
+          <i :class="formatIcon(row)"></i>
+        </template>
+        <!-- 类型插槽 -->
+        <template slot-scope="{row}" slot="table-functionType">
+          <el-tag :type="formatTypeClass(row.functionType)">{{formatTypeName(row.functionType)}}</el-tag>
+        </template>
+        <!-- 是否菜单表格插槽 -->
+        <template slot-scope="{row}" slot="table-menuIs">
+          <i :class="row['menuIs'] === true ? 'el-icon-success' : 'el-icon-error'"></i>
+        </template>
+      </smart-table-crud>
+    </div>
+    `;
+        }
+    }
     exports.SysFunction = SysFunction;
 });

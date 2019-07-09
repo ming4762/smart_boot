@@ -40,9 +40,9 @@ export class Organ extends ComponentBuilder {
       'flex-aside': FlexAside,
       // @ts-ignore
       'organ-tree': OrganTree,
-      'smart-form':new SmartForm().build(),
+      'smart-form':SmartForm,
       // @ts-ignore
-      'organ-detail': new OrganDetail().build()
+      'organ-detail': OrganDetail
     }
   }
 

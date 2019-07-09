@@ -11,62 +11,71 @@ define(["require", "exports", "utils/ApiService", "mixins/MessageMixins"], funct
                 type: String
             }
         },
-        data: function () {
+        data() {
             return {
                 userTransferData: [],
                 userTransferModel: [],
                 loading: false
             };
         },
-        mounted: function () {
-            var _this = this;
+        mounted() {
             this.loading = true;
             ApiService_1.default.postAjax('sys/user/list', {})
-                .then(function (userList) {
-                _this.userTransferData = userList.map(function (user) {
+                .then(userList => {
+                this.userTransferData = userList.map(user => {
                     return {
                         key: user.userId,
                         label: user.name
                     };
                 });
-                _this.loadRoleUser();
-            }).catch(function (error) {
-                _this.loading = false;
-                _this.errorMessage('加载用户角色信息发生错误', error);
+                this.loadRoleUser();
+            }).catch(error => {
+                this.loading = false;
+                this.errorMessage('加载用户角色信息发生错误', error);
             });
         },
         watch: {
-            roleId: function (_new, old) {
+            roleId(_new, old) {
                 if (_new !== old) {
                     this.loadRoleUser();
                 }
             }
         },
         methods: {
-            handleSetUser: function () {
-                var _this = this;
-                var parameter = {};
+            handleSetUser() {
+                const parameter = {};
                 parameter[this.roleId] = this.userTransferModel;
                 ApiService_1.default.postAjax('sys/role/updateUser', parameter)
-                    .then(function () {
-                    _this.successMessage('保存成功');
-                }).catch(function (error) {
-                    _this.errorMessage('设置人员失败', error);
+                    .then(() => {
+                    this.successMessage('保存成功');
+                }).catch(error => {
+                    this.errorMessage('设置人员失败', error);
                 });
             },
-            loadRoleUser: function () {
-                var _this = this;
+            loadRoleUser() {
                 this.loading = true;
                 ApiService_1.default.postAjax('sys/role/getRoleUserId', { roleId: this.roleId })
-                    .then(function (data) {
-                    _this.loading = false;
-                    _this.userTransferModel = data;
-                }).catch(function (error) {
-                    _this.loading = false;
-                    _this.errorMessage('加载用户角色信息发生错误', error);
+                    .then(data => {
+                    this.loading = false;
+                    this.userTransferModel = data;
+                }).catch(error => {
+                    this.loading = false;
+                    this.errorMessage('加载用户角色信息发生错误', error);
                 });
             }
         },
-        template: "\n  <div v-loading=\"loading\" style=\"width: 496px; padding: 20px; border:1px dashed #A9A9A9;\">\n    <el-transfer class=\"user-transfer\"\n      :data=\"userTransferData\"\n      v-model=\"userTransferModel\"\n      filter-placeholder=\"\u8BF7\u8F93\u5165\u5173\u952E\u5B57\"\n      :titles=\"['\u7528\u6237', '\u7528\u6237']\"\n      filterable></el-transfer>\n    <div style=\"padding-top: 15px\">\n      <el-button type=\"primary\" @click=\"handleSetUser\">\u4FDD\u5B58</el-button> \n    </div> \n  </div>\n  "
+        template: `
+  <div v-loading="loading" style="width: 496px; padding: 20px; border:1px dashed #A9A9A9;">
+    <el-transfer class="user-transfer"
+      :data="userTransferData"
+      v-model="userTransferModel"
+      filter-placeholder="请输入关键字"
+      :titles="['用户', '用户']"
+      filterable></el-transfer>
+    <div style="padding-top: 15px">
+      <el-button type="primary" @click="handleSetUser">保存</el-button> 
+    </div> 
+  </div>
+  `
     };
 });

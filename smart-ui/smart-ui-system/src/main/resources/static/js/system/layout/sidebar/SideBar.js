@@ -1,45 +1,63 @@
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    }
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-define(["require", "exports", "ComponentBuilder", "mixins/ThemeMixins"], function (require, exports, ComponentBuilder_1, ThemeMixins_1) {
+define(["require", "exports", "mixins/ThemeMixins", "utils/ValidateUtils"], function (require, exports, ThemeMixins_1, ValidateUtils_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    var SideBar = (function (_super) {
-        __extends(SideBar, _super);
-        function SideBar() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
-        SideBar.prototype.data = function () {
+    exports.default = {
+        mixins: [
+            ThemeMixins_1.default
+        ],
+        data() {
             return {
                 activeIndex: ''
             };
-        };
-        SideBar.prototype.mixins = function () {
-            return [
-                new ThemeMixins_1.default().build()
-            ];
-        };
-        SideBar.prototype.computed = function () {
-            return {
-                getSidebarHeaderStyle: function () {
-                    return "background-color:" + this.getTopColor;
+        },
+        computed: {
+            getBus() {
+                return busVue;
+            },
+            getSidebarHeaderStyle() {
+                return `background-color:${this.getTopColor}`;
+            },
+            computedMenuList() {
+                const activeTopMenu = this.getBus.activeTopMenu;
+                if (ValidateUtils_1.default.validateNull(activeTopMenu)) {
+                    return [];
                 }
-            };
-        };
-        SideBar.prototype.template = function () {
-            return "\n    <el-scrollbar wrap-class=\"scrollbar-wrapper\">\n      <div class=\"left-outer\">\n        <div :style=\"getSidebarHeaderStyle\" class=\"left-header\">\n        </div>\n        <el-menu\n          class=\"left-menu\"\n          :show-timeout=\"200\"\n          :background-color=\"getSideBarTheme['background-color']\"\n          :text-color=\"getSideBarTheme['text-color']\"\n          :active-text-color=\"getSideBarTheme['active-text-color']\"\n          mode=\"vertical\"\n          :default-active=\"activeIndex\">\n        \n        </el-menu>\n      </div>\n    </el-scrollbar>\n    ";
-        };
-        return SideBar;
-    }(ComponentBuilder_1.default));
-    exports.default = SideBar;
+                else {
+                    return activeTopMenu.children;
+                }
+            },
+            computedIsCollapse() {
+                return !this.getBus.sidebar.opened;
+            },
+            computedActiveMenu() {
+                return this.getBus.activeMenu;
+            },
+            computedActiveIndex() {
+                const activeMenu = this.getBus.activeMenu;
+                return activeMenu ? activeMenu.id : '';
+            }
+        },
+        template: `
+  <el-scrollbar wrap-class="scrollbar-wrapper">
+    <div class="left-outer">
+      <div :style="getSidebarHeaderStyle" class="left-header">
+      </div>
+      <el-menu
+        class="left-menu"
+        :collapse="computedIsCollapse"
+        :show-timeout="200"
+        :background-color="getSideBarTheme['background-color']"
+        :text-color="getSideBarTheme['text-color']"
+        :active-text-color="getSideBarTheme['active-text-color']"
+        mode="vertical"
+        :default-active="computedActiveIndex">
+        <sidebar-item
+          :key="menu.id"
+          :item="menu"
+          v-for="menu in computedMenuList"/>
+      </el-menu>
+    </div>
+  </el-scrollbar>
+  `
+    };
 });

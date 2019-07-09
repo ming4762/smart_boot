@@ -1,38 +1,21 @@
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    }
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 define(["require", "exports", "ComponentBuilder", "plugins/table/SmartTableCRUD", "utils/ApiService", "utils/ValidateUtils", "mixins/LayoutMixins"], function (require, exports, ComponentBuilder_1, SmartTableCRUD_1, ApiService_1, ValidateUtils_1, LayoutMixins_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    var User = (function (_super) {
-        __extends(User, _super);
-        function User() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
-        User.prototype.init = function () {
+    class User extends ComponentBuilder_1.default {
+        init() {
             this.initVue();
-        };
-        User.prototype.initVue = function () {
+        }
+        initVue() {
             this.vue = new Vue({
                 el: '#vue-container',
                 components: {
                     'home-main': this.build()
                 }
             });
-        };
-        User.validateMobile = function (rule, value, callback) {
+        }
+        static validateMobile(rule, value, callback) {
             if (value && value.trim() !== '') {
-                var result = ValidateUtils_1.default.validateMobile(value.trim());
+                let result = ValidateUtils_1.default.validateMobile(value.trim());
                 if (result[0]) {
                     callback();
                 }
@@ -43,13 +26,13 @@ define(["require", "exports", "ComponentBuilder", "plugins/table/SmartTableCRUD"
             else {
                 callback();
             }
-        };
-        User.prototype.mixins = function () {
+        }
+        mixins() {
             return [
                 LayoutMixins_1.default
             ];
-        };
-        User.prototype.data = function () {
+        }
+        data() {
             return {
                 apiService: ApiService_1.default,
                 columnOptions: [
@@ -127,7 +110,7 @@ define(["require", "exports", "ComponentBuilder", "plugins/table/SmartTableCRUD"
                         label: '性别',
                         type: 'radio',
                         table: {
-                            formatter: function (row, column, cellValue) {
+                            formatter: (row, column, cellValue) => {
                                 if (cellValue === 0) {
                                     return '男';
                                 }
@@ -174,16 +157,16 @@ define(["require", "exports", "ComponentBuilder", "plugins/table/SmartTableCRUD"
                     }
                 }
             };
-        };
-        User.prototype.components = function () {
+        }
+        components() {
             return {
                 'smart-table-crud': SmartTableCRUD_1.default
             };
-        };
-        User.prototype.methods = function () {
+        }
+        methods() {
             return {
-                formatStatusType: function (row) {
-                    var result = '';
+                formatStatusType(row) {
+                    let result = '';
                     switch (row.status) {
                         case '1':
                             result = 'success';
@@ -197,8 +180,8 @@ define(["require", "exports", "ComponentBuilder", "plugins/table/SmartTableCRUD"
                     }
                     return result;
                 },
-                formatStateValue: function (row) {
-                    var result = '';
+                formatStateValue(row) {
+                    let result = '';
                     switch (row.status) {
                         case '1':
                             result = '正常';
@@ -213,18 +196,37 @@ define(["require", "exports", "ComponentBuilder", "plugins/table/SmartTableCRUD"
                     return result;
                 }
             };
-        };
-        User.prototype.computed = function () {
+        }
+        computed() {
             return {
-                computedTableHeight: function () {
+                computedTableHeight() {
                     return this.clientHeight - 30;
                 }
             };
-        };
-        User.prototype.template = function () {
-            return "\n    <div style=\"padding: 15px;\">\n      <smart-table-crud\n        :defaultButtonConfig=\"defaultButtonConfig\"\n        queryUrl=\"sys/user/list\"\n        deleteUrl=\"sys/user/batchDelete\"\n        saveUpdateUrl=\"sys/user/saveUpdate\"\n        :keys=\"['userId']\"\n        tableName=\"\u7CFB\u7EDF\u7528\u6237\" \n        :apiService=\"apiService\"\n        labelWidth=\"80px\"\n        :height=\"computedTableHeight\"\n        :columnOptions=\"columnOptions\">\n        <!-- \u72B6\u6001status\u63D2\u69FD -->\n        <template slot=\"table-status\" slot-scope=\"{ row }\">\n          <el-tag\n            :type=\"formatStatusType(row)\">{{formatStateValue(row)}}</el-tag>\n        </template>\n      </smart-table-crud>\n    </div>\n    ";
-        };
-        return User;
-    }(ComponentBuilder_1.default));
+        }
+        template() {
+            return `
+    <div style="padding: 15px;">
+      <smart-table-crud
+        :defaultButtonConfig="defaultButtonConfig"
+        queryUrl="sys/user/list"
+        deleteUrl="sys/user/batchDelete"
+        saveUpdateUrl="sys/user/saveUpdate"
+        :keys="['userId']"
+        tableName="系统用户" 
+        :apiService="apiService"
+        labelWidth="80px"
+        :height="computedTableHeight"
+        :columnOptions="columnOptions">
+        <!-- 状态status插槽 -->
+        <template slot="table-status" slot-scope="{ row }">
+          <el-tag
+            :type="formatStatusType(row)">{{formatStateValue(row)}}</el-tag>
+        </template>
+      </smart-table-crud>
+    </div>
+    `;
+        }
+    }
     exports.User = User;
 });

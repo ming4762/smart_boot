@@ -1,16 +1,16 @@
 define(["require", "exports", "utils/ApiService", "mixins/MessageMixins", "utils/Md5Utils", "Constants", "utils/StoreUtil"], function (require, exports, ApiService_1, MessageMixins_1, Md5Utils_1, Constants_1, StoreUtil_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    var createPassword = function (username, password) {
-        var salt = '1qazxsw2';
-        var passwordValue = username + password + salt;
+    const createPassword = (username, password) => {
+        const salt = '1qazxsw2';
+        const passwordValue = username + password + salt;
         return Md5Utils_1.default.md5(passwordValue, 2);
     };
     exports.default = {
         mixins: [
             MessageMixins_1.default
         ],
-        data: function () {
+        data() {
             return {
                 loginFormModel: {
                     username: '',
@@ -29,24 +29,42 @@ define(["require", "exports", "utils/ApiService", "mixins/MessageMixins", "utils
         },
         methods: {
             handleLogin: function () {
-                var _this = this;
-                this.$refs['form'].validate(function (valid) {
+                this.$refs['form'].validate(valid => {
                     if (valid) {
                         ApiService_1.default.postAjax('public/login', {
-                            username: _this.loginFormModel.username,
-                            password: createPassword(_this.loginFormModel.username, _this.loginFormModel.password)
-                        }).then(function (data) {
+                            username: this.loginFormModel.username,
+                            password: createPassword(this.loginFormModel.username, this.loginFormModel.password)
+                        }).then(data => {
                             console.log(data);
                             ApiService_1.default.saveToken(data.Authorization);
                             StoreUtil_1.default.setStore(Constants_1.STORE_KEYS.USER_PREMISSION, data.permission, StoreUtil_1.default.SESSION_TYPE);
-                            window.location.href = contextPath + "ui/system/home";
-                        }).catch(function (error) {
-                            _this.errorMessage(error.message, error);
+                            window.location.href = `${contextPath}ui/system/home`;
+                        }).catch(error => {
+                            this.errorMessage(error.message, error);
                         });
                     }
                 });
             }
         },
-        template: "\n  <el-form ref=\"form\" :rules=\"rules\" :model=\"loginFormModel\">\n    <el-form-item prop=\"username\">\n      <el-input\n        placeholder=\"\u8BF7\u8F93\u5165\u8D26\u53F7\"\n        prefix-icon=\"el-icon-user\"\n        v-model=\"loginFormModel.username\"></el-input>\n    </el-form-item>\n    <el-form-item prop=\"password\">\n      <el-input\n        placeholder=\"\u8BF7\u8F93\u5165\u5BC6\u7801\"\n        show-password\n        v-model=\"loginFormModel.password\"\n        prefix-icon=\"el-icon-unlock\"></el-input>\n    </el-form-item>\n    <el-form-item>\n      <el-button v-loading=\"loginLoading\" @click=\"handleLogin\" class=\"full-width\" type=\"primary\">\u767B\u5F55</el-button>\n    </el-form-item>\n  </el-form>\n  "
+        template: `
+  <el-form ref="form" :rules="rules" :model="loginFormModel">
+    <el-form-item prop="username">
+      <el-input
+        placeholder="请输入账号"
+        prefix-icon="el-icon-user"
+        v-model="loginFormModel.username"></el-input>
+    </el-form-item>
+    <el-form-item prop="password">
+      <el-input
+        placeholder="请输入密码"
+        show-password
+        v-model="loginFormModel.password"
+        prefix-icon="el-icon-unlock"></el-input>
+    </el-form-item>
+    <el-form-item>
+      <el-button v-loading="loginLoading" @click="handleLogin" class="full-width" type="primary">登录</el-button>
+    </el-form-item>
+  </el-form>
+  `
     };
 });
