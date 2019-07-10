@@ -49,6 +49,8 @@ export default {
      * 执行登录
      */
     handleLogin: function () {
+      // 清除token
+      ApiService.saveToken(null)
       this.$refs['form'].validate(valid => {
         if (valid) {
           ApiService.postAjax('public/login', {

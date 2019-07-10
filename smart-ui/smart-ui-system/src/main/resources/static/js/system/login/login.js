@@ -3,6 +3,7 @@ define(["require", "exports", "./UsernameLogin"], function (require, exports, Us
     Object.defineProperty(exports, "__esModule", { value: true });
     class Login {
         init() {
+            Login.pageToTop();
             this.initVue();
         }
         initVue() {
@@ -12,6 +13,11 @@ define(["require", "exports", "./UsernameLogin"], function (require, exports, Us
                     'username-login': UsernameLogin_1.default
                 }
             });
+        }
+        static pageToTop() {
+            if (window.frames.length != parent.frames.length) {
+                parent.location.href = window.location.href;
+            }
         }
     }
     exports.Login = Login;

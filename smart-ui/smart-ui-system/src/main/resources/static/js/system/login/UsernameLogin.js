@@ -29,6 +29,7 @@ define(["require", "exports", "utils/ApiService", "mixins/MessageMixins", "utils
         },
         methods: {
             handleLogin: function () {
+                ApiService_1.default.saveToken(null);
                 this.$refs['form'].validate(valid => {
                     if (valid) {
                         ApiService_1.default.postAjax('public/login', {

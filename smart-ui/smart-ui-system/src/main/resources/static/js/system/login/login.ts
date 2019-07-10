@@ -11,6 +11,7 @@ export class Login {
    * 初始化函数
    */
   public init () {
+    Login.pageToTop()
     this.initVue()
   }
 
@@ -25,5 +26,16 @@ export class Login {
         'username-login': UsernameLogin
       }
     })
+  }
+
+  /**
+   * 跳转到顶层页面
+   * TODO: 待测试
+   */
+  private static pageToTop () {
+    // 判断当前页面是否在iframe中，如果在iframe中，跳转到顶层页面
+    if (window.frames.length != parent.frames.length) {
+      parent.location.href = window.location.href
+    }
   }
 }

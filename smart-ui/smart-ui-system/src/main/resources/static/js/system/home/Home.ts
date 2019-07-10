@@ -8,7 +8,7 @@ import { STORE_KEYS } from 'Constants'
 import SidebarItem from 'system/layout/sidebar/SidebarItem'
 // 默认的样式
 const defaultTheme: any = {
-  topColor: '#4391F4',
+  topColor: '#0b1c2f',
   menuTheme: 'dark',
   themeColor: '#46a0fc'
 }
@@ -72,7 +72,6 @@ export class Home extends PageBuilder {
          * @param menu
          */
         setActiveTopMenu (menu: any) {
-          console.log('------------')
           this.activeTopMenu = menu
           StoreUtil.setStore(STORE_KEYS.ACTIVE_TOP_MENU, menu, StoreUtil.SESSION_TYPE)
         },

@@ -2,7 +2,7 @@ define(["require", "exports", "PageBuilder", "system/layout/Layout", "utils/Stor
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     const defaultTheme = {
-        topColor: '#4391F4',
+        topColor: '#0b1c2f',
         menuTheme: 'dark',
         themeColor: '#46a0fc'
     };
@@ -37,7 +37,6 @@ define(["require", "exports", "PageBuilder", "system/layout/Layout", "utils/Stor
                         StoreUtil_1.default.setStore(Constants_1.STORE_KEYS.USER_MENU_LIST, userMenuList, StoreUtil_1.default.SESSION_TYPE);
                     },
                     setActiveTopMenu(menu) {
-                        console.log('------------');
                         this.activeTopMenu = menu;
                         StoreUtil_1.default.setStore(Constants_1.STORE_KEYS.ACTIVE_TOP_MENU, menu, StoreUtil_1.default.SESSION_TYPE);
                     },

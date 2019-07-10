@@ -11,8 +11,8 @@ define(["require", "exports", "utils/StoreUtil"], function (require, exports, St
     };
     const TOKEN_KEY = 'Authorization';
     class ApiService {
-        static postAjax(url, parameter) {
-            const headers = {};
+        static postAjax(url, parameter, headers) {
+            headers = headers || {};
             const token = getToken();
             if (token) {
                 headers[TOKEN_KEY] = token;
@@ -28,11 +28,28 @@ define(["require", "exports", "utils/StoreUtil"], function (require, exports, St
                     return Promise.reject(result ? result.data : result);
                 }
             }).catch((error) => {
+                if (error.code === 403) {
+                    ApiService.toNoPremissionPage();
+                }
+                if (error.response && error.response.status === 401) {
+                    ApiService.toLoginPage();
+                }
                 return Promise.reject(error);
             });
         }
         static saveToken(token) {
             StoreUtil_1.default.setStore(STORE_TOKEN_KEY, token, StoreUtil_1.default.SESSION_TYPE);
+        }
+        static toLoginPage() {
+            const loginUrl = `${contextPath}ui/system/login`;
+            if (window.frames.length != parent.frames.length) {
+                parent.location.href = loginUrl;
+            }
+            else {
+                window.location.href = loginUrl;
+            }
+        }
+        static toNoPremissionPage() {
         }
     }
     exports.default = ApiService;
