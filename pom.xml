@@ -21,14 +21,19 @@
         <kotlin.version>1.2.71</kotlin.version>
         <!--shiro版本-->
         <shiro.version>1.4.1</shiro.version>
+        <commons-vfs2.version>2.1</commons-vfs2.version>
         <!--smart-common 版本-->
         <smart-common.version>0.0.1-SNAPSHOT</smart-common.version>
+        <smart-log-common.version>0.0.1-SNAPSHOT</smart-log-common.version>
         <!--系统模块版本-->
         <smart-system.version>0.0.1-SNAPSHOT</smart-system.version>
+        <!--队列启动器版本-->
+        <queue-spring-boot-starter.version>0.0.1-SNAPSHOT</queue-spring-boot-starter.version>
         <!--缓存工具包版本-->
         <smart-cache-common.version>0.0.1-SNAPSHOT</smart-cache-common.version>
         <!--crud启动器版本-->
         <crud-spring-boot-starter.version>0.0.1-SNAPSHOT</crud-spring-boot-starter.version>
+        <smart-queue-common.version>0.0.1-SNAPSHOT</smart-queue-common.version>
         <!--日志启动器-->
         <log-spring-boot-starter.version>0.0.1-SNAPSHOT</log-spring-boot-starter.version>
         <shiro-redis.version>0.0.1-SNAPSHOT</shiro-redis.version>
@@ -53,7 +58,7 @@
         <dependency>
             <groupId>com.fasterxml.jackson.module</groupId>
             <artifactId>jackson-module-kotlin</artifactId>
-            <version>2.9.7</version>
+            <version>2.9.9</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
