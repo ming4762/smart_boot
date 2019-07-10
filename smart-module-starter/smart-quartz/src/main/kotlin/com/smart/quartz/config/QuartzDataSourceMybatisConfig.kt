@@ -5,7 +5,6 @@ import com.baomidou.mybatisplus.extension.spring.MybatisSqlSessionFactoryBean
 import com.github.pagehelper.PageInterceptor
 import org.apache.ibatis.plugin.Interceptor
 import org.apache.ibatis.session.SqlSessionFactory
-import org.mybatis.spring.SqlSessionTemplate
 import org.mybatis.spring.annotation.MapperScan
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.boot.context.properties.ConfigurationProperties
@@ -13,7 +12,6 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.core.io.Resource
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver
-import org.springframework.jdbc.datasource.DataSourceTransactionManager
 import java.io.IOException
 import java.util.*
 import javax.sql.DataSource
@@ -24,7 +22,7 @@ import javax.sql.DataSource
  * 2019/7/4 下午4:38
  */
 @Configuration
-@MapperScan("com.smart.quartz.mapper", sqlSessionTemplateRef = "quartzSqlSessionTemplate")
+@MapperScan("com.smart.quartz.mapper", sqlSessionFactoryRef = "quartzSqlSessionFactory")
 class QuartzDataSourceMybatisConfig {
 
     /**
@@ -42,10 +40,10 @@ class QuartzDataSourceMybatisConfig {
      * @param dataSource 系统数据源
      * @return 事物类
      */
-    @Bean(name = ["quartzTransactionManager"])
-    fun quartzTransactionManager(@Qualifier("quartzDataSource") dataSource: DataSource): DataSourceTransactionManager {
-        return DataSourceTransactionManager(dataSource)
-    }
+//    @Bean(name = ["quartzTransactionManager"])
+//    fun quartzTransactionManager(@Qualifier("quartzDataSource") dataSource: DataSource): DataSourceTransactionManager {
+//        return DataSourceTransactionManager(dataSource)
+//    }
 
     @Bean(name = ["quartzSqlSessionFactory"])
     @Throws(Exception::class)
@@ -68,10 +66,10 @@ class QuartzDataSourceMybatisConfig {
      * @param sqlSessionFactory sqlSessionFactory
      * @return 系统库SqlSessionTemplate
      */
-    @Bean(name = ["quartzSqlSessionTemplate"])
-    fun quartzSqlSessionTemplate(@Qualifier("quartzSqlSessionFactory") sqlSessionFactory: SqlSessionFactory): SqlSessionTemplate {
-        return SqlSessionTemplate(sqlSessionFactory)
-    }
+//    @Bean(name = ["quartzSqlSessionTemplate"])
+//    fun quartzSqlSessionTemplate(@Qualifier("quartzSqlSessionFactory") sqlSessionFactory: SqlSessionFactory): SqlSessionTemplate {
+//        return SqlSessionTemplate(sqlSessionFactory)
+//    }
 
     /**
      * 创建分页插件

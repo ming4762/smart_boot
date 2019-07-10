@@ -5,6 +5,8 @@ import com.smart.common.message.Result
 import com.smart.quartz.model.SmartTimedTaskDO
 import com.smart.quartz.service.SmartTimedTaskService
 import com.smart.starter.crud.controller.BaseController
+import org.apache.shiro.authz.annotation.Logical
+import org.apache.shiro.authz.annotation.RequiresPermissions
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("/quartz/timeTask")
 class SmartTimedTaskController : BaseController<SmartTimedTaskService, SmartTimedTaskDO>() {
 
+    @RequiresPermissions("quartz:timeTask:query")
     @RequestMapping("/list")
     override fun list(@RequestBody parameters: Map<String, Any?>): Result<Any?> {
         val list = super.list(parameters)
@@ -28,6 +31,7 @@ class SmartTimedTaskController : BaseController<SmartTimedTaskService, SmartTime
     /**
      * 开始关闭定时任务
      */
+    @RequiresPermissions("quartz:timeTask:add", "quartz:timeTask:update", logical = Logical.OR)
     @RequestMapping("/openClose")
     @Log("开启关闭定时任务")
     fun openClose(@RequestBody taskList: List<SmartTimedTaskDO>): Result<Boolean?> {
