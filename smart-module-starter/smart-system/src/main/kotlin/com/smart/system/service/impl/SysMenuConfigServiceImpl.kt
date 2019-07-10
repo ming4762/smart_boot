@@ -28,7 +28,7 @@ class SysMenuConfigServiceImpl : BaseServiceImpl<SysMenuConfigMapper, SysMenuCon
     /**
      * 重写保存更新方法
      */
-    @Transactional(rollbackFor = [Exception::class])
+    @Transactional( rollbackFor = [Exception::class])
     override fun saveOrUpdate(entity: SysMenuConfigDO): Boolean {
         val result: Boolean
         var isAdd = false
@@ -86,7 +86,7 @@ class SysMenuConfigServiceImpl : BaseServiceImpl<SysMenuConfigMapper, SysMenuCon
     /**
      * 激活配置
      */
-    @Transactional(rollbackFor = [Exception::class])
+    @Transactional( rollbackFor = [Exception::class])
     override fun activeConfig(menuConfig: SysMenuConfigDO): Boolean {
         // 查询当前激活的菜单
         val wrapper = KtQueryWrapper(SysMenuConfigDO :: class.java)

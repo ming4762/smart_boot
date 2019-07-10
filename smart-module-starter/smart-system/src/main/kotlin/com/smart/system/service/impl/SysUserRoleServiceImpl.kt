@@ -40,12 +40,12 @@ class SysUserRoleServiceImpl : BaseServiceImpl<SysUserRoleMapper, SysUserRoleDO>
                 .toMap()
     }
 
-    @Transactional(value = "systemTransactionManager")
+    @Transactional
     override fun saveOrUpdate(entity: SysUserRoleDO?): Boolean {
         return super.saveOrUpdate(entity)
     }
 
-    @Transactional(value = "systemTransactionManager")
+    @Transactional
     override fun batchDelete(tList: List<SysUserRoleDO>): Int {
         return super.batchDelete(tList)
     }

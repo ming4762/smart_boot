@@ -5,7 +5,6 @@ import com.baomidou.mybatisplus.extension.spring.MybatisSqlSessionFactoryBean
 import com.github.pagehelper.PageInterceptor
 import org.apache.ibatis.plugin.Interceptor
 import org.apache.ibatis.session.SqlSessionFactory
-import org.mybatis.spring.SqlSessionTemplate
 import org.mybatis.spring.annotation.MapperScan
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.boot.context.properties.ConfigurationProperties
@@ -13,7 +12,6 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.core.io.Resource
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver
-import org.springframework.jdbc.datasource.DataSourceTransactionManager
 import java.io.IOException
 import java.util.*
 import javax.sql.DataSource
@@ -23,12 +21,12 @@ import javax.sql.DataSource
  * @author ming
  * 2019/7/5 上午10:27
  */
-@MapperScan("com.smart.system.mapper", sqlSessionTemplateRef = "systemSqlSessionTemplate")
+@MapperScan("com.smart.system.mapper", sqlSessionFactoryRef = "systemSqlSessionFactory")
 @Configuration
 class SystemDataSourceMybatisConfig {
 
     /**
-     * 定时任务库数据源
+     * 系统模块数据库数据源
      * @return 数据源
      */
     @Bean(name = ["systemDataSource"])
@@ -42,10 +40,10 @@ class SystemDataSourceMybatisConfig {
      * @param dataSource 系统数据源
      * @return 事物类
      */
-    @Bean(name = ["systemTransactionManager"])
-    fun quartzTransactionManager(@Qualifier("systemDataSource") dataSource: DataSource): DataSourceTransactionManager {
-        return DataSourceTransactionManager(dataSource)
-    }
+//    @Bean(name = ["systemTransactionManager"])
+//    fun systemTransactionManager(@Qualifier("systemDataSource") dataSource: DataSource): DataSourceTransactionManager {
+//        return DataSourceTransactionManager(dataSource)
+//    }
 
     @Bean(name = ["systemSqlSessionFactory"])
     @Throws(Exception::class)
@@ -68,10 +66,10 @@ class SystemDataSourceMybatisConfig {
      * @param sqlSessionFactory sqlSessionFactory
      * @return 系统库SqlSessionTemplate
      */
-    @Bean(name = ["systemSqlSessionTemplate"])
-    fun quartzSqlSessionTemplate(@Qualifier("systemSqlSessionFactory") sqlSessionFactory: SqlSessionFactory): SqlSessionTemplate {
-        return SqlSessionTemplate(sqlSessionFactory)
-    }
+//    @Bean(name = ["systemSqlSessionTemplate"])
+//    fun systemSqlSessionTemplate(@Qualifier("systemSqlSessionFactory") sqlSessionFactory: SqlSessionFactory): SqlSessionTemplate {
+//        return SqlSessionTemplate(sqlSessionFactory)
+//    }
 
     /**
     * 创建分页插件

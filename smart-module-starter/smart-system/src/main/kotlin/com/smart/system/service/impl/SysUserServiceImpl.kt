@@ -151,12 +151,12 @@ class SysUserServiceImpl : BaseServiceImpl<SysUserMapper, SysUserDO>(), SysUserS
         return mapOf()
     }
 
-    @Transactional(value = "systemTransactionManager")
+    @Transactional
     override fun batchDelete(tList: List<SysUserDO>): Int {
         return super.batchDelete(tList)
     }
 
-    @Transactional(value = "systemTransactionManager")
+    @Transactional
     override fun saveOrUpdate(entity: SysUserDO): Boolean {
         var isAdd = false
         if (entity.userId == null) {
