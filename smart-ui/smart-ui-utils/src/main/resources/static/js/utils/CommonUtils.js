@@ -11,7 +11,7 @@ define(["require", "exports"], function (require, exports) {
             s[14] = '4';
             s[19] = hexDigits.substr((s[19] & 0x3) | 0x8, 1);
             s[8] = s[13] = s[18] = s[23] = '-';
-            let uuid = s.join('');
+            const uuid = s.join('');
             return uuid;
         }
         static clone(object) {
@@ -34,6 +34,36 @@ define(["require", "exports"], function (require, exports) {
                 return resultList;
             }
             return [];
+        }
+        static fullScreen() {
+            const element = document.documentElement;
+            if (element.requestFullscreen) {
+                element.requestFullscreen();
+            }
+            else if (element.msRequestFullscreen) {
+                element.msRequestFullscreen();
+            }
+            else if (element.mozRequestFullScreen) {
+                element.mozRequestFullScreen();
+            }
+            else if (element.webkitRequestFullscreen) {
+                element.webkitRequestFullscreen();
+            }
+        }
+        static exitFullscreen() {
+            const doc = document;
+            if (doc.exitFullscreen) {
+                doc.exitFullscreen();
+            }
+            else if (doc.msExitFullscreen) {
+                doc.msExitFullscreen();
+            }
+            else if (doc.mozCancelFullScreen) {
+                doc.mozCancelFullScreen();
+            }
+            else if (doc.webkitExitFullscreen) {
+                doc.webkitExitFullscreen();
+            }
         }
     }
     exports.default = CommonUtil;

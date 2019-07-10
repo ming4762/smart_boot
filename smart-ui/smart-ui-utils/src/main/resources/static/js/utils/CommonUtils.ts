@@ -16,7 +16,7 @@ export default class CommonUtil {
     s[14] = '4'  // bits 12-15 of the time_hi_and_version field to 0010
     s[19] = hexDigits.substr((s[19] & 0x3) | 0x8, 1)  // bits 6-7 of the clock_seq_hi_and_reserved to 01
     s[8] = s[13] = s[18] = s[23] = '-'
-    let uuid = s.join('')
+    const uuid = s.join('')
     return uuid
   }
 
@@ -50,5 +50,37 @@ export default class CommonUtil {
       return resultList
     }
     return []
+  }
+
+  /**
+   * 全屏操作
+   */
+  public static fullScreen () {
+    const element: any = document.documentElement;
+    if (element.requestFullscreen) {
+      element.requestFullscreen()
+    } else if (element.msRequestFullscreen) {
+      element.msRequestFullscreen()
+    } else if (element.mozRequestFullScreen) {
+      element.mozRequestFullScreen()
+    } else if (element.webkitRequestFullscreen) {
+      element.webkitRequestFullscreen()
+    }
+  }
+
+  /**
+   * 退出全屏
+   */
+  public static exitFullscreen () {
+    const doc: any = document
+    if (doc.exitFullscreen) {
+      doc.exitFullscreen()
+    } else if (doc.msExitFullscreen) {
+      doc.msExitFullscreen()
+    } else if (doc.mozCancelFullScreen) {
+      doc.mozCancelFullScreen()
+    } else if (doc.webkitExitFullscreen) {
+      doc.webkitExitFullscreen()
+    }
   }
 }
