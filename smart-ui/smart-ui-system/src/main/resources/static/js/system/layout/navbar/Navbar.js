@@ -1,9 +1,10 @@
-define(["require", "exports", "mixins/ThemeMixins", "system/layout/sidebar/Item"], function (require, exports, ThemeMixins_1, Item_1) {
+define(["require", "exports", "mixins/ThemeMixins", "system/layout/sidebar/Item", "system/layout/navbar/NavbarButton"], function (require, exports, ThemeMixins_1, Item_1, NavbarButton_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.default = {
         components: {
-            'menu-item': Item_1.default
+            'menu-item': Item_1.default,
+            'navbar-button': NavbarButton_1.default
         },
         data() {
             return {
@@ -126,6 +127,8 @@ define(["require", "exports", "mixins/ThemeMixins", "system/layout/sidebar/Item"
           :title="menu.name"/>
       </el-menu-item>
     </el-menu>
+    <!--顶部按钮列-->
+    <navbar-button class="navbar-button-container"/>
   </div>
   `
     };

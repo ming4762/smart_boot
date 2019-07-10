@@ -4,10 +4,13 @@ import ThemeMixins from 'mixins/ThemeMixins'
 
 import Item from 'system/layout/sidebar/Item'
 
+import NavbarButton from 'system/layout/navbar/NavbarButton'
+
 
 export default {
   components: {
-    'menu-item': Item
+    'menu-item': Item,
+    'navbar-button': NavbarButton
   },
   data () {
     return {
@@ -162,6 +165,8 @@ export default {
           :title="menu.name"/>
       </el-menu-item>
     </el-menu>
+    <!--顶部按钮列-->
+    <navbar-button class="navbar-button-container"/>
   </div>
   `
 }

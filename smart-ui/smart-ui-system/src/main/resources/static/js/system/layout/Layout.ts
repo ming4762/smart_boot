@@ -38,19 +38,22 @@ export default {
   },
   methods: {
     // 加载用户菜单信息
+    // todo:菜单不存在时加载
     loadUserMenu () {
-      ApiService.postAjax('sys/menu/queryUserMenu', {})
-          .then(data => {
-            const resultList = []
-            if (data !== null) {
-              const menuUrlMap = {}
-              this.dealMenuData(data, resultList, null, menuUrlMap)
-            }
-            // 设置菜单
-            this.getBus.setUserMenulist(resultList)
-          }).catch(error => {
-            this.errorMessage('记载菜单数据失败，请刷新重试', error)
-          })
+      if (!this.getBus.userMenuList || this.getBus.userMenuList.length === 0) {
+        ApiService.postAjax('sys/menu/queryUserMenu', {})
+            .then(data => {
+              const resultList = []
+              if (data !== null) {
+                const menuUrlMap = {}
+                this.dealMenuData(data, resultList, null, menuUrlMap)
+              }
+              // 设置菜单
+              this.getBus.setUserMenulist(resultList)
+            }).catch(error => {
+              this.errorMessage('记载菜单数据失败，请刷新重试', error)
+            })
+      }
     },
     /**
      * 使用递归处理菜单数据

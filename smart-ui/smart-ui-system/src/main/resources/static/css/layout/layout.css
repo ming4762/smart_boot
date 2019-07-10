@@ -43,6 +43,34 @@
     transform: rotate(0deg);
 }
 
+/*顶部按钮组*/
+.navbar-button-container {
+    right: 35px;
+    height: 60px;
+    display: inline-block;
+    position: absolute;
+}
+.navbar-button-container .navbar-button-list {
+    display: block;
+    margin: 0;
+    line-height: 60px;
+}
+.navbar-button-container .navbar-button-list li {
+    list-style: none;
+    float: left;
+    width: 50px;
+    cursor: pointer;
+    color: white;
+}
+
+.navbar-button-container .navbar-button-list li:hover {
+    background-color: #31639d;
+}
+
+.navbar-button-container .navbar-button-list a {
+    padding: 0 17px;
+}
+
 .app-wrapper {
     position: relative;
     height: 100%;
@@ -300,3 +328,4 @@
     -webkit-animation-timing-function: linear;
     animation-timing-function: linear;
 }
+

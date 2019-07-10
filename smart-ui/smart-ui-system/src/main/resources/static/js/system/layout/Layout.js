@@ -29,17 +29,19 @@ define(["require", "exports", "utils/ApiService", "mixins/MessageMixins", "syste
         },
         methods: {
             loadUserMenu() {
-                ApiService_1.default.postAjax('sys/menu/queryUserMenu', {})
-                    .then(data => {
-                    const resultList = [];
-                    if (data !== null) {
-                        const menuUrlMap = {};
-                        this.dealMenuData(data, resultList, null, menuUrlMap);
-                    }
-                    this.getBus.setUserMenulist(resultList);
-                }).catch(error => {
-                    this.errorMessage('记载菜单数据失败，请刷新重试', error);
-                });
+                if (!this.getBus.userMenuList || this.getBus.userMenuList.length === 0) {
+                    ApiService_1.default.postAjax('sys/menu/queryUserMenu', {})
+                        .then(data => {
+                        const resultList = [];
+                        if (data !== null) {
+                            const menuUrlMap = {};
+                            this.dealMenuData(data, resultList, null, menuUrlMap);
+                        }
+                        this.getBus.setUserMenulist(resultList);
+                    }).catch(error => {
+                        this.errorMessage('记载菜单数据失败，请刷新重试', error);
+                    });
+                }
             },
             dealMenuData(menuList, resultList, topId, menuUrlMap) {
                 menuList.forEach(menu => {
