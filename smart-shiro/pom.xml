@@ -13,6 +13,10 @@
     <packaging>pom</packaging>
     <description>Demo project for Spring Boot</description>
 
+    <modules>
+        <module>shiro-redis</module>
+    </modules>
+
     <properties>
     </properties>
 

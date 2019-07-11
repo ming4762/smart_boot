@@ -15,6 +15,10 @@
 
     <modules>
         <module>smart-common</module>
+        <module>smart-auth-common</module>
+        <module>smart-log-common</module>
+        <module>smart-quartz-queue-common</module>
+        <module>smart-queue-common</module>
     </modules>
 
     <properties>

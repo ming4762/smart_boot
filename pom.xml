@@ -42,14 +42,19 @@
         <redis-spring-boot-starter.version>0.0.1-SNAPSHOT</redis-spring-boot-starter.version>
         <smart-ui-utils.version>0.0.1-SNAPSHOT</smart-ui-utils.version>
         <smart-ui-library.version>0.0.1-SNAPSHOT</smart-ui-library.version>
+        <!--kettle工具包版本-->
+        <smart-kettle-actuator.version>0.0.1-SNAPSHOT</smart-kettle-actuator.version>
         <commons-io.commons-io.version>2.6</commons-io.commons-io.version>
     </properties>
 
     <modules>
+        <module>smart-cache</module>
         <!--common包-->
         <module>smart-commons</module>
         <!--模块启动器-->
         <module>smart-module-starter</module>
+        <module>smart-shiro</module>
+        <module>smart-ui</module>
         <!--启动器模块-->
         <module>smart-starter</module>
     </modules>
