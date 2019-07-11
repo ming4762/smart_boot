@@ -5,9 +5,9 @@ import com.baomidou.mybatisplus.extension.kotlin.KtUpdateWrapper
 import com.smart.common.utils.UUIDGenerator
 import com.smart.quartz.mapper.SmartTimedTaskMapper
 import com.smart.quartz.model.SmartTimedTaskDO
-import com.smart.quartz.service.QuartzService
 import com.smart.quartz.service.SmartTimedTaskService
 import com.smart.starter.crud.service.impl.BaseServiceImpl
+import com.smart.starter.quartz.service.QuartzService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -33,14 +33,14 @@ class SmartTimedTaskServiceImpl : BaseServiceImpl<SmartTimedTaskMapper, SmartTim
     @Transactional(value = "quartzTransactionManager", rollbackFor = [Exception::class])
     override fun batchDelete(tList: List<SmartTimedTaskDO>): Int {
         // 移除定时任务
-        this.quartzService.removeTask(tList)
+        this.quartzService.removeTask(tList.map { SmartTimedTaskDO.convertToMetaData(it) })
         return super.batchDelete(tList)
     }
 
     @Transactional(value = "quartzTransactionManager", rollbackFor = [Exception::class])
     override fun delete(t: SmartTimedTaskDO): Int {
         // 移除定时任务
-        this.quartzService.removeTask(t)
+        this.quartzService.removeTask(SmartTimedTaskDO.convertToMetaData(t))
         return super.delete(t)
     }
 
@@ -63,16 +63,16 @@ class SmartTimedTaskServiceImpl : BaseServiceImpl<SmartTimedTaskMapper, SmartTim
     override fun save(entity: SmartTimedTaskDO): Boolean {
         if (entity.taskId == null) entity.taskId = UUIDGenerator.getUUID()
         if (entity.used == true) {
-            this.quartzService.addTask(entity)
+            this.quartzService.addTask(SmartTimedTaskDO.convertToMetaData(entity))
         }
         return super.save(entity)
     }
 
     @Transactional(value = "quartzTransactionManager", rollbackFor = [Exception::class])
     override fun updateById(entity: SmartTimedTaskDO): Boolean {
-        this.quartzService.removeTask(entity)
+        this.quartzService.removeTask(SmartTimedTaskDO.convertToMetaData(entity))
         if (entity.used == true) {
-            this.quartzService.addTask(entity)
+            this.quartzService.addTask(SmartTimedTaskDO.convertToMetaData(entity))
         }
         return super.updateById(entity)
     }
@@ -93,14 +93,14 @@ class SmartTimedTaskServiceImpl : BaseServiceImpl<SmartTimedTaskMapper, SmartTim
             task.taskId = it
             if (enable) {
                 // 判断任务是否存在
-                val jobDetail = this.quartzService.getJob(task)
+                val jobDetail = this.quartzService.getJob(SmartTimedTaskDO.convertToMetaData(task))
                 if (jobDetail == null) {
-                    this.quartzService.addTask(task)
+                    this.quartzService.addTask(SmartTimedTaskDO.convertToMetaData(task))
                 } else {
-                    this.quartzService.resumeTask(task)
+                    this.quartzService.resumeTask(SmartTimedTaskDO.convertToMetaData(task))
                 }
             } else {
-                this.quartzService.pauseTask(task)
+                this.quartzService.pauseTask(SmartTimedTaskDO.convertToMetaData(task))
             }
         }
     }
@@ -114,16 +114,16 @@ class SmartTimedTaskServiceImpl : BaseServiceImpl<SmartTimedTaskMapper, SmartTim
             this.update(updateWrapper)
             if (it.used == true) {
                 // 判断任务是否存在
-                val jobDetail = this.quartzService.getJob(it)
+                val jobDetail = this.quartzService.getJob(SmartTimedTaskDO.convertToMetaData(it))
                 if (jobDetail == null) {
                     // 查询任务
                     val taskQuery = this.getById(it.taskId)
-                    this.quartzService.addTask(taskQuery)
+                    this.quartzService.addTask(SmartTimedTaskDO.convertToMetaData(taskQuery))
                 } else {
-                    this.quartzService.resumeTask(it)
+                    this.quartzService.resumeTask(SmartTimedTaskDO.convertToMetaData(it))
                 }
             } else {
-                this.quartzService.pauseTask(it)
+                this.quartzService.pauseTask(SmartTimedTaskDO.convertToMetaData(it))
             }
         }
     }

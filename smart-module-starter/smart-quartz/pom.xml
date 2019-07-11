@@ -17,12 +17,12 @@
 	</properties>
 
 	<dependencies>
-		<!--quartz支持-->
+		<!--引入定时任务启动器 TODO:版本问题-->
 		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-quartz</artifactId>
+			<groupId>com.smart</groupId>
+			<artifactId>smartquartz-spring-boot-starter</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
-
 		<!--引入crud启动器-->
 		<dependency>
 			<groupId>com.smart</groupId>

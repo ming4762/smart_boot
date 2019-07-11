@@ -1,6 +1,6 @@
-package com.smart.quartz.service
+package com.smart.starter.quartz.service
 
-import com.smart.quartz.model.SmartTimedTaskDO
+import com.smart.starter.quartz.properties.QuartzMetaData
 import org.quartz.*
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component
 /**
  * 定时任务服务类
  * @author ming
- * 2019/7/4 下午8:45
+ * 2019/7/11 下午4:57
  */
 @Component
 class QuartzService {
@@ -26,34 +26,33 @@ class QuartzService {
     /**
      * 添加定时任务
      */
-    fun addTask(task: SmartTimedTaskDO) {
+    fun <T> addTask(metaData: QuartzMetaData<T>) {
         try {
-            val clazz = Class.forName(task.clazz)
-            // 判断类是否是子类
+            val clazz = Class.forName(metaData.clazz)
             if (QuartzJobBean :: class.java.isAssignableFrom(clazz)) {
                 clazz as Class<out Job>
                 val scheduler = this.schedulerFactoryBean.scheduler
                 val jobDetail = JobBuilder.newJob(clazz)
-                        .withIdentity(task.taskId)
+                        .withIdentity(metaData.id)
                         .build()
-                jobDetail.jobDataMap["task"] = task
+                jobDetail.jobDataMap["task"] = metaData.data
                 val trigger = TriggerBuilder.newTrigger()
-                        .withIdentity(task.taskId)
-                        .withSchedule(CronScheduleBuilder.cronSchedule(task.cron))
+                        .withIdentity(metaData.id)
+                        .withSchedule(CronScheduleBuilder.cronSchedule(metaData.cron))
                         .build()
                 scheduler.scheduleJob(jobDetail, trigger)
             } else {
-                LOGGER.warn("类【${task.clazz}】不是QuartzJobBean的子类")
+                LOGGER.warn("类【${metaData.clazz}】不是QuartzJobBean的子类")
             }
         } catch (e: ClassNotFoundException) {
-            LOGGER.error("无法获取类：${task.clazz}")
+            LOGGER.error("无法获取类：${metaData.clazz}")
         }
     }
 
     /**
      * 批量添加任务
      */
-    fun addTask(vararg tasks: SmartTimedTaskDO) {
+    fun <T> addTask(vararg tasks: QuartzMetaData<T>) {
         tasks.forEach {
             this.addTask(it)
         }
@@ -62,7 +61,7 @@ class QuartzService {
     /**
      * 批量添加任务
      */
-    fun addTask(tasks: Collection<SmartTimedTaskDO>) {
+    fun <T> addTask(tasks: Collection<QuartzMetaData<T>>) {
         tasks.forEach {
             this.addTask(it)
         }
@@ -73,7 +72,7 @@ class QuartzService {
      * @throws Exception
      */
     @Throws(Exception::class)
-    fun removeTask(task: SmartTimedTaskDO): Boolean {
+    fun <T> removeTask(task: QuartzMetaData<T>): Boolean {
         val scheduler = this.schedulerFactoryBean.scheduler
         return scheduler.deleteJob(this.getJobKeyByTask(task))
     }
@@ -82,7 +81,7 @@ class QuartzService {
      * 移除定时任务
      */
     @Throws(Exception::class)
-    fun removeTask(taskList: List<SmartTimedTaskDO>): Boolean {
+    fun <T> removeTask(taskList: List<QuartzMetaData<T>>): Boolean {
         val scheduler = this.schedulerFactoryBean.scheduler
         return scheduler.deleteJobs(
                 taskList.map { this.getJobKeyByTask(it) }
@@ -95,7 +94,7 @@ class QuartzService {
      * @throws Exception
      */
     @Throws(Exception::class)
-    fun resumeTask(task: SmartTimedTaskDO) {
+    fun <T> resumeTask(task: QuartzMetaData<T>) {
         val scheduler = this.schedulerFactoryBean.scheduler
         scheduler.resumeJob(this.getJobKeyByTask(task))
     }
@@ -106,7 +105,7 @@ class QuartzService {
      * @throws Exception
      */
     @Throws(Exception::class)
-    fun pauseTask(task: SmartTimedTaskDO) {
+    fun <T> pauseTask(task: QuartzMetaData<T>) {
         val scheduler = this.schedulerFactoryBean.scheduler
         scheduler.pauseJob(this.getJobKeyByTask(task))
     }
@@ -117,17 +116,18 @@ class QuartzService {
      * @return
      */
     @Throws(Exception::class)
-    fun getJob(task: SmartTimedTaskDO): JobDetail? {
+    fun <T> getJob(task: QuartzMetaData<T>): JobDetail? {
         val scheduler = this.schedulerFactoryBean.scheduler
         return scheduler.getJobDetail(this.getJobKeyByTask(task))
     }
+
 
     /**
      * 根据任务信息获取jobkey
      * @param cloudTimedTask
      * @return
      */
-    private fun getJobKeyByTask(task: SmartTimedTaskDO): JobKey {
-        return JobKey.jobKey(task.taskId)
+    private fun <T> getJobKeyByTask(task: QuartzMetaData<T>): JobKey {
+        return JobKey.jobKey(task.id)
     }
 }

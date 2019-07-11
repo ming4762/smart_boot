@@ -2,8 +2,8 @@ package com.smart.quartz.config
 
 import com.baomidou.mybatisplus.extension.kotlin.KtQueryWrapper
 import com.smart.quartz.model.SmartTimedTaskDO
-import com.smart.quartz.service.QuartzService
 import com.smart.quartz.service.SmartTimedTaskService
+import com.smart.starter.quartz.service.QuartzService
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.ApplicationArguments
@@ -35,6 +35,6 @@ class InitTask : ApplicationRunner {
                 KtQueryWrapper(SmartTimedTaskDO::class.java).eq(SmartTimedTaskDO :: used, true)
         )
         // 添加任务
-        this.quartzService.addTask(usedTaskList)
+        this.quartzService.addTask(usedTaskList.map { SmartTimedTaskDO.convertToMetaData(it) })
     }
 }

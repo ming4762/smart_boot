@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.annotation.TableField
 import com.baomidou.mybatisplus.annotation.TableId
 import com.baomidou.mybatisplus.annotation.TableName
 import com.smart.starter.crud.model.BaseModel
+import com.smart.starter.quartz.properties.QuartzMetaData
 
 /**
  * 定时任务实体类
@@ -16,6 +17,16 @@ class SmartTimedTaskDO : BaseModel() {
 
     companion object {
         private const val serialVersionUID = -6735048176105225227L
+
+        fun convertToMetaData(task: SmartTimedTaskDO): QuartzMetaData<SmartTimedTaskDO> {
+            val quartzMetaData = QuartzMetaData<SmartTimedTaskDO>()
+            quartzMetaData.id = task.taskId!!
+            quartzMetaData.clazz = task.clazz!!
+            quartzMetaData.cron = task.cron!!
+            quartzMetaData.name = task.taskName ?: ""
+            quartzMetaData.data = task
+            return quartzMetaData
+        }
     }
 
     /** TASK_ID - 任务ID  */
