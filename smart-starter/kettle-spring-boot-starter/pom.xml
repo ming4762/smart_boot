@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.smart</groupId>
+        <artifactId>smart-starter</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+    </parent>
+    <artifactId>kettle-spring-boot-starter</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>kettle-spring-boot-starter</name>
+    <description>kettle启动器</description>
+
+    <properties>
+
+    </properties>
+
+    <dependencies>
+        <!--连接池支持-->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-pool2</artifactId>
+            <version>${commons-pool2.version}</version>
+        </dependency>
+
+        <!--kettle支持-->
+        <dependency>
+            <groupId>com.smart</groupId>
+            <artifactId>smart-kettle-actuator</artifactId>
+            <version>${smart-kettle-actuator.version}</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+    </build>
+
+</project>
