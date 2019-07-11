@@ -8,21 +8,18 @@ package com.smart.kettle.common.config
  */
 class DatabaseMetaProperties {
 
-    var name = ""
-
     var type = "mysql"
-
     var access = "jdbc"
+    var name = ""
+    var host: String = "localhost"
 
-    lateinit var host: String
-
-    lateinit var db: String
+    var db: String = ""
 
     var port = "3306"
 
-    lateinit var dbUser: String
+    var dbUser: String = "root"
 
-    lateinit var dbPassword: String
+    var dbPassword: String = ""
 
     var resUser = "admin"
 
