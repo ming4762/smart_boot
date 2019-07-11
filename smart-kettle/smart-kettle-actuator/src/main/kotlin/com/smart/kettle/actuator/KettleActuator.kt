@@ -63,7 +63,6 @@ object KettleActuator {
      * todo: connect 自动获取
      */
     fun excuteDBTransfer(databaseMetaProperties: DatabaseMetaProperties, transName: String, params: Array<String> = arrayOf()) {
-        KettleEnvironment.init()
         // 创建资源库
         val repository = KettleDatabaseRepository()
         val databaseMeta = DatabaseMeta(databaseMetaProperties.name, databaseMetaProperties.type,
@@ -73,6 +72,15 @@ object KettleActuator {
         repository.init(kettleDatabaseRepositoryMeta)
         //连接资源库
         repository.connect(databaseMetaProperties.resUser,databaseMetaProperties.resPassword)
+        KettleActuator.excuteDBTransfer(repository, transName, params)
+        repository.disconnect()
+    }
+
+    /**
+     * 执行资源库转换
+     */
+    fun excuteDBTransfer(repository: KettleDatabaseRepository, transName: String, params: Array<String> = arrayOf()) {
+        KettleEnvironment.init()
         val directoryInterface = repository.loadRepositoryDirectoryTree()
         // 获取转换
         val transMeta = repository.loadTransformation(transName, directoryInterface,null,true,null)
@@ -82,7 +90,6 @@ object KettleActuator {
         if (trans.errors > 0) {
             throw Exception("There are errors during transformation exception!(传输过程中发生异常)")
         }
-        repository.disconnect()
     }
 
 
