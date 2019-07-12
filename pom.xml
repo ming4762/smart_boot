@@ -42,6 +42,9 @@
         <redis-spring-boot-starter.version>0.0.1-SNAPSHOT</redis-spring-boot-starter.version>
         <smart-ui-utils.version>0.0.1-SNAPSHOT</smart-ui-utils.version>
         <smart-ui-library.version>0.0.1-SNAPSHOT</smart-ui-library.version>
+        <smart-quartz-queue-common.version>0.0.1-SNAPSHOT</smart-quartz-queue-common.version>
+        <!--kettle启动器版本-->
+        <kettle-spring-boot-starter.version>0.0.1-SNAPSHOT</kettle-spring-boot-starter.version>
         <!--kettle工具包版本-->
         <smart-kettle-actuator.version>0.0.1-SNAPSHOT</smart-kettle-actuator.version>
         <commons-io.commons-io.version>2.6</commons-io.commons-io.version>

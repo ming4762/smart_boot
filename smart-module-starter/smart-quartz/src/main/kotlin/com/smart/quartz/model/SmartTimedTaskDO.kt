@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.IdType
 import com.baomidou.mybatisplus.annotation.TableField
 import com.baomidou.mybatisplus.annotation.TableId
 import com.baomidou.mybatisplus.annotation.TableName
+import com.smart.quartz.preset.PresetClass
 import com.smart.starter.crud.model.BaseModel
 import com.smart.starter.quartz.properties.QuartzMetaData
 
@@ -21,10 +22,14 @@ class SmartTimedTaskDO : BaseModel() {
         fun convertToMetaData(task: SmartTimedTaskDO): QuartzMetaData<SmartTimedTaskDO> {
             val quartzMetaData = QuartzMetaData<SmartTimedTaskDO>()
             quartzMetaData.id = task.taskId!!
-            quartzMetaData.clazz = task.clazz!!
             quartzMetaData.cron = task.cron!!
             quartzMetaData.name = task.taskName ?: ""
             quartzMetaData.data = task
+            if (task.clazz == null && task.presetClass != null) {
+                quartzMetaData.clazz = PresetClass.valueOf(task.presetClass!!).clazz
+            } else {
+                quartzMetaData.clazz = task.clazz!!
+            }
             return quartzMetaData
         }
     }
@@ -51,4 +56,9 @@ class SmartTimedTaskDO : BaseModel() {
     var remark: String? = null
 
     var seq: Int? = null
+
+    var presetClass: String? = null
+
+    var taskParameter: String? = null
+
 }

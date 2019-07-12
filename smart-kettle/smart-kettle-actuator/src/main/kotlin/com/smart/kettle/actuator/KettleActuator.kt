@@ -1,8 +1,8 @@
 package com.smart.kettle.actuator
 
 import com.smart.kettle.common.config.DatabaseMetaProperties
+import com.smart.kettle.meta.CustomDatabaseMeta
 import org.pentaho.di.core.KettleEnvironment
-import org.pentaho.di.core.database.DatabaseMeta
 import org.pentaho.di.core.util.EnvUtil
 import org.pentaho.di.job.Job
 import org.pentaho.di.job.JobMeta
@@ -63,9 +63,10 @@ object KettleActuator {
      * todo: connect 自动获取
      */
     fun excuteDBTransfer(databaseMetaProperties: DatabaseMetaProperties, transName: String, params: Array<String> = arrayOf()) {
+        KettleEnvironment.init()
         // 创建资源库
         val repository = KettleDatabaseRepository()
-        val databaseMeta = DatabaseMeta(databaseMetaProperties.name, databaseMetaProperties.type,
+        val databaseMeta = CustomDatabaseMeta(databaseMetaProperties.name, databaseMetaProperties.type,
                 databaseMetaProperties.access, databaseMetaProperties.host, databaseMetaProperties.db,
                 databaseMetaProperties.port, databaseMetaProperties.dbUser, databaseMetaProperties.dbPassword)
         val kettleDatabaseRepositoryMeta = KettleDatabaseRepositoryMeta("kettle","kettle","Transformation description",databaseMeta)
@@ -80,7 +81,6 @@ object KettleActuator {
      * 执行资源库转换
      */
     fun excuteDBTransfer(repository: KettleDatabaseRepository, transName: String, params: Array<String> = arrayOf()) {
-        KettleEnvironment.init()
         val directoryInterface = repository.loadRepositoryDirectoryTree()
         // 获取转换
         val transMeta = repository.loadTransformation(transName, directoryInterface,null,true,null)

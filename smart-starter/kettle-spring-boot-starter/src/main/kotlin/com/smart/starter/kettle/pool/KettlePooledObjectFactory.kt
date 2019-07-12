@@ -1,10 +1,11 @@
 package com.smart.starter.kettle.pool
 
 import com.smart.kettle.common.config.DatabaseMetaProperties
+import com.smart.kettle.meta.CustomDatabaseMeta
 import org.apache.commons.pool2.PooledObject
 import org.apache.commons.pool2.PooledObjectFactory
 import org.apache.commons.pool2.impl.DefaultPooledObject
-import org.pentaho.di.core.database.DatabaseMeta
+import org.pentaho.di.core.KettleEnvironment
 import org.pentaho.di.repository.kdr.KettleDatabaseRepository
 import org.pentaho.di.repository.kdr.KettleDatabaseRepositoryMeta
 
@@ -21,6 +22,7 @@ class KettlePooledObjectFactory : PooledObjectFactory<KettleDatabaseRepository> 
 
     constructor(properties: DatabaseMetaProperties) {
         this.properties = properties
+        KettleEnvironment.init()
     }
 
     /**
@@ -29,7 +31,7 @@ class KettlePooledObjectFactory : PooledObjectFactory<KettleDatabaseRepository> 
     override fun makeObject(): PooledObject<KettleDatabaseRepository> {
         // 创建资源库
         val repository = KettleDatabaseRepository()
-        val databaseMeta = DatabaseMeta(this.properties.name, this.properties.type,
+        val databaseMeta = CustomDatabaseMeta(this.properties.name, this.properties.type,
                 this.properties.access, this.properties.host, this.properties.db,
                 this.properties.port, this.properties.dbUser, this.properties.dbPassword)
         val kettleDatabaseRepositoryMeta = KettleDatabaseRepositoryMeta("kettle","kettle","Transformation description",databaseMeta)

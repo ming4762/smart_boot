@@ -24,6 +24,9 @@ class KettleServiceImpl : KettleService {
      * 执行资源库转换
      */
     override fun excuteDBTransfer(transName: String, params: Array<String>) {
-        KettleActuator.excuteDBTransfer(kettleRepositoryProvider.getRepository(), transName, params)
+        val repository = kettleRepositoryProvider.getRepository()
+        KettleActuator.excuteDBTransfer(repository, transName, params)
+        // 必须归还对象，否则会造成线程阻塞
+        kettleRepositoryProvider.returnRepository(repository)
     }
 }

@@ -48,11 +48,12 @@ class QueueExecuteService(val queueProperties: QueueProperties) {
                         task.execute()
                     } catch (e: Exception) {
                         LOGGER.error("执行任务发生错误", e)
-                        throw e
                     }
                 } catch (e: InterruptedException) {
                     LOGGER.error("服务停止，退出", e)
                     threadQueue.running = false
+                } catch (e: Exception) {
+                    e.printStackTrace()
                 }
             }
         }

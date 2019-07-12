@@ -33,14 +33,14 @@ class SmartTimedTaskServiceImpl : BaseServiceImpl<SmartTimedTaskMapper, SmartTim
     @Transactional(value = "quartzTransactionManager", rollbackFor = [Exception::class])
     override fun batchDelete(tList: List<SmartTimedTaskDO>): Int {
         // 移除定时任务
-        this.quartzService.removeTask(tList.map { SmartTimedTaskDO.convertToMetaData(it) })
+        this.quartzService.removeTask(tList.mapNotNull { it.taskId })
         return super.batchDelete(tList)
     }
 
     @Transactional(value = "quartzTransactionManager", rollbackFor = [Exception::class])
     override fun delete(t: SmartTimedTaskDO): Int {
         // 移除定时任务
-        this.quartzService.removeTask(SmartTimedTaskDO.convertToMetaData(t))
+        this.quartzService.removeTask(t.taskId!!)
         return super.delete(t)
     }
 
@@ -70,7 +70,7 @@ class SmartTimedTaskServiceImpl : BaseServiceImpl<SmartTimedTaskMapper, SmartTim
 
     @Transactional(value = "quartzTransactionManager", rollbackFor = [Exception::class])
     override fun updateById(entity: SmartTimedTaskDO): Boolean {
-        this.quartzService.removeTask(SmartTimedTaskDO.convertToMetaData(entity))
+        this.quartzService.removeTask(entity.taskId!!)
         if (entity.used == true) {
             this.quartzService.addTask(SmartTimedTaskDO.convertToMetaData(entity))
         }
@@ -89,18 +89,17 @@ class SmartTimedTaskServiceImpl : BaseServiceImpl<SmartTimedTaskMapper, SmartTim
         this.update(updateWrapper)
         // 处理任务
         taskIdList.forEach {
-            val task = SmartTimedTaskDO()
-            task.taskId = it
             if (enable) {
                 // 判断任务是否存在
-                val jobDetail = this.quartzService.getJob(SmartTimedTaskDO.convertToMetaData(task))
+                val jobDetail = this.quartzService.getJob(it)
                 if (jobDetail == null) {
+                    val task = this.getById(it)
                     this.quartzService.addTask(SmartTimedTaskDO.convertToMetaData(task))
                 } else {
-                    this.quartzService.resumeTask(SmartTimedTaskDO.convertToMetaData(task))
+                    this.quartzService.resumeTask(it)
                 }
             } else {
-                this.quartzService.pauseTask(SmartTimedTaskDO.convertToMetaData(task))
+                this.quartzService.pauseTask(it)
             }
         }
     }
@@ -114,16 +113,16 @@ class SmartTimedTaskServiceImpl : BaseServiceImpl<SmartTimedTaskMapper, SmartTim
             this.update(updateWrapper)
             if (it.used == true) {
                 // 判断任务是否存在
-                val jobDetail = this.quartzService.getJob(SmartTimedTaskDO.convertToMetaData(it))
+                val jobDetail = this.quartzService.getJob(it.taskId!!)
                 if (jobDetail == null) {
                     // 查询任务
                     val taskQuery = this.getById(it.taskId)
                     this.quartzService.addTask(SmartTimedTaskDO.convertToMetaData(taskQuery))
                 } else {
-                    this.quartzService.resumeTask(SmartTimedTaskDO.convertToMetaData(it))
+                    this.quartzService.resumeTask(it.taskId!!)
                 }
             } else {
-                this.quartzService.pauseTask(SmartTimedTaskDO.convertToMetaData(it))
+                this.quartzService.pauseTask(it.taskId!!)
             }
         }
     }

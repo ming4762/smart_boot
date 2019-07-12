@@ -1,5 +1,6 @@
 package com.smart.starter.quartz.service
 
+import com.smart.starter.quartz.constants.QuartzConstants
 import com.smart.starter.quartz.properties.QuartzMetaData
 import org.quartz.*
 import org.slf4j.LoggerFactory
@@ -35,7 +36,7 @@ class QuartzService {
                 val jobDetail = JobBuilder.newJob(clazz)
                         .withIdentity(metaData.id)
                         .build()
-                jobDetail.jobDataMap["task"] = metaData.data
+                jobDetail.jobDataMap[QuartzConstants.JOB_MATE_DATA.name] = metaData.data
                 val trigger = TriggerBuilder.newTrigger()
                         .withIdentity(metaData.id)
                         .withSchedule(CronScheduleBuilder.cronSchedule(metaData.cron))
@@ -72,19 +73,19 @@ class QuartzService {
      * @throws Exception
      */
     @Throws(Exception::class)
-    fun <T> removeTask(task: QuartzMetaData<T>): Boolean {
+    fun removeTask(id: String): Boolean {
         val scheduler = this.schedulerFactoryBean.scheduler
-        return scheduler.deleteJob(this.getJobKeyByTask(task))
+        return scheduler.deleteJob(this.getJobKey(id))
     }
 
     /**
      * 移除定时任务
      */
     @Throws(Exception::class)
-    fun <T> removeTask(taskList: List<QuartzMetaData<T>>): Boolean {
+    fun removeTask(idList: List<String>): Boolean {
         val scheduler = this.schedulerFactoryBean.scheduler
         return scheduler.deleteJobs(
-                taskList.map { this.getJobKeyByTask(it) }
+                idList.map { this.getJobKey(it) }
         )
     }
 
@@ -94,9 +95,9 @@ class QuartzService {
      * @throws Exception
      */
     @Throws(Exception::class)
-    fun <T> resumeTask(task: QuartzMetaData<T>) {
+    fun resumeTask(id: String) {
         val scheduler = this.schedulerFactoryBean.scheduler
-        scheduler.resumeJob(this.getJobKeyByTask(task))
+        scheduler.resumeJob(this.getJobKey(id))
     }
 
     /**
@@ -105,9 +106,9 @@ class QuartzService {
      * @throws Exception
      */
     @Throws(Exception::class)
-    fun <T> pauseTask(task: QuartzMetaData<T>) {
+    fun pauseTask(id: String) {
         val scheduler = this.schedulerFactoryBean.scheduler
-        scheduler.pauseJob(this.getJobKeyByTask(task))
+        scheduler.pauseJob(this.getJobKey(id))
     }
 
     /**
@@ -116,9 +117,9 @@ class QuartzService {
      * @return
      */
     @Throws(Exception::class)
-    fun <T> getJob(task: QuartzMetaData<T>): JobDetail? {
+    fun getJob(id: String): JobDetail? {
         val scheduler = this.schedulerFactoryBean.scheduler
-        return scheduler.getJobDetail(this.getJobKeyByTask(task))
+        return scheduler.getJobDetail(this.getJobKey(id))
     }
 
 
@@ -129,5 +130,9 @@ class QuartzService {
      */
     private fun <T> getJobKeyByTask(task: QuartzMetaData<T>): JobKey {
         return JobKey.jobKey(task.id)
+    }
+
+    private fun getJobKey(id: String): JobKey {
+        return JobKey.jobKey(id)
     }
 }

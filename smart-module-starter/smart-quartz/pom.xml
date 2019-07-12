@@ -43,6 +43,18 @@
 			<artifactId>smart-log-common</artifactId>
 			<version>${smart-log-common.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>com.smart</groupId>
+			<artifactId>smart-quartz-queue-common</artifactId>
+			<version>${smart-quartz-queue-common.version}</version>
+		</dependency>
+
+		<!--引入kettle支持-->
+		<dependency>
+			<groupId>com.smart</groupId>
+			<artifactId>kettle-spring-boot-starter</artifactId>
+			<version>${kettle-spring-boot-starter.version}</version>
+		</dependency>
 	</dependencies>
 
 	<build>

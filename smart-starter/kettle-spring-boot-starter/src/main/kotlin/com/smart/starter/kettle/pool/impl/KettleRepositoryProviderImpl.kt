@@ -5,6 +5,7 @@ import com.smart.starter.kettle.pool.KettlePooledObjectFactory
 import com.smart.starter.kettle.pool.KettleRepositoryProvider
 import org.apache.commons.pool2.impl.GenericObjectPool
 import org.pentaho.di.repository.kdr.KettleDatabaseRepository
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.InitializingBean
 
 /**
@@ -13,6 +14,10 @@ import org.springframework.beans.factory.InitializingBean
  * 2019/7/11 下午3:23
  */
 class KettleRepositoryProviderImpl(private var databaseMetaProperties: DatabaseMetaProperties) : KettleRepositoryProvider, InitializingBean {
+
+    companion object {
+        private val LOGGER = LoggerFactory.getLogger(KettleRepositoryProviderImpl :: class.java)
+    }
 
     /**
      * 连接池
@@ -23,6 +28,9 @@ class KettleRepositoryProviderImpl(private var databaseMetaProperties: DatabaseM
      * 获取资源库连接
      */
     override fun getRepository(): KettleDatabaseRepository {
+        if (this.objectPool.numIdle == 0) {
+            LOGGER.warn("线程池暂无空闲资源库对象")
+        }
         return objectPool.borrowObject()
     }
 
