@@ -13,10 +13,13 @@ import org.springframework.scheduling.quartz.QuartzJobBean
  */
 abstract class QuartzQueueHandler : QuartzJobBean(), QueueTaskHandler {
 
+    var jobContext: JobExecutionContext? = null
+
     /**
      * 定时任务
      */
     final override fun executeInternal(context: JobExecutionContext) {
+        this.jobContext = context
         QueueUtils.addTask(this, this.getQueueName())
     }
 
