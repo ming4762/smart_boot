@@ -35,7 +35,7 @@ abstract class QuartzQueueHandler : QuartzJobBean(), QueueTaskHandler {
      */
     abstract fun handle()
 
-    fun getQueueName(): String {
+    open fun getQueueName(): String {
         return QueueExecuteService.DEFAULT_QUEUE_NAME
     }
 }
