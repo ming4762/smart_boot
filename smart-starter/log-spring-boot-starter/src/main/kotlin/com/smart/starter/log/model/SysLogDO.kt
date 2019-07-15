@@ -12,7 +12,7 @@ import java.util.*
  * 2019/6/28 下午4:08
  */
 @TableName("sys_log")
-class SysLogDO : BaseModel() {
+open class SysLogDO : BaseModel() {
 
     @TableId(type = IdType.UUID)
     var logId: String? = null
