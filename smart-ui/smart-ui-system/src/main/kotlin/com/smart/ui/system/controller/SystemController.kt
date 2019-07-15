@@ -75,4 +75,20 @@ class SystemController {
     fun menuConfig(@RequestParam parameter: Map<String, Any?>): ModelAndView {
         return ModelAndView("system/menu/menuConfig", parameter)
     }
+
+    /**
+     * 跳转到403页面
+     */
+    @RequestMapping("/error404")
+    fun error404(): ModelAndView {
+        return ModelAndView("system/error/403")
+    }
+
+    /**
+     * 跳转日志管理页面
+     */
+    @RequestMapping("/log")
+    fun log(@RequestParam parameter: Map<String, Any?>): ModelAndView {
+        return ModelAndView("system/log/log", parameter)
+    }
 }
