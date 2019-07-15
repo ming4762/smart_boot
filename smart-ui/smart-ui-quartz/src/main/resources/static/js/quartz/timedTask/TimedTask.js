@@ -23,7 +23,9 @@ define(["require", "exports", "PageBuilder", "plugins/table/SmartTableCRUD", "ut
                             visible: false,
                             displayControl: false
                         },
-                        form: {}
+                        form: {
+                            visible: false
+                        }
                     },
                     {
                         label: '任务名称',
@@ -32,7 +34,10 @@ define(["require", "exports", "PageBuilder", "plugins/table/SmartTableCRUD", "ut
                             width: 100,
                             fixed: true
                         },
-                        form: {}
+                        form: {
+                            span: 12,
+                            rules: true
+                        }
                     },
                     {
                         label: '任务类',
@@ -48,15 +53,21 @@ define(["require", "exports", "PageBuilder", "plugins/table/SmartTableCRUD", "ut
                         table: {
                             width: 120
                         },
-                        form: {}
+                        form: {
+                            rules: true
+                        }
                     },
                     {
                         label: '启用',
                         prop: 'used',
+                        type: 'boolean',
                         table: {
                             sortable: true
                         },
-                        form: {}
+                        form: {
+                            span: 12,
+                            defaultValue: true
+                        }
                     },
                     {
                         label: '预设类',
@@ -64,7 +75,9 @@ define(["require", "exports", "PageBuilder", "plugins/table/SmartTableCRUD", "ut
                         table: {
                             width: 180
                         },
-                        form: {}
+                        form: {
+                            span: 12
+                        }
                     },
                     {
                         label: '任务参数',
@@ -148,7 +161,10 @@ define(["require", "exports", "PageBuilder", "plugins/table/SmartTableCRUD", "ut
         <el-tooltip class="item" effect="dark" :content="row.used === true ? '关闭' : '启用'" placement="top">
           <el-button @click="handleOpenClose(row)" type="success" :icon="row.used === true ? 'el-icon-video-pause' : 'el-icon-video-play'" size="mini"/>
         </el-tooltip>
-          </template>
+      </template>
+      
+      <!--启用form插槽-->
+      
     </smart-table-crud>
   </div>
   `
