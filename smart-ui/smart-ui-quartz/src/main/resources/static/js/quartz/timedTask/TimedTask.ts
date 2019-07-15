@@ -57,7 +57,7 @@ const page = {
           label: '表达式',
           prop: 'cron',
           table: {
-            width: 100
+            width: 120
           },
           form: {}
         },
@@ -66,6 +66,22 @@ const page = {
           prop: 'used',
           table: {
             sortable: true
+          },
+          form: {}
+        },
+        {
+          label: '预设类',
+          prop: 'presetClass',
+          table: {
+            width: 180
+          },
+          form: {}
+        },
+        {
+          label: '任务参数',
+          prop: 'taskParameter',
+          table: {
+            minWidth: 220
           },
           form: {}
         },

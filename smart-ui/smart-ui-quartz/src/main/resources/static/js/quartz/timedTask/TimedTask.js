@@ -46,7 +46,7 @@ define(["require", "exports", "PageBuilder", "plugins/table/SmartTableCRUD", "ut
                         label: '表达式',
                         prop: 'cron',
                         table: {
-                            width: 100
+                            width: 120
                         },
                         form: {}
                     },
@@ -55,6 +55,22 @@ define(["require", "exports", "PageBuilder", "plugins/table/SmartTableCRUD", "ut
                         prop: 'used',
                         table: {
                             sortable: true
+                        },
+                        form: {}
+                    },
+                    {
+                        label: '预设类',
+                        prop: 'presetClass',
+                        table: {
+                            width: 180
+                        },
+                        form: {}
+                    },
+                    {
+                        label: '任务参数',
+                        prop: 'taskParameter',
+                        table: {
+                            minWidth: 220
                         },
                         form: {}
                     },
