@@ -61,4 +61,5 @@ class SmartTimedTaskDO : BaseModel() {
 
     var taskParameter: String? = null
 
+    var queueName: String? = null
 }

@@ -38,4 +38,12 @@ class RepositoryTransQuartzQueueHandler : QuartzQueueHandler() {
             e.printStackTrace()
         }
     }
+
+    /**
+     * 获取队列名称
+     */
+    override fun getQueueName(): String {
+        val task = this.jobContext?.jobDetail?.jobDataMap?.get(QuartzConstants.JOB_MATE_DATA.name) as SmartTimedTaskDO?
+        return task?.queueName ?: super.getQueueName()
+    }
 }
