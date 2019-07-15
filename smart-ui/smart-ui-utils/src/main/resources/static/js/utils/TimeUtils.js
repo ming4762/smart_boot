@@ -1,7 +1,7 @@
 define(["require", "exports", "utils/ValidateUtils"], function (require, exports, ValidateUtils_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    class TimeUtil {
+    class TimeUtils {
         static formatTime(time) {
             if (ValidateUtils_1.default.validateNull(time)) {
                 return '';
@@ -91,5 +91,5 @@ define(["require", "exports", "utils/ValidateUtils"], function (require, exports
             return year + '-' + (month < 10 ? ('0' + month) : month) + '-' + (day < 10 ? ('0' + day) : day);
         }
     }
-    exports.default = TimeUtil;
+    exports.default = TimeUtils;
 });

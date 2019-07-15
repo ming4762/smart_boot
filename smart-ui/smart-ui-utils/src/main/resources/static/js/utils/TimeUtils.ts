@@ -4,7 +4,7 @@ import Validate from 'utils/ValidateUtils'
  * 时间工具类
  * @author zhongming
  */
-export default class TimeUtil {
+export default class TimeUtils {
 
   /**
    * 格式化时间
