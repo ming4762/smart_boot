@@ -40,22 +40,23 @@ define(["require", "exports", "PageBuilder", "plugins/table/SmartTableCRUD", "ut
                         }
                     },
                     {
+                        label: 'cron表达式',
+                        prop: 'cron',
+                        table: {
+                            width: 120
+                        },
+                        form: {
+                            rules: true,
+                            span: 12
+                        }
+                    },
+                    {
                         label: '任务类',
                         prop: 'clazz',
                         table: {
                             width: 200
                         },
                         form: {}
-                    },
-                    {
-                        label: '表达式',
-                        prop: 'cron',
-                        table: {
-                            width: 120
-                        },
-                        form: {
-                            rules: true
-                        }
                     },
                     {
                         label: '启用',
@@ -73,7 +74,8 @@ define(["require", "exports", "PageBuilder", "plugins/table/SmartTableCRUD", "ut
                         label: '预设类',
                         prop: 'presetClass',
                         table: {
-                            width: 180
+                            width: 180,
+                            formatter: (row, column, value) => this.presetClass[value] ? this.presetClass[value] : value
                         },
                         form: {
                             span: 12
@@ -85,7 +87,19 @@ define(["require", "exports", "PageBuilder", "plugins/table/SmartTableCRUD", "ut
                         table: {
                             minWidth: 220
                         },
-                        form: {}
+                        form: {
+                            span: 12
+                        }
+                    },
+                    {
+                        label: '队列',
+                        prop: 'queueName',
+                        table: {
+                            minWidth: 100
+                        },
+                        form: {
+                            span: 12
+                        }
                     },
                     {
                         label: '备注',
@@ -111,8 +125,12 @@ define(["require", "exports", "PageBuilder", "plugins/table/SmartTableCRUD", "ut
                     add: {
                         rowShow: false
                     }
-                }
+                },
+                presetClass: {}
             };
+        },
+        created() {
+            this.loadPresetClass();
         },
         methods: {
             handleOpenClose(task) {
@@ -137,6 +155,14 @@ define(["require", "exports", "PageBuilder", "plugins/table/SmartTableCRUD", "ut
                         }
                     });
                 });
+            },
+            loadPresetClass() {
+                ApiService_1.default.postAjax('quartz/timeTask/queryPreset', {})
+                    .then(data => {
+                    this.presetClass = data;
+                }).catch(error => {
+                    this.errorMessage('加载预设类信息失败', error);
+                });
             }
         },
         template: `
@@ -147,7 +173,7 @@ define(["require", "exports", "PageBuilder", "plugins/table/SmartTableCRUD", "ut
       deleteUrl="quartz/timeTask/batchDelete"
       saveUpdateUrl="quartz/timeTask/saveUpdate"
       :keys="['taskId']"
-      labelWidth="80px"
+      labelWidth="100px"
       :height="computedTableHeight"
       :columnOptions="columnOptions"
       tableName="定时任务"
@@ -162,9 +188,18 @@ define(["require", "exports", "PageBuilder", "plugins/table/SmartTableCRUD", "ut
           <el-button @click="handleOpenClose(row)" type="success" :icon="row.used === true ? 'el-icon-video-pause' : 'el-icon-video-play'" size="mini"/>
         </el-tooltip>
       </template>
-      
-      <!--启用form插槽-->
-      
+      <!--预设类form插槽-->
+      <template v-slot:form-presetClass="{model}">
+        <el-form-item label="预设类">
+          <el-select v-model="model['presetClass']" placeholder="请选择">
+            <el-option
+              v-for="(value, key) in presetClass"
+              :label="value"
+              :value="key"
+              :key="key"/>
+          </el-select>
+        </el-form-item>
+      </template>
     </smart-table-crud>
   </div>
   `
