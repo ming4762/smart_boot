@@ -1,5 +1,6 @@
 package com.smart.auth.config
 
+import com.smart.auth.shiro.CustomAuthorizationAttributeSourceAdvisor
 import com.smart.auth.shiro.OptionsAdoptFilter
 import com.smart.auth.shiro.StatelessRealm
 import com.smart.auth.shiro.TokenSessionManager
@@ -106,9 +107,11 @@ class ShiroConfiguration {
      */
     @Bean
     fun authorizationAttributeSourceAdvisor(securityManager: SecurityManager): AuthorizationAttributeSourceAdvisor {
-        val authorizationAttributeSourceAdvisor = AuthorizationAttributeSourceAdvisor()
-        authorizationAttributeSourceAdvisor.securityManager = securityManager
-        return authorizationAttributeSourceAdvisor
+        val advisor = CustomAuthorizationAttributeSourceAdvisor(this.development)
+        advisor.securityManager = securityManager
+//        val authorizationAttributeSourceAdvisor = AuthorizationAttributeSourceAdvisor()
+//        authorizationAttributeSourceAdvisor.securityManager = securityManager
+        return advisor
     }
 
     @Bean
