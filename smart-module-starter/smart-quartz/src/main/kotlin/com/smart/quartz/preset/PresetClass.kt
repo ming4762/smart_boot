@@ -7,5 +7,7 @@ package com.smart.quartz.preset
  */
 enum class PresetClass(var value: String, var clazz: String) {
     // 执行资源库kettle
-    KETTLE_REPOSITORY_TRANS("资源库kettle","com.smart.quartz.preset.kettle.RepositoryTransQuartzQueueHandler")
+    KETTLE_REPOSITORY_TRANS("资源库kettle","com.smart.quartz.preset.kettle.RepositoryTransQuartzQueueHandler"),
+    // 执行资源库job
+    KETTLE_REPOSITORY_JOB("资源库job","com.smart.quartz.preset.kettle.RepositoryJobQuartzQueueHandler")
 }
