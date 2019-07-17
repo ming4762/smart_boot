@@ -7,6 +7,7 @@
   <div th:replace="/common/common-resources :: common-resources-element-css"></div>
   <link rel="stylesheet" th:href="@{/css/common.css}"/>
   <div th:replace="/common/common-resources :: common-resources-contextPath"></div>
+  <link rel="stylesheet" th:href="@{/css/error/error.css}"/>
 </head>
 <body>
   <div id="vue-container" class="full-height">
@@ -19,5 +20,7 @@
 <div th:replace="/common/common-resources :: common-resources-requireJS"></div>
 
 <script th:src="@{/js/common.js}"></script>
+<!--引入页面js-->
+<script th:src="@{/js/system/error/error403Page.js}"></script>
 </body>
 </html>

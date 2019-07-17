@@ -22,12 +22,6 @@ import org.springframework.context.annotation.Lazy
 import org.springframework.util.StringUtils
 import javax.servlet.Filter
 
-
-
-
-
-
-
 /**
  * shiro 配置类
  * @author ming
