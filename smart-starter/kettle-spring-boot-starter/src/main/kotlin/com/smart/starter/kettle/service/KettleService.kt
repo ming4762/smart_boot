@@ -7,5 +7,7 @@ package com.smart.starter.kettle.service
  */
 interface KettleService {
 
-    fun excuteDBTransfer(transName: String, params: Array<String> = arrayOf())
+    fun excuteDBTransfer(transName: String, directoryName: String? = null, params: Array<String> = arrayOf())
+
+    fun excuteDBJob(name: String, directoryName: String? = null, params: Map<String, String>)
 }

@@ -28,7 +28,7 @@ class KettleRepositoryProviderImpl(private var databaseMetaProperties: DatabaseM
      * 获取资源库连接
      */
     override fun getRepository(): KettleDatabaseRepository {
-        if (this.objectPool.numIdle == 0) {
+        if (this.objectPool.numWaiters > 0) {
             LOGGER.warn("线程池暂无空闲资源库对象")
         }
         return objectPool.borrowObject()

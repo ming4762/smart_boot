@@ -23,9 +23,20 @@ class KettleServiceImpl : KettleService {
     /**
      * 执行资源库转换
      */
-    override fun excuteDBTransfer(transName: String, params: Array<String>) {
+    override fun excuteDBTransfer(transName: String, directoryName: String?, params: Array<String>) {
         val repository = kettleRepositoryProvider.getRepository()
-        KettleActuator.excuteDBTransfer(repository, transName, params)
+        KettleActuator.excuteDBTransfer(repository, transName, directoryName, params)
+        // 必须归还对象，否则会造成线程阻塞
+        kettleRepositoryProvider.returnRepository(repository)
+    }
+
+
+    /**
+     * 执行job
+     */
+    override fun excuteDBJob(name: String, directoryName: String?, params: Map<String, String>) {
+        val repository = kettleRepositoryProvider.getRepository()
+        KettleActuator.excuteDBJob(repository, name, directoryName, params)
         // 必须归还对象，否则会造成线程阻塞
         kettleRepositoryProvider.returnRepository(repository)
     }
