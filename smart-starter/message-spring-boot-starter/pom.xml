@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.smart</groupId>
+        <artifactId>smart-starter</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+    </parent>
+    <artifactId>message-spring-boot-starter</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>message-spring-boot-starter</name>
+    <description>消息服务类</description>
+
+    <properties>
+        <!--阿里云版本-->
+        <liyun-java-sdk-core.version>4.0.6</liyun-java-sdk-core.version>
+        <!--短信包版本-->
+        <aliyun-java-sdk-dysmsapi.version>1.1.0</aliyun-java-sdk-dysmsapi.version>
+    </properties>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>com.aliyun</groupId>
+            <artifactId>aliyun-java-sdk-core</artifactId>
+            <version>${liyun-java-sdk-core.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.aliyun</groupId>
+            <artifactId>aliyun-java-sdk-dysmsapi</artifactId>
+            <version>${aliyun-java-sdk-dysmsapi.version}</version>
+        </dependency>
+
+        <!--引入common工具包-->
+        <dependency>
+            <groupId>com.smart</groupId>
+            <artifactId>smart-common</artifactId>
+            <version>${smart-common.version}</version>
+        </dependency>
+
+        <!--引入认证工具包-->
+        <dependency>
+            <groupId>com.smart</groupId>
+            <artifactId>smart-auth-common</artifactId>
+            <version>${smart-auth-common.version}</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+    </build>
+
+</project>

@@ -23,6 +23,7 @@
         <module>file-spring-boot-starter</module>
         <module>kettle-spring-boot-starter</module>
         <module>log-spring-boot-starter</module>
+        <module>message-spring-boot-starter</module>
         <module>queue-spring-boot-starter</module>
         <module>smartquartz-spring-boot-starter</module>
     </modules>
