@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <title>登录系统</title>
   <!--引入element ui-->
-  <div th:replace="/common/common-resources :: common-resources-element-css"></div>
+  <div th:replace="common/common-resources :: common-resources-element-css"></div>
   <!--<link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">-->
   <link rel="stylesheet" th:href="@{/css/common.css}">
   <link rel="stylesheet" th:href="@{/css/login/login.css}">
@@ -15,7 +15,7 @@
       localStorage.setItem('API_URL', apiURL)
     }
   </script>
-  <div th:replace="/common/common-resources :: common-resources-contextPath"></div>
+  <div th:replace="common/common-resources :: common-resources-contextPath"></div>
 </head>
 <body>
     <div class="full-height login-outer" id="login-container" v-cloak>
@@ -35,10 +35,10 @@
 <!--引入axios-->
 <script th:src="@{/axios/0.19.0/axios.min.js}"></script>
 <!--引入vue-->
-<div th:replace="/common/common-resources :: common-resources-vue"></div>
+<div th:replace="common/common-resources :: common-resources-vue"></div>
 <!--引入element ui-->
-<div th:replace="/common/common-resources :: common-resources-element-js"></div>
-<div th:replace="/common/common-resources :: common-resources-requireJS"></div>
+<div th:replace="common/common-resources :: common-resources-element-js"></div>
+<div th:replace="common/common-resources :: common-resources-requireJS"></div>
 
 <script th:src="@{/js/common.js}"></script>
 <!--引入页面js-->
