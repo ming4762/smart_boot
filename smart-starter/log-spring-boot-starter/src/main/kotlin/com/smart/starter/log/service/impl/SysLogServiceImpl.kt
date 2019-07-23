@@ -13,7 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 
 /**
- *
+ * 日志服务层
  * @author ming
  * 2019/6/28 下午4:21
  */

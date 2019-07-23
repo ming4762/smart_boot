@@ -134,8 +134,9 @@ open class BaseServiceImpl<K: CloudBaseMapper<T>, T: BaseModel> : ServiceImpl<K,
      */
     override fun listByIds(idList: Collection<Serializable>): MutableCollection<T> {
         if (idList.isEmpty()) return mutableListOf()
-        if (idList.size == 1) return mutableListOf(this.getById(idList.first()))
-        return super.listByIds(idList)
+        val distinctList = idList.distinct()
+        if (distinctList.size == 1) return mutableListOf(this.getById(distinctList.first()))
+        return super.listByIds(distinctList)
     }
 
 
