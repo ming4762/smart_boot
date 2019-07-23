@@ -1,6 +1,7 @@
 package com.smart.auth.service
 
 import com.smart.auth.model.vo.OnlineUserVO
+import java.io.Serializable
 
 /**
  *
@@ -10,4 +11,8 @@ import com.smart.auth.model.vo.OnlineUserVO
 interface AuthService {
 
     fun listOnlineUser(): List<OnlineUserVO>
+
+    fun removeSession(sessionIdList: List<Serializable>): Int
+
+    fun removeUser(userIdList: List<String>): Int
 }

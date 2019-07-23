@@ -4,8 +4,10 @@ import com.smart.auth.model.vo.OnlineUserVO
 import com.smart.auth.service.AuthService
 import com.smart.common.message.Result
 import org.apache.shiro.SecurityUtils
+import org.apache.shiro.authz.annotation.RequiresPermissions
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
@@ -38,10 +40,39 @@ class AuthController {
     /**
      * 获取在线用户
      */
+    @RequiresPermissions("auth:user:listOnlineUser")
     @PostMapping("auth/listOnlineUser")
     fun listOnlineUser(): Result<List<OnlineUserVO>?> {
         return try {
             Result.success(this.authService.listOnlineUser())
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Result.failure(e.message)
+        }
+    }
+
+    /**
+     * 移除用户
+     */
+    @RequiresPermissions("auth:user:remove")
+    @PostMapping("auth/removeUser")
+    fun removeUser(@RequestBody userIdList: List<String>): Result<Int?> {
+        return try {
+            Result.success(this.authService.removeUser(userIdList))
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Result.failure(e.message)
+        }
+    }
+
+    /**
+     * 移除用户
+     */
+    @RequiresPermissions("auth:user:remove")
+    @PostMapping("auth/removeSession")
+    fun removeSession(@RequestBody sessionIdList: List<String>): Result<Int?> {
+        return try {
+            Result.success(this.authService.removeSession(sessionIdList))
         } catch (e: Exception) {
             e.printStackTrace()
             Result.failure(e.message)
