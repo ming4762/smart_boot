@@ -5,11 +5,12 @@ import com.smart.auth.shiro.OptionsAdoptFilter
 import com.smart.auth.shiro.StatelessRealm
 import com.smart.auth.shiro.TokenSessionManager
 import com.smart.shiro.redis.cache.RedisCacheManager
+import com.smart.shiro.redis.session.RedisSessionDAO
 import com.smart.starter.redis.service.RedisService
 import org.apache.shiro.cache.CacheManager
 import org.apache.shiro.mgt.SecurityManager
 import org.apache.shiro.session.mgt.SessionManager
-import org.apache.shiro.session.mgt.eis.EnterpriseCacheSessionDAO
+import org.apache.shiro.session.mgt.eis.SessionDAO
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager
@@ -73,11 +74,11 @@ class ShiroConfiguration {
      * 配置核心事物管理器
      */
     @Bean
-    fun securityManager(@Autowired @Lazy redisService: RedisService): SecurityManager {
+    fun securityManager(@Autowired @Lazy redisService: RedisService, @Autowired sessionDAO: SessionDAO): SecurityManager {
         val securityManager = DefaultWebSecurityManager()
         securityManager.setRealm(statelessRealm())
         // 使用自定义session 管理器
-        securityManager.sessionManager = sessionManager(redisService)
+        securityManager.sessionManager = sessionManager(sessionDAO)
         securityManager.cacheManager = createRedisCacheManager(redisService)
         return securityManager
     }
@@ -85,10 +86,15 @@ class ShiroConfiguration {
     /**
      * 配置sessionmanager
      */
-    fun sessionManager(redisService: RedisService): SessionManager {
+    fun sessionManager(sessionDAO: SessionDAO): SessionManager {
         val sessionManager = TokenSessionManager()
-        sessionManager.sessionDAO = EnterpriseCacheSessionDAO()
+        sessionManager.sessionDAO = sessionDAO
         return sessionManager
+    }
+
+    @Bean
+    fun sessionDAO(@Autowired @Lazy redisService: RedisService): SessionDAO {
+        return RedisSessionDAO(redisService)
     }
 
 
