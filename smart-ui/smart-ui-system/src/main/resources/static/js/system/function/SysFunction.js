@@ -223,7 +223,7 @@ define(["require", "exports", "ComponentBuilder", "plugins/table/SmartTableCRUD"
         </template>
          <!-- 图标form插槽 -->
         <template slot="form-icon" slot-scope="{ model }">
-          <el-form-item label="图标1">
+          <el-form-item label="图标">
             <smart-icon-select v-model="model.icon"></smart-icon-select>
           </el-form-item>
         </template>

@@ -91,4 +91,12 @@ class SystemController {
     fun log(@RequestParam parameter: Map<String, Any?>): ModelAndView {
         return ModelAndView("system/log/log", parameter)
     }
+
+    /**
+     * 跳转在线用户页面
+     */
+    @RequestMapping("/onlineUser")
+    fun onlineUser(@RequestParam parameter: Map<String, Any?>): ModelAndView {
+        return ModelAndView("system/auth/onlineUser", parameter)
+    }
 }

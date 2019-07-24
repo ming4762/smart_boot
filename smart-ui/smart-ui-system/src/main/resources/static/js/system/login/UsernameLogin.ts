@@ -57,7 +57,6 @@ export default {
             username: this.loginFormModel.username,
             password: createPassword(this.loginFormModel.username, this.loginFormModel.password)
           }).then(data => {
-            console.log(data)
             // 保存token
             ApiService.saveToken(data.Authorization)
             // 保存权限信息

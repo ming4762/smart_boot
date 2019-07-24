@@ -36,7 +36,6 @@ define(["require", "exports", "utils/ApiService", "mixins/MessageMixins", "utils
                             username: this.loginFormModel.username,
                             password: createPassword(this.loginFormModel.username, this.loginFormModel.password)
                         }).then(data => {
-                            console.log(data);
                             ApiService_1.default.saveToken(data.Authorization);
                             StoreUtil_1.default.setStore(Constants_1.STORE_KEYS.USER_PREMISSION, data.permission, StoreUtil_1.default.SESSION_TYPE);
                             window.location.href = `${contextPath}ui/system/home`;
