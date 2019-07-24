@@ -122,7 +122,6 @@ define(["require", "exports", "utils/ApiService", "mixins/MessageMixins", "utils
                 });
             },
             handleSave() {
-                console.log(this);
                 const checkNodeList = this.$refs['menuTree'].getCheckedNodes(false, true);
                 if (checkNodeList !== null) {
                     const checkData = [];
@@ -137,10 +136,13 @@ define(["require", "exports", "utils/ApiService", "mixins/MessageMixins", "utils
                             });
                         }
                     });
+                    this.showHideFullScreenloading(true);
                     ApiService_1.default.postAjax('sys/role/authorize', checkData)
                         .then(result => {
+                        this.showHideFullScreenloading(false);
                         this.successMessage('角色授权成功');
                     }).catch(error => {
+                        this.showHideFullScreenloading(false);
                         this.errorMessage('角色授权发生错误！', error);
                     });
                 }

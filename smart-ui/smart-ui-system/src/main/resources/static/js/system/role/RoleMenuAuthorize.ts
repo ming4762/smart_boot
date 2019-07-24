@@ -149,7 +149,6 @@ export default {
      * 执行保存操作
      */
     handleSave () {
-      console.log(this)
       const checkNodeList: any[] = this.$refs['menuTree'].getCheckedNodes(false, true)
       if (checkNodeList !== null) {
         const checkData = []
@@ -165,11 +164,14 @@ export default {
             })
           }
         })
+        this.showHideFullScreenloading(true)
         // 保存数据
         ApiService.postAjax('sys/role/authorize', checkData)
             .then(result => {
+              this.showHideFullScreenloading(false)
               this.successMessage('角色授权成功')
             }).catch(error => {
+              this.showHideFullScreenloading(false)
               this.errorMessage('角色授权发生错误！', error)
             })
       }
