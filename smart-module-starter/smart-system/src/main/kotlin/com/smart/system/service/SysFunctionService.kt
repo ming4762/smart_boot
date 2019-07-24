@@ -20,9 +20,4 @@ interface SysFunctionService : BaseService<SysFunctionDO> {
      * 查询功能和下级
      */
     fun queryWithChildren(functionId: String): Tree<SysFunctionDO>?
-
-    /**
-     * 新增/更新
-     */
-    fun saveUpdate (entity: SysFunctionDO): SysFunctionDO
 }

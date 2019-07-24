@@ -136,7 +136,6 @@ class SysFunctionServiceImpl : BaseServiceImpl<SysFunctionMapper, SysFunctionDO>
      * 重写保存修改方法
      */
     @Transactional(rollbackFor = [Exception :: class])
-    @Deprecated("已废弃")
     override fun saveOrUpdate(entity: SysFunctionDO): Boolean {
         // 判断是插入还是更新
         var isInsert = true
@@ -147,7 +146,7 @@ class SysFunctionServiceImpl : BaseServiceImpl<SysFunctionMapper, SysFunctionDO>
         }
 
         // 同时更新默认的菜单配置
-        if (entity.functionType != SysFunctionDO.BUTTON) {
+        if (entity.functionType != SysFunctionDO.BUTTON && entity.menuIs == true) {
             this.saveUpdateDefaultMenu(entity, isInsert)
         }
         if (isInsert) {
@@ -159,35 +158,6 @@ class SysFunctionServiceImpl : BaseServiceImpl<SysFunctionMapper, SysFunctionDO>
             entity.updateUserId = AuthUtils.getCurrentUserId()
             return this.updateById(entity)
         }
-    }
-
-    /**
-     * 重写保存修改方法
-     */
-    @Transactional(rollbackFor = [Exception :: class])
-    override fun saveUpdate(entity: SysFunctionDO): SysFunctionDO {
-        // 判断是插入还是更新
-        var isInsert = true
-        if (!StringUtils.isEmpty(entity.functionId) && this.getById(entity.functionId) != null) {
-            isInsert = false
-        } else {
-            entity.functionId = UUIDGenerator.getUUID()
-        }
-
-        // 同时更新默认的菜单配置
-        if (entity.functionType != "2") {
-            this.saveUpdateDefaultMenu(entity, isInsert)
-        }
-        if (isInsert) {
-            entity.createTime = Date()
-            entity.createUserId = AuthUtils.getCurrentUserId()
-            this.save(entity)
-        } else {
-            entity.updateTime = Date()
-            entity.updateUserId = AuthUtils.getCurrentUserId()
-            this.updateById(entity)
-        }
-        return entity
     }
 
 
