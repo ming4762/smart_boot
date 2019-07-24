@@ -128,6 +128,7 @@ define(["require", "exports", "utils/CommonUtils"], function (require, exports, 
       :width="item.width"
       :minWidth="item.minWidth"
       :fixed="item.fixed"
+      :type="item.type"
       :render-header="item.renderHeader"
       :sortable="item.sortable === true ? 'custom' : false"
       :resizable="item.resizable"
