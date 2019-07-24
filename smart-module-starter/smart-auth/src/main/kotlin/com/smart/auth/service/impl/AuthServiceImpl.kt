@@ -31,8 +31,8 @@ class AuthServiceImpl : AuthService {
                     val onlineUserVO = OnlineUserVO()
                     onlineUserVO.user = it.value.first().user
                     onlineUserVO.onlineNum = it.value.size
-                    onlineUserVO.sessionIdList = it.value.map { onlineUserDTO ->
-                        onlineUserDTO.sessionId
+                    onlineUserVO.sessionList = it.value.map { onlineUserDTO ->
+                        onlineUserDTO.session
                     }
                     return@map onlineUserVO
                 }
@@ -58,7 +58,7 @@ class AuthServiceImpl : AuthService {
      */
     override fun removeUser(userIdList: List<String>): Int {
         val onlineUserList = this.getOnlineUser(userIdList)
-        return this.removeSession(onlineUserList.map { it.sessionId }.distinct())
+        return this.removeSession(onlineUserList.map { it.session.sessionId }.distinct())
     }
 
     /**
@@ -72,7 +72,7 @@ class AuthServiceImpl : AuthService {
             if (session?.getAttribute(DefaultSubjectContext.AUTHENTICATED_SESSION_KEY) == null) continue
             val principalCollection = session.getAttribute(DefaultSubjectContext.PRINCIPALS_SESSION_KEY) as SimplePrincipalCollection
             val user = principalCollection.primaryPrincipal as SysUserDO
-            val onlineUser = OnlineUserDTO(user, session.id)
+            val onlineUser = OnlineUserDTO(user, session)
             onlineUserList.add(onlineUser)
         }
         return if (userIdList.isEmpty()) {

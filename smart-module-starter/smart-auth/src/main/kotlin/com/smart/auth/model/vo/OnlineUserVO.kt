@@ -1,7 +1,6 @@
 package com.smart.auth.model.vo
 
 import com.smart.auth.common.model.SysUserDO
-import java.io.Serializable
 
 /**
  *
@@ -14,5 +13,5 @@ class OnlineUserVO {
 
     var onlineNum = 0
 
-    lateinit var sessionIdList: List<Serializable>
+    lateinit var sessionList: List<SessionVO>
 }

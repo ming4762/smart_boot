@@ -5,6 +5,7 @@ import com.smart.auth.common.constants.AuthConstants
 import com.smart.auth.common.utils.AuthUtils
 import com.smart.auth.model.po.LoginPO
 import com.smart.common.message.Result
+import com.smart.common.utils.IPUtils
 import com.smart.system.service.SysUserService
 import org.apache.shiro.SecurityUtils
 import org.apache.shiro.authc.UsernamePasswordToken
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
+import javax.servlet.http.HttpServletRequest
 
 /**
  * 登录接口
@@ -41,23 +43,23 @@ class LoginController {
      * 登录接口
      */
     @PostMapping("/public/login")
-    fun login(@RequestBody user: LoginPO): Result<Map<String, Any>?> {
-        return this.doLogin(user.username, user.password, AuthConstants.LOGIN_WEB_TYPE)
+    fun login(@RequestBody user: LoginPO, request: HttpServletRequest): Result<Map<String, Any>?> {
+        return this.doLogin(request, user.username, user.password, AuthConstants.LOGIN_WEB_TYPE)
     }
 
     /**
      * 移动端登录接口
      */
     @PostMapping("/public/mobileLogin")
-    fun mobileLogin(@RequestBody user: LoginPO): Result<Map<String, Any>?> {
-        return this.doLogin(user.username, user.password, AuthConstants.LOGIN_MOBILE_TYPE)
+    fun mobileLogin(@RequestBody user: LoginPO, request: HttpServletRequest): Result<Map<String, Any>?> {
+        return this.doLogin(request, user.username, user.password, AuthConstants.LOGIN_MOBILE_TYPE)
     }
 
     /**
      * 执行登录
      * @param 登录类型（web、移动）
      */
-    private fun doLogin(username: String?, password: String?, type: AuthConstants): Result<Map<String, Any>?> {
+    private fun doLogin(request: HttpServletRequest, username: String?, password: String?, type: AuthConstants): Result<Map<String, Any>?> {
         if (StringUtils.isEmpty(username) || StringUtils.isEmpty(password)) {
             LOGGER.warn("用户名或密码为空，username：{}  password：{}", username, password)
             return Result.failure(403, "用户名或密码不能为空")
@@ -74,6 +76,7 @@ class LoginController {
             }
             val permissionList = this.queryUserPremissionList()
             session.setAttribute(AuthConstants.PERMISSION, permissionList)
+            session.setAttribute(AuthConstants.LOGIN_IP, IPUtils.getIpAddr(request))
             // 返回数据
             Result.success(mapOf(
                     // token信息

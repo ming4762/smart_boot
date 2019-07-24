@@ -1,7 +1,10 @@
 package com.smart.auth.model.dto
 
 import com.smart.auth.common.model.SysUserDO
+import com.smart.auth.model.vo.SessionVO
+import org.apache.shiro.session.Session
 import java.io.Serializable
+import java.util.*
 
 /**
  *
@@ -16,11 +19,19 @@ class OnlineUserDTO : Serializable {
 
     lateinit var user: SysUserDO
 
-    lateinit var sessionId: Serializable
+    var session: SessionVO = SessionVO()
 
     constructor()
-    constructor(user: SysUserDO, sessionId: Serializable) {
+    constructor(user: SysUserDO, session: Session) {
         this.user = user
-        this.sessionId = sessionId
+        this.session.sessionId = session.id
+        this.session.startTime = session.startTimestamp
+        this.session.lastAccessTime = session.lastAccessTime
+        this.session.timeout = session.timeout
+        this.session.host = session.host
+        if (session.lastAccessTime != null) {
+            val time = session.lastAccessTime.time - session.timeout
+            this.session.lastUseTime = Date(time)
+        }
     }
 }
