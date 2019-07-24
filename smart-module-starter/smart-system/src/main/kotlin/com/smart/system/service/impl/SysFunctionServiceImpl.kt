@@ -2,6 +2,7 @@ package com.smart.system.service.impl
 
 import com.baomidou.mybatisplus.core.conditions.Wrapper
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper
+import com.baomidou.mybatisplus.extension.kotlin.KtQueryWrapper
 import com.smart.auth.common.utils.AuthUtils
 import com.smart.common.model.Tree
 import com.smart.common.utils.TreeUtils
@@ -10,9 +11,11 @@ import com.smart.starter.crud.service.impl.BaseServiceImpl
 import com.smart.starter.crud.utils.MybatisUtil
 import com.smart.system.mapper.SysFunctionMapper
 import com.smart.system.mapper.SysMenuMapper
+import com.smart.system.mapper.SysRoleMenuFunctionMapper
 import com.smart.system.model.SysFunctionDO
 import com.smart.system.model.SysMenuConfigDO
 import com.smart.system.model.SysMenuDO
+import com.smart.system.model.SysRoleMenuFunctionDO
 import com.smart.system.service.SysFunctionService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
@@ -32,6 +35,9 @@ class SysFunctionServiceImpl : BaseServiceImpl<SysFunctionMapper, SysFunctionDO>
 
     @Autowired
     private lateinit var menuMapper: SysMenuMapper
+
+    @Autowired
+    private lateinit var roleMenuFunctionMapper: SysRoleMenuFunctionMapper
 
     /**
      * 重写LIST方法添加排序
@@ -100,6 +106,7 @@ class SysFunctionServiceImpl : BaseServiceImpl<SysFunctionMapper, SysFunctionDO>
      * 同时删除下级
      * 删除功能同时删除默认配置
      */
+    @Transactional(rollbackFor = [Exception :: class])
     override fun batchDelete(tList: List<SysFunctionDO>): Int {
         val functionList = mutableListOf<SysFunctionDO>()
         tList.forEach {
@@ -114,8 +121,17 @@ class SysFunctionServiceImpl : BaseServiceImpl<SysFunctionMapper, SysFunctionDO>
                 menuIdSet.add(it.functionId!!)
             }
         }
+        val functionMenuIds = mutableSetOf<String>()
+        functionMenuIds.addAll(idSet)
+        functionMenuIds.addAll(menuIdSet)
+        var roleMenuFunctionDeleteNum = 0
+        if (functionMenuIds.isNotEmpty()) {
+            val roleMenuFunctionDeleteWrapper = KtQueryWrapper(SysRoleMenuFunctionDO::class.java)
+            roleMenuFunctionDeleteWrapper.`in`(SysRoleMenuFunctionDO :: menuFunctionId, functionMenuIds)
+            roleMenuFunctionDeleteNum = this.roleMenuFunctionMapper.delete(roleMenuFunctionDeleteWrapper)
+        }
         // 删除功能和功能对应的菜单信息
-        return this.baseMapper.deleteBatchIds(idSet) + this.menuMapper.deleteBatchIds(menuIdSet)
+        return this.baseMapper.deleteBatchIds(idSet) + this.menuMapper.deleteBatchIds(menuIdSet) + roleMenuFunctionDeleteNum
     }
 
     /**
