@@ -40,6 +40,7 @@
         <smart-auth-common.version>0.0.1-SNAPSHOT</smart-auth-common.version>
         <!--redis-spring-boot-starter.version-->
         <redis-spring-boot-starter.version>0.0.1-SNAPSHOT</redis-spring-boot-starter.version>
+        <interface-encryption-spring-boot-starter.version>0.0.1-SNAPSHOT</interface-encryption-spring-boot-starter.version>
         <smart-ui-utils.version>0.0.1-SNAPSHOT</smart-ui-utils.version>
         <smart-ui-library.version>0.0.1-SNAPSHOT</smart-ui-library.version>
         <smart-quartz-queue-common.version>0.0.1-SNAPSHOT</smart-quartz-queue-common.version>

@@ -1,5 +1,6 @@
 package com.smart.common.utils.security
 
+import com.alibaba.fastjson.JSON
 import com.smart.common.model.RsaKey
 import com.smart.common.utils.Base64Util
 import java.io.ByteArrayOutputStream
@@ -218,5 +219,17 @@ object RSAUtils {
         val encryptedData = out.toByteArray()
         out.close()
         return org.apache.commons.codec.binary.Base64.encodeBase64String(encryptedData)
+    }
+
+
+    @JvmStatic
+    fun main(args: Array<String>) {
+        val value = JSON.toJSONString(mapOf(
+                "name" to "史仲明"
+        ))
+        val key = this.genKeyPair()
+        val text = RSAUtils.encryptByPublicKey(value, key.pubKey)
+        println(text)
+        println(RSAUtils.decryptByPrivateKey(text, key.priKey))
     }
 }

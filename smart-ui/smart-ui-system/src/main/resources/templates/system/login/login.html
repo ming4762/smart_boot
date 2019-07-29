@@ -11,9 +11,12 @@
 
   <script th:inline="javascript">
     var apiURL = [[${apiURL}]]
+    // 是否启用接口加密
+    var useIde = [[${useIde}]]
     if (!localStorage.getItem('API_URL')) {
       localStorage.setItem('API_URL', apiURL)
     }
+    localStorage.setItem("useIde", useIde)
   </script>
   <div th:replace="common/common-resources :: common-resources-contextPath"></div>
 </head>

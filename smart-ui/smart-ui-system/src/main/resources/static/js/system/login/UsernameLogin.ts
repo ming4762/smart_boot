@@ -61,6 +61,11 @@ export default {
             ApiService.saveToken(data.Authorization)
             // 保存权限信息
             StoreUtil.setStore(STORE_KEYS.USER_PREMISSION, data.permission, StoreUtil.SESSION_TYPE)
+            // 注册秘钥
+            if (ApiService.useIde()) {
+              return ApiService.registerKey()
+            }
+          }).then(() => {
             // 跳转到主页 TODO：可配置
             window.location.href = `${contextPath}ui/system/home`
           }).catch(error => {

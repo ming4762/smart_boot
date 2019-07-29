@@ -49,6 +49,13 @@
             <version>${smart-system.version}</version>
         </dependency>
 
+        <!--引入接口加密启动器-->
+        <dependency>
+            <groupId>com.smart</groupId>
+            <artifactId>interface-encryption-spring-boot-starter</artifactId>
+            <version>${interface-encryption-spring-boot-starter.version}</version>
+        </dependency>
+
         <!--引入shiro redis-->
         <dependency>
             <groupId>com.smart</groupId>

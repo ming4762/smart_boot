@@ -1,9 +1,12 @@
 package com.smart.auth.controller
 
+import com.smart.auth.common.constants.AuthConstants
+import com.smart.auth.common.utils.AuthUtils
 import com.smart.auth.model.vo.OnlineUserVO
 import com.smart.auth.service.AuthService
 import com.smart.common.log.annotation.Log
 import com.smart.common.message.Result
+import com.smart.starter.ide.util.RsaKeyUtils
 import org.apache.shiro.SecurityUtils
 import org.apache.shiro.authz.annotation.RequiresPermissions
 import org.springframework.beans.factory.annotation.Autowired
@@ -77,6 +80,25 @@ class AuthController {
     fun removeSession(@RequestBody sessionIdList: List<String>): Result<Int?> {
         return try {
             Result.success(this.authService.removeSession(sessionIdList))
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Result.failure(e.message)
+        }
+    }
+
+    /**
+     * 注册秘钥
+     */
+    @PostMapping("auth/registerKey")
+    fun registerKey(@RequestBody key: String): Result<String?> {
+        return try {
+            val session = AuthUtils.getSession()
+            if (session == null) {
+                Result.failure("注册秘钥失败，获取用户session失败")
+            } else {
+                session.setAttribute(AuthConstants.CLIENT_PUBLIC_KEY, key)
+                Result.success(RsaKeyUtils.getServerKey().pubKey)
+            }
         } catch (e: Exception) {
             e.printStackTrace()
             Result.failure(e.message)

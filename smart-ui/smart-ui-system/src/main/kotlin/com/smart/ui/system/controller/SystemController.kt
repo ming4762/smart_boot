@@ -18,6 +18,9 @@ class SystemController {
     // 后台地址
     @Value("\${smart.ui.apiURL:}")
     private lateinit var apiURL: String
+    // 是否启用接口加密
+    @Value("\${smart.auth.useIde:false}")
+    private var useIde: Boolean = false
 
     /**
      * 跳转到登录页
@@ -25,6 +28,7 @@ class SystemController {
     @RequestMapping("/login")
     fun login(@RequestParam parameter: MutableMap<String, Any?>): ModelAndView {
         parameter["apiURL"] = this.apiURL
+        parameter["useIde"] = this.useIde
         return ModelAndView("system/login/login", parameter)
     }
 

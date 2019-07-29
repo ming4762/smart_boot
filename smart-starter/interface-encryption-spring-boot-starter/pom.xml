@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.smart</groupId>
+        <artifactId>smart-starter</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+    </parent>
+    <artifactId>interface-encryption-spring-boot-starter</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>interface-encryption-spring-boot-starter</name>
+    <description>接口加密启动器</description>
+
+    <properties>
+
+    </properties>
+
+    <dependencies>
+        <!--引入web支持-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+        <!--引入common工具包-->
+        <dependency>
+            <groupId>com.smart</groupId>
+            <artifactId>smart-common</artifactId>
+            <version>${smart-common.version}</version>
+        </dependency>
+        <!--认证common包-->
+        <dependency>
+            <groupId>com.smart</groupId>
+            <artifactId>smart-auth-common</artifactId>
+            <version>${smart-auth-common.version}</version>
+        </dependency>
+       <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>${commons-io.commons-io.version}</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+    </build>
+
+</project>
