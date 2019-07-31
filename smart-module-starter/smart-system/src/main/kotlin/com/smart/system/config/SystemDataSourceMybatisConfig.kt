@@ -31,7 +31,7 @@ class SystemDataSourceMybatisConfig {
      */
     @Bean(name = ["systemDataSource"])
     @ConfigurationProperties("spring.datasource.system")
-    fun dataSourceQuartz(): DataSource {
+    fun dataSourceSystem(): DataSource {
         return DruidDataSourceBuilder.create().build()
     }
 
