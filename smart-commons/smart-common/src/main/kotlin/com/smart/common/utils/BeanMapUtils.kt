@@ -109,9 +109,10 @@ object BeanMapUtils {
         childrenFieldList.addAll(parentFieldMap.values)
         val child = clazz.newInstance()
         childrenFieldList.forEach {
-            if (!Modifier.isFinal(it.modifiers)) {
+            val parentField = parentFieldMap[it.name]
+            if (!Modifier.isFinal(it.modifiers) && parentField != null) {
                 it.isAccessible = true
-                it.set(child, parentFieldMap[it.name]?.get(parent))
+                it.set(child, parentField.get(parent))
             }
         }
         return child
