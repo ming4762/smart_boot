@@ -42,6 +42,20 @@ class AuthController {
     }
 
     /**
+     * 验证token是否有效
+     * @author zhongming（2019-08-01）
+     */
+    @PostMapping("public/auth/validateToken")
+    fun validateToken(): Result<Boolean?> {
+        return try {
+            Result.success(AuthUtils.getCurrentUser() != null)
+        } catch (e: Exception) {
+            e.message
+            Result.failure(e.message, false)
+        }
+    }
+
+    /**
      * 获取在线用户
      * TODO: 获取IP
      */
