@@ -35,18 +35,6 @@ open class BaseController<K : BaseService<T>, T : BaseModel> : BaseListParameter
      */
     private val keywordField = "keyword"
 
-//    @Autowired
-//    protected lateinit var service: K
-
-    /**
-     * 注册日期转换工具
-     * @param binder
-     */
-//    @InitBinder
-//    fun initBinder(binder: WebDataBinder) {
-//        binder.registerCustomEditor(Date::class.java, CustomDateEditor())
-//    }
-
     /**
      * 查询列表
      * @param parameters
@@ -139,21 +127,6 @@ open class BaseController<K : BaseService<T>, T : BaseModel> : BaseListParameter
 
     }
 
-//    /**
-//     * 批量保存
-//     */
-//    @RequestMapping("/batchSave")
-//    @ResponseBody
-//    protected open fun batchSave(@RequestBody tList: List<T>): Result<Boolean?> {
-//        return try {
-//            Result.success(this.service.saveBatch(tList))
-//        } catch (e: Exception) {
-//            e.printStackTrace()
-//            Result.failure(e.message, false)
-//        }
-//
-//    }
-
     /**
      * 更新
      */
@@ -165,23 +138,6 @@ open class BaseController<K : BaseService<T>, T : BaseModel> : BaseListParameter
         e.printStackTrace()
         Result.failure(e.message, false)
     }
-
-//    /**
-//     * 批量删除
-//     * @param deleteObjects
-//     * @return
-//     */
-//    @RequestMapping("/batchDelete")
-//    @ResponseBody
-//    protected open fun batchDelete(@RequestBody deleteObjects: List<T>): Result<Any?> {
-//        return try {
-//            Result.success(this.service.batchDelete(deleteObjects))
-//        } catch (e: Exception) {
-//            e.printStackTrace()
-//            Result.failure("批量删除时发生错误", 0)
-//        }
-//
-//    }
 
     /**
      * 执行分期
