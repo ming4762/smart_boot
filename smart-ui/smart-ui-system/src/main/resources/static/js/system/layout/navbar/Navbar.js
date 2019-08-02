@@ -121,7 +121,7 @@ define(["require", "exports", "mixins/ThemeMixins", "system/layout/sidebar/Item"
         v-for="menu in computedUserMenuList">
         <menu-item
           :color="getTopTextColor"
-          :active="computedActiveMenu.topId === menu.id"
+          :active="getBus.activeTopMenu.id === menu.id"
           :icon="menu.icon"
           :activeColor="topActiveTextColor"
           :title="menu.name"/>

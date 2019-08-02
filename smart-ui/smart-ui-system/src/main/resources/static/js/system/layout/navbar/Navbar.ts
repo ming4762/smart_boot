@@ -159,7 +159,7 @@ export default {
         v-for="menu in computedUserMenuList">
         <menu-item
           :color="getTopTextColor"
-          :active="computedActiveMenu.topId === menu.id"
+          :active="getBus.activeTopMenu.id === menu.id"
           :icon="menu.icon"
           :activeColor="topActiveTextColor"
           :title="menu.name"/>
