@@ -40,7 +40,7 @@ class ShiroConfiguration {
 
     // 是否是开发模式
     @Value("\${smart.auth.development:false}")
-    private var development: Boolean = false
+    private var development = false
 
     /**
      * 创建shiro拦截器
