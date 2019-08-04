@@ -38,7 +38,6 @@ export default {
   },
   methods: {
     // 加载用户菜单信息
-    // todo:菜单不存在时加载
     loadUserMenu () {
       if (!this.getBus.userMenuList || this.getBus.userMenuList.length === 0) {
         ApiService.postAjax('sys/menu/queryUserMenu', {})

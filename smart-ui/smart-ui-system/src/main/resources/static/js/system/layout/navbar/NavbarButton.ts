@@ -1,15 +1,32 @@
 // @ts-ignore
 import CommonUtils from 'utils/CommonUtils'
+
+// 样式混入
+// @ts-ignore
+import ThemeMixins from 'mixins/ThemeMixins'
+// @ts-ignore
+import MessageMixins from 'mixins/MessageMixins'
+// @ts-ignore
+import ApiService from 'utils/ApiService'
+
+declare var busVue
+
+// 项目跟路径
+declare var contextPath: string
+
 /**
  * 顶部操作按钮
  */
 export default {
 
+  mixins: [ ThemeMixins, MessageMixins ],
   data () {
     return {
       buttonList: [],
       // 标识全屏状态
-      isFullScreen: false
+      isFullScreen: false,
+      //TODO
+      activeIndex: null
     }
   },
   created () {
@@ -37,6 +54,11 @@ export default {
       }
     ]
   },
+  computed: {
+    getBus (): any {
+      return busVue
+    }
+  },
   methods: {
     handleClickMessage () {
 
@@ -53,24 +75,98 @@ export default {
      */
     handleClickUser () {
 
+    },
+    handleSelect (index: string) {
+      console.log(index)
+      switch (index) {
+        case 'fullScreen':
+          this.handleClickFullScreen()
+          break
+        case 'userlogout':
+          this.logout()
+          break
+        case 'accountMessage':
+          this.handleShowAccountMessage()
+          break
+      }
+    },
+    /**
+     * 退出操作
+     */
+    logout () {
+      this.$confirm('您确定要退出系统吗?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        return ApiService.logout()
+      }).then(() => {
+        window.location.href = `${contextPath}ui/system/login`
+      }).catch(error => {
+        console.log(error)
+        if (error !== 'cancel') {
+          this.errorMessage('退出时发生错误，请稍后重试', error)
+        }
+      })
+    },
+    /**
+     * 显示账户信息
+     */
+    handleShowAccountMessage () {
+      /**
+       * 跳转到账户信息页面
+       */
+      this.getBus.addMenu({
+        name: '账户信息',
+        path: '/ui/system/accountMessage'
+      })
     }
   },
   template: `
   <div>
-    <ul class="full-height navbar-button-list">
-      <li
-        v-for="(button, i) in buttonList"
-        @click="button.handler"
-        class="navbar-button-li"
-        :key="i">
-        <el-tooltip
-          :content="button.title"
-          placement="top">
-          <el-dropdown v-if=""></el-dropdown>
-          <a :class="button.icon"></a>
-        </el-tooltip>
-      </li>
-    </ul>  
+    <el-menu 
+      :default-active="activeIndex"
+      :background-color="getTopColor"
+      :active-text-color="topActiveTextColor"
+      :text-color="getTopTextColor"
+      @select="handleSelect"
+      mode="horizontal">
+      <el-submenu index="user">
+        <template slot="title">
+          <i class="el-icon-user-solid"></i>
+        </template>
+        <el-menu-item index="accountMessage">账户信息</el-menu-item>
+        <el-divider></el-divider>
+        <el-menu-item index="userlogout">
+          <i class="el-icon-switch-button"></i>
+          退出
+        </el-menu-item>
+      </el-submenu>
+      <el-tooltip placement="top" content="通知">
+        <el-menu-item index="notice">
+          <i class="el-icon-message-solid"></i>
+        </el-menu-item>
+      </el-tooltip>
+      <el-tooltip placement="top" content="全屏">
+        <el-menu-item index="fullScreen">
+          <i class="el-icon-full-screen"></i>
+        </el-menu-item>
+      </el-tooltip>
+    </el-menu>
+    <!--<ul class="full-height navbar-button-list">-->
+      <!--<li-->
+        <!--v-for="(button, i) in buttonList"-->
+        <!--@click="button.handler"-->
+        <!--class="navbar-button-li"-->
+        <!--:key="i">-->
+        <!--<el-tooltip-->
+          <!--:content="button.title"-->
+          <!--placement="top">-->
+          <!--<el-dropdown v-if=""></el-dropdown>-->
+          <!--<a :class="button.icon"></a>-->
+        <!--</el-tooltip>-->
+      <!--</li>-->
+    <!--</ul>  -->
   </div>
   `
 }

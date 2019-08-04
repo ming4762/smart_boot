@@ -107,11 +107,21 @@ export default {
       if (activeTopMenu.id !== activeTopId) {
         const userMenuList = this.getBus.userMenuList
         for (let i in userMenuList) {
-          if (activeTopId=== userMenuList[i].topId) {
+          if (activeTopId === userMenuList[i].topId) {
             this.getBus.setActiveTopMenu(userMenuList[i])
             break
           }
         }
+      }
+    },
+    /**
+     * 判断菜单是否激活
+     */
+    isActive (menuId: string) {
+      if (!this.computedActiveMenu.topId) {
+        return false
+      } else {
+        return this.getBus.activeTopMenu.id === menuId
       }
     }
   },
@@ -159,7 +169,7 @@ export default {
         v-for="menu in computedUserMenuList">
         <menu-item
           :color="getTopTextColor"
-          :active="getBus.activeTopMenu.id === menu.id"
+          :active="isActive(menu.id)"
           :icon="menu.icon"
           :activeColor="topActiveTextColor"
           :title="menu.name"/>

@@ -75,6 +75,14 @@ define(["require", "exports", "mixins/ThemeMixins", "system/layout/sidebar/Item"
                         }
                     }
                 }
+            },
+            isActive(menuId) {
+                if (!this.computedActiveMenu.topId) {
+                    return false;
+                }
+                else {
+                    return this.getBus.activeTopMenu.id === menuId;
+                }
             }
         },
         template: `
@@ -121,7 +129,7 @@ define(["require", "exports", "mixins/ThemeMixins", "system/layout/sidebar/Item"
         v-for="menu in computedUserMenuList">
         <menu-item
           :color="getTopTextColor"
-          :active="getBus.activeTopMenu.id === menu.id"
+          :active="isActive(menu.id)"
           :icon="menu.icon"
           :activeColor="topActiveTextColor"
           :title="menu.name"/>
