@@ -91,6 +91,16 @@ export default class ApiService  {
   }
 
   /**
+   * 登出操作
+   */
+  public static logout (): Promise<any> {
+    return this.postAjax('logout', {
+    }).then(result => {
+      window.sessionStorage.clear()
+    })
+  }
+
+  /**
    * 保存token操作
    * @param token
    */

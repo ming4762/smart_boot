@@ -59,6 +59,11 @@ define(["require", "exports", "utils/StoreUtil", "utils/RsaUtils", "utils/Md5Uti
                 return Promise.reject(error);
             });
         }
+        static logout() {
+            return this.postAjax('logout', {}).then(result => {
+                window.sessionStorage.clear();
+            });
+        }
         static saveToken(token) {
             StoreUtil_1.default.setStore(STORE_TOKEN_KEY, token, StoreUtil_1.default.SESSION_TYPE);
         }
