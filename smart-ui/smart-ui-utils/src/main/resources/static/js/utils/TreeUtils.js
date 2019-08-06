@@ -30,7 +30,6 @@ define(["require", "exports"], function (require, exports) {
                         parent[this.CHILDREN].push(value);
                         parent[this.HAS_CHILD] = true;
                         value[this.HAS_PARENT] = true;
-                        continue;
                     }
                 }
             }

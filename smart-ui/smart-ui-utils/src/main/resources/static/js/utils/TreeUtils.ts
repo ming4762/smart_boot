@@ -44,10 +44,12 @@ export default class TreeUtils {
           parent[this.HAS_CHILD] = true
           // 设置节点含有上级
           value[this.HAS_PARENT] = true
-          continue
+
         }
       }
     }
     return treeList
   }
+
+
 }
