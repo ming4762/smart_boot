@@ -1,4 +1,4 @@
-define(["require", "exports", "ComponentBuilder", "utils/StoreUtil", "Constants"], function (require, exports, ComponentBuilder_1, StoreUtil_1, Constants_1) {
+define(["require", "exports", "utils/StoreUtil", "Constants"], function (require, exports, StoreUtil_1, Constants_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     const validateOne = (permissions, allPermissions) => {
@@ -21,35 +21,30 @@ define(["require", "exports", "ComponentBuilder", "utils/StoreUtil", "Constants"
         }
         return result;
     };
-    class PermissionMixins extends ComponentBuilder_1.default {
-        computed() {
-            return {
-                computedUserPermission() {
-                    return StoreUtil_1.default.getStore(Constants_1.STORE_KEYS.USER_PREMISSION) || [];
+    exports.default = {
+        computed: {
+            computedUserPermission() {
+                return StoreUtil_1.default.getStore(Constants_1.STORE_KEYS.USER_PREMISSION) || [];
+            }
+        },
+        methods: {
+            validatePermission(permission) {
+                if (permission === undefined || permission === null || permission === '') {
+                    return true;
                 }
-            };
-        }
-        methods() {
-            return {
-                validatePermission(permission) {
-                    if (permission === undefined || permission === null || permission === '') {
-                        return true;
-                    }
-                    return this.computedUserPermission.indexOf(permission) !== -1;
-                },
-                validatePermissions(permissions, all) {
-                    if (permissions.length === 0) {
-                        return true;
-                    }
-                    else if (all) {
-                        return validateAll(permissions, this.computedUserPermission);
-                    }
-                    else {
-                        return validateOne(permissions, this.computedUserPermission);
-                    }
+                return this.computedUserPermission.indexOf(permission) !== -1;
+            },
+            validatePermissions(permissions, all) {
+                if (permissions.length === 0) {
+                    return true;
                 }
-            };
+                else if (all) {
+                    return validateAll(permissions, this.computedUserPermission);
+                }
+                else {
+                    return validateOne(permissions, this.computedUserPermission);
+                }
+            }
         }
-    }
-    exports.default = PermissionMixins;
+    };
 });
