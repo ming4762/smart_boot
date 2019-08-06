@@ -13,10 +13,16 @@
 
     <!--element-ui 引入-->
     <div th:fragment="common-resources-element-js">
-        <script src="/element-ui/2.9.2/index.js" th:src="@{/element-ui/2.9.2/index.js}"></script>
+        <!--<script src="/element-ui/2.9.2/index.js" th:src="@{/element-ui/2.9.2/index.js}"></script>-->
+        <script src="/element-ui/2.11.1/index.js" th:src="@{/element-ui/2.11.1/index.js}"></script>
     </div>
     <div th:fragment="common-resources-element-css">
-        <link rel="stylesheet" href="/element-ui/2.9.2/index.css" th:href="@{/element-ui/2.9.2/index.css}"></link>
+        <!--<link rel="stylesheet" href="/element-ui/2.9.2/index.css" th:href="@{/element-ui/2.9.2/index.css}"/>-->
+        <link rel="stylesheet" href="/element-ui/2.11.1/index.css" th:href="@{/element-ui/2.11.1/index.css}"/>
+    </div>
+    <!--bootstrap-->
+    <div th:fragment="common-resources-bootstrap-css">
+        <link rel="stylesheet" href="/bootstrap/4.0.0/css/bootstrap.min.css" th:href="@{/bootstrap/4.0.0/css/bootstrap.min.css}"/>
     </div>
     <!--requireJS TODO: 生产环境改为min-->
     <div th:fragment="common-resources-requireJS">
