@@ -42,7 +42,7 @@ open class BaseController<K : BaseService<T>, T : BaseModel> : BaseListParameter
      */
     @RequestMapping("list")
     @ResponseBody
-    protected open fun list(@RequestBody parameters: Map<String, Any?>): Result<Any?> {
+    protected open fun list(@RequestBody parameters: MutableMap<String, Any?>): Result<Any?> {
         try {
             val page = this.doPage(parameters)
             val wrapper = MybatisUtil.createQueryWrapperFromParameters<T>(parameters, this.getModelType())
