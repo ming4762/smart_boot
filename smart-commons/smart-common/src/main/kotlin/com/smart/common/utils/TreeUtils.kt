@@ -79,4 +79,31 @@ object TreeUtils {
         }
         return topNodes
     }
+
+    /**
+     * 反转父子关系
+     */
+    @JvmStatic
+    @Deprecated("")
+    fun reverseParentChild(parentChildren: Map<String, List<String>>, withSelf: Boolean = true): Map<String, List<String>> {
+        var selefParentChildren = parentChildren
+        if (withSelf) {
+            selefParentChildren = parentChildren.map {
+                it.key to it.value.let { value ->
+                    val list = mutableListOf<String>()
+                    list.add(it.key)
+                    list.addAll(value)
+                    list
+                }
+            }.toMap()
+        }
+        val result = mutableMapOf<String, MutableList<String>>()
+        selefParentChildren.forEach { key, list ->
+            list.forEach {
+                if (result[it] == null) result[it] = mutableListOf()
+                result[it]!!.add(key)
+            }
+        }
+        return result
+    }
 }
