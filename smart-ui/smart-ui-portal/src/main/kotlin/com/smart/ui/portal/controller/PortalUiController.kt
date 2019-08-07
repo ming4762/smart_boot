@@ -2,6 +2,7 @@ package com.smart.ui.portal.controller
 
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.servlet.ModelAndView
 
 /**
@@ -18,7 +19,15 @@ class PortalUiController {
      * 跳转到素材管理页面
      */
     @RequestMapping("/material")
-    fun material(parameter: Map<String, String>): ModelAndView {
+    fun material(@RequestParam parameter: Map<String, String>): ModelAndView {
         return ModelAndView("portal/material/material", parameter)
+    }
+
+    /**
+     * 跳转到模块管理页面
+     */
+    @RequestMapping("/module")
+    fun module(@RequestParam parameter: Map<String, String>): ModelAndView {
+        return ModelAndView("portal/module/module", parameter)
     }
 }
