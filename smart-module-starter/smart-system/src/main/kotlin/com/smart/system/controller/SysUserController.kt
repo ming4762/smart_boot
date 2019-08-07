@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("/sys/user")
 class SysUserController : BaseController<SysUserService, SysUserDO>() {
 
-    override fun list(@RequestBody parameters: Map<String, Any?>): Result<Any?> {
+    override fun list(@RequestBody parameters: MutableMap<String, Any?>): Result<Any?> {
         return super.list(parameters)
     }
 

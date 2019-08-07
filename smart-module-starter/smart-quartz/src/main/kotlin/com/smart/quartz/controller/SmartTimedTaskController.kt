@@ -23,7 +23,7 @@ class SmartTimedTaskController : BaseController<SmartTimedTaskService, SmartTime
 
     @RequiresPermissions("quartz:timeTask:query")
     @RequestMapping("/list")
-    override fun list(@RequestBody parameters: Map<String, Any?>): Result<Any?> {
+    override fun list(@RequestBody parameters: MutableMap<String, Any?>): Result<Any?> {
         val list = super.list(parameters)
         return list
     }

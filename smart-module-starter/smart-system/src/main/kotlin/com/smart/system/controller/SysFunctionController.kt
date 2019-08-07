@@ -41,7 +41,7 @@ class SysFunctionController : BaseController<SysFunctionService, SysFunctionDO>(
     }
 
     @RequiresPermissions("system:function:query")
-    override fun list(@RequestBody parameters: Map<String, Any?>): Result<Any?> {
+    override fun list(@RequestBody parameters: MutableMap<String, Any?>): Result<Any?> {
         return super.list(parameters)
     }
 
