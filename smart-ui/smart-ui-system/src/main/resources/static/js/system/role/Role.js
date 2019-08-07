@@ -20,7 +20,7 @@ define(["require", "exports", "ComponentBuilder", "plugins/container/FlexAside",
         }
         mixins() {
             return [
-                new PermissionMixins_1.default().build()
+                PermissionMixins_1.default
             ];
         }
         components() {

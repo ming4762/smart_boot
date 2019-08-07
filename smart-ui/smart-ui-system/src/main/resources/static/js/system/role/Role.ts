@@ -45,7 +45,7 @@ export class Role extends ComponentBuilder {
 
   protected mixins () {
     return [
-      new PermissionMixins().build()
+      PermissionMixins
     ]
   }
 
