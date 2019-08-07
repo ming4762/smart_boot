@@ -11,7 +11,7 @@ import java.util.*
  * @author ming
  * 2019/8/1 下午2:43
  */
-@TableName("smart-portal-material-gt")
+@TableName("smart_portal_material_gt")
 class PortalMaterialGtDO : BaseModel() {
 
     companion object {

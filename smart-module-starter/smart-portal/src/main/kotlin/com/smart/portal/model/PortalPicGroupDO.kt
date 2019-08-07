@@ -11,7 +11,7 @@ import java.util.*
  * @author ming
  * 2019/8/1 下午3:39
  */
-@TableName("smart-portal-pic-group")
+@TableName("smart_portal_pic_group")
 class PortalPicGroupDO : BaseModel() {
 
     companion object {

@@ -23,5 +23,12 @@
             <artifactId>crud-spring-boot-starter</artifactId>
             <version>${crud-spring-boot-starter.version}</version>
         </dependency>
+
+        <!--引入认证common-->
+        <dependency>
+            <groupId>com.smart</groupId>
+            <artifactId>smart-auth-common</artifactId>
+            <version>${smart-auth-common.version}</version>
+        </dependency>
     </dependencies>
 </project>

@@ -11,7 +11,7 @@ import java.util.*
  * @author ming
  * 2019/8/1 下午3:43
  */
-@TableName("smart-portal-pic")
+@TableName("smart_portal_pic")
 class PortalPicDO : BaseModel() {
     companion object {
         private const val serialVersionUID = 1564645449652L
