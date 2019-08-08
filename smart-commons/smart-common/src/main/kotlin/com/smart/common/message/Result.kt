@@ -21,11 +21,12 @@ class Result<T: Any?> {
             return Result()
         }
 
-        @JvmStatic fun <T: Any> success(data: T?): Result<T?> {
+        @JvmStatic
+        fun <T: Any> success(data: T?, message: String = ResultCodeEnum.SUCCESS.msg): Result<T?> {
             val result = newInstance<T>()
             result.data = data
             result.code = ResultCodeEnum.SUCCESS.code
-            result.message = ResultCodeEnum.SUCCESS.msg
+            result.message = message
             result.ok = true
 
             if (data == null) {
