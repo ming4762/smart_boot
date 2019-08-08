@@ -6,7 +6,8 @@ const typeTriggerMap = {
   select: 'change',
   boolean: 'change',
   number: 'change',
-  radio: 'change'
+  radio: 'change',
+  password: 'blur'
 }
 
 /**

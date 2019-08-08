@@ -28,9 +28,9 @@ const createTemplate = () => {
           :label="dic.label" 
           :key="index + 'radio'">{{dic.value}}</el-radio>
       </el-radio-group>
-      <el-input placeholder='请输入密码' ${createVIf('password')} ${vModel} show-password/>
-      <el-input type='textarea' ${createVIf('textarea')} ${vModel} :placeholder="'请输入' + column.label"/>
-      <el-input ${disabled} :placeholder="'请输入' + column.label" ${createVIf('input')} ${vModel}/>
+      <el-input :placeholder="getPlaceholder(column)" ${createVIf('password')} ${vModel} show-password/>
+      <el-input type='textarea' ${createVIf('textarea')} ${vModel} :placeholder="getPlaceholder(column)"/>
+      <el-input ${disabled} :placeholder="getPlaceholder(column)" ${createVIf('input')} ${vModel}/>
     </el-form-item>
     `
 }
@@ -46,6 +46,15 @@ export default {
     model: {
       required: true,
       type: Object
+    }
+  },
+  methods: {
+    getPlaceholder (column) {
+      if (column.placeholder) {
+        return column.placeholder
+      } else {
+        return '请输入' + column.label
+      }
     }
   },
   template: createTemplate()

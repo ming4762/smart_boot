@@ -6,7 +6,8 @@ define(["require", "exports", "plugins/form/SmartFormItem"], function (require, 
         select: 'change',
         boolean: 'change',
         number: 'change',
-        radio: 'change'
+        radio: 'change',
+        password: 'blur'
     };
     const createRules = (column) => {
         const trigger = typeTriggerMap[column.type];
