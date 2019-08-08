@@ -177,7 +177,7 @@ define(["require", "exports", "PageBuilder", "plugins/table/SmartTableCRUD", "ut
       queryUrl="portal/module/list"
       deleteUrl="portal/module/batchDelete"
       saveUpdateUrl="portal/module/saveUpdate"
-      :keys="['module_id']"
+      :keys="['moduleId']"
       defaultSortColumn="seq"
       tableName="模块" 
       :apiService="apiService"
