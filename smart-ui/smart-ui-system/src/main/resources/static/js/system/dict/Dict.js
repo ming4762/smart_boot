@@ -25,9 +25,18 @@ define(["require", "exports", "PageBuilder", "plugins/table/SmartTableCRUD", "ut
             return {
                 apiService: ApiService_1.default,
                 defaultButtonConfig: {
-                    add: {
-                        rowShow: false
-                    }
+                    defaultButtonConfig: {
+                        add: {
+                            rowShow: false,
+                            permission: 'sys:dictItem:save'
+                        },
+                        edit: {
+                            permission: 'sys:dictItem:update'
+                        },
+                        delete: {
+                            permission: 'sys:dictItem:delete'
+                        }
+                    },
                 },
                 columnOptions: [
                     {
@@ -231,7 +240,14 @@ define(["require", "exports", "PageBuilder", "plugins/table/SmartTableCRUD", "ut
                 apiService: ApiService_1.default,
                 defaultButtonConfig: {
                     add: {
-                        rowShow: false
+                        rowShow: false,
+                        permission: 'sys:dict:save'
+                    },
+                    edit: {
+                        permission: 'sys:dict:update'
+                    },
+                    delete: {
+                        permission: 'sys:dict:delete'
                     }
                 },
                 currentDict: {
@@ -247,7 +263,9 @@ define(["require", "exports", "PageBuilder", "plugins/table/SmartTableCRUD", "ut
                             fixed: true,
                             sortable: true
                         },
-                        form: {}
+                        form: {
+                            rules: true
+                        }
                     },
                     {
                         prop: 'dictName',
@@ -257,7 +275,9 @@ define(["require", "exports", "PageBuilder", "plugins/table/SmartTableCRUD", "ut
                             fixed: true,
                             sortable: true
                         },
-                        form: {}
+                        form: {
+                            rules: true
+                        }
                     },
                     {
                         prop: 'createUserId',

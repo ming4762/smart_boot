@@ -41,11 +41,20 @@ const DictItem = {
   data () {
     return {
       apiService: ApiService,
-      // TODO: 权限信息
+      // TODO: 权限信息，待测试
       defaultButtonConfig: {
-        add: {
-          rowShow: false
-        }
+        defaultButtonConfig: {
+          add: {
+            rowShow: false,
+            permission: 'sys:dictItem:save'
+          },
+          edit: {
+            permission: 'sys:dictItem:update'
+          },
+          delete: {
+            permission: 'sys:dictItem:delete'
+          }
+        },
       },
       columnOptions: [
         {
@@ -257,10 +266,17 @@ const page = {
   data () {
     return {
       apiService: ApiService,
-      // TODO: 权限信息
+      // TODO: 权限信息, 待测试
       defaultButtonConfig: {
         add: {
-          rowShow: false
+          rowShow: false,
+          permission: 'sys:dict:save'
+        },
+        edit: {
+          permission: 'sys:dict:update'
+        },
+        delete: {
+          permission: 'sys:dict:delete'
         }
       },
       // 当前的字典
@@ -277,7 +293,9 @@ const page = {
             fixed: true,
             sortable: true
           },
-          form: {}
+          form: {
+            rules: true
+          }
         },
         {
           prop: 'dictName',
@@ -287,7 +305,9 @@ const page = {
             fixed: true,
             sortable: true
           },
-          form: {}
+          form: {
+            rules: true
+          }
         },
         {
           prop: 'createUserId',

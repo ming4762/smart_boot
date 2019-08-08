@@ -103,4 +103,20 @@ class SystemController {
     fun onlineUser(@RequestParam parameter: Map<String, Any?>): ModelAndView {
         return ModelAndView("system/auth/onlineUser", parameter)
     }
+
+    /**
+     * 跳转账户信息页面
+     */
+    @RequestMapping("/accountMessage")
+    fun accountMessage(@RequestParam parameter: Map<String, Any?>): ModelAndView {
+        return ModelAndView("system/auth/accountMessage", parameter)
+    }
+
+    /**
+     * 跳转字典管理页面
+     */
+    @RequestMapping("/dict")
+    fun dict(@RequestParam parameter: Map<String, Any?>): ModelAndView {
+        return ModelAndView("system/dict/dict", parameter)
+    }
 }
