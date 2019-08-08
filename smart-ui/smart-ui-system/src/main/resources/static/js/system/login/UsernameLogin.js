@@ -1,11 +1,6 @@
-define(["require", "exports", "utils/ApiService", "mixins/MessageMixins", "utils/Md5Utils", "Constants", "utils/StoreUtil"], function (require, exports, ApiService_1, MessageMixins_1, Md5Utils_1, Constants_1, StoreUtil_1) {
+define(["require", "exports", "utils/ApiService", "mixins/MessageMixins", "system/utils/AuthUtils", "Constants", "utils/StoreUtil"], function (require, exports, ApiService_1, MessageMixins_1, AuthUtils_1, Constants_1, StoreUtil_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    const createPassword = (username, password) => {
-        const salt = '1qazxsw2';
-        const passwordValue = username + password + salt;
-        return Md5Utils_1.default.md5(passwordValue, 2);
-    };
     exports.default = {
         mixins: [
             MessageMixins_1.default
@@ -34,7 +29,7 @@ define(["require", "exports", "utils/ApiService", "mixins/MessageMixins", "utils
                     if (valid) {
                         ApiService_1.default.postAjax('public/login', {
                             username: this.loginFormModel.username,
-                            password: createPassword(this.loginFormModel.username, this.loginFormModel.password)
+                            password: AuthUtils_1.createPassword(this.loginFormModel.username, this.loginFormModel.password)
                         }).then(data => {
                             ApiService_1.default.saveToken(data.Authorization);
                             StoreUtil_1.default.setStore(Constants_1.STORE_KEYS.USER_PREMISSION, data.permission, StoreUtil_1.default.SESSION_TYPE);

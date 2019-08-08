@@ -4,7 +4,7 @@ import ApiService from 'utils/ApiService'
 import MessageMixins from 'mixins/MessageMixins'
 // 引入MD5工具类
 // @ts-ignore
-import Md5Utils from 'utils/Md5Utils'
+import { createPassword } from 'system/utils/AuthUtils'
 // @ts-ignore
 import { STORE_KEYS } from 'Constants'
 // @ts-ignore
@@ -12,16 +12,6 @@ import StoreUtil from 'utils/StoreUtil'
 // 项目跟路径
 declare var contextPath: string
 
-/**
- * 创建密码
- * @param username
- * @param password
- */
-const createPassword = (username: string, password: string): string => {
-  const salt = '1qazxsw2'
-  const passwordValue = username + password + salt
-  return Md5Utils.md5(passwordValue, 2)
-}
 
 export default {
   mixins: [
