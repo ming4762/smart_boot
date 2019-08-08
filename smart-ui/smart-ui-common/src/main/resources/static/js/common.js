@@ -1,6 +1,11 @@
-requirejs.config({
-  baseUrl: '../../js/'
-})
+if (window.requirejs) {
+  requirejs.config({
+    baseUrl: '../../js/'
+  })
+  require.config({
+    baseUrl: '../../js/'
+  })
+}
 function ready(fn){
   if(document.addEventListener){		//标准浏览器
     document.addEventListener('DOMContentLoaded',function(){
