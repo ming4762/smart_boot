@@ -7,6 +7,7 @@ import com.smart.common.message.Result
 import com.smart.starter.crud.model.BaseModel
 import com.smart.starter.crud.service.BaseService
 import com.smart.starter.crud.utils.MybatisUtil
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.util.StringUtils
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
@@ -21,7 +22,7 @@ import java.util.*
  * @author ming
  * 2019/8/7 上午10:52
  */
-open class BaseControllerQuery<K : BaseService<T>, T : BaseModel> : BaseListParameterController<K, T>() {
+open class BaseControllerQuery<K : BaseService<T>, T : BaseModel> {
 
     private val PAGE_SIZE = "limit"
     private val OFFSET = "offset"
@@ -34,6 +35,9 @@ open class BaseControllerQuery<K : BaseService<T>, T : BaseModel> : BaseListPara
      * 关键字字段名
      */
     private val keywordField = "keyword"
+
+    @Autowired
+    private lateinit var service: K
 
     /**
      * 查询列表

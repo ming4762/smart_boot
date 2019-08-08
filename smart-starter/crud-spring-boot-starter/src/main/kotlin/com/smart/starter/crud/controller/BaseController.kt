@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody
  * @author ming
  * 2019/6/12 上午11:20
  */
-open class BaseController<K : BaseService<T>, T : BaseModel> : BaseControllerQuery<K, T>() {
+open class BaseController<K : BaseService<T>, T : BaseModel> : BaseListParameterController<K, T>() {
 
     /**
      * 删除接口
@@ -21,7 +21,7 @@ open class BaseController<K : BaseService<T>, T : BaseModel> : BaseControllerQue
     @ResponseBody
     protected open fun delete(@RequestBody deleteObject: T): Result<Int?> {
         return try {
-            Result.success(this.service.delete(deleteObject))
+            Result.success(this.service.batchDelete(listOf(deleteObject)))
         } catch (e: Exception) {
             e.printStackTrace()
             Result.failure("删除单个对象时发生错误", 0)

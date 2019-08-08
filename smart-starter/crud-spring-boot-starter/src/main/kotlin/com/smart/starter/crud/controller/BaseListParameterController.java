@@ -14,7 +14,7 @@ import java.util.List;
  * @author ming
  * 2019/7/5 下午8:32
  */
-public class BaseListParameterController<K extends BaseService<T>, T extends BaseModel> {
+public class BaseListParameterController<K extends BaseService<T>, T extends BaseModel> extends BaseControllerQuery<K, T> {
 
     @Autowired
     protected K service;
