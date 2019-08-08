@@ -1,0 +1,38 @@
+.user-card-header {
+    padding: 40px 15px;
+    background-color: white;
+}
+
+.user-card-header-content {
+
+}
+
+.user-card-header-content h6 {
+    margin-top: 11px;
+    margin-bottom: 10px;
+}
+
+.user-card-header-content p {
+    color: #76838f;
+}
+
+.user-card-header .user-card-header-content .avatar {
+    width: 130px;
+}
+.user-card-footer {
+    background-color: #f6f9fd;
+    border-top: 0;
+}
+.tab-container {
+    margin-bottom: 10px;
+    padding: 24px;
+    background-color: white;
+}
+.tab-icon {
+    margin: 0 6px;
+}
+
+.change-password-panel {
+    max-width: 360px;
+    margin: 80px auto;
+}
