@@ -33,6 +33,7 @@ define(["require", "exports", "utils/ApiService", "mixins/MessageMixins", "syste
                         }).then(data => {
                             ApiService_1.default.saveToken(data.Authorization);
                             StoreUtil_1.default.setStore(Constants_1.STORE_KEYS.USER_PREMISSION, data.permission, StoreUtil_1.default.SESSION_TYPE);
+                            StoreUtil_1.default.setStore(Constants_1.STORE_KEYS.USER_KEY, data.user, StoreUtil_1.default.SESSION_TYPE);
                             if (ApiService_1.default.useIde()) {
                                 return ApiService_1.default.registerKey();
                             }

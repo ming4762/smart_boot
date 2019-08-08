@@ -1,7 +1,11 @@
 package com.smart.auth.controller
 
+import com.baomidou.mybatisplus.extension.kotlin.KtUpdateWrapper
 import com.smart.auth.common.constants.AuthConstants
+import com.smart.auth.common.model.SysUserDO
+import com.smart.auth.common.service.AuthUserService
 import com.smart.auth.common.utils.AuthUtils
+import com.smart.auth.model.po.UpdatePasswordPO
 import com.smart.auth.model.vo.OnlineUserVO
 import com.smart.auth.service.AuthService
 import com.smart.common.log.annotation.Log
@@ -26,6 +30,12 @@ class AuthController {
 
     @Autowired
     private lateinit var authService: AuthService
+
+    /**
+     * 用户服务
+     */
+    @Autowired
+    private lateinit var userService: AuthUserService
 
     /**
      * 登出接口
@@ -116,6 +126,31 @@ class AuthController {
         } catch (e: Exception) {
             e.printStackTrace()
             Result.failure(e.message)
+        }
+    }
+
+    /**
+     * 更新密码
+     */
+    @PostMapping("auth/updatePassword")
+    fun updatePassword(@RequestBody updatePasswordPO: UpdatePasswordPO): Result<Boolean?> {
+        try {
+            // 查询用户
+            val user = this.userService.getById(AuthUtils.getCurrentUserId()) ?: return Result.success(false, "用户为登录")
+            if (user.password != updatePasswordPO.oldPassword) {
+                return Result.success(false, "原密码错误")
+            }
+            // 更新密码
+            val updateQuery = KtUpdateWrapper(SysUserDO :: class.java)
+                    .set(SysUserDO :: password, updatePasswordPO.password)
+                    .eq(SysUserDO :: userId, user.userId)
+            this.userService.update(updateQuery)
+            // 退出登录
+            SecurityUtils.getSubject().logout()
+            return Result.success(true)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            return Result.failure(e.message)
         }
     }
 }

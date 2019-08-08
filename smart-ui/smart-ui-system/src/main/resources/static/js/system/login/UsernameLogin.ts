@@ -51,6 +51,8 @@ export default {
             ApiService.saveToken(data.Authorization)
             // 保存权限信息
             StoreUtil.setStore(STORE_KEYS.USER_PREMISSION, data.permission, StoreUtil.SESSION_TYPE)
+            // 保存用户信息
+            StoreUtil.setStore(STORE_KEYS.USER_KEY, data.user, StoreUtil.SESSION_TYPE)
             // 注册秘钥
             if (ApiService.useIde()) {
               return ApiService.registerKey()

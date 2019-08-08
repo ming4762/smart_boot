@@ -78,12 +78,19 @@ class LoginController {
             session.setAttribute(AuthConstants.PERMISSION, permissionList)
             session.setAttribute(AuthConstants.LOGIN_IP, IPUtils.getIpAddr(request))
             // 返回数据
-            Result.success(mapOf(
-                    // token信息
+            val user = AuthUtils.getCurrentUser()
+            user?.let {
+                it.password = null
+            }
+            val data = mutableMapOf(
                     HttpHeaders.AUTHORIZATION to session.id.toString(),
                     "permission" to permissionList
-                    // todo:其他信息待完善
-            ))
+            )
+            user?.let {
+                it.password = null
+                data["user"] = it
+            }
+            Result.success(data)
         } catch (e: Exception) {
             e.printStackTrace()
             Result.failure(e.message)
