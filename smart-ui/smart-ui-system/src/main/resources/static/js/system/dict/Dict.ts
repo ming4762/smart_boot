@@ -10,7 +10,6 @@ import LayoutMixins from 'mixins/LayoutMixins'
 // @ts-ignore
 import TimeUtils from 'utils/TimeUtils'
 
-
 export class Dict extends PageBuilder {
   /**
    * 构建函数

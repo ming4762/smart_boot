@@ -28,13 +28,6 @@
             <artifactId>smart-ui-plugins</artifactId>
             <version>${smart-ui-plugins.version}</version>
         </dependency>
-        <!--todo:正式环境下移除-->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-devtools</artifactId>
-            <optional>true</optional>
-            <scope>true</scope>
-        </dependency>
     </dependencies>
 
     <build>
