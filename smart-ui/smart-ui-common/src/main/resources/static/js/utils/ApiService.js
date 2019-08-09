@@ -60,9 +60,11 @@ define(["require", "exports", "utils/StoreUtil", "utils/RsaUtils", "utils/Md5Uti
             });
         }
         static logout() {
-            return this.postAjax('logout', {}).then(result => {
-                window.sessionStorage.clear();
-            });
+            return this.postAjax('logout', {});
+        }
+        static goToLogin() {
+            window.sessionStorage.clear();
+            window.location.href = `${contextPath}ui/system/login`;
         }
         static saveToken(token) {
             StoreUtil_1.default.setStore(STORE_TOKEN_KEY, token, StoreUtil_1.default.SESSION_TYPE);

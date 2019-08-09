@@ -95,9 +95,15 @@ export default class ApiService  {
    */
   public static logout (): Promise<any> {
     return this.postAjax('logout', {
-    }).then(result => {
-      window.sessionStorage.clear()
     })
+  }
+
+  /**
+   * 跳转到登录页面
+   */
+  public static goToLogin () {
+    window.sessionStorage.clear()
+    window.location.href = `${contextPath}ui/system/login`
   }
 
   /**
