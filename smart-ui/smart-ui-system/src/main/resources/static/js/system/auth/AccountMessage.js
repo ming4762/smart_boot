@@ -68,7 +68,12 @@ define(["require", "exports", "PageBuilder", "plugins/form/SmartForm", "utils/Ap
                         password: AuthUtils_1.createPassword(username, this.model.password)
                     });
                 }).then(result => {
-                    this.successMessage('修改成功');
+                    this.$alert('修改成功，请重新登录', '成功', {
+                        confirmButtonText: '确定',
+                        callback: action => {
+                            ApiService_1.default.goToLogin();
+                        }
+                    });
                 }).catch(error => {
                     this.errorMessage("修改密码失败，请稍后重试", error);
                 });
@@ -92,7 +97,7 @@ define(["require", "exports", "PageBuilder", "plugins/form/SmartForm", "utils/Ap
         },
         data() {
             return {
-                activeName: 'password'
+                activeName: activeTab || 'message'
             };
         },
         template: `

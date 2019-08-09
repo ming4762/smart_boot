@@ -10,6 +10,10 @@
   <div th:replace="common/common-resources :: common-resources-bootstrap-css"></div>
 
   <link rel="stylesheet" th:href="@{/css/system/auth/accountMessage.css}"/>
+  <div th:replace="common/common-resources :: common-resources-contextPath"></div>
+  <script type="text/javascript" th:inline="javascript">
+    var activeTab = [[${activeTab}]]
+  </script>
 </head>
 <body>
 <div id="vue-container" style="background-color: #f1f4f5; min-height: 100%">

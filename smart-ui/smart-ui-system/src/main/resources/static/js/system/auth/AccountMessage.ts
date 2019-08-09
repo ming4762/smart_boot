@@ -9,12 +9,14 @@ import MessageMixins from 'mixins/MessageMixins'
 // @ts-ignore
 import AuthUtils, { createPassword } from 'system/utils/AuthUtils'
 
+declare const activeTab
+
 export class AccountMessage extends PageBuilder {
   protected build () {
     return page
   }
 }
-
+// TODO:修改成功后提示退出系统
 /**
  * 修改密码组件
  */
@@ -79,7 +81,12 @@ const ChangePassword = {
               password: createPassword(username, this.model.password)
             })
           }).then(result => {
-            this.successMessage('修改成功')
+            this.$alert('修改成功，请重新登录', '成功', {
+              confirmButtonText: '确定',
+              callback: action => {
+                ApiService.goToLogin()
+              }
+            })
       }).catch(error => {
         this.errorMessage("修改密码失败，请稍后重试", error)
       })
@@ -104,7 +111,7 @@ const page = {
   },
   data () {
     return {
-      activeName: 'password'
+      activeName: activeTab || 'message'
     }
   },
   template: `
