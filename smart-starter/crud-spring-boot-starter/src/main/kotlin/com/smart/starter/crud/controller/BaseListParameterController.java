@@ -1,6 +1,7 @@
 package com.smart.starter.crud.controller;
 
 import com.smart.common.message.Result;
+import com.smart.common.message.ResultCodeEnum;
 import com.smart.starter.crud.model.BaseModel;
 import com.smart.starter.crud.service.BaseService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +30,7 @@ public class BaseListParameterController<K extends BaseService<T>, T extends Bas
     @ResponseBody
     protected Result<Object> batchDelete(@RequestBody List<T> deleteObjects) {
         try {
-            return Result.success(this.service.batchDelete(deleteObjects));
+            return Result.success(this.service.batchDelete(deleteObjects), ResultCodeEnum.SUCCESS.getMsg());
         } catch (Exception e) {
             e.printStackTrace();
             return Result.failure("批量删除时发生错误", 0);
@@ -43,7 +44,7 @@ public class BaseListParameterController<K extends BaseService<T>, T extends Bas
     @ResponseBody
     protected Result<Boolean> batchSave(@RequestBody List<T> tList) {
         try {
-            return Result.success(this.service.saveBatch(tList));
+            return Result.success(this.service.saveBatch(tList), ResultCodeEnum.SUCCESS.getMsg());
         } catch (Exception e) {
             e.printStackTrace();
             return Result.failure(e.getMessage(), false);
