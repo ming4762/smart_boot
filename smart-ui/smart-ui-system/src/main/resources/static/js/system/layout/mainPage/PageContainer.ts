@@ -32,6 +32,10 @@ export default {
         }
         return path
       } else {
+        const path = this.menuPath[menu.id]
+        if (path && path !== menu.path) {
+          this.menuPath[menu.id] = menu.path
+        }
         return this.menuPath[menu.id]
       }
     }

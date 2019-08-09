@@ -102,6 +102,28 @@ export class Home extends PageBuilder {
           })
         },
         /**
+         * 通过ID删除菜单
+         * @param id
+         */
+        deleteMenuById (id: string): Promise<any> {
+          return new Promise<any>((resolve, reject) => {
+            for (let i=0; i<this.openMenuList.length; i++) {
+              const menu = this.openMenuList[i]
+              if (menu.id === id) {
+                this.openMenuList.splice(i, 1)
+                break
+              }
+            }
+            StoreUtil.setStore(STORE_KEYS.OPEN_MENU_LIST, this.openMenuList, StoreUtil.SESSION_TYPE)
+            // 如果关闭的是激活的菜单，则设置下一个激活的菜单
+            if (this.activeMenu.id === id) {
+              const activeMenu = this.openMenuList.slice(-1)[0]
+              // 设置激活的菜单 TODO: 判断activeMenu是否存在
+              this.setActiveMenu(activeMenu)
+            }
+          })
+        },
+        /**
          * 删除菜单
          * @param menuPath
          */

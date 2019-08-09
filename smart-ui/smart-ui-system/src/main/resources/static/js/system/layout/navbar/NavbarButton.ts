@@ -26,7 +26,8 @@ export default {
       // 标识全屏状态
       isFullScreen: false,
       //TODO
-      activeIndex: null
+      activeIndex: null,
+      accountMessageUrl: '/ui/system/accountMessage'
     }
   },
   created () {
@@ -77,7 +78,6 @@ export default {
 
     },
     handleSelect (index: string) {
-      console.log(index)
       switch (index) {
         case 'fullScreen':
           this.handleClickFullScreen()
@@ -87,6 +87,9 @@ export default {
           break
         case 'accountMessage':
           this.handleShowAccountMessage()
+          break
+        case 'updatePassword':
+          this.handleUpdatePassword()
           break
       }
     },
@@ -115,10 +118,37 @@ export default {
       /**
        * 跳转到账户信息页面
        */
-      this.getBus.addMenu({
-        name: '账户信息',
-        path: '/ui/system/accountMessage'
-      })
+      this.goToAccountMessagePage(this.accountMessageUrl)
+    },
+    /**
+     * 修改密码
+     */
+    handleUpdatePassword () {
+      this.goToAccountMessagePage(`${this.accountMessageUrl}?activeTab=password`)
+    },
+    /**
+     * 跳转到账户信息页面
+     * @param menuPath
+     */
+    goToAccountMessagePage (menuPath: any) {
+      const menuId = 'accountMessage'
+      // 判断菜单是否存在
+      let accountMessageMenu = null
+      for (let menu of this.getBus.openMenuList) {
+        if (menu.id === menuId) {
+          accountMessageMenu = menu
+          break
+        }
+      }
+      if (accountMessageMenu !== null) {
+        accountMessageMenu.path = menuPath
+      } else {
+        this.getBus.addMenu({
+          id: menuId,
+          name: '账户信息',
+          path: menuPath
+        })
+      }
     }
   },
   template: `
@@ -134,6 +164,7 @@ export default {
         <template slot="title">
           <i class="el-icon-user-solid"></i>
         </template>
+        <el-menu-item index="updatePassword">修改密码</el-menu-item>
         <el-menu-item index="accountMessage">账户信息</el-menu-item>
         <el-divider></el-divider>
         <el-menu-item index="userlogout">

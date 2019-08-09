@@ -56,6 +56,22 @@ define(["require", "exports", "PageBuilder", "system/layout/Layout", "utils/Stor
                             }
                         });
                     },
+                    deleteMenuById(id) {
+                        return new Promise((resolve, reject) => {
+                            for (let i = 0; i < this.openMenuList.length; i++) {
+                                const menu = this.openMenuList[i];
+                                if (menu.id === id) {
+                                    this.openMenuList.splice(i, 1);
+                                    break;
+                                }
+                            }
+                            StoreUtil_1.default.setStore(Constants_1.STORE_KEYS.OPEN_MENU_LIST, this.openMenuList, StoreUtil_1.default.SESSION_TYPE);
+                            if (this.activeMenu.id === id) {
+                                const activeMenu = this.openMenuList.slice(-1)[0];
+                                this.setActiveMenu(activeMenu);
+                            }
+                        });
+                    },
                     deleteMenu(menuPath) {
                         return new Promise((resolve, reject) => {
                             for (let i = 0; i < this.openMenuList.length; i++) {

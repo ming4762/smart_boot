@@ -7,7 +7,8 @@ define(["require", "exports", "utils/CommonUtils", "mixins/ThemeMixins", "mixins
             return {
                 buttonList: [],
                 isFullScreen: false,
-                activeIndex: null
+                activeIndex: null,
+                accountMessageUrl: '/ui/system/accountMessage'
             };
         },
         created() {
@@ -47,7 +48,6 @@ define(["require", "exports", "utils/CommonUtils", "mixins/ThemeMixins", "mixins
             handleClickUser() {
             },
             handleSelect(index) {
-                console.log(index);
                 switch (index) {
                     case 'fullScreen':
                         this.handleClickFullScreen();
@@ -57,6 +57,9 @@ define(["require", "exports", "utils/CommonUtils", "mixins/ThemeMixins", "mixins
                         break;
                     case 'accountMessage':
                         this.handleShowAccountMessage();
+                        break;
+                    case 'updatePassword':
+                        this.handleUpdatePassword();
                         break;
                 }
             },
@@ -76,10 +79,30 @@ define(["require", "exports", "utils/CommonUtils", "mixins/ThemeMixins", "mixins
                 });
             },
             handleShowAccountMessage() {
-                this.getBus.addMenu({
-                    name: '账户信息',
-                    path: '/ui/system/accountMessage'
-                });
+                this.goToAccountMessagePage(this.accountMessageUrl);
+            },
+            handleUpdatePassword() {
+                this.goToAccountMessagePage(`${this.accountMessageUrl}?activeTab=password`);
+            },
+            goToAccountMessagePage(menuPath) {
+                const menuId = 'accountMessage';
+                let accountMessageMenu = null;
+                for (let menu of this.getBus.openMenuList) {
+                    if (menu.id === menuId) {
+                        accountMessageMenu = menu;
+                        break;
+                    }
+                }
+                if (accountMessageMenu !== null) {
+                    accountMessageMenu.path = menuPath;
+                }
+                else {
+                    this.getBus.addMenu({
+                        id: menuId,
+                        name: '账户信息',
+                        path: menuPath
+                    });
+                }
             }
         },
         template: `
@@ -95,6 +118,7 @@ define(["require", "exports", "utils/CommonUtils", "mixins/ThemeMixins", "mixins
         <template slot="title">
           <i class="el-icon-user-solid"></i>
         </template>
+        <el-menu-item index="updatePassword">修改密码</el-menu-item>
         <el-menu-item index="accountMessage">账户信息</el-menu-item>
         <el-divider></el-divider>
         <el-menu-item index="userlogout">

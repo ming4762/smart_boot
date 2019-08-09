@@ -28,6 +28,10 @@ define(["require", "exports"], function (require, exports) {
                     return path;
                 }
                 else {
+                    const path = this.menuPath[menu.id];
+                    if (path && path !== menu.path) {
+                        this.menuPath[menu.id] = menu.path;
+                    }
                     return this.menuPath[menu.id];
                 }
             }
