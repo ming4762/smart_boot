@@ -3,15 +3,18 @@ define(["require", "exports", "PageBuilder", "utils/TimeUtils", "plugins/table/S
     Object.defineProperty(exports, "__esModule", { value: true });
     class Log extends PageBuilder_1.default {
         build() {
-            return page;
+            return exports.LogComponent;
         }
     }
     exports.Log = Log;
-    const page = {
+    exports.LogComponent = {
         components: {
             'smart-table-crud': SmartTableCRUD_1.default
         },
         mixins: [LayoutMixins_1.default],
+        props: {
+            userId: String
+        },
         data() {
             return {
                 apiService: ApiService_1.default,
@@ -118,6 +121,14 @@ define(["require", "exports", "PageBuilder", "utils/TimeUtils", "plugins/table/S
             },
             handleShowParamsDetail(params) {
                 this.$alert(params ? params : '');
+            },
+            handleQueryParameterFormatter(parameter) {
+                if (this.userId) {
+                    return Object.assign({
+                        'userId@=': this.userId
+                    }, parameter);
+                }
+                return parameter;
             }
         },
         template: `
@@ -135,6 +146,7 @@ define(["require", "exports", "PageBuilder", "utils/TimeUtils", "plugins/table/S
       :height="computedTableHeight"
       :columnOptions="columnOptions"
       tableName="日志"
+      :queryParameterFormatter="handleQueryParameterFormatter"
       :apiService="apiService">
       <!--参数插槽-->
       <template v-slot:table-params="{row}">

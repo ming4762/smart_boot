@@ -11,15 +11,18 @@ import LayoutMixins from 'mixins/LayoutMixins'
 
 export class Log extends PageBuilder {
   protected build () {
-    return page
+    return LogComponent
   }
 }
 
-const page = {
+export const LogComponent = {
   components: {
     'smart-table-crud': SmartTableCRUD
   },
   mixins: [ LayoutMixins ],
+  props: {
+    userId: String
+  },
   data () {
     return {
       apiService: ApiService,
@@ -130,6 +133,17 @@ const page = {
      */
     handleShowParamsDetail (params) {
       this.$alert(params ? params : '')
+    },
+    /**
+     * 参数格式化
+     */
+    handleQueryParameterFormatter (parameter) {
+      if (this.userId) {
+        return Object.assign({
+          'userId@=': this.userId
+        }, parameter)
+      }
+      return parameter
     }
   },
   template: `
@@ -147,6 +161,7 @@ const page = {
       :height="computedTableHeight"
       :columnOptions="columnOptions"
       tableName="日志"
+      :queryParameterFormatter="handleQueryParameterFormatter"
       :apiService="apiService">
       <!--参数插槽-->
       <template v-slot:table-params="{row}">
