@@ -68,9 +68,8 @@ define(["require", "exports", "utils/CommonUtils", "mixins/ThemeMixins", "mixins
                 }).then(() => {
                     return ApiService_1.default.logout();
                 }).then(() => {
-                    window.location.href = `${contextPath}ui/system/login`;
+                    ApiService_1.default.goToLogin();
                 }).catch(error => {
-                    console.log(error);
                     if (error !== 'cancel') {
                         this.errorMessage('退出时发生错误，请稍后重试', error);
                     }

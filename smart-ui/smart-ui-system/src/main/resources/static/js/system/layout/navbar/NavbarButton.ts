@@ -101,9 +101,8 @@ export default {
       }).then(() => {
         return ApiService.logout()
       }).then(() => {
-        window.location.href = `${contextPath}ui/system/login`
+        ApiService.goToLogin()
       }).catch(error => {
-        console.log(error)
         if (error !== 'cancel') {
           this.errorMessage('退出时发生错误，请稍后重试', error)
         }
