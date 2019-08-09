@@ -9,6 +9,8 @@ import MessageMixins from 'mixins/MessageMixins'
 // @ts-ignore
 import AuthUtils, { createPassword } from 'system/utils/AuthUtils'
 
+import { LogComponent } from 'system/log/Log'
+
 declare const activeTab
 
 export class AccountMessage extends PageBuilder {
@@ -16,7 +18,6 @@ export class AccountMessage extends PageBuilder {
     return page
   }
 }
-// TODO:修改成功后提示退出系统
 /**
  * 修改密码组件
  */
@@ -105,13 +106,17 @@ const ChangePassword = {
   `
 }
 
+
 const page = {
   components: {
-    ChangePassword
+    ChangePassword,
+    // 日志组件
+    LogComponent
   },
   data () {
     return {
-      activeName: activeTab || 'message'
+      activeName: activeTab || 'message',
+      userId: AuthUtils.getCurrentUserId()
     }
   },
   template: `
@@ -139,6 +144,7 @@ const page = {
             </el-tab-pane>
             <el-tab-pane label="日志" name="log">
               <span slot="label"><i class="tab-icon el-icon-document"></i>日志</span>
+              <LogComponent :userId="userId"/>
             </el-tab-pane>
             <el-tab-pane label="密码" name="password">
               <span slot="label"><i class="tab-icon el-icon-key"></i>密码</span>

@@ -1,4 +1,4 @@
-define(["require", "exports", "PageBuilder", "plugins/form/SmartForm", "utils/ApiService", "mixins/MessageMixins", "system/utils/AuthUtils"], function (require, exports, PageBuilder_1, SmartForm_1, ApiService_1, MessageMixins_1, AuthUtils_1) {
+define(["require", "exports", "PageBuilder", "plugins/form/SmartForm", "utils/ApiService", "mixins/MessageMixins", "system/utils/AuthUtils", "system/log/Log"], function (require, exports, PageBuilder_1, SmartForm_1, ApiService_1, MessageMixins_1, AuthUtils_1, Log_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class AccountMessage extends PageBuilder_1.default {
@@ -93,11 +93,13 @@ define(["require", "exports", "PageBuilder", "plugins/form/SmartForm", "utils/Ap
     };
     const page = {
         components: {
-            ChangePassword
+            ChangePassword,
+            LogComponent: Log_1.LogComponent
         },
         data() {
             return {
-                activeName: activeTab || 'message'
+                activeName: activeTab || 'message',
+                userId: AuthUtils_1.default.getCurrentUserId()
             };
         },
         template: `
@@ -125,6 +127,7 @@ define(["require", "exports", "PageBuilder", "plugins/form/SmartForm", "utils/Ap
             </el-tab-pane>
             <el-tab-pane label="日志" name="log">
               <span slot="label"><i class="tab-icon el-icon-document"></i>日志</span>
+              <LogComponent :userId="userId"/>
             </el-tab-pane>
             <el-tab-pane label="密码" name="password">
               <span slot="label"><i class="tab-icon el-icon-key"></i>密码</span>
