@@ -5765,8 +5765,8 @@ var es6_symbol = __webpack_require__("8a81");
       type: 'layer',
       // 默认的需要由调用图层单位设定
       defaultIndex: 0,
-      // 地图对象
-      map: null,
+      // 创建完毕回调
+      createCallback: null,
       // 视图容器
       viewContainer: null
     };
@@ -5782,18 +5782,25 @@ var es6_symbol = __webpack_require__("8a81");
         if (this.layer !== null) {
           this.layer.visible = _new;
         } else if (_new === true) {
-          this.init();
+          this.createGisLayer();
         }
       }
     }
   },
   methods: {
-    /**
-     * 设置默认的序号
-     * @param index
-     */
-    setDefaultIndex: function setDefaultIndex(index) {
+    // 初始化函数
+    init: function init(viewContainer, index, callback) {
       this.defaultIndex = index;
+      this.viewContainer = viewContainer;
+      this.createCallback = callback; // 如果视图是可见的，初始化完毕后直接创建
+
+      if (this.visible === true) {
+        this.createGisLayer();
+      }
+    },
+    createGisLayer: function createGisLayer() {
+      /* eslint-disable */
+      console.warn("未覆盖方法，未能创建图层");
     },
 
     /**
@@ -5807,10 +5814,21 @@ var es6_symbol = __webpack_require__("8a81");
      * 获取序号
      */
     getIndex: function getIndex() {
-      if (this.index !== null) {
+      if (this.index) {
         return this.index;
       } else {
         return this.defaultIndex;
+      }
+    },
+
+    /**
+     * 获取地图实例
+     */
+    getGisMap: function getGisMap() {
+      if (this.viewContainer === null) {
+        return null;
+      } else {
+        return this.viewContainer.activeView.map;
       }
     }
   }
@@ -5902,58 +5920,6 @@ var GisGraphicsLayer = null;
   watch: {},
   methods: {
     /**
-     * 初始化函数
-     * @param map 地图对象
-     * @param viewContainer 视图容器
-     * @returns {Promise<void>}
-     */
-    init: function () {
-      var _init = _asyncToGenerator(
-      /*#__PURE__*/
-      regeneratorRuntime.mark(function _callee(map, viewContainer) {
-        return regeneratorRuntime.wrap(function _callee$(_context) {
-          while (1) {
-            switch (_context.prev = _context.next) {
-              case 0:
-                if (!(GisGraphicsLayer === null)) {
-                  _context.next = 4;
-                  break;
-                }
-
-                _context.next = 3;
-                return GisUtil_GisUtil.loadModules('esri/layers/GraphicsLayer');
-
-              case 3:
-                GisGraphicsLayer = _context.sent[0];
-
-              case 4:
-                this.map = map;
-                this.viewContainer = viewContainer;
-                this.layer = new GisGraphicsLayer({
-                  id: this.id,
-                  title: this.title
-                }); // 添加图层
-
-                this.map.add(this.layer, this.getIndex()); // 加载数据
-
-                this.loadData();
-
-              case 9:
-              case "end":
-                return _context.stop();
-            }
-          }
-        }, _callee, this);
-      }));
-
-      function init(_x, _x2) {
-        return _init.apply(this, arguments);
-      }
-
-      return init;
-    }(),
-
-    /**
      * 获取图形元素集合
      */
     getGraphics: function getGraphics() {
@@ -6040,6 +6006,56 @@ var GisGraphicsLayer = null;
     // -----------私有方法 ------------
 
     /**
+     * 创建gis图层
+     */
+    createGisLayer: function () {
+      var _createGisLayer = _asyncToGenerator(
+      /*#__PURE__*/
+      regeneratorRuntime.mark(function _callee() {
+        return regeneratorRuntime.wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                if (!(GisGraphicsLayer === null)) {
+                  _context.next = 4;
+                  break;
+                }
+
+                _context.next = 3;
+                return GisUtil_GisUtil.loadModules('esri/layers/GraphicsLayer');
+
+              case 3:
+                GisGraphicsLayer = _context.sent[0];
+
+              case 4:
+                this.layer = new GisGraphicsLayer({
+                  id: this.id,
+                  title: this.title
+                }); // 执行回调
+
+                if (this.createCallback) {
+                  this.createCallback(this.layer, this.getIndex());
+                } // 加载数据
+
+
+                this.loadData();
+
+              case 7:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee, this);
+      }));
+
+      function createGisLayer() {
+        return _createGisLayer.apply(this, arguments);
+      }
+
+      return createGisLayer;
+    }(),
+
+    /**
      * 转换数据
      */
     convertData: function convertData(dataList, baseGraphicType) {
@@ -6074,6 +6090,7 @@ var GisGraphicsLayer = null;
       var graphicType = data.graphicType || baseGraphicType;
 
       if (!graphicType) {
+        /* eslint-disable */
         console.warn('获取元素类型失败');
       }
 
@@ -6455,17 +6472,38 @@ var config = {
     }
   },
   created: function created() {
-    if (this.preset === null && this.urlTemplate === null) {
-      console.error('参数错误，如果未选择预设，请设置urlTemplate');
+    if (!this.preset && !this.urlTemplate) {
+      // eslint-disable-line
+      throw Error('参数错误，如果未选择预设，请设置urlTemplate');
     }
   },
   methods: {
     /**
-     * 初始化方法
-     * @returns {Promise<void>}
+     * 获取配置
+     * 如果设置预设信息则使用预设对应tileinof
      */
-    init: function () {
-      var _init = _asyncToGenerator(
+    getConfig: function getConfig() {
+      if (this.preset) {
+        var layerConfig = config[this.preset];
+
+        if (this.preset === presetLayer.global) {
+          layerConfig.urlTemplate = layerConfig.urlTemplate + "&tk=".concat(this.token);
+        }
+
+        return layerConfig;
+      } else {
+        return {
+          urlTemplate: this.urlTemplate,
+          tileInfo: this.tileInfo
+        };
+      }
+    },
+
+    /**
+     * 创建GIS图层
+     */
+    createGisLayer: function () {
+      var _createGisLayer = _asyncToGenerator(
       /*#__PURE__*/
       regeneratorRuntime.mark(function _callee() {
         var _ref, _ref2, TileInfo, WebTileLayer, tileInfo, layerConfig, properties;
@@ -6508,8 +6546,11 @@ var config = {
                   properties.subDomains = layerConfig.subDomains;
                 }
 
-                this.layer = new WebTileLayer(properties);
-                return _context.abrupt("return", this.layer);
+                this.layer = new WebTileLayer(properties); // 执行回调
+
+                if (this.createCallback) {
+                  this.createCallback(this.layer, this.getIndex());
+                }
 
               case 15:
               case "end":
@@ -6519,34 +6560,15 @@ var config = {
         }, _callee, this);
       }));
 
-      function init() {
-        return _init.apply(this, arguments);
+      function createGisLayer() {
+        return _createGisLayer.apply(this, arguments);
       }
 
-      return init;
-    }(),
-
-    /**
-     * 获取配置
-     * 如果设置预设信息则使用预设对应tileinof
-     */
-    getConfig: function getConfig() {
-      if (this.preset !== null) {
-        var layerConfig = config[this.preset];
-
-        if (this.preset === presetLayer.global) {
-          layerConfig.urlTemplate = layerConfig.urlTemplate + "&tk=".concat(this.token);
-        }
-
-        return layerConfig;
-      } else {
-        return {
-          urlTemplate: this.urlTemplate,
-          tileInfo: this.tileInfo
-        };
-      }
-    }
+      return createGisLayer;
+    }()
   },
+
+  /* eslint-disable */
   render: function render(h) {
     return undefined;
   }
@@ -6665,7 +6687,6 @@ var ArcgisMap_name = 'arcgis-map';
       var _initMapProperties = _asyncToGenerator(
       /*#__PURE__*/
       regeneratorRuntime.mark(function _callee2() {
-        var abc;
         return regeneratorRuntime.wrap(function _callee2$(_context2) {
           while (1) {
             switch (_context2.prev = _context2.next) {
@@ -6674,17 +6695,12 @@ var ArcgisMap_name = 'arcgis-map';
                 return this.getBaseMap();
 
               case 2:
-                abc = _context2.sent;
-                _context2.next = 5;
-                return this.getBaseMap();
-
-              case 5:
                 _context2.t0 = _context2.sent;
                 return _context2.abrupt("return", {
                   basemap: _context2.t0
                 });
 
-              case 7:
+              case 4:
               case "end":
                 return _context2.stop();
             }
@@ -6729,7 +6745,7 @@ var ArcgisMap_name = 'arcgis-map';
                 }
 
                 _context3.next = 7;
-                return child.init();
+                return child.init(this.viewContainer);
 
               case 7:
                 baseMap = _context3.sent;
@@ -6782,15 +6798,139 @@ var ArcgisMap_name = 'arcgis-map';
 
     /**
      * 添加图层
-     * @param layer
-     * @param index
+     * @param layerVue layer vue对象
+     * @param index 图层序号
      */
-    addLayer: function addLayer(layer, index) {
-      // 设置默认序号
-      layer.setDefaultIndex(index); // 如果图层是显示的直接创建
+    addLayer: function addLayer(layerVue, index) {
+      var _this2 = this;
 
-      if (layer.getVisible() === true) {
-        layer.init(this.map, this.viewContainer);
+      // 初始化图层对象
+      layerVue.init(this.viewContainer, index, function (gisLayer, index) {
+        _this2.map.add(gisLayer, index);
+      });
+    }
+  },
+
+  /* eslint-disable */
+  render: function render(h) {
+    return h("div", [this.$slots.default]);
+  }
+});
+// CONCATENATED MODULE: ./packages/map/src/BaseMap.js
+
+
+
+
+
+var BaseMap_name = 'base-map';
+/* harmony default export */ var BaseMap = ({
+  name: BaseMap_name,
+  props: {
+    id: String,
+    title: String
+  },
+  data: function data() {
+    return {
+      name: BaseMap_name,
+      // 视图容器对象
+      viewContainer: null,
+      baseap: null
+    };
+  },
+  methods: {
+    // --------- 公共方法 -------------
+
+    /**
+     * 初始化方法
+     * @returns {Promise<void>}
+     */
+    init: function () {
+      var _init = _asyncToGenerator(
+      /*#__PURE__*/
+      regeneratorRuntime.mark(function _callee(viewContainer) {
+        var _ref, _ref2, Basemap;
+
+        return regeneratorRuntime.wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                this.viewContainer = viewContainer;
+                _context.next = 3;
+                return GisUtil_GisUtil.loadModules('esri/Basemap');
+
+              case 3:
+                _ref = _context.sent;
+                _ref2 = _slicedToArray(_ref, 1);
+                Basemap = _ref2[0];
+                this.baseap = new Basemap(this.initMapProperties()); // 添加图层
+
+                this.initLayers();
+                return _context.abrupt("return", this.baseap);
+
+              case 9:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee, this);
+      }));
+
+      function init(_x) {
+        return _init.apply(this, arguments);
+      }
+
+      return init;
+    }(),
+    // -------- 私有方法 ----------
+    initLayers: function initLayers() {
+      // 初始化图层
+      if (this.$children.length > 0) {
+        var indexObject = {
+          index: 1
+        };
+        this.recursionInit(this.$children, indexObject);
+      }
+    },
+
+    /**
+     * 初始化地图参数
+     */
+    initMapProperties: function initMapProperties() {
+      var properties = {
+        baseLayers: []
+      };
+
+      if (this.id != null) {
+        properties.id = this.id;
+      }
+
+      if (this.title != null) {
+        properties.title = this.title;
+      }
+
+      return properties;
+    },
+
+    /**
+     * 使用递归初始化图层
+     */
+    recursionInit: function recursionInit(children, indexObject) {
+      var _this = this;
+
+      for (var i = 0; i < children.length; i++) {
+        var child = children[i];
+
+        if (child['type'] === 'layer') {
+          indexObject.index = indexObject.index + 1;
+          child.init(this.viewContainer, indexObject.index, function (gisLayer) {
+            _this.baseap.baseLayers.push(gisLayer);
+          }); // const layer = await child.init(this.viewContainer, indexObject.index)
+          // properties.baseLayers.push(layer)
+        }
+
+        if (child.$children.length > 0 && child.name !== 'base-map') {
+          this.recursionInit(child.$children, indexObject);
+        }
       }
     }
   },
@@ -6804,8 +6944,13 @@ var ArcgisMap_name = 'arcgis-map';
 
 
 
+
 ArcgisMap.install = function (Vue) {
   Vue.component(ArcgisMap.name, ArcgisMap);
+};
+
+BaseMap.install = function (Vue) {
+  Vue.component(BaseMap.name, BaseMap);
 };
 
 
@@ -6825,7 +6970,7 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 
 
 
-var components = [packages_view, GraphicsLayer, src_WebTileLayer, ArcgisMap];
+var components = [packages_view, GraphicsLayer, src_WebTileLayer, ArcgisMap, BaseMap];
 
 var install = function install(Vue) {
   if (install.installed) return;
