@@ -1,19 +1,25 @@
 // @ts-ignore
-import PageBuilder from 'PageBuilder'
+import PageBuilder from '../../PageBuilder.js'
+// @ts-ignore
+import SmartTableCRUD from '../../plugins/table/SmartTableCRUD.js'
+// @ts-ignore
+import ApiService from '../../utils/ApiService.js'
+// @ts-ignore
+import LayoutMixins from '../../mixins/LayoutMixins.js'
 
 // @ts-ignore
-import SmartTableCRUD from 'plugins/table/SmartTableCRUD'
+import TimeUtils from '../../utils/TimeUtils.js'
 // @ts-ignore
-import ApiService from 'utils/ApiService'
-// @ts-ignore
-import LayoutMixins from 'mixins/LayoutMixins'
+import TreeUtils from '../../utils/TreeUtils.js'
 
-// @ts-ignore
-import TimeUtils from 'utils/TimeUtils'
-// @ts-ignore
-import TreeUtils from 'utils/TreeUtils'
+declare const ready
 
-export class Module extends PageBuilder {
+ready(function () {
+  // @ts-ignore
+  new Module().init()
+})
+
+class Module extends PageBuilder {
   /**
    * 构建函数
    */

@@ -1,66 +1,52 @@
 // @ts-ignore
-import ComponentBuilder from 'ComponentBuilder'
+import PageBuilder from '../../PageBuilder.js'
 // @ts-ignore
-import SmartTableCRUD from 'plugins/table/SmartTableCRUD'
+import SmartTableCRUD from '../../plugins/table/SmartTableCRUD.js'
 // @ts-ignore
-import ApiService from 'utils/ApiService'
+import ApiService from '../../utils/ApiService.js'
 // @ts-ignore
-import ValidateUtils from 'utils/ValidateUtils'
+import LayoutMixins from '../../mixins/LayoutMixins.js'
 // @ts-ignore
-import LayoutMixins from 'mixins/LayoutMixins'
+import ValidateUtils from '../../utils/ValidateUtils.js'
 
+declare const ready
+
+ready(function () {
+  // @ts-ignore
+  new User().init()
+})
 
 /**
  * 用户界面构建
  */
-export class User extends ComponentBuilder {
-
-  private vue: any
-
+export class User extends PageBuilder {
   /**
-   * 初始化方法
+   * 构建函数
    */
-  public init () {
-    this.initVue()
+  protected build () {
+    return page
   }
-
-  /**
-   * 初始化vue
-   */
-  private initVue () {
-    // @ts-ignore
-    this.vue = new Vue({
-      el: '#vue-container',
-      components: {
-        // @ts-ignore
-        'home-main': this.build()
-      }
-    })
-  }
-
-  /**
-   * 验证手机号
-   */
-  private static validateMobile (rule, value: string, callback): void {
-    if (value && value.trim() !== '') {
-      let result: any[] = ValidateUtils.validateMobile(value.trim())
-      if (result[0]) {
-        callback()
-      } else {
-        callback(new Error(result[1]))
-      }
-    } else {
+}
+const validateMobile = (rule, value: string, callback): void => {
+  if (value && value.trim() !== '') {
+    let result: any[] = ValidateUtils.validateMobile(value.trim())
+    if (result[0]) {
       callback()
+    } else {
+      callback(new Error(result[1]))
     }
+  } else {
+    callback()
   }
+}
 
-  protected mixins () {
-    return [
-        LayoutMixins
-    ]
-  }
 
-  protected data () {
+const page = {
+  components: {
+    'smart-table-crud': SmartTableCRUD
+  },
+  mixins: [LayoutMixins],
+  data () {
     return {
       apiService: ApiService,
       /**
@@ -121,7 +107,7 @@ export class User extends ComponentBuilder {
             rules: [{
               required: false,
               tigger: 'blur',
-              validator: User.validateMobile
+              validator: validateMobile
             }]
           }
         },
@@ -185,62 +171,48 @@ export class User extends ComponentBuilder {
         }
       }
     }
-  }
-
-  protected components () {
-    return {
-      'smart-table-crud': SmartTableCRUD
-    }
-  }
-
-  protected methods () {
-    return {
-      formatStatusType (row): string {
-        let result = ''
-        switch (row.status) {
-          case '1':
-            result = 'success'
-            break
-          case '0':
-            result = 'danger'
-            break
-          case '2':
-            result = 'warning'
-            break
-        }
-        return result
-      },
-      formatStateValue (row): string {
-        let result = ''
-        switch (row.status) {
-          case '1':
-            result = '正常'
-            break
-          case '0':
-            result = '禁用'
-            break
-          case '2':
-            result = '锁定'
-            break
-        }
-        return result
+  },
+  methods: {
+    formatStatusType (row): string {
+      let result = ''
+      switch (row.status) {
+        case '1':
+          result = 'success'
+          break
+        case '0':
+          result = 'danger'
+          break
+        case '2':
+          result = 'warning'
+          break
       }
-    }
-  }
-
-  protected computed () {
-    return {
-      /**
-       * 计算表格高度
-       */
-      computedTableHeight () {
-        return this.clientHeight - 30
+      return result
+    },
+    formatStateValue (row): string {
+      let result = ''
+      switch (row.status) {
+        case '1':
+          result = '正常'
+          break
+        case '0':
+          result = '禁用'
+          break
+        case '2':
+          result = '锁定'
+          break
       }
+      return result
     }
-  }
-
-  protected template () {
-    return `
+  },
+  computed: {
+    /**
+     * 计算表格高度
+     */
+    computedTableHeight () {
+      return this.clientHeight - 30
+    }
+  },
+  template:  `
     <div style="padding: 15px;">
       <smart-table-crud
         :defaultButtonConfig="defaultButtonConfig"
@@ -261,5 +233,4 @@ export class User extends ComponentBuilder {
       </smart-table-crud>
     </div>
     `
-  }
 }

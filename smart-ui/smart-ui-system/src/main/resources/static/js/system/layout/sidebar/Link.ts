@@ -1,5 +1,5 @@
 // @ts-ignore
-import ValidateUtils from 'utils/ValidateUtils'
+import ValidateUtils from '../../../utils/ValidateUtils.js'
 
 /**
  * 连接组件

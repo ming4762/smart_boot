@@ -1,11 +1,11 @@
 
 declare var busVue
 // @ts-ignore 样式混入
-import ThemeMixins from 'mixins/ThemeMixins'
+import ThemeMixins from '../../../mixins/ThemeMixins.js'
 // @ts-ignore
-import ValidateUtils from 'utils/ValidateUtils'
+import ValidateUtils from '../../../utils/ValidateUtils.js'
 
-import SidebarItem from 'system/layout/sidebar/SidebarItem'
+import SidebarItem from './SidebarItem.js'
 
 export default {
   mixins: [

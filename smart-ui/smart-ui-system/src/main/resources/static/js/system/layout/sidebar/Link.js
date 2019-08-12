@@ -1,19 +1,17 @@
-define(["require", "exports", "utils/ValidateUtils"], function (require, exports, ValidateUtils_1) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.default = {
-        props: {
-            to: {
-                required: true,
-                type: String
-            }
-        },
-        methods: {
-            isExternalLink(routePath) {
-                return ValidateUtils_1.default.validateURL(routePath);
-            }
-        },
-        template: `
+import ValidateUtils from '../../../utils/ValidateUtils.js';
+export default {
+    props: {
+        to: {
+            required: true,
+            type: String
+        }
+    },
+    methods: {
+        isExternalLink(routePath) {
+            return ValidateUtils.validateURL(routePath);
+        }
+    },
+    template: `
   <a v-if="isExternalLink(to)" :href="to" target="_blank" rel="noopener">
     <slot/>
   </a>
@@ -21,5 +19,4 @@ define(["require", "exports", "utils/ValidateUtils"], function (require, exports
     <slot/>
   </a>
   `
-    };
-});
+};

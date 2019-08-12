@@ -1,8 +1,6 @@
-// @ts-ignore
-import ComponentBuilder from 'ComponentBuilder'
 
 // @ts-ignore
-import ResizeHandler from 'utils/ResizeHandler'
+import ResizeHandler from '../utils/ResizeHandler.js'
 
 export default {
   data () {

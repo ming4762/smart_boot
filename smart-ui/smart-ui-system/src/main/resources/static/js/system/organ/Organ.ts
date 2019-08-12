@@ -1,59 +1,45 @@
 // @ts-ignore
-import ComponentBuilder from 'ComponentBuilder'
+import PageBuilder from '../../PageBuilder.js'
 // @ts-ignore
-import FlexAside from 'plugins/container/FlexAside'
-import OrganTree from 'system/organ/OrganTree'
+import FlexAside from '../../plugins/container/FlexAside.js'
+import OrganTree from './OrganTree.js'
 // @ts-ignore
-import SmartForm from 'plugins/form/SmartForm'
+import SmartForm from '../../plugins/form/SmartForm.js'
 // @ts-ignore
-import ApiService from 'utils/ApiService'
+import ApiService from '../../utils/ApiService.js'
 // @ts-ignore
-import MessageMixins from 'mixins/MessageMixins'
+import MessageMixins from '../../mixins/MessageMixins.js'
 // @ts-ignore
-import CommonUtils from 'utils/CommonUtils'
-import OrganDetail from 'system/organ/OrganDetail'
+import CommonUtils from '../../utils/CommonUtils.js'
+import OrganDetail from './OrganDetail.js'
 
-export class Organ extends ComponentBuilder {
+declare const ready
 
-  private vue: any
+ready(function () {
+  // @ts-ignore
+  new Organ().init()
+})
 
-  public init() {
-    this.initVue()
-  }
-
-  private initVue () {
-    // @ts-ignore
-    this.vue = new Vue({
-      el: '#vue-container',
-      components: {
-        // @ts-ignore
-        'organ-main': this.build()
-      }
-    })
-  }
-
+class Organ extends PageBuilder {
   /**
-   * 构建组件
+   * 构建函数
    */
-  protected components () {
-    return {
-      'flex-aside': FlexAside,
-      // @ts-ignore
-      'organ-tree': OrganTree,
-      'smart-form':SmartForm,
-      // @ts-ignore
-      'organ-detail': OrganDetail
-    }
+  protected build () {
+    return page
   }
+}
 
-  protected mixins () {
-    return [
-      MessageMixins
-    ]
-  }
-
-
-  protected data () {
+const page = {
+  components: {
+    'flex-aside': FlexAside,
+    // @ts-ignore
+    'organ-tree': OrganTree,
+    'smart-form':SmartForm,
+    // @ts-ignore
+    'organ-detail': OrganDetail
+  },
+  mixins: [MessageMixins],
+  data () {
     return {
       // 部门搜索值
       searchValue: '',
@@ -102,54 +88,47 @@ export class Organ extends ComponentBuilder {
       // 激活的tab
       activeTab: 'detail'
     }
-  }
-
-  protected methods () {
-    return {
-      /**
-       * 添加部门
-       */
-      handleShowAddOrgan () {
-        this.addOrganDialogVisible = true
-        this.organModel.organCode = CommonUtils.createUUID()
-        this.organModel.organId = CommonUtils.createUUID()
-        this.organModel.parentId = this.selectedOrgan.organId ? this.selectedOrgan.organId : '0'
-        if (this.organModel.parentId === '0') {
-          this.organModel.topParentId = this.organModel.organId
-        } else  {
-          this.organModel.topParentId = this.selectedOrgan.topParentId
-        }
-      },
-      /**
-       * 添加部门
-       */
-      handleAddOrgan () {
-        ApiService.postAjax('sys/organ/saveUpdate', this.organModel)
-            .then(data => {
-              console.log(data)
-              this.successMessage('添加部门成功')
-              this.addOrganDialogVisible = false
-              // 重新加载数据
-              this.$refs['organTree'].load()
-            }).catch(error => {
-              this.addOrganDialogVisible = false
-              this.errorMessage('添加部门失败', error)
-            })
-      },
-      /**
-       * 点击节点时触发
-       * @param data
-       */
-      handleClickOrganTree (data) {
-        this.selectedOrgan = data.object
+  },
+  methods: {
+    /**
+     * 添加部门
+     */
+    handleShowAddOrgan () {
+      this.addOrganDialogVisible = true
+      this.organModel.organCode = CommonUtils.createUUID()
+      this.organModel.organId = CommonUtils.createUUID()
+      this.organModel.parentId = this.selectedOrgan.organId ? this.selectedOrgan.organId : '0'
+      if (this.organModel.parentId === '0') {
+        this.organModel.topParentId = this.organModel.organId
+      } else  {
+        this.organModel.topParentId = this.selectedOrgan.topParentId
       }
+    },
+    /**
+     * 添加部门
+     */
+    handleAddOrgan () {
+      ApiService.postAjax('sys/organ/saveUpdate', this.organModel)
+          .then(data => {
+            console.log(data)
+            this.successMessage('添加部门成功')
+            this.addOrganDialogVisible = false
+            // 重新加载数据
+            this.$refs['organTree'].load()
+          }).catch(error => {
+        this.addOrganDialogVisible = false
+        this.errorMessage('添加部门失败', error)
+      })
+    },
+    /**
+     * 点击节点时触发
+     * @param data
+     */
+    handleClickOrganTree (data) {
+      this.selectedOrgan = data.object
     }
-  }
-
-
-  protected template () {
-    // TODO I18N
-    return `
+  },
+  template:  `
     <flex-aside
       :hasAsideHeader="false">
       <template slot="aside">
@@ -209,5 +188,4 @@ export class Organ extends ComponentBuilder {
       </el-dialog>
     </flex-aside>
     `
-  }
 }

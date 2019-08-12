@@ -1,42 +1,39 @@
-define(["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.default = {
-        data() {
-            return {
-                menuPath: {}
-            };
+export default {
+    data() {
+        return {
+            menuPath: {}
+        };
+    },
+    computed: {
+        getBus() {
+            return busVue;
         },
-        computed: {
-            getBus() {
-                return busVue;
-            },
-            computedOpenMenuList() {
-                return this.getBus.openMenuList;
-            },
-            computedActiveMenu() {
-                return this.getBus.activeMenu;
-            }
+        computedOpenMenuList() {
+            return this.getBus.openMenuList;
         },
-        methods: {
-            getMenuPath(menu) {
-                if (menu.id === this.computedActiveMenu.id) {
-                    const path = menu.path;
-                    if (!this.menuPath[menu.id]) {
-                        this.menuPath[menu.id] = path;
-                    }
-                    return path;
+        computedActiveMenu() {
+            return this.getBus.activeMenu;
+        }
+    },
+    methods: {
+        getMenuPath(menu) {
+            if (menu.id === this.computedActiveMenu.id) {
+                const path = menu.path;
+                if (!this.menuPath[menu.id]) {
+                    this.menuPath[menu.id] = path;
                 }
-                else {
-                    const path = this.menuPath[menu.id];
-                    if (path && path !== menu.path) {
-                        this.menuPath[menu.id] = menu.path;
-                    }
-                    return this.menuPath[menu.id];
-                }
+                return path;
             }
-        },
-        template: `
+            else {
+                const path = this.menuPath[menu.id];
+                if (path && path !== menu.path) {
+                    this.menuPath[menu.id] = menu.path;
+                }
+                return this.menuPath[menu.id];
+            }
+        }
+    },
+    template: `
   <div class="page-container">
     <iframe
       :class="menu.id === computedActiveMenu.id ? 'active' : ''"
@@ -46,5 +43,4 @@ define(["require", "exports"], function (require, exports) {
       :key="menu.id"/>
   </div>
   `
-    };
-});
+};

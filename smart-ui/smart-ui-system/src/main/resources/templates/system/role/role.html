@@ -14,7 +14,7 @@
 </head>
 <body>
   <div id="vue-container" class="full-height">
-    <home-main/>
+    <vue-main/>
   </div>
 </body>
 <!--引入axios-->
@@ -26,5 +26,5 @@
 <div th:replace="common/common-resources :: common-resources-requireJS"></div>
 
 <script th:src="@{/js/common.js}"></script>
-<script th:src="@{/js/system/role/rolePage.js}"></script>
+<script type="module" th:src="@{/js/system/role/Role.js}"></script>
 </html>

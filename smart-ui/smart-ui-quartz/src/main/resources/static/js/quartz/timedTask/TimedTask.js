@@ -1,171 +1,175 @@
-define(["require", "exports", "PageBuilder", "plugins/table/SmartTableCRUD", "utils/ApiService", "mixins/LayoutMixins", "mixins/MessageMixins"], function (require, exports, PageBuilder_1, SmartTableCRUD_1, ApiService_1, LayoutMixins_1, MessageMixins_1) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    class TimedTask extends PageBuilder_1.default {
-        build() {
-            return page;
-        }
+import PageBuilder from '../../PageBuilder.js';
+import SmartTableCRUD from '../../plugins/table/SmartTableCRUD.js';
+import ApiService from '../../utils/ApiService.js';
+import LayoutMixins from '../../mixins/LayoutMixins.js';
+import MessageMixins from '../../mixins/MessageMixins.js';
+ready(function () {
+    new TimedTask().init();
+});
+class TimedTask extends PageBuilder {
+    build() {
+        return page;
     }
-    exports.TimedTask = TimedTask;
-    const page = {
-        components: {
-            'smart-table-crud': SmartTableCRUD_1.default
-        },
-        mixins: [LayoutMixins_1.default, MessageMixins_1.default],
-        data() {
-            return {
-                apiService: ApiService_1.default,
-                columnOptions: [
-                    {
-                        label: '任务id',
-                        prop: 'taskId',
-                        table: {
-                            visible: false,
-                            displayControl: false
-                        },
-                        form: {
-                            visible: false
-                        }
+}
+const page = {
+    components: {
+        'smart-table-crud': SmartTableCRUD
+    },
+    mixins: [LayoutMixins, MessageMixins],
+    data() {
+        return {
+            apiService: ApiService,
+            columnOptions: [
+                {
+                    label: '任务id',
+                    prop: 'taskId',
+                    table: {
+                        visible: false,
+                        displayControl: false
                     },
-                    {
-                        label: '任务名称',
-                        prop: 'taskName',
-                        table: {
-                            width: 100,
-                            fixed: true
-                        },
-                        form: {
-                            span: 12,
-                            rules: true
-                        }
-                    },
-                    {
-                        label: 'cron表达式',
-                        prop: 'cron',
-                        table: {
-                            width: 120
-                        },
-                        form: {
-                            rules: true,
-                            span: 12
-                        }
-                    },
-                    {
-                        label: '任务类',
-                        prop: 'clazz',
-                        table: {
-                            width: 200
-                        },
-                        form: {}
-                    },
-                    {
-                        label: '启用',
-                        prop: 'used',
-                        type: 'boolean',
-                        table: {
-                            sortable: true
-                        },
-                        form: {
-                            span: 12,
-                            defaultValue: true
-                        }
-                    },
-                    {
-                        label: '预设类',
-                        prop: 'presetClass',
-                        table: {
-                            width: 180,
-                            formatter: (row, column, value) => this.presetClass[value] ? this.presetClass[value] : value
-                        },
-                        form: {
-                            span: 12
-                        }
-                    },
-                    {
-                        label: '任务参数',
-                        prop: 'taskParameter',
-                        table: {
-                            minWidth: 220
-                        },
-                        form: {
-                            span: 12
-                        }
-                    },
-                    {
-                        label: '队列',
-                        prop: 'queueName',
-                        table: {
-                            minWidth: 100
-                        },
-                        form: {
-                            span: 12
-                        }
-                    },
-                    {
-                        label: '备注',
-                        prop: 'remark',
-                        table: {
-                            minWidth: 220
-                        },
-                        form: {}
-                    },
-                    {
-                        label: '序号',
-                        prop: 'seq',
-                        type: 'number',
-                        table: {
-                            sortable: true
-                        },
-                        form: {
-                            defaultValue: 1
-                        }
-                    }
-                ],
-                defaultButtonConfig: {
-                    add: {
-                        rowShow: false
+                    form: {
+                        visible: false
                     }
                 },
-                presetClass: {}
-            };
-        },
-        created() {
-            this.loadPresetClass();
-        },
-        methods: {
-            handleOpenClose(task) {
-                const used = !task.used;
-                const status = used ? '启用' : '关闭';
-                this.$confirm(`确定要${status}该任务吗?`, '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
-                    type: 'warning'
-                }).then(() => {
-                    ApiService_1.default.postAjax('quartz/timeTask/openClose', [
-                        {
-                            taskId: task.taskId,
-                            used: used
-                        }
-                    ]).then(() => {
-                        this.successMessage(`${status}任务成功`);
-                        this.$refs['table'].load();
-                    }).catch(error => {
-                        if (error !== 'cancel') {
-                            this.errorMessage(`${status}任务失败`, error);
-                        }
-                    });
-                });
+                {
+                    label: '任务名称',
+                    prop: 'taskName',
+                    table: {
+                        width: 100,
+                        fixed: true
+                    },
+                    form: {
+                        span: 12,
+                        rules: true
+                    }
+                },
+                {
+                    label: 'cron表达式',
+                    prop: 'cron',
+                    table: {
+                        width: 120
+                    },
+                    form: {
+                        rules: true,
+                        span: 12
+                    }
+                },
+                {
+                    label: '任务类',
+                    prop: 'clazz',
+                    table: {
+                        width: 200
+                    },
+                    form: {}
+                },
+                {
+                    label: '启用',
+                    prop: 'used',
+                    type: 'boolean',
+                    table: {
+                        sortable: true
+                    },
+                    form: {
+                        span: 12,
+                        defaultValue: true
+                    }
+                },
+                {
+                    label: '预设类',
+                    prop: 'presetClass',
+                    table: {
+                        width: 180,
+                        formatter: (row, column, value) => this.presetClass[value] ? this.presetClass[value] : value
+                    },
+                    form: {
+                        span: 12
+                    }
+                },
+                {
+                    label: '任务参数',
+                    prop: 'taskParameter',
+                    table: {
+                        minWidth: 220
+                    },
+                    form: {
+                        span: 12
+                    }
+                },
+                {
+                    label: '队列',
+                    prop: 'queueName',
+                    table: {
+                        minWidth: 100
+                    },
+                    form: {
+                        span: 12
+                    }
+                },
+                {
+                    label: '备注',
+                    prop: 'remark',
+                    table: {
+                        minWidth: 220
+                    },
+                    form: {}
+                },
+                {
+                    label: '序号',
+                    prop: 'seq',
+                    type: 'number',
+                    table: {
+                        sortable: true
+                    },
+                    form: {
+                        defaultValue: 1
+                    }
+                }
+            ],
+            defaultButtonConfig: {
+                add: {
+                    rowShow: false
+                }
             },
-            loadPresetClass() {
-                ApiService_1.default.postAjax('quartz/timeTask/queryPreset', {})
-                    .then(data => {
-                    this.presetClass = data;
+            presetClass: {}
+        };
+    },
+    created() {
+        this.loadPresetClass();
+    },
+    methods: {
+        handleOpenClose(task) {
+            const used = !task.used;
+            const status = used ? '启用' : '关闭';
+            this.$confirm(`确定要${status}该任务吗?`, '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            }).then(() => {
+                ApiService.postAjax('quartz/timeTask/openClose', [
+                    {
+                        taskId: task.taskId,
+                        used: used
+                    }
+                ]).then(() => {
+                    this.successMessage(`${status}任务成功`);
+                    this.$refs['table'].load();
                 }).catch(error => {
-                    this.errorMessage('加载预设类信息失败', error);
+                    if (error !== 'cancel') {
+                        this.errorMessage(`${status}任务失败`, error);
+                    }
                 });
-            }
+            });
         },
-        template: `
+        loadPresetClass() {
+            ApiService.postAjax('quartz/timeTask/queryPreset', {})
+                .then(data => {
+                this.presetClass = data;
+            }).catch(error => {
+                this.errorMessage('加载预设类信息失败', error);
+            });
+        }
+    },
+    template: `
   <div style="padding: 15px;">
     <smart-table-crud
       ref="table"
@@ -203,5 +207,4 @@ define(["require", "exports", "PageBuilder", "plugins/table/SmartTableCRUD", "ut
     </smart-table-crud>
   </div>
   `
-    };
-});
+};

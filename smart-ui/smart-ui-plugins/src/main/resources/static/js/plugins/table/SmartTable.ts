@@ -1,5 +1,5 @@
 // @ts-ignore
-import CommonUtils from 'utils/CommonUtils'
+import CommonUtils from '../../utils/CommonUtils.js'
 
 export default {
   props: {

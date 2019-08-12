@@ -1,4 +1,4 @@
-import Validate from 'utils/ValidateUtils'
+import Validate from './ValidateUtils.js'
 
 /**
  * 时间工具类

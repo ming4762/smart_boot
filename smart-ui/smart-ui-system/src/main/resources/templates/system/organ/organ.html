@@ -15,7 +15,7 @@
 <body>
 
   <div id="vue-container" class="full-height">
-    <organ-main/>
+    <vue-main/>
   </div>
 
 <!--引入axios-->
@@ -28,6 +28,6 @@
 
 <script th:src="@{/js/common.js}"></script>
 <!--引入页面js-->
-<script th:src="@{/js/system/organ/organPage.js}"></script>
+<script type="module" th:src="@{/js/system/organ/Organ.js}"></script>
 </body>
 </html>

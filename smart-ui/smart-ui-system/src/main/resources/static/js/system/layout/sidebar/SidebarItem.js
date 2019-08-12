@@ -1,45 +1,45 @@
-define(["require", "exports", "system/layout/sidebar/Link", "system/layout/sidebar/Item", "mixins/ThemeMixins"], function (require, exports, Link_1, Item_1, ThemeMixins_1) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.default = {
-        components: {
-            'app-link': Link_1.default,
-            'menu-item': Item_1.default
+import Link from './Link.js';
+import Item from './Item.js';
+import ThemeMixins from '../../../mixins/ThemeMixins.js';
+export default {
+    components: {
+        'app-link': Link,
+        'menu-item': Item
+    },
+    mixins: [
+        ThemeMixins
+    ],
+    props: {
+        item: {
+            required: true
         },
-        mixins: [
-            ThemeMixins_1.default
-        ],
-        props: {
-            item: {
-                required: true
-            },
-            isNest: {
-                type: Boolean,
-                default: false
-            }
+        isNest: {
+            type: Boolean,
+            default: false
+        }
+    },
+    computed: {
+        computedActiveIndex() {
+            const activeMenu = this.getBus.activeMenu;
+            return activeMenu ? activeMenu.id : '';
         },
-        computed: {
-            computedActiveIndex() {
-                const activeMenu = this.getBus.activeMenu;
-                return activeMenu ? activeMenu.id : '';
-            },
-            getBus() {
-                return busVue;
-            }
+        getBus() {
+            return busVue;
+        }
+    },
+    methods: {
+        handleOpenMenu(menu) {
+            this.getBus.addMenu(menu);
         },
-        methods: {
-            handleOpenMenu(menu) {
-                this.getBus.addMenu(menu);
-            },
-            handleShowTip(menu, status) {
-                if (!this.getBus.sidebar.opened) {
-                    if (this.$refs[menu.id + 'tip']) {
-                        this.$refs[menu.id + 'tip'].showPopper = status;
-                    }
+        handleShowTip(menu, status) {
+            if (!this.getBus.sidebar.opened) {
+                if (this.$refs[menu.id + 'tip']) {
+                    this.$refs[menu.id + 'tip'].showPopper = status;
                 }
             }
-        },
-        template: `
+        }
+    },
+    template: `
   <div class="menu-wrapper">
     <template v-if="!item.isCatalog">
       <app-link
@@ -79,5 +79,4 @@ define(["require", "exports", "system/layout/sidebar/Link", "system/layout/sideb
     </el-submenu>
   </div>
   `
-    };
-});
+};

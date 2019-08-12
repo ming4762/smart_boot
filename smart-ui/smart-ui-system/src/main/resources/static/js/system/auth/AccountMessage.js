@@ -1,85 +1,87 @@
-define(["require", "exports", "PageBuilder", "plugins/form/SmartForm", "utils/ApiService", "mixins/MessageMixins", "system/utils/AuthUtils", "system/log/Log"], function (require, exports, PageBuilder_1, SmartForm_1, ApiService_1, MessageMixins_1, AuthUtils_1, Log_1) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    class AccountMessage extends PageBuilder_1.default {
-        build() {
-            return page;
-        }
+import PageBuilder from 'PageBuilder';
+import SmartForm from 'plugins/form/SmartForm';
+import ApiService from 'utils/ApiService';
+import MessageMixins from 'mixins/MessageMixins';
+import AuthUtils, { createPassword } from 'system/utils/AuthUtils';
+import { LogComponent } from 'system/log/Log';
+export class AccountMessage extends PageBuilder {
+    build() {
+        return page;
     }
-    exports.AccountMessage = AccountMessage;
-    const ChangePassword = {
-        components: {
-            SmartForm: SmartForm_1.default
-        },
-        mixins: [MessageMixins_1.default],
-        data() {
-            const validateConfirmPassword = (rule, value, callback) => {
-                if (value === '') {
-                    callback(new Error('请再次输入密码'));
-                }
-                else if (value !== this.model.password) {
-                    callback(new Error('两次输入密码不一致!'));
-                }
-                else {
-                    callback();
-                }
-            };
-            return {
-                model: {},
-                columnOptions: [
-                    {
-                        prop: 'oldPassword',
-                        type: 'password',
-                        placeholder: '请输入原密码',
-                        rules: {
-                            message: '请输入原密码',
-                            required: true,
-                            trigger: 'blur'
-                        }
-                    },
-                    {
-                        prop: 'password',
-                        type: 'password',
-                        placeholder: '请输入新密码',
-                        rules: {
-                            message: '请输入新密码',
-                            required: true,
-                            trigger: 'blur'
-                        }
-                    },
-                    {
-                        prop: 'confirmPassword',
-                        type: 'password',
-                        placeholder: '请再次输入新密码',
-                        rules: [
-                            { validator: validateConfirmPassword, trigger: 'blur' }
-                        ]
-                    }
-                ]
-            };
-        },
-        methods: {
-            handleSave() {
-                this.$refs['form'].validate()
-                    .then(valid => {
-                    const username = AuthUtils_1.default.getCurrentUser().username;
-                    return ApiService_1.default.postAjax('auth/updatePassword', {
-                        oldPassword: AuthUtils_1.createPassword(username, this.model.oldPassword),
-                        password: AuthUtils_1.createPassword(username, this.model.password)
-                    });
-                }).then(result => {
-                    this.$alert('修改成功，请重新登录', '成功', {
-                        confirmButtonText: '确定',
-                        callback: action => {
-                            ApiService_1.default.goToLogin();
-                        }
-                    });
-                }).catch(error => {
-                    this.errorMessage("修改密码失败，请稍后重试", error);
-                });
+}
+const ChangePassword = {
+    components: {
+        SmartForm
+    },
+    mixins: [MessageMixins],
+    data() {
+        const validateConfirmPassword = (rule, value, callback) => {
+            if (value === '') {
+                callback(new Error('请再次输入密码'));
             }
-        },
-        template: `
+            else if (value !== this.model.password) {
+                callback(new Error('两次输入密码不一致!'));
+            }
+            else {
+                callback();
+            }
+        };
+        return {
+            model: {},
+            columnOptions: [
+                {
+                    prop: 'oldPassword',
+                    type: 'password',
+                    placeholder: '请输入原密码',
+                    rules: {
+                        message: '请输入原密码',
+                        required: true,
+                        trigger: 'blur'
+                    }
+                },
+                {
+                    prop: 'password',
+                    type: 'password',
+                    placeholder: '请输入新密码',
+                    rules: {
+                        message: '请输入新密码',
+                        required: true,
+                        trigger: 'blur'
+                    }
+                },
+                {
+                    prop: 'confirmPassword',
+                    type: 'password',
+                    placeholder: '请再次输入新密码',
+                    rules: [
+                        { validator: validateConfirmPassword, trigger: 'blur' }
+                    ]
+                }
+            ]
+        };
+    },
+    methods: {
+        handleSave() {
+            this.$refs['form'].validate()
+                .then(valid => {
+                const username = AuthUtils.getCurrentUser().username;
+                return ApiService.postAjax('auth/updatePassword', {
+                    oldPassword: createPassword(username, this.model.oldPassword),
+                    password: createPassword(username, this.model.password)
+                });
+            }).then(result => {
+                this.$alert('修改成功，请重新登录', '成功', {
+                    confirmButtonText: '确定',
+                    callback: action => {
+                        ApiService.goToLogin();
+                    }
+                });
+            }).catch(error => {
+                this.errorMessage("修改密码失败，请稍后重试", error);
+            });
+        }
+    },
+    template: `
   <div>
     <SmartForm
       ref="form"
@@ -90,19 +92,19 @@ define(["require", "exports", "PageBuilder", "plugins/form/SmartForm", "utils/Ap
       type="primary">确认修改</el-button>
   </div>
   `
-    };
-    const page = {
-        components: {
-            ChangePassword,
-            LogComponent: Log_1.LogComponent
-        },
-        data() {
-            return {
-                activeName: activeTab || 'message',
-                userId: AuthUtils_1.default.getCurrentUserId()
-            };
-        },
-        template: `
+};
+const page = {
+    components: {
+        ChangePassword,
+        LogComponent
+    },
+    data() {
+        return {
+            activeName: activeTab || 'message',
+            userId: AuthUtils.getCurrentUserId()
+        };
+    },
+    template: `
   <div style="padding: 20px;">
     <div class="row">
       <div class="col-lg-3">
@@ -142,5 +144,4 @@ define(["require", "exports", "PageBuilder", "plugins/form/SmartForm", "utils/Ap
     </div>
   </div>
   `
-    };
-});
+};

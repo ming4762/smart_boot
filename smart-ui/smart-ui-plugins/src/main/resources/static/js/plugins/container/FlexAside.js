@@ -1,45 +1,42 @@
-define(["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.default = {
-        props: {
-            asideTitle: String,
-            asideHeaderHeight: {
-                type: String,
-                default: '30px'
-            },
-            asideWidth: {
-                type: String,
-                default: '200px'
-            },
-            hasAsideHeader: {
-                type: Boolean,
-                default: true
-            }
+export default {
+    props: {
+        asideTitle: String,
+        asideHeaderHeight: {
+            type: String,
+            default: '30px'
         },
-        data() {
-            return {
-                name: name,
-                asideVisible: true
-            };
+        asideWidth: {
+            type: String,
+            default: '200px'
         },
-        computed: {
-            getAsideHeaderLineHeight: function () {
-                return `line-height: ${this.asideHeaderHeight};`;
-            },
-            getAsideHeaderIconClass: function () {
-                return this.asideVisible ? 'el-icon-d-arrow-left' : 'el-icon-d-arrow-right';
-            },
-            getAsideWidth: function () {
-                return this.asideVisible ? this.asideWidth : '30px';
-            }
+        hasAsideHeader: {
+            type: Boolean,
+            default: true
+        }
+    },
+    data() {
+        return {
+            name: name,
+            asideVisible: true
+        };
+    },
+    computed: {
+        getAsideHeaderLineHeight: function () {
+            return `line-height: ${this.asideHeaderHeight};`;
         },
-        methods: {
-            handleShowHideAside: function () {
-                this.asideVisible = !this.asideVisible;
-            }
+        getAsideHeaderIconClass: function () {
+            return this.asideVisible ? 'el-icon-d-arrow-left' : 'el-icon-d-arrow-right';
         },
-        template: `
+        getAsideWidth: function () {
+            return this.asideVisible ? this.asideWidth : '30px';
+        }
+    },
+    methods: {
+        handleShowHideAside: function () {
+            this.asideVisible = !this.asideVisible;
+        }
+    },
+    template: `
   <el-container class="full-height">
     <!--  添加动画效果  -->
     <el-aside
@@ -67,5 +64,4 @@ define(["require", "exports"], function (require, exports) {
     </el-main>
   </el-container>
   `
-    };
-});
+};

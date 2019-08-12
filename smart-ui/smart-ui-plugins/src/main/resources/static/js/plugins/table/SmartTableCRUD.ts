@@ -1,14 +1,14 @@
 // @ts-ignore
-import MessageMixins from 'mixins/MessageMixins'
+import MessageMixins from '../../mixins/MessageMixins.js'
 // @ts-ignore
-import CommonUtils from 'utils/CommonUtils'
+import CommonUtils from '../../utils/CommonUtils.js'
 
 
 //引入组件
-import SmartForm from 'plugins/form/SmartForm'
-import SmartButtonGroup from 'plugins/table/SmartButtonGroup'
-import SmartTable from 'plugins/table/SmartTable'
-import SmartColumnVisible from 'plugins/table/SmartColumnVisible'
+import SmartForm from '../form/SmartForm.js'
+import SmartButtonGroup from './SmartButtonGroup.js'
+import SmartTable from './SmartTable.js'
+import SmartColumnVisible from './SmartColumnVisible.js'
 
 /**
  * 验证权限

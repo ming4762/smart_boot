@@ -1,6 +1,6 @@
 declare var busVue
 
-import ScrollPane from 'system/layout/TagsView/ScrollPane'
+import ScrollPane from './ScrollPane.js'
 
 export default {
   components: {

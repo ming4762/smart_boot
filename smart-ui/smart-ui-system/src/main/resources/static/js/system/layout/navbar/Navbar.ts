@@ -1,10 +1,10 @@
 // 样式混入
 // @ts-ignore
-import ThemeMixins from 'mixins/ThemeMixins'
+import ThemeMixins from '../../../mixins/ThemeMixins.js'
 
-import Item from 'system/layout/sidebar/Item'
+import Item from '../sidebar/Item.js'
 
-import NavbarButton from 'system/layout/navbar/NavbarButton'
+import NavbarButton from './NavbarButton.js'
 
 
 export default {

@@ -1,109 +1,102 @@
-define(["require", "exports", "ComponentBuilder", "plugins/container/FlexAside", "system/organ/OrganTree", "plugins/form/SmartForm", "utils/ApiService", "mixins/MessageMixins", "utils/CommonUtils", "system/organ/OrganDetail"], function (require, exports, ComponentBuilder_1, FlexAside_1, OrganTree_1, SmartForm_1, ApiService_1, MessageMixins_1, CommonUtils_1, OrganDetail_1) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    class Organ extends ComponentBuilder_1.default {
-        init() {
-            this.initVue();
-        }
-        initVue() {
-            this.vue = new Vue({
-                el: '#vue-container',
-                components: {
-                    'organ-main': this.build()
+import PageBuilder from '../../PageBuilder.js';
+import FlexAside from '../../plugins/container/FlexAside.js';
+import OrganTree from './OrganTree.js';
+import SmartForm from '../../plugins/form/SmartForm.js';
+import ApiService from '../../utils/ApiService.js';
+import MessageMixins from '../../mixins/MessageMixins.js';
+import CommonUtils from '../../utils/CommonUtils.js';
+import OrganDetail from './OrganDetail.js';
+ready(function () {
+    new Organ().init();
+});
+class Organ extends PageBuilder {
+    build() {
+        return page;
+    }
+}
+const page = {
+    components: {
+        'flex-aside': FlexAside,
+        'organ-tree': OrganTree,
+        'smart-form': SmartForm,
+        'organ-detail': OrganDetail
+    },
+    mixins: [MessageMixins],
+    data() {
+        return {
+            searchValue: '',
+            addOrganDialogVisible: false,
+            organAddFormColumn: [
+                {
+                    label: '组织ID',
+                    prop: 'organId',
+                    visible: false
+                },
+                {
+                    label: '上级Id',
+                    prop: 'parentId'
+                },
+                {
+                    label: '组织编码',
+                    prop: 'organCode',
+                    rules: true
+                },
+                {
+                    label: '组织名称',
+                    prop: 'organName',
+                    rules: true
+                },
+                {
+                    label: '组织简称',
+                    prop: 'shortName'
+                },
+                {
+                    label: '负责人',
+                    prop: 'leaderId'
+                },
+                {
+                    label: '描述',
+                    prop: 'description',
+                    type: 'textarea'
                 }
+            ],
+            organModel: {
+                organCode: ''
+            },
+            selectedOrgan: {},
+            activeTab: 'detail'
+        };
+    },
+    methods: {
+        handleShowAddOrgan() {
+            this.addOrganDialogVisible = true;
+            this.organModel.organCode = CommonUtils.createUUID();
+            this.organModel.organId = CommonUtils.createUUID();
+            this.organModel.parentId = this.selectedOrgan.organId ? this.selectedOrgan.organId : '0';
+            if (this.organModel.parentId === '0') {
+                this.organModel.topParentId = this.organModel.organId;
+            }
+            else {
+                this.organModel.topParentId = this.selectedOrgan.topParentId;
+            }
+        },
+        handleAddOrgan() {
+            ApiService.postAjax('sys/organ/saveUpdate', this.organModel)
+                .then(data => {
+                console.log(data);
+                this.successMessage('添加部门成功');
+                this.addOrganDialogVisible = false;
+                this.$refs['organTree'].load();
+            }).catch(error => {
+                this.addOrganDialogVisible = false;
+                this.errorMessage('添加部门失败', error);
             });
+        },
+        handleClickOrganTree(data) {
+            this.selectedOrgan = data.object;
         }
-        components() {
-            return {
-                'flex-aside': FlexAside_1.default,
-                'organ-tree': OrganTree_1.default,
-                'smart-form': SmartForm_1.default,
-                'organ-detail': OrganDetail_1.default
-            };
-        }
-        mixins() {
-            return [
-                MessageMixins_1.default
-            ];
-        }
-        data() {
-            return {
-                searchValue: '',
-                addOrganDialogVisible: false,
-                organAddFormColumn: [
-                    {
-                        label: '组织ID',
-                        prop: 'organId',
-                        visible: false
-                    },
-                    {
-                        label: '上级Id',
-                        prop: 'parentId'
-                    },
-                    {
-                        label: '组织编码',
-                        prop: 'organCode',
-                        rules: true
-                    },
-                    {
-                        label: '组织名称',
-                        prop: 'organName',
-                        rules: true
-                    },
-                    {
-                        label: '组织简称',
-                        prop: 'shortName'
-                    },
-                    {
-                        label: '负责人',
-                        prop: 'leaderId'
-                    },
-                    {
-                        label: '描述',
-                        prop: 'description',
-                        type: 'textarea'
-                    }
-                ],
-                organModel: {
-                    organCode: ''
-                },
-                selectedOrgan: {},
-                activeTab: 'detail'
-            };
-        }
-        methods() {
-            return {
-                handleShowAddOrgan() {
-                    this.addOrganDialogVisible = true;
-                    this.organModel.organCode = CommonUtils_1.default.createUUID();
-                    this.organModel.organId = CommonUtils_1.default.createUUID();
-                    this.organModel.parentId = this.selectedOrgan.organId ? this.selectedOrgan.organId : '0';
-                    if (this.organModel.parentId === '0') {
-                        this.organModel.topParentId = this.organModel.organId;
-                    }
-                    else {
-                        this.organModel.topParentId = this.selectedOrgan.topParentId;
-                    }
-                },
-                handleAddOrgan() {
-                    ApiService_1.default.postAjax('sys/organ/saveUpdate', this.organModel)
-                        .then(data => {
-                        console.log(data);
-                        this.successMessage('添加部门成功');
-                        this.addOrganDialogVisible = false;
-                        this.$refs['organTree'].load();
-                    }).catch(error => {
-                        this.addOrganDialogVisible = false;
-                        this.errorMessage('添加部门失败', error);
-                    });
-                },
-                handleClickOrganTree(data) {
-                    this.selectedOrgan = data.object;
-                }
-            };
-        }
-        template() {
-            return `
+    },
+    template: `
     <flex-aside
       :hasAsideHeader="false">
       <template slot="aside">
@@ -162,8 +155,5 @@ define(["require", "exports", "ComponentBuilder", "plugins/container/FlexAside",
         </div>
       </el-dialog>
     </flex-aside>
-    `;
-        }
-    }
-    exports.Organ = Organ;
-});
+    `
+};

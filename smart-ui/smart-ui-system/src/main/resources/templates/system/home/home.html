@@ -10,6 +10,10 @@
     <link rel="stylesheet" th:href="@{/css/layout/layout.css}"/>
     <link rel="stylesheet" th:href="@{/font-awesome/4.7.0/css/font-awesome.css}"/>
     <div th:replace="common/common-resources :: common-resources-contextPath"></div>
+
+    <script>
+        var busVue
+    </script>
 </head>
 <body>
 
@@ -26,6 +30,6 @@
 
 <script th:src="@{/js/common.js}"></script>
 <!--引入页面js-->
-<script th:src="@{/js/system/home/homePage.js}"></script>
+<script type="module" th:src="@{/js/system/home/Home.js}"></script>
 </body>
 </html>

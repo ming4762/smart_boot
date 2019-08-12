@@ -1,82 +1,86 @@
-define(["require", "exports", "PageBuilder", "plugins/table/SmartTableCRUD", "utils/ApiService", "mixins/LayoutMixins", "mixins/MessageMixins"], function (require, exports, PageBuilder_1, SmartTableCRUD_1, ApiService_1, LayoutMixins_1, MessageMixins_1) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    class OnlineUser extends PageBuilder_1.default {
-        build() {
-            return page;
-        }
+import PageBuilder from '../../PageBuilder.js';
+import SmartTableCRUD from '../../plugins/table/SmartTableCRUD.js';
+import ApiService from '../../utils/ApiService.js';
+import LayoutMixins from '../../mixins/LayoutMixins.js';
+import MessageMixins from '../../mixins/MessageMixins.js';
+ready(function () {
+    new OnlineUser().init();
+});
+export class OnlineUser extends PageBuilder {
+    build() {
+        return page;
     }
-    exports.OnlineUser = OnlineUser;
-    const page = {
-        components: {
-            'smart-table-crud': SmartTableCRUD_1.default
-        },
-        mixins: [LayoutMixins_1.default, MessageMixins_1.default],
-        data() {
-            return {
-                apiService: ApiService_1.default,
-                columnOptions: [
-                    {
-                        prop: 'username',
-                        label: '用户名',
-                        form: {},
-                        table: {
-                            formatter: (row) => row.user.username,
-                            fixed: true
-                        }
-                    },
-                    {
-                        prop: 'name',
-                        label: '姓名',
-                        form: {},
-                        table: {
-                            fixed: true,
-                            formatter: (row) => row.user.name,
-                        }
-                    },
-                    {
-                        prop: 'onlineNum',
-                        label: '在线数',
-                        form: {},
-                        table: {
-                            width: 80
-                        }
+}
+const page = {
+    components: {
+        'smart-table-crud': SmartTableCRUD
+    },
+    mixins: [LayoutMixins, MessageMixins],
+    data() {
+        return {
+            apiService: ApiService,
+            columnOptions: [
+                {
+                    prop: 'username',
+                    label: '用户名',
+                    form: {},
+                    table: {
+                        formatter: (row) => row.user.username,
+                        fixed: true
                     }
-                ],
-                defaultButtonConfig: {
-                    add: {
-                        rowShow: false
-                    },
-                    edit: {
-                        rowShow: false
-                    },
-                    delete: {
-                        rowShow: false
+                },
+                {
+                    prop: 'name',
+                    label: '姓名',
+                    form: {},
+                    table: {
+                        fixed: true,
+                        formatter: (row) => row.user.name,
+                    }
+                },
+                {
+                    prop: 'onlineNum',
+                    label: '在线数',
+                    form: {},
+                    table: {
+                        width: 80
                     }
                 }
-            };
-        },
-        methods: {
-            handleRemoveUser(userId) {
-                this.$confirm('您确定要将该用户强制下线吗？', '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
-                    type: 'warning'
-                }).then(() => {
-                    this.showHideFullScreenloading(true);
-                    return ApiService_1.default.postAjax('auth/removeUser', [userId]);
-                }).then(() => {
-                    this.showHideFullScreenloading(false);
-                    this.$refs['table'].load();
-                }).catch(error => {
-                    this.showHideFullScreenloading(false);
-                    if (error !== 'cancel') {
-                        this.errorMessage('强制下线失败，请稍后重置', error);
-                    }
-                });
+            ],
+            defaultButtonConfig: {
+                add: {
+                    rowShow: false
+                },
+                edit: {
+                    rowShow: false
+                },
+                delete: {
+                    rowShow: false
+                }
             }
-        },
-        template: `
+        };
+    },
+    methods: {
+        handleRemoveUser(userId) {
+            this.$confirm('您确定要将该用户强制下线吗？', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            }).then(() => {
+                this.showHideFullScreenloading(true);
+                return ApiService.postAjax('auth/removeUser', [userId]);
+            }).then(() => {
+                this.showHideFullScreenloading(false);
+                this.$refs['table'].load();
+            }).catch(error => {
+                this.showHideFullScreenloading(false);
+                if (error !== 'cancel') {
+                    this.errorMessage('强制下线失败，请稍后重置', error);
+                }
+            });
+        }
+    },
+    template: `
   <div style="padding: 15px;">
     <smart-table-crud
       ref="table"
@@ -111,5 +115,4 @@ define(["require", "exports", "PageBuilder", "plugins/table/SmartTableCRUD", "ut
     </smart-table-crud>
   </div>
   `
-    };
-});
+};

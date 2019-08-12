@@ -1,42 +1,39 @@
-define(["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.default = {
-        props: {
-            leftInGroup: {
-                type: Boolean,
-                default: true
-            },
-            hasLeft: {
-                type: Boolean,
-                default: true
-            },
-            hasRight: {
-                type: Boolean,
-                default: true
-            },
-            addShow: {
-                type: Boolean,
-                default: true
-            },
-            editShow: {
-                type: Boolean,
-                default: true
-            },
-            deleteShow: {
-                type: Boolean,
-                default: true
-            }
+export default {
+    props: {
+        leftInGroup: {
+            type: Boolean,
+            default: true
         },
-        methods: {
-            handleClickButtonGroup: function (ident) {
-                const listener = 'button-click';
-                if (this.$listeners[listener]) {
-                    this.$emit(listener, ident);
-                }
-            }
+        hasLeft: {
+            type: Boolean,
+            default: true
         },
-        template: `
+        hasRight: {
+            type: Boolean,
+            default: true
+        },
+        addShow: {
+            type: Boolean,
+            default: true
+        },
+        editShow: {
+            type: Boolean,
+            default: true
+        },
+        deleteShow: {
+            type: Boolean,
+            default: true
+        }
+    },
+    methods: {
+        handleClickButtonGroup: function (ident) {
+            const listener = 'button-click';
+            if (this.$listeners[listener]) {
+                this.$emit(listener, ident);
+            }
+        }
+    },
+    template: `
   <div>
       <div v-if="hasLeft" class="cloud-table-left">
         <el-button-group>
@@ -94,5 +91,4 @@ define(["require", "exports"], function (require, exports) {
       </div>
     </div>
   `
-    };
-});
+};

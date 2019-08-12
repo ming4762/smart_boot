@@ -1,7 +1,7 @@
 // @ts-ignore
-import StoreUtil from 'utils/StoreUtil'
+import StoreUtil from '../utils/StoreUtil.js'
 // @ts-ignore
-import { STORE_KEYS } from 'Constants'
+import { STORE_KEYS } from '../Constants.js'
 /**
  * 验证是否拥有一项权限
  * @param permissions 权限

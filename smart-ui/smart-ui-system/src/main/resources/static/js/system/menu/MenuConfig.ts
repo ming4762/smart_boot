@@ -1,19 +1,25 @@
 // @ts-ignore
-import PageBuilder from 'PageBuilder'
+import PageBuilder from '../../PageBuilder.js'
 // @ts-ignore
-import ApiService from 'utils/ApiService'
+import ApiService from '../../utils/ApiService.js'
 // @ts-ignore
-import MessageMixins from 'mixins/MessageMixins'
+import MessageMixins from '../../mixins/MessageMixins.js'
 // @ts-ignore
-import CollectionUtils from 'utils/CollectionUtils'
+import CollectionUtils from '../../utils/CollectionUtils.js'
 // @ts-ignore
-import SmartForm from 'plugins/form/SmartForm'
+import SmartForm from '../../plugins/form/SmartForm.js'
 
+declare const ready
+
+ready(function () {
+  // @ts-ignore
+  new MenuConfig().init()
+})
 
 /**
  * 菜单配置页面
  */
-export class MenuConfig extends PageBuilder {
+class MenuConfig extends PageBuilder {
   protected build () {
     return page
   }

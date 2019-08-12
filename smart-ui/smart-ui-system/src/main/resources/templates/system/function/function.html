@@ -13,7 +13,7 @@
 </head>
 <body>
   <div id="vue-container" class="full-height">
-    <home-main/>
+    <vue-main/>
   </div>
 
 <!--引入axios-->
@@ -26,6 +26,6 @@
 
 <script th:src="@{/js/common.js}"></script>
 
-<script th:src="@{/js/system/function/functionPage.js}"></script>
+<script type="module" th:src="@{/js/system/function/SysFunction.js}"></script>
 </body>
 </html>

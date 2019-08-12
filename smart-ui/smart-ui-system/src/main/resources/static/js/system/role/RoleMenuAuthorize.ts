@@ -1,11 +1,11 @@
 // @ts-ignore
-import ApiService from 'utils/ApiService'
+import ApiService from '../../utils/ApiService.js'
 // @ts-ignore
-import MessageMixins from 'mixins/MessageMixins'
+import MessageMixins from '../../mixins/MessageMixins.js'
 // @ts-ignore
-import TreeUtils from 'utils/TreeUtils'
+import TreeUtils from '../../utils/TreeUtils.js'
 
-import MenuTree from 'system/menu/MenuTree'
+import MenuTree from '../menu/MenuTree.js'
 /**
  * 角色授权操作
  */

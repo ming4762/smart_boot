@@ -1,13 +1,17 @@
-define(["require", "exports", "PageBuilder", "utils/ApiService", "mixins/MessageMixins", "utils/CollectionUtils", "plugins/form/SmartForm"], function (require, exports, PageBuilder_1, ApiService_1, MessageMixins_1, CollectionUtils_1, SmartForm_1) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    class MenuConfig extends PageBuilder_1.default {
-        build() {
-            return page;
-        }
+import PageBuilder from '../../PageBuilder.js';
+import ApiService from '../../utils/ApiService.js';
+import MessageMixins from '../../mixins/MessageMixins.js';
+import CollectionUtils from '../../utils/CollectionUtils.js';
+import SmartForm from '../../plugins/form/SmartForm.js';
+ready(function () {
+    new MenuConfig().init();
+});
+class MenuConfig extends PageBuilder {
+    build() {
+        return page;
     }
-    exports.MenuConfig = MenuConfig;
-    const menuConfigTemplate = `
+}
+const menuConfigTemplate = `
 <el-card
   @click.native="handleShowConfigDetail(item)"
   class="menu-config-card menu-config-show-card"
@@ -26,13 +30,13 @@ define(["require", "exports", "PageBuilder", "utils/ApiService", "mixins/Message
   </div>
 </el-card>
 `;
-    const addMenuConfigTemplate = `
+const addMenuConfigTemplate = `
 <el-card @click.native="handleShowAddMenuConfig" class="menu-config-card menu-config-add-card" :body-style="addCardBodyStyle" shadow="hover">
   <i class="el-icon-plus"></i>
   <span>创建菜单类别</span>
 </el-card>
 `;
-    const addDialogTemplate = `
+const addDialogTemplate = `
 <el-dialog
   width="400px"
   title="添加菜单分类"
@@ -47,149 +51,149 @@ define(["require", "exports", "PageBuilder", "utils/ApiService", "mixins/Message
   </div>  
 </el-dialog>
 `;
-    const page = {
-        components: {
-            'smart-form': SmartForm_1.default
-        },
-        mixins: [MessageMixins_1.default],
-        data() {
-            return {
-                addCardBodyStyle: {
-                    'font-size': '18px',
-                    'color': '#737373'
+const page = {
+    components: {
+        'smart-form': SmartForm
+    },
+    mixins: [MessageMixins],
+    data() {
+        return {
+            addCardBodyStyle: {
+                'font-size': '18px',
+                'color': '#737373'
+            },
+            data: [],
+            menuConfigSelect: {},
+            selectConfigId: '',
+            addDialogVisible: false,
+            addEditFormColumns: [
+                {
+                    label: '菜单分类ID',
+                    prop: 'configId',
+                    visible: false
                 },
-                data: [],
-                menuConfigSelect: {},
-                selectConfigId: '',
-                addDialogVisible: false,
-                addEditFormColumns: [
-                    {
-                        label: '菜单分类ID',
-                        prop: 'configId',
-                        visible: false
-                    },
-                    {
-                        label: '菜单分类名称',
-                        prop: 'configName'
-                    },
-                    {
-                        label: '序号',
-                        prop: 'seq',
-                        type: 'number',
-                        defaultValue: 1
-                    },
-                    {
-                        label: '是否启用',
-                        prop: 'status',
-                        type: 'boolean'
-                    }
-                ],
-                addEditFormModel: {}
+                {
+                    label: '菜单分类名称',
+                    prop: 'configName'
+                },
+                {
+                    label: '序号',
+                    prop: 'seq',
+                    type: 'number',
+                    defaultValue: 1
+                },
+                {
+                    label: '是否启用',
+                    prop: 'status',
+                    type: 'boolean'
+                }
+            ],
+            addEditFormModel: {}
+        };
+    },
+    computed: {
+        computedData() {
+            return CollectionUtils.splitArray(this.data, 3);
+        }
+    },
+    mounted() {
+        this.load();
+    },
+    methods: {
+        handleShowAddMenuConfig(menuConfig) {
+            this.addDialogVisible = true;
+            if (menuConfig) {
+                this.addEditFormModel = {
+                    configId: menuConfig.configId,
+                    configName: menuConfig.configName,
+                    seq: menuConfig.seq,
+                    status: menuConfig.status
+                };
+            }
+            else {
+                this.addEditFormModel = {};
+            }
+        },
+        handleMouseOver(menuConfig) {
+            Object.keys(this.menuConfigSelect).forEach(key => {
+                this.menuConfigSelect[key] = false;
+            });
+            this.$set(this.menuConfigSelect, menuConfig.configId, true);
+        },
+        handleMouseLeave(menuConfig) {
+            Object.keys(this.menuConfigSelect).forEach(key => {
+                this.menuConfigSelect[key] = false;
+            });
+        },
+        getCardBodyStyle(menuConfig) {
+            const configId = menuConfig.configId;
+            const activeStyle = {
+                color: 'white',
+                'background-color': '#1fbceb'
             };
-        },
-        computed: {
-            computedData() {
-                return CollectionUtils_1.default.splitArray(this.data, 3);
+            const noActiveStyle = {
+                color: '#737373'
+            };
+            if (configId === this.selectConfigId) {
+                return activeStyle;
+            }
+            if (this.menuConfigSelect[configId] === true) {
+                return activeStyle;
+            }
+            else {
+                return noActiveStyle;
             }
         },
-        mounted() {
-            this.load();
+        getEditShow(menuConfig) {
+            return this.menuConfigSelect[menuConfig.configId] === true;
         },
-        methods: {
-            handleShowAddMenuConfig(menuConfig) {
-                this.addDialogVisible = true;
-                if (menuConfig) {
-                    this.addEditFormModel = {
-                        configId: menuConfig.configId,
-                        configName: menuConfig.configName,
-                        seq: menuConfig.seq,
-                        status: menuConfig.status
-                    };
-                }
-                else {
-                    this.addEditFormModel = {};
-                }
-            },
-            handleMouseOver(menuConfig) {
-                Object.keys(this.menuConfigSelect).forEach(key => {
-                    this.menuConfigSelect[key] = false;
-                });
-                this.$set(this.menuConfigSelect, menuConfig.configId, true);
-            },
-            handleMouseLeave(menuConfig) {
-                Object.keys(this.menuConfigSelect).forEach(key => {
-                    this.menuConfigSelect[key] = false;
-                });
-            },
-            getCardBodyStyle(menuConfig) {
-                const configId = menuConfig.configId;
-                const activeStyle = {
-                    color: 'white',
-                    'background-color': '#1fbceb'
-                };
-                const noActiveStyle = {
-                    color: '#737373'
-                };
-                if (configId === this.selectConfigId) {
-                    return activeStyle;
-                }
-                if (this.menuConfigSelect[configId] === true) {
-                    return activeStyle;
-                }
-                else {
-                    return noActiveStyle;
-                }
-            },
-            getEditShow(menuConfig) {
-                return this.menuConfigSelect[menuConfig.configId] === true;
-            },
-            handleSaveUpdate() {
-                ApiService_1.default.postAjax('sys/menuConfig/saveUpdate', this.addEditFormModel)
-                    .then(data => {
-                    this.load();
-                    this.addDialogVisible = false;
-                }).catch(error => {
-                    this.errorMessage('保存菜单分类发生错误', error);
-                });
-            },
-            load() {
-                const $this = this;
-                ApiService_1.default.postAjax('sys/menuConfig/list', {
-                    defaultSortColumn: 'seq'
-                }).then(data => {
-                    this.data = data;
-                    data.forEach(item => {
-                        if (item.status === true) {
-                            $this.selectConfigId = item.configId;
-                        }
-                    });
-                }).catch(error => {
-                    this.errorMessage('加载菜单分类失败', error);
-                });
-            },
-            handleDeleteMenuConfig(menuConfig) {
-                this.$confirm('确定要删除该分类吗?', '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
-                    type: 'warning'
-                }).then(() => {
-                    return ApiService_1.default.postAjax('sys/menuConfig/delete', {
-                        configId: menuConfig.configId
-                    });
-                }).then(() => {
-                    this.load();
-                    this.successMessage('删除成功');
-                }).catch(error => {
-                    if (error !== 'cancel') {
-                        this.errorMessage('删除菜单分类发生错误', error);
+        handleSaveUpdate() {
+            ApiService.postAjax('sys/menuConfig/saveUpdate', this.addEditFormModel)
+                .then(data => {
+                this.load();
+                this.addDialogVisible = false;
+            }).catch(error => {
+                this.errorMessage('保存菜单分类发生错误', error);
+            });
+        },
+        load() {
+            const $this = this;
+            ApiService.postAjax('sys/menuConfig/list', {
+                defaultSortColumn: 'seq'
+            }).then(data => {
+                this.data = data;
+                data.forEach(item => {
+                    if (item.status === true) {
+                        $this.selectConfigId = item.configId;
                     }
                 });
-            },
-            handleShowConfigDetail(menuConfig) {
-                console.log(menuConfig);
-            }
+            }).catch(error => {
+                this.errorMessage('加载菜单分类失败', error);
+            });
         },
-        template: `
+        handleDeleteMenuConfig(menuConfig) {
+            this.$confirm('确定要删除该分类吗?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            }).then(() => {
+                return ApiService.postAjax('sys/menuConfig/delete', {
+                    configId: menuConfig.configId
+                });
+            }).then(() => {
+                this.load();
+                this.successMessage('删除成功');
+            }).catch(error => {
+                if (error !== 'cancel') {
+                    this.errorMessage('删除菜单分类发生错误', error);
+                }
+            });
+        },
+        handleShowConfigDetail(menuConfig) {
+            console.log(menuConfig);
+        }
+    },
+    template: `
     <div class="menu-config-container">
       <!--遍历菜单-->
       <el-row
@@ -215,5 +219,4 @@ define(["require", "exports", "PageBuilder", "utils/ApiService", "mixins/Message
       ${addDialogTemplate}
     </div>
     `
-    };
-});
+};

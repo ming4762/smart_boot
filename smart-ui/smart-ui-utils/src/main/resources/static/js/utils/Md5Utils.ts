@@ -1,4 +1,4 @@
-import Md5 from 'utils/Md5'
+import Md5 from './Md5.js'
 /**
  * MD5工具类
  */

@@ -1,14 +1,14 @@
 // @ts-ignore
-import ApiService from 'utils/ApiService'
+import ApiService from '../../utils/ApiService.js'
 // @ts-ignore
-import MessageMixins from 'mixins/MessageMixins'
+import MessageMixins from '../../mixins/MessageMixins.js'
 // 引入MD5工具类
 // @ts-ignore
-import { createPassword } from 'system/utils/AuthUtils'
+import { createPassword } from '../utils/AuthUtils.js'
 // @ts-ignore
-import { STORE_KEYS } from 'Constants'
+import { STORE_KEYS } from '../../Constants.js'
 // @ts-ignore
-import StoreUtil from 'utils/StoreUtil'
+import StoreUtil from '../../utils/StoreUtil.js'
 // 项目跟路径
 declare var contextPath: string
 

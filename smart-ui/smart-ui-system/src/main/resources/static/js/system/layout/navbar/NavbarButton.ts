@@ -1,13 +1,13 @@
 // @ts-ignore
-import CommonUtils from 'utils/CommonUtils'
+import CommonUtils from '../../../utils/CommonUtils.js'
 
 // 样式混入
 // @ts-ignore
-import ThemeMixins from 'mixins/ThemeMixins'
+import ThemeMixins from '../../../mixins/ThemeMixins.js'
 // @ts-ignore
-import MessageMixins from 'mixins/MessageMixins'
+import MessageMixins from '../../../mixins/MessageMixins.js'
 // @ts-ignore
-import ApiService from 'utils/ApiService'
+import ApiService from '../../../utils/ApiService.js'
 
 declare var busVue
 

@@ -1,22 +1,20 @@
-define(["require", "exports", "PageBuilder", "portal/material/MaterialGT"], function (require, exports, PageBuilder_1, MaterialGT_1) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    class Material extends PageBuilder_1.default {
-        build() {
-            return page;
-        }
+import PageBuilder from 'PageBuilder';
+import MaterialGT from 'portal/material/MaterialGT';
+export class Material extends PageBuilder {
+    build() {
+        return page;
     }
-    exports.Material = Material;
-    const page = {
-        components: {
-            'material-gt': MaterialGT_1.default
-        },
-        data() {
-            return {
-                activeName: 'materialGT'
-            };
-        },
-        template: `
+}
+const page = {
+    components: {
+        'material-gt': MaterialGT
+    },
+    data() {
+        return {
+            activeName: 'materialGT'
+        };
+    },
+    template: `
   <div style="height: 100%; background-color: #f6f8f9">
     <div style="padding: 15px; ">
       <el-tabs v-model="activeName">
@@ -26,5 +24,4 @@ define(["require", "exports", "PageBuilder", "portal/material/MaterialGT"], func
     </div>
   </div>
   `
-    };
-});
+};

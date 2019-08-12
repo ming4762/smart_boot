@@ -1,37 +1,36 @@
-define(["require", "exports", "utils/ApiService", "mixins/MessageMixins"], function (require, exports, ApiService_1, MessageMixins_1) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.default = {
-        mixins: [
-            MessageMixins_1.default
-        ],
-        data() {
-            return {
-                treeData: []
-            };
-        },
-        mounted() {
-            this.load();
-        },
-        methods: {
-            getIconClass(type) {
-                if (type === 'role') {
-                    return 'el-icon-user';
-                }
-                else {
-                    return 'el-icon-school';
-                }
-            },
-            load() {
-                ApiService_1.default.postAjax('sys/role/listAllTreeWithOrgan', {})
-                    .then(data => {
-                    this.treeData = [data];
-                }).catch(error => {
-                    this.errorMessage('加载角色树失败', error);
-                });
+import ApiService from '../../utils/ApiService.js';
+import MessageMixins from '../../mixins/MessageMixins.js';
+export default {
+    mixins: [
+        MessageMixins
+    ],
+    data() {
+        return {
+            treeData: []
+        };
+    },
+    mounted() {
+        this.load();
+    },
+    methods: {
+        getIconClass(type) {
+            if (type === 'role') {
+                return 'el-icon-user';
+            }
+            else {
+                return 'el-icon-school';
             }
         },
-        template: `
+        load() {
+            ApiService.postAjax('sys/role/listAllTreeWithOrgan', {})
+                .then(data => {
+                this.treeData = [data];
+            }).catch(error => {
+                this.errorMessage('加载角色树失败', error);
+            });
+        }
+    },
+    template: `
   <el-tree
     v-on="$listeners"
     :expand-on-click-node="false"
@@ -46,5 +45,4 @@ define(["require", "exports", "utils/ApiService", "mixins/MessageMixins"], funct
     </template>
   </el-tree>
   `
-    };
-});
+};

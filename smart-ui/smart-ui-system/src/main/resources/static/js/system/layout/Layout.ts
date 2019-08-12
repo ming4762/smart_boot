@@ -1,14 +1,14 @@
 declare var busVue
 // @ts-ignore
-import ApiService from 'utils/ApiService'
+import ApiService from '../../utils/ApiService.js'
 // @ts-ignore
-import MessageMixins from 'mixins/MessageMixins'
+import MessageMixins from '../../mixins/MessageMixins.js'
 
-import Navbar from 'system/layout/navbar/Navbar'
-import SideBar from 'system/layout/sidebar/SideBar'
-import TagsView from 'system/layout/TagsView/TagsView'
+import Navbar from './navbar/Navbar.js'
+import SideBar from './sidebar/SideBar.js'
+import TagsView from './TagsView/TagsView.js'
 
-import PageContainer from 'system/layout/mainPage/PageContainer'
+import PageContainer from './mainPage/PageContainer.js'
 
 export default {
   components: {

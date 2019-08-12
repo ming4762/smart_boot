@@ -1,17 +1,27 @@
+'use strict';
 // @ts-ignore
-import JSEncrypt from 'jsencrypt/3.0.0/jsencrypt.min'
-// import JSEncrypt from 'jsrsasign/8.0.0/jsrsasign-rsa-min'
+// import JSEncrypt from '../jsencrypt/3.0.0/jsencrypt.min.js'
+declare const JSEncrypt
 /**
  * 秘钥工具类
  */
 export default class RsaUtils {
+  private GLOBAL_KEY
   // 全局的key
-  private static GLOBAL_KEY = new JSEncrypt()
+  constructor () {
+    try {
+      if (JSEncrypt) {
+        this.GLOBAL_KEY = new JSEncrypt()
+      }
+    } catch (e) {
+      // TODO: 待处理问题
+    }
+  }
 
   /**
    * 生产秘钥
    */
-  public static createKey(): RsaKey {
+  public createKey(): RsaKey {
     const jSEncrypt = new JSEncrypt()
     return new RsaKey(jSEncrypt.getPublicKeyB64(), jSEncrypt.getPrivateKeyB64())
   }
@@ -21,7 +31,7 @@ export default class RsaUtils {
    * @param publicKey
    * @param data
    */
-  public static rsaEncrypt(publicKey: string, data: string): string {
+  public rsaEncrypt(publicKey: string, data: string): string {
     this.GLOBAL_KEY.setPublicKey(publicKey)
     return this.GLOBAL_KEY.encrypt(data)
   }
@@ -31,7 +41,7 @@ export default class RsaUtils {
    * @param privateKey 私钥
    * @param ciphertext 密文
    */
-  public static rsaDecrypt(privateKey: string, ciphertext: string): string {
+  public rsaDecrypt(privateKey: string, ciphertext: string): string {
     this.GLOBAL_KEY.setPrivateKey(privateKey)
     return this.GLOBAL_KEY.decrypt(ciphertext)
   }

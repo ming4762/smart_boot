@@ -1,11 +1,15 @@
 // @ts-ignore
-import PageBuilder from 'PageBuilder'
-import Layout from 'system/layout/Layout'
+import PageBuilder from '../../PageBuilder.js'
+import Layout from '../layout/Layout.js'
 // @ts-ignore
-import StoreUtil from 'utils/StoreUtil'
+import StoreUtil from '../../utils/StoreUtil.js'
 // @ts-ignore
-import { STORE_KEYS } from 'Constants'
-import SidebarItem from 'system/layout/sidebar/SidebarItem'
+import { STORE_KEYS } from '../../Constants.js'
+import SidebarItem from '../layout/sidebar/SidebarItem.js'
+
+declare const ready
+declare let busVue
+
 // 默认的样式
 const defaultTheme: any = {
   topColor: '#0b1c2f',
@@ -13,9 +17,16 @@ const defaultTheme: any = {
   themeColor: '#46a0fc'
 }
 
+ready(function () {
+  const home = new Home()
+  busVue = home.initBus()
+  // @ts-ignore
+  home.init()
+})
+
 // 标识开发模式 TODO: 可配置
 const debug = true
-export class Home extends PageBuilder {
+class Home extends PageBuilder {
 
   /**
    * 初始化vue

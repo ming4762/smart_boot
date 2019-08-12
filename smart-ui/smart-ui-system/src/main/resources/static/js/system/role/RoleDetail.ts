@@ -1,12 +1,12 @@
 // @ts-ignore
-import SmartForm from 'plugins/form/SmartForm'
-import RoleUser from 'system/role/RoleUser'
-import RoleMenuAuthorize from 'system/role/RoleMenuAuthorize'
+import SmartForm from '../../plugins/form/SmartForm.js'
+import RoleUser from './RoleUser.js'
+import RoleMenuAuthorize from './RoleMenuAuthorize.js'
 // @ts-ignore
-import ApiService from 'utils/ApiService'
+import ApiService from '../../utils/ApiService.js'
 
 // @ts-ignore
-import MessageMixins from 'mixins/MessageMixins'
+import MessageMixins from '../../mixins/MessageMixins.js'
 
 const roleTypeMap = {
   '1': '业务角色',

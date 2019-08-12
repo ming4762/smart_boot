@@ -1,4 +1,4 @@
-import SmartIconList from 'plugins/icon/SmartIconList'
+import SmartIconList from './SmartIconList.js'
 
 export default {
   components: {

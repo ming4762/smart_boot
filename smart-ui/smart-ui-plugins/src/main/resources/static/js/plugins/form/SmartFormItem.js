@@ -1,13 +1,10 @@
-define(["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    const createVIf = (type) => {
-        return `v-if="column.type === '${type}'"`;
-    };
-    const createTemplate = () => {
-        const vModel = 'v-model="model[column.key]"';
-        const disabled = ':disabled="column.disabled"';
-        return `
+const createVIf = (type) => {
+    return `v-if="column.type === '${type}'"`;
+};
+const createTemplate = () => {
+    const vModel = 'v-model="model[column.key]"';
+    const disabled = ':disabled="column.disabled"';
+    return `
     <el-form-item
       :label="column.label"
       :prop="column.key">
@@ -31,29 +28,28 @@ define(["require", "exports"], function (require, exports) {
       <el-input ${disabled} :placeholder="getPlaceholder(column)" ${createVIf('input')} ${vModel}/>
     </el-form-item>
     `;
-    };
-    exports.default = {
-        name: 'smart-form-item',
-        props: {
-            column: {
-                required: true,
-                type: Object
-            },
-            model: {
-                required: true,
-                type: Object
-            }
+};
+export default {
+    name: 'smart-form-item',
+    props: {
+        column: {
+            required: true,
+            type: Object
         },
-        methods: {
-            getPlaceholder(column) {
-                if (column.placeholder) {
-                    return column.placeholder;
-                }
-                else {
-                    return '请输入' + column.label;
-                }
+        model: {
+            required: true,
+            type: Object
+        }
+    },
+    methods: {
+        getPlaceholder(column) {
+            if (column.placeholder) {
+                return column.placeholder;
             }
-        },
-        template: createTemplate()
-    };
-});
+            else {
+                return '请输入' + column.label;
+            }
+        }
+    },
+    template: createTemplate()
+};

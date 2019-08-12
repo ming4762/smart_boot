@@ -1,19 +1,16 @@
-define(["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.default = {
-        props: {
-            icon: String
-        },
-        methods: {
-            handleClickIcon(event) {
-                let localName = event.target['localName'];
-                if (localName === 'i') {
-                    this.$emit('update:icon', event.target['className']);
-                }
+export default {
+    props: {
+        icon: String
+    },
+    methods: {
+        handleClickIcon(event) {
+            let localName = event.target['localName'];
+            if (localName === 'i') {
+                this.$emit('update:icon', event.target['className']);
             }
-        },
-        template: `
+        }
+    },
+    template: `
   <div @click="handleClickIcon">
     <i class="fa fa-address-book" aria-hidden="true"></i>
 
@@ -918,5 +915,4 @@ define(["require", "exports"], function (require, exports) {
    <i class="fa fa-wrench" aria-hidden="true"></i>
   </div>
   `
-    };
-});
+};

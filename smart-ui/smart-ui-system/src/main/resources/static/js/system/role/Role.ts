@@ -1,18 +1,18 @@
 // @ts-ignore
-import ComponentBuilder from 'ComponentBuilder'
+import PageBuilder from '../../PageBuilder.js'
 // @ts-ignore
-import FlexAside from 'plugins/container/FlexAside'
+import FlexAside from '../../plugins/container/FlexAside.js'
 
 //组织树
-import RoleTreeWithOrgan from 'system/role/RoleTreeWithOrgan'
-import RoleDetail from 'system/role/RoleDetail'
+import RoleTreeWithOrgan from './RoleTreeWithOrgan.js'
+import RoleDetail from './RoleDetail.js'
 
 // @ts-ignore
-import ApiService from 'utils/ApiService'
+import ApiService from '../../utils/ApiService.js'
 // @ts-ignore
-import TimeUtils from 'utils/TimeUtils'
+import TimeUtils from '../../utils/TimeUtils.js'
 // @ts-ignore
-import PermissionMixins from 'mixins/PermissionMixins'
+import PermissionMixins from '../../mixins/PermissionMixins.js'
 
 
 const roleTypeMap = {
@@ -21,43 +21,30 @@ const roleTypeMap = {
   '3': '系统内置角色'
 }
 
-export class Role extends ComponentBuilder {
+declare const ready
 
-  private vue
+ready(function () {
+  // @ts-ignore
+  new Role().init()
+})
 
+class Role extends PageBuilder {
   /**
-   * 初始化函数
+   * 构建函数
    */
-  public init () {
-    this.initVue()
+  protected build () {
+    return page
   }
+}
 
-  private initVue () {
-    // @ts-ignore
-    this.vue = new Vue({
-      el: '#vue-container',
-      components: {
-        // @ts-ignore
-        'home-main': this.build()
-      }
-    })
-  }
-
-  protected mixins () {
-    return [
-      PermissionMixins
-    ]
-  }
-
-  protected components () {
-    return {
-      'flex-aside': FlexAside,
-      'role-tree': RoleTreeWithOrgan,
-      'role-detail': RoleDetail
-    }
-  }
-
-  protected data () {
+const page = {
+  components: {
+    'flex-aside': FlexAside,
+    'role-tree': RoleTreeWithOrgan,
+    'role-detail': RoleDetail
+  },
+  mixins: [PermissionMixins],
+  data () {
     const roleTypeDic = []
     Object.keys(roleTypeMap).forEach(key => {
       roleTypeDic.push({
@@ -176,42 +163,37 @@ export class Role extends ComponentBuilder {
       selectedOrgan: {},
       selectRole: {}
     }
-  }
-
-  protected methods () {
-    return {
-      handleShowSetUser (role) {
-        console.log(role)
-      },
-      handleShowAuthorizeDialog (role) {
-        console.log(role)
-      },
-      /**
-       * 点击树节点事件
-       * @param roleOrgan
-       */
-      handleClickRoleTree (roleOrgan) {
-        const type = roleOrgan.attributes ? roleOrgan.attributes.type : ''
-        if (type === 'role') {
-          this.selectRole = roleOrgan
-        } else if (type === 'organ') {
-          this.selectedOrgan = roleOrgan
-        }
-      },
-      handleAddRole () {
-        this.selectRole = {}
-      },
-      /**
-       * 保存结束时间重新加载数据
-       */
-      handleAfterSave () {
-        this.$refs['roleTree'].load()
+  },
+  methods : {
+    handleShowSetUser (role) {
+      console.log(role)
+    },
+    handleShowAuthorizeDialog (role) {
+      console.log(role)
+    },
+    /**
+     * 点击树节点事件
+     * @param roleOrgan
+     */
+    handleClickRoleTree (roleOrgan) {
+      const type = roleOrgan.attributes ? roleOrgan.attributes.type : ''
+      if (type === 'role') {
+        this.selectRole = roleOrgan
+      } else if (type === 'organ') {
+        this.selectedOrgan = roleOrgan
       }
+    },
+    handleAddRole () {
+      this.selectRole = {}
+    },
+    /**
+     * 保存结束时间重新加载数据
+     */
+    handleAfterSave () {
+      this.$refs['roleTree'].load()
     }
-  }
-
-  protected template () {
-    return `
+  },
+  template: `
     <flex-aside
       :hasAsideHeader="false">
       <template slot="aside">
@@ -253,5 +235,4 @@ export class Role extends ComponentBuilder {
       <!--添加角色弹窗-->
     </flex-aside>
     `
-  }
 }

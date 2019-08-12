@@ -1,13 +1,20 @@
 // @ts-ignore
-import PageBuilder from 'PageBuilder'
+import PageBuilder from '../../PageBuilder.js'
 // @ts-ignore
-import SmartTableCRUD from 'plugins/table/SmartTableCRUD'
+import SmartTableCRUD from '../../plugins/table/SmartTableCRUD.js'
 // @ts-ignore
-import ApiService from 'utils/ApiService'
+import ApiService from '../../utils/ApiService.js'
 // @ts-ignore
-import LayoutMixins from 'mixins/LayoutMixins'
+import LayoutMixins from '../../mixins/LayoutMixins.js'
 // @ts-ignore
-import MessageMixins from 'mixins/MessageMixins'
+import MessageMixins from '../../mixins/MessageMixins.js'
+
+declare const ready
+
+ready(function () {
+  // @ts-ignore
+  new OnlineUser().init()
+})
 
 /**
  * 在线用户页面

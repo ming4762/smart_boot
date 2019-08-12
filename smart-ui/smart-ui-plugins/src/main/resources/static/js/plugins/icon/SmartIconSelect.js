@@ -1,33 +1,31 @@
-define(["require", "exports", "plugins/icon/SmartIconList"], function (require, exports, SmartIconList_1) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.default = {
-        components: {
-            'smart-icon-list': SmartIconList_1.default
-        },
-        props: {
-            value: String
-        },
-        data() {
-            return {
-                iconDialogShow: false,
-                icon: ''
-            };
-        },
-        watch: {
-            icon(_new, old) {
-                if (_new !== old) {
-                    this.$emit('input', _new);
-                    this.iconDialogShow = false;
-                }
+import SmartIconList from './SmartIconList.js';
+export default {
+    components: {
+        'smart-icon-list': SmartIconList
+    },
+    props: {
+        value: String
+    },
+    data() {
+        return {
+            iconDialogShow: false,
+            icon: ''
+        };
+    },
+    watch: {
+        icon(_new, old) {
+            if (_new !== old) {
+                this.$emit('input', _new);
+                this.iconDialogShow = false;
             }
-        },
-        methods: {
-            handleShowIconDialog() {
-                this.iconDialogShow = true;
-            }
-        },
-        template: `
+        }
+    },
+    methods: {
+        handleShowIconDialog() {
+            this.iconDialogShow = true;
+        }
+    },
+    template: `
   <el-row>
     <el-col :span="11">
       <el-input placeholder="请选择图标" v-model="value">
@@ -48,5 +46,4 @@ define(["require", "exports", "plugins/icon/SmartIconList"], function (require, 
     </el-dialog>
   </el-row>
   `
-    };
-});
+};

@@ -1,181 +1,173 @@
-define(["require", "exports", "ComponentBuilder", "plugins/container/FlexAside", "system/role/RoleTreeWithOrgan", "system/role/RoleDetail", "utils/ApiService", "utils/TimeUtils", "mixins/PermissionMixins"], function (require, exports, ComponentBuilder_1, FlexAside_1, RoleTreeWithOrgan_1, RoleDetail_1, ApiService_1, TimeUtils_1, PermissionMixins_1) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    const roleTypeMap = {
-        '1': '业务角色',
-        '2': '管理角色',
-        '3': '系统内置角色'
-    };
-    class Role extends ComponentBuilder_1.default {
-        init() {
-            this.initVue();
-        }
-        initVue() {
-            this.vue = new Vue({
-                el: '#vue-container',
-                components: {
-                    'home-main': this.build()
-                }
+import PageBuilder from '../../PageBuilder.js';
+import FlexAside from '../../plugins/container/FlexAside.js';
+import RoleTreeWithOrgan from './RoleTreeWithOrgan.js';
+import RoleDetail from './RoleDetail.js';
+import ApiService from '../../utils/ApiService.js';
+import TimeUtils from '../../utils/TimeUtils.js';
+import PermissionMixins from '../../mixins/PermissionMixins.js';
+const roleTypeMap = {
+    '1': '业务角色',
+    '2': '管理角色',
+    '3': '系统内置角色'
+};
+ready(function () {
+    new Role().init();
+});
+class Role extends PageBuilder {
+    build() {
+        return page;
+    }
+}
+const page = {
+    components: {
+        'flex-aside': FlexAside,
+        'role-tree': RoleTreeWithOrgan,
+        'role-detail': RoleDetail
+    },
+    mixins: [PermissionMixins],
+    data() {
+        const roleTypeDic = [];
+        Object.keys(roleTypeMap).forEach(key => {
+            roleTypeDic.push({
+                label: key,
+                value: roleTypeMap[key]
             });
-        }
-        mixins() {
-            return [
-                PermissionMixins_1.default
-            ];
-        }
-        components() {
-            return {
-                'flex-aside': FlexAside_1.default,
-                'role-tree': RoleTreeWithOrgan_1.default,
-                'role-detail': RoleDetail_1.default
-            };
-        }
-        data() {
-            const roleTypeDic = [];
-            Object.keys(roleTypeMap).forEach(key => {
-                roleTypeDic.push({
-                    label: key,
-                    value: roleTypeMap[key]
-                });
-            });
-            return {
-                apiService: ApiService_1.default,
-                roleTypeMap: roleTypeMap,
-                columnOptions: [
-                    {
-                        prop: 'roleId',
-                        label: '角色ID',
-                        form: {
-                            visible: false
-                        },
-                        table: {
-                            visible: false,
-                            displayControl: false
-                        }
+        });
+        return {
+            apiService: ApiService,
+            roleTypeMap: roleTypeMap,
+            columnOptions: [
+                {
+                    prop: 'roleId',
+                    label: '角色ID',
+                    form: {
+                        visible: false
                     },
-                    {
-                        label: '角色名',
-                        prop: 'roleName',
-                        table: {
-                            width: 120,
-                            fixed: true
-                        },
-                        form: {
-                            rules: true
-                        }
-                    },
-                    {
-                        label: '备注',
-                        prop: 'remark',
-                        table: {
-                            minWidth: 200
-                        },
-                        form: {}
-                    },
-                    {
-                        label: '类型',
-                        prop: 'roleType',
-                        type: 'radio',
-                        table: {
-                            width: 100
-                        },
-                        form: {
-                            defaultValue: true,
-                            dicData: roleTypeDic
-                        }
-                    },
-                    {
-                        label: '启用',
-                        prop: 'enable',
-                        type: 'boolean',
-                        table: {},
-                        form: {}
-                    },
-                    {
-                        label: '创建时间',
-                        prop: 'createTime',
-                        table: {
-                            formatter: (row, column, value) => TimeUtils_1.default.formatTime(value),
-                            width: 160
-                        },
-                        form: {}
-                    },
-                    {
-                        label: '创建用户',
-                        prop: 'createUserId',
-                        table: {
-                            formatter: (row) => {
-                                const user = row.createUser;
-                                return user ? user.name : '-';
-                            }
-                        },
-                        form: {}
-                    },
-                    {
-                        label: '更新时间',
-                        prop: 'updateTime',
-                        table: {
-                            formatter: (row, column, value) => TimeUtils_1.default.formatTime(value),
-                            width: 160
-                        },
-                        form: {}
-                    },
-                    {
-                        label: '更新人员',
-                        prop: 'updateUserId',
-                        table: {
-                            formatter: (row) => {
-                                const user = row.updateUser;
-                                return user ? user.name : '-';
-                            }
-                        },
-                        form: {}
-                    },
-                    {
-                        label: '序号',
-                        prop: 'seq',
-                        type: 'number',
-                        table: {
-                            sortable: true
-                        },
-                        form: {
-                            defaultValue: 1
-                        }
-                    }
-                ],
-                searchValue: '',
-                activeTab: 'detail',
-                selectedOrgan: {},
-                selectRole: {}
-            };
-        }
-        methods() {
-            return {
-                handleShowSetUser(role) {
-                    console.log(role);
-                },
-                handleShowAuthorizeDialog(role) {
-                    console.log(role);
-                },
-                handleClickRoleTree(roleOrgan) {
-                    const type = roleOrgan.attributes ? roleOrgan.attributes.type : '';
-                    if (type === 'role') {
-                        this.selectRole = roleOrgan;
-                    }
-                    else if (type === 'organ') {
-                        this.selectedOrgan = roleOrgan;
+                    table: {
+                        visible: false,
+                        displayControl: false
                     }
                 },
-                handleAddRole() {
-                    this.selectRole = {};
+                {
+                    label: '角色名',
+                    prop: 'roleName',
+                    table: {
+                        width: 120,
+                        fixed: true
+                    },
+                    form: {
+                        rules: true
+                    }
                 },
-                handleAfterSave() {
-                    this.$refs['roleTree'].load();
+                {
+                    label: '备注',
+                    prop: 'remark',
+                    table: {
+                        minWidth: 200
+                    },
+                    form: {}
+                },
+                {
+                    label: '类型',
+                    prop: 'roleType',
+                    type: 'radio',
+                    table: {
+                        width: 100
+                    },
+                    form: {
+                        defaultValue: true,
+                        dicData: roleTypeDic
+                    }
+                },
+                {
+                    label: '启用',
+                    prop: 'enable',
+                    type: 'boolean',
+                    table: {},
+                    form: {}
+                },
+                {
+                    label: '创建时间',
+                    prop: 'createTime',
+                    table: {
+                        formatter: (row, column, value) => TimeUtils.formatTime(value),
+                        width: 160
+                    },
+                    form: {}
+                },
+                {
+                    label: '创建用户',
+                    prop: 'createUserId',
+                    table: {
+                        formatter: (row) => {
+                            const user = row.createUser;
+                            return user ? user.name : '-';
+                        }
+                    },
+                    form: {}
+                },
+                {
+                    label: '更新时间',
+                    prop: 'updateTime',
+                    table: {
+                        formatter: (row, column, value) => TimeUtils.formatTime(value),
+                        width: 160
+                    },
+                    form: {}
+                },
+                {
+                    label: '更新人员',
+                    prop: 'updateUserId',
+                    table: {
+                        formatter: (row) => {
+                            const user = row.updateUser;
+                            return user ? user.name : '-';
+                        }
+                    },
+                    form: {}
+                },
+                {
+                    label: '序号',
+                    prop: 'seq',
+                    type: 'number',
+                    table: {
+                        sortable: true
+                    },
+                    form: {
+                        defaultValue: 1
+                    }
                 }
-            };
+            ],
+            searchValue: '',
+            activeTab: 'detail',
+            selectedOrgan: {},
+            selectRole: {}
+        };
+    },
+    methods: {
+        handleShowSetUser(role) {
+            console.log(role);
+        },
+        handleShowAuthorizeDialog(role) {
+            console.log(role);
+        },
+        handleClickRoleTree(roleOrgan) {
+            const type = roleOrgan.attributes ? roleOrgan.attributes.type : '';
+            if (type === 'role') {
+                this.selectRole = roleOrgan;
+            }
+            else if (type === 'organ') {
+                this.selectedOrgan = roleOrgan;
+            }
+        },
+        handleAddRole() {
+            this.selectRole = {};
+        },
+        handleAfterSave() {
+            this.$refs['roleTree'].load();
         }
-        template() {
-            return `
+    },
+    template: `
     <flex-aside
       :hasAsideHeader="false">
       <template slot="aside">
@@ -216,8 +208,5 @@ define(["require", "exports", "ComponentBuilder", "plugins/container/FlexAside",
       </template>
       <!--添加角色弹窗-->
     </flex-aside>
-    `;
-        }
-    }
-    exports.Role = Role;
-});
+    `
+};

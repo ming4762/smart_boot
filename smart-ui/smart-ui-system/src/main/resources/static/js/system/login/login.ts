@@ -1,5 +1,10 @@
 declare const Vue
-import UsernameLogin from './UsernameLogin'
+import UsernameLogin from './UsernameLogin.js'
+declare const ready
+
+ready(function () {
+  new Login().init()
+})
 
 /**
  * 页面加载完毕执行

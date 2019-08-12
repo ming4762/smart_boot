@@ -1,5 +1,5 @@
 
-import SmartFormItem from 'plugins/form/SmartFormItem'
+import SmartFormItem from './SmartFormItem.js'
 
 const typeTriggerMap = {
   input: 'blur',

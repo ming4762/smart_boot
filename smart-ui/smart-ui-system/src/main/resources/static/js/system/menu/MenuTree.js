@@ -1,30 +1,27 @@
-define(["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.default = {
-        props: {
-            data: {
-                required: true,
-                type: Array
+export default {
+    props: {
+        data: {
+            required: true,
+            type: Array
+        }
+    },
+    data() {
+        return {
+            treeProps: {
+                children: 'children',
+                label: 'menuName'
             }
+        };
+    },
+    methods: {
+        getCheckedNodes(leafOnly, includeHalfChecked) {
+            return this.$refs['role_menu_tree'].getCheckedNodes(leafOnly, includeHalfChecked);
         },
-        data() {
-            return {
-                treeProps: {
-                    children: 'children',
-                    label: 'menuName'
-                }
-            };
-        },
-        methods: {
-            getCheckedNodes(leafOnly, includeHalfChecked) {
-                return this.$refs['role_menu_tree'].getCheckedNodes(leafOnly, includeHalfChecked);
-            },
-            setCheckedKeys(keys, leafOnly) {
-                this.$refs['role_menu_tree'].setCheckedKeys(keys, leafOnly);
-            }
-        },
-        template: `
+        setCheckedKeys(keys, leafOnly) {
+            this.$refs['role_menu_tree'].setCheckedKeys(keys, leafOnly);
+        }
+    },
+    template: `
   <el-tree
     ref="role_menu_tree"
     :data="data"
@@ -34,5 +31,4 @@ define(["require", "exports"], function (require, exports) {
     node-key="menuId">
   </el-tree>
   `
-    };
-});
+};

@@ -2,11 +2,11 @@ declare var axios
 // 项目跟路径
 declare var contextPath: string
 // @ts-ignore
-import StoreUtil from 'utils/StoreUtil'
+import StoreUtil from './StoreUtil.js'
 // @ts-ignore
-import RsaUtils from 'utils/RsaUtils'
+import RsaUtils from './RsaUtils.js'
 // @ts-ignore
-import Md5Utils from 'utils/Md5Utils'
+import Md5Utils from './Md5Utils.js'
 // 设置默认的请求头
 axios.defaults.headers.post['Content-Type'] = 'application/json;charset=UTF-8'
 const service = axios.create({
@@ -25,7 +25,6 @@ const getToken = () => {
     return StoreUtil.getStore(STORE_TOKEN_KEY)
 }
 
-
 /**
  * token请求头key
  */
@@ -41,6 +40,7 @@ export default class ApiService  {
    * @param ideConfig 接口加密配置
    */
   public static postAjax(url: string, parameter?: any, headers?: {[index: string]: any}, ideConfig?: IdeConfig): Promise<any> {
+    const rsaUtils = new RsaUtils()
     headers = headers || {}
     const token = getToken()
     if (token) {
@@ -48,7 +48,7 @@ export default class ApiService  {
     }
     parameter = parameter || {}
     if (this.isEncrypt(ideConfig)) {
-      parameter = RsaUtils.rsaEncrypt(this.getServerPublicKey(), JSON.stringify(this.createEncryptParameter(parameter, ideConfig)))
+      parameter = rsaUtils.rsaEncrypt(this.getServerPublicKey(), JSON.stringify(this.createEncryptParameter(parameter, ideConfig)))
     }
     return service.post(url, parameter, {
       headers: headers
@@ -59,7 +59,7 @@ export default class ApiService  {
         // 判断是否进行参数解密
         if (this.isDecrypt(ideConfig)) {
           // 解密
-          data = JSON.parse(RsaUtils.rsaDecrypt(this.getClientPrivateKey(), result.data))
+          data = JSON.parse(rsaUtils.rsaDecrypt(this.getClientPrivateKey(), result.data))
         } else {
           data = result.data
         }

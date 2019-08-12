@@ -11,7 +11,7 @@
 </head>
 <body>
   <div id="vue-container" class="full-height">
-    <home-main/>
+    <vue-main/>
   </div>
 
 <!--引入axios-->
@@ -24,6 +24,6 @@
 
 <script th:src="@{/js/common.js}"></script>
 
-<script th:src="@{/js/system/user/userPage.js}"></script>
+<script type="module" th:src="@{/js/system/user/User.js}"></script>
 </body>
 </html>

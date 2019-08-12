@@ -1,91 +1,91 @@
-define(["require", "exports", "mixins/ThemeMixins", "system/layout/sidebar/Item", "system/layout/navbar/NavbarButton"], function (require, exports, ThemeMixins_1, Item_1, NavbarButton_1) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.default = {
-        components: {
-            'menu-item': Item_1.default,
-            'navbar-button': NavbarButton_1.default
+import ThemeMixins from '../../../mixins/ThemeMixins.js';
+import Item from '../sidebar/Item.js';
+import NavbarButton from './NavbarButton.js';
+export default {
+    components: {
+        'menu-item': Item,
+        'navbar-button': NavbarButton
+    },
+    data() {
+        return {
+            activeIndex: '',
+            sidebar: {}
+        };
+    },
+    mixins: [
+        ThemeMixins
+    ],
+    computed: {
+        getIsActive() {
+            return this.getBus.sidebar.opened === true;
         },
-        data() {
-            return {
-                activeIndex: '',
-                sidebar: {}
-            };
+        getBus() {
+            return busVue;
         },
-        mixins: [
-            ThemeMixins_1.default
-        ],
-        computed: {
-            getIsActive() {
-                return this.getBus.sidebar.opened === true;
-            },
-            getBus() {
-                return busVue;
-            },
-            computedStyle() {
-                return `fill: ${this.getTopTextColor}`;
-            },
-            getTopDivStyle() {
-                return 'background-color:' + this.getBus.theme.topColor;
-            },
-            computedUserMenuList() {
-                return this.getBus.userMenuList;
-            },
-            computedActiveMenu() {
-                return this.getBus.activeMenu;
+        computedStyle() {
+            return `fill: ${this.getTopTextColor}`;
+        },
+        getTopDivStyle() {
+            return 'background-color:' + this.getBus.theme.topColor;
+        },
+        computedUserMenuList() {
+            return this.getBus.userMenuList;
+        },
+        computedActiveMenu() {
+            return this.getBus.activeMenu;
+        }
+    },
+    watch: {
+        'computedActiveMenu': function (_new, old) {
+            if (_new && _new.topId !== old.topId) {
+                this.setActiveTopMenu();
             }
+        }
+    },
+    mounted() {
+    },
+    methods: {
+        handleMenuSelectEvent(index) {
+            this.activeIndex = index;
         },
-        watch: {
-            'computedActiveMenu': function (_new, old) {
-                if (_new && _new.topId !== old.topId) {
-                    this.setActiveTopMenu();
+        handleToggleClick() {
+            this.getBus.sidebar.opened = !this.getBus.sidebar.opened;
+        },
+        handleOpenMenu(menu) {
+            this.getBus.setActiveTopMenu(menu);
+        },
+        getDefaultTopMenuId() {
+            if (this.computedUserMenuList.length > 0) {
+                const menu = this.computedUserMenuList[0];
+                if (menu) {
+                    return menu.topId;
                 }
             }
+            return '';
         },
-        mounted() {
-        },
-        methods: {
-            handleMenuSelectEvent(index) {
-                this.activeIndex = index;
-            },
-            handleToggleClick() {
-                this.getBus.sidebar.opened = !this.getBus.sidebar.opened;
-            },
-            handleOpenMenu(menu) {
-                this.getBus.setActiveTopMenu(menu);
-            },
-            getDefaultTopMenuId() {
-                if (this.computedUserMenuList.length > 0) {
-                    const menu = this.computedUserMenuList[0];
-                    if (menu) {
-                        return menu.topId;
+        setActiveTopMenu() {
+            const activeTopMenu = this.getBus.activeTopMenu;
+            const activeTopId = this.computedActiveMenu.topId;
+            if (activeTopMenu.id !== activeTopId) {
+                const userMenuList = this.getBus.userMenuList;
+                for (let i in userMenuList) {
+                    if (activeTopId === userMenuList[i].topId) {
+                        this.getBus.setActiveTopMenu(userMenuList[i]);
+                        break;
                     }
                 }
-                return '';
-            },
-            setActiveTopMenu() {
-                const activeTopMenu = this.getBus.activeTopMenu;
-                const activeTopId = this.computedActiveMenu.topId;
-                if (activeTopMenu.id !== activeTopId) {
-                    const userMenuList = this.getBus.userMenuList;
-                    for (let i in userMenuList) {
-                        if (activeTopId === userMenuList[i].topId) {
-                            this.getBus.setActiveTopMenu(userMenuList[i]);
-                            break;
-                        }
-                    }
-                }
-            },
-            isActive(menuId) {
-                if (!this.computedActiveMenu.topId) {
-                    return false;
-                }
-                else {
-                    return this.getBus.activeTopMenu.id === menuId;
-                }
             }
         },
-        template: `
+        isActive(menuId) {
+            if (!this.computedActiveMenu.topId) {
+                return false;
+            }
+            else {
+                return this.getBus.activeTopMenu.id === menuId;
+            }
+        }
+    },
+    template: `
   <div :style="getTopDivStyle" class="navbar-outer-a">
     <el-menu
       ref="topMenu"
@@ -139,5 +139,4 @@ define(["require", "exports", "mixins/ThemeMixins", "system/layout/sidebar/Item"
     <navbar-button class="navbar-button-container"/>
   </div>
   `
-    };
-});
+};

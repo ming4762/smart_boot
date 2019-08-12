@@ -1,18 +1,25 @@
 // @ts-ignore
-import PageBuilder from 'PageBuilder'
+import PageBuilder from '../../PageBuilder.js'
 // @ts-ignore
-import SmartTableCRUD from 'plugins/table/SmartTableCRUD'
+import SmartTableCRUD from '../../plugins/table/SmartTableCRUD.js'
 // @ts-ignore
-import ApiService from 'utils/ApiService'
+import ApiService from '../../utils/ApiService.js'
 // @ts-ignore
-import LayoutMixins from 'mixins/LayoutMixins'
+import LayoutMixins from '../../mixins/LayoutMixins.js'
 // @ts-ignore
-import MessageMixins from 'mixins/MessageMixins'
+import MessageMixins from '../../mixins/MessageMixins.js'
+
+declare const ready
+
+ready(function () {
+  // @ts-ignore
+  new TimedTask().init()
+})
 
 /**
  * 定时任务管理页面
  */
-export class TimedTask extends PageBuilder {
+class TimedTask extends PageBuilder {
   protected build () {
     return page
   }

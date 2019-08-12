@@ -1,33 +1,31 @@
-define(["require", "exports", "system/layout/TagsView/ScrollPane"], function (require, exports, ScrollPane_1) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.default = {
-        components: {
-            'scroll-pane': ScrollPane_1.default
+import ScrollPane from './ScrollPane.js';
+export default {
+    components: {
+        'scroll-pane': ScrollPane
+    },
+    computed: {
+        getBus() {
+            return busVue;
         },
-        computed: {
-            getBus() {
-                return busVue;
-            },
-            computedOpenMenuList() {
-                return this.getBus.openMenuList;
-            }
+        computedOpenMenuList() {
+            return this.getBus.openMenuList;
+        }
+    },
+    methods: {
+        isActive(menu) {
+            return menu.path === this.getBus.activeMenu.path;
         },
-        methods: {
-            isActive(menu) {
-                return menu.path === this.getBus.activeMenu.path;
-            },
-            handleOpenOperate(menu, event) {
-                console.log(menu);
-            },
-            handleCloseSelectedMenu(menu) {
-                this.getBus.deleteMenu(menu.path);
-            },
-            handleActiveMenu(menu) {
-                this.getBus.addMenu(menu);
-            }
+        handleOpenOperate(menu, event) {
+            console.log(menu);
         },
-        template: `
+        handleCloseSelectedMenu(menu) {
+            this.getBus.deleteMenu(menu.path);
+        },
+        handleActiveMenu(menu) {
+            this.getBus.addMenu(menu);
+        }
+    },
+    template: `
   <div class="tags-view-container">
     <scroll-pane class="tags-view-wrapper" ref="scrollPane">
       <a
@@ -43,5 +41,4 @@ define(["require", "exports", "system/layout/TagsView/ScrollPane"], function (re
     </scroll-pane>
   </div>
   `
-    };
-});
+};

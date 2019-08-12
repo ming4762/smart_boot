@@ -1,53 +1,31 @@
 // @ts-ignore
-import ComponentBuilder from 'ComponentBuilder'
+import PageBuilder from '../../PageBuilder.js'
 // @ts-ignore
-import SmartTableCRUD from 'plugins/table/SmartTableCRUD'
+import SmartTableCRUD from '../../plugins/table/SmartTableCRUD.js'
 // @ts-ignore
-import ApiService from 'utils/ApiService'
+import ApiService from '../../utils/ApiService.js'
 // @ts-ignore
-import LayoutMixins from 'mixins/LayoutMixins'
+import LayoutMixins from '../../mixins/LayoutMixins.js'
 // @ts-ignore
-import SmartIconSelect from 'plugins/icon/SmartIconSelect'
+import SmartIconSelect from '../../plugins/icon/SmartIconSelect.js'
 // @ts-ignore
-import ValidateUtils from 'utils/ValidateUtils'
+import ValidateUtils from '../../utils/ValidateUtils.js'
 // @ts-ignore
-import TreeUtils from 'utils/TreeUtils'
+import TreeUtils from '../../utils/TreeUtils.js'
 
-export class SysFunction extends ComponentBuilder {
-  private vue: any
+declare const ready
 
+ready(function () {
+  // @ts-ignore
+  new SysFunction().init()
+})
+
+class SysFunction extends PageBuilder {
   /**
-   * 初始化方法
+   * 构建函数
    */
-  public init () {
-    this.initVue()
-  }
-
-  /**
-   * 初始化vue
-   */
-  private initVue () {
-    // @ts-ignore
-    this.vue = new Vue({
-      el: '#vue-container',
-      components: {
-        // @ts-ignore
-        'home-main': this.build()
-      }
-    })
-  }
-
-  protected components () {
-    return {
-      'smart-table-crud': SmartTableCRUD,
-      'smart-icon-select': SmartIconSelect
-    }
-  }
-
-  protected mixins () {
-    return [
-      LayoutMixins
-    ]
+  protected build () {
+    return page
   }
 
   private static format(data, key) {
@@ -55,7 +33,15 @@ export class SysFunction extends ComponentBuilder {
     // return data['object'][key]
   }
 
-  protected data () {
+}
+
+const page = {
+  components: {
+    'smart-table-crud': SmartTableCRUD,
+    'smart-icon-select': SmartIconSelect
+  },
+  mixins: [LayoutMixins],
+  data () {
     return {
       apiService: ApiService,
       columnOptions: [
@@ -172,64 +158,58 @@ export class SysFunction extends ComponentBuilder {
       ],
       defaultButtonConfig: {}
     }
-  }
-
-  protected methods () {
-    return {
-      /**
-       * 添加修改弹窗打开事件
-       */
-      handleAddEditDialogShow (ident: string, model: any, callBack: Function, row?) {
-        if (ident === 'add') {
-          if (ValidateUtils.validateNull(row)) {
-            model.parentId = '0'
-            model.parentName = '根目录'
-          } else {
-            model.parentId = row.functionId
-            model.parentName = row.functionName
-          }
-          callBack(model)
+  },
+  methods: {
+    /**
+     * 添加修改弹窗打开事件
+     */
+    handleAddEditDialogShow (ident: string, model: any, callBack: Function, row?) {
+      if (ident === 'add') {
+        if (ValidateUtils.validateNull(row)) {
+          model.parentId = '0'
+          model.parentName = '根目录'
         } else {
-          callBack()
+          model.parentId = row.functionId
+          model.parentName = row.functionName
         }
-      },
-      // 格式化图标样式
-      formatIcon (row: any): string {
-        if (row['icon']) {
-          return row['icon'] + ' fa-lg'
-        } else {
-          return ''
-        }
-      },
-      // 格式化类型的样式
-      formatTypeClass (type: string): string {
-        if (type === '0') {
-          return ''
-        } else if (type === '1') {
-          return 'success'
-        } else if (type === '2') {
-          return 'warning'
-        }
-      },
-      // 格式化类型名称
-      formatTypeName (type: string): string {
-        if (type === '0') {
-          return '目录'
-        } else if (type === '1') {
-          return '菜单'
-        } else if (type === '2') {
-          return '按钮'
-        }
-      },
-      handleTableDataFormatter (tableData: any[]): any[] {
-        return TreeUtils.convertList2Tree(tableData, ['functionId', 'parentId'], '0')
+        callBack(model)
+      } else {
+        callBack()
       }
+    },
+    // 格式化图标样式
+    formatIcon (row: any): string {
+      if (row['icon']) {
+        return row['icon'] + ' fa-lg'
+      } else {
+        return ''
+      }
+    },
+    // 格式化类型的样式
+    formatTypeClass (type: string): string {
+      if (type === '0') {
+        return ''
+      } else if (type === '1') {
+        return 'success'
+      } else if (type === '2') {
+        return 'warning'
+      }
+    },
+    // 格式化类型名称
+    formatTypeName (type: string): string {
+      if (type === '0') {
+        return '目录'
+      } else if (type === '1') {
+        return '菜单'
+      } else if (type === '2') {
+        return '按钮'
+      }
+    },
+    handleTableDataFormatter (tableData: any[]): any[] {
+      return TreeUtils.convertList2Tree(tableData, ['functionId', 'parentId'], '0')
     }
-  }
-
-
-  protected template () {
-    return `
+  },
+  template: `
     <div style="padding: 15px;">
       <smart-table-crud
         :defaultButtonConfig="defaultButtonConfig"
@@ -274,5 +254,4 @@ export class SysFunction extends ComponentBuilder {
       </smart-table-crud>
     </div>
     `
-  }
 }

@@ -1,192 +1,196 @@
-define(["require", "exports", "PageBuilder", "plugins/table/SmartTableCRUD", "utils/ApiService", "mixins/LayoutMixins", "utils/TimeUtils"], function (require, exports, PageBuilder_1, SmartTableCRUD_1, ApiService_1, LayoutMixins_1, TimeUtils_1) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    class Dict extends PageBuilder_1.default {
-        build() {
-            return page;
-        }
+import PageBuilder from '../../PageBuilder.js';
+import SmartTableCRUD from '../../plugins/table/SmartTableCRUD.js';
+import ApiService from '../../utils/ApiService.js';
+import LayoutMixins from '../../mixins/LayoutMixins.js';
+import TimeUtils from '../../utils/TimeUtils.js';
+ready(function () {
+    new Dict().init();
+});
+class Dict extends PageBuilder {
+    build() {
+        return page;
     }
-    exports.Dict = Dict;
-    const DictItem = {
-        components: {
-            SmartTableCRUD: SmartTableCRUD_1.default
+}
+const DictItem = {
+    components: {
+        SmartTableCRUD
+    },
+    mixins: [
+        LayoutMixins
+    ],
+    props: {
+        dictCode: {
+            type: String,
+            required: true
         },
-        mixins: [
-            LayoutMixins_1.default
-        ],
-        props: {
-            dictCode: {
-                type: String,
-                required: true
-            },
-            show: Boolean
-        },
-        data() {
-            return {
-                apiService: ApiService_1.default,
+        show: Boolean
+    },
+    data() {
+        return {
+            apiService: ApiService,
+            defaultButtonConfig: {
                 defaultButtonConfig: {
-                    defaultButtonConfig: {
-                        add: {
-                            rowShow: false,
-                            permission: 'sys:dictItem:save'
-                        },
-                        edit: {
-                            permission: 'sys:dictItem:update'
-                        },
-                        delete: {
-                            permission: 'sys:dictItem:delete'
-                        }
+                    add: {
+                        rowShow: false,
+                        permission: 'sys:dictItem:save'
                     },
-                },
-                columnOptions: [
-                    {
-                        prop: 'id',
-                        label: 'id',
-                        table: {
-                            visible: false,
-                            displayControl: false
-                        },
-                        form: {
-                            visible: false
-                        }
+                    edit: {
+                        permission: 'sys:dictItem:update'
                     },
-                    {
-                        prop: 'dictCode',
-                        label: '字典编码',
-                        table: {
-                            fixed: true,
-                            visible: false
-                        },
-                        form: {}
-                    },
-                    {
-                        prop: 'itemCode',
-                        label: '字典项编码',
-                        table: {
-                            width: 150,
-                            fixed: true
-                        },
-                        form: {
-                            rules: true
-                        }
-                    },
-                    {
-                        prop: 'itemValue',
-                        label: '字典项值',
-                        table: {
-                            fixed: true,
-                            width: 180
-                        },
-                        form: {
-                            rules: true
-                        }
-                    },
-                    {
-                        prop: 'remark',
-                        label: '描述',
-                        table: {
-                            minWidth: 200
-                        },
-                        form: {}
-                    },
-                    {
-                        prop: 'createUserId',
-                        label: '创建人员',
-                        table: {
-                            width: 120
-                        },
-                        form: {
-                            visible: false
-                        }
-                    },
-                    {
-                        prop: 'createTime',
-                        label: '创建时间',
-                        table: {
-                            width: 170,
-                            formatter: (row, column, cellValue) => {
-                                return TimeUtils_1.default.formatTime(cellValue);
-                            }
-                        },
-                        form: {
-                            visible: false
-                        }
-                    },
-                    {
-                        prop: 'updateUserId',
-                        label: '更新人员',
-                        table: {
-                            width: 120
-                        },
-                        form: {
-                            visible: false
-                        }
-                    },
-                    {
-                        prop: 'updateTime',
-                        label: '创建人员',
-                        table: {
-                            width: 160
-                        },
-                        form: {
-                            visible: false
-                        }
-                    },
-                    {
-                        prop: 'inUse',
-                        type: 'boolean',
-                        label: '是否启用',
-                        table: {
-                            slot: true,
-                            width: 120,
-                            sortable: true
-                        },
-                        form: {
-                            defaultValue: true
-                        }
-                    }, {
-                        prop: 'seq',
-                        label: '序号',
-                        type: 'number',
-                        table: {
-                            sortable: true
-                        },
-                        form: {
-                            defaultValue: 1
-                        }
+                    delete: {
+                        permission: 'sys:dictItem:delete'
                     }
-                ]
-            };
+                },
+            },
+            columnOptions: [
+                {
+                    prop: 'id',
+                    label: 'id',
+                    table: {
+                        visible: false,
+                        displayControl: false
+                    },
+                    form: {
+                        visible: false
+                    }
+                },
+                {
+                    prop: 'dictCode',
+                    label: '字典编码',
+                    table: {
+                        fixed: true,
+                        visible: false
+                    },
+                    form: {}
+                },
+                {
+                    prop: 'itemCode',
+                    label: '字典项编码',
+                    table: {
+                        width: 150,
+                        fixed: true
+                    },
+                    form: {
+                        rules: true
+                    }
+                },
+                {
+                    prop: 'itemValue',
+                    label: '字典项值',
+                    table: {
+                        fixed: true,
+                        width: 180
+                    },
+                    form: {
+                        rules: true
+                    }
+                },
+                {
+                    prop: 'remark',
+                    label: '描述',
+                    table: {
+                        minWidth: 200
+                    },
+                    form: {}
+                },
+                {
+                    prop: 'createUserId',
+                    label: '创建人员',
+                    table: {
+                        width: 120
+                    },
+                    form: {
+                        visible: false
+                    }
+                },
+                {
+                    prop: 'createTime',
+                    label: '创建时间',
+                    table: {
+                        width: 170,
+                        formatter: (row, column, cellValue) => {
+                            return TimeUtils.formatTime(cellValue);
+                        }
+                    },
+                    form: {
+                        visible: false
+                    }
+                },
+                {
+                    prop: 'updateUserId',
+                    label: '更新人员',
+                    table: {
+                        width: 120
+                    },
+                    form: {
+                        visible: false
+                    }
+                },
+                {
+                    prop: 'updateTime',
+                    label: '创建人员',
+                    table: {
+                        width: 160
+                    },
+                    form: {
+                        visible: false
+                    }
+                },
+                {
+                    prop: 'inUse',
+                    type: 'boolean',
+                    label: '是否启用',
+                    table: {
+                        slot: true,
+                        width: 120,
+                        sortable: true
+                    },
+                    form: {
+                        defaultValue: true
+                    }
+                }, {
+                    prop: 'seq',
+                    label: '序号',
+                    type: 'number',
+                    table: {
+                        sortable: true
+                    },
+                    form: {
+                        defaultValue: 1
+                    }
+                }
+            ]
+        };
+    },
+    watch: {
+        dictCode() {
+            this.$refs['itemTable'].load();
+        }
+    },
+    methods: {
+        handleQueryParameterFormatter(parameter) {
+            parameter['dictCode@='] = this.dictCode;
+            return parameter;
         },
-        watch: {
-            dictCode() {
-                this.$refs['itemTable'].load();
+        handleAddEditDialogShow(ident, model, callBack, row) {
+            if (ident === 'edit') {
+                ApiService.postAjax('sys/dictItem/get', { id: row.id })
+                    .then(result => {
+                    callBack(result);
+                }).catch(error => {
+                    this.errorMessage('获取字典项信息失败', error);
+                });
+            }
+            else {
+                model.dictCode = this.dictCode;
+                callBack(model);
             }
         },
-        methods: {
-            handleQueryParameterFormatter(parameter) {
-                parameter['dictCode@='] = this.dictCode;
-                return parameter;
-            },
-            handleAddEditDialogShow(ident, model, callBack, row) {
-                if (ident === 'edit') {
-                    ApiService_1.default.postAjax('sys/dictItem/get', { id: row.id })
-                        .then(result => {
-                        callBack(result);
-                    }).catch(error => {
-                        this.errorMessage('获取字典项信息失败', error);
-                    });
-                }
-                else {
-                    model.dictCode = this.dictCode;
-                    callBack(model);
-                }
-            },
-            handleGoBack() {
-                this.$emit('update:show', false);
-            }
-        },
-        template: `
+        handleGoBack() {
+            this.$emit('update:show', false);
+        }
+    },
+    template: `
   <SmartTableCRUD
     ref="itemTable"
     :height="computedTableHeight"
@@ -226,136 +230,136 @@ define(["require", "exports", "PageBuilder", "plugins/table/SmartTableCRUD", "ut
     </template>
   </SmartTableCRUD>
   `
-    };
-    const page = {
-        components: {
-            SmartTableCRUD: SmartTableCRUD_1.default,
-            DictItem
-        },
-        mixins: [
-            LayoutMixins_1.default
-        ],
-        data() {
-            return {
-                apiService: ApiService_1.default,
-                defaultButtonConfig: {
-                    add: {
-                        rowShow: false,
-                        permission: 'sys:dict:save'
+};
+const page = {
+    components: {
+        SmartTableCRUD,
+        DictItem
+    },
+    mixins: [
+        LayoutMixins
+    ],
+    data() {
+        return {
+            apiService: ApiService,
+            defaultButtonConfig: {
+                add: {
+                    rowShow: false,
+                    permission: 'sys:dict:save'
+                },
+                edit: {
+                    permission: 'sys:dict:update'
+                },
+                delete: {
+                    permission: 'sys:dict:delete'
+                }
+            },
+            currentDict: {
+                dictCode: 'xx'
+            },
+            showItem: false,
+            columnOptions: [
+                {
+                    prop: 'dictCode',
+                    label: '字典编码',
+                    table: {
+                        width: 150,
+                        fixed: true,
+                        sortable: true
                     },
-                    edit: {
-                        permission: 'sys:dict:update'
-                    },
-                    delete: {
-                        permission: 'sys:dict:delete'
+                    form: {
+                        rules: true
                     }
                 },
-                currentDict: {
-                    dictCode: 'xx'
-                },
-                showItem: false,
-                columnOptions: [
-                    {
-                        prop: 'dictCode',
-                        label: '字典编码',
-                        table: {
-                            width: 150,
-                            fixed: true,
-                            sortable: true
-                        },
-                        form: {
-                            rules: true
-                        }
+                {
+                    prop: 'dictName',
+                    label: '字典名称',
+                    table: {
+                        width: 120,
+                        fixed: true,
+                        sortable: true
                     },
-                    {
-                        prop: 'dictName',
-                        label: '字典名称',
-                        table: {
-                            width: 120,
-                            fixed: true,
-                            sortable: true
-                        },
-                        form: {
-                            rules: true
-                        }
-                    },
-                    {
-                        prop: 'createUserId',
-                        label: '创建人员',
-                        table: {
-                            width: 120
-                        },
-                        form: {
-                            visible: false
-                        }
-                    },
-                    {
-                        prop: 'createTime',
-                        label: '创建时间',
-                        table: {
-                            sortable: true,
-                            width: 170,
-                            formatter: (row, column, cellValue) => {
-                                return TimeUtils_1.default.formatTime(cellValue);
-                            }
-                        },
-                        form: {
-                            visible: false
-                        }
-                    },
-                    {
-                        prop: 'remark',
-                        label: '描述',
-                        table: {
-                            minWidth: 200
-                        },
-                        form: {}
-                    },
-                    {
-                        prop: 'updateUserId',
-                        label: '更新人员',
-                        table: {
-                            width: 120,
-                            visible: false
-                        },
-                        form: {
-                            visible: false
-                        }
-                    },
-                    {
-                        prop: 'inUse',
-                        type: 'boolean',
-                        label: '是否启用',
-                        table: {
-                            slot: true,
-                            width: 120,
-                            sortable: true
-                        },
-                        form: {
-                            defaultValue: true
-                        }
-                    },
-                    {
-                        prop: 'seq',
-                        label: '序号',
-                        type: 'number',
-                        table: {
-                            sortable: true
-                        },
-                        form: {
-                            defaultValue: 1
-                        }
+                    form: {
+                        rules: true
                     }
-                ]
-            };
-        },
-        methods: {
-            handleShowDictItem(dict) {
-                this.currentDict = dict;
-                this.showItem = true;
-            }
-        },
-        template: `
+                },
+                {
+                    prop: 'createUserId',
+                    label: '创建人员',
+                    table: {
+                        width: 120
+                    },
+                    form: {
+                        visible: false
+                    }
+                },
+                {
+                    prop: 'createTime',
+                    label: '创建时间',
+                    table: {
+                        sortable: true,
+                        width: 170,
+                        formatter: (row, column, cellValue) => {
+                            return TimeUtils.formatTime(cellValue);
+                        }
+                    },
+                    form: {
+                        visible: false
+                    }
+                },
+                {
+                    prop: 'remark',
+                    label: '描述',
+                    table: {
+                        minWidth: 200
+                    },
+                    form: {}
+                },
+                {
+                    prop: 'updateUserId',
+                    label: '更新人员',
+                    table: {
+                        width: 120,
+                        visible: false
+                    },
+                    form: {
+                        visible: false
+                    }
+                },
+                {
+                    prop: 'inUse',
+                    type: 'boolean',
+                    label: '是否启用',
+                    table: {
+                        slot: true,
+                        width: 120,
+                        sortable: true
+                    },
+                    form: {
+                        defaultValue: true
+                    }
+                },
+                {
+                    prop: 'seq',
+                    label: '序号',
+                    type: 'number',
+                    table: {
+                        sortable: true
+                    },
+                    form: {
+                        defaultValue: 1
+                    }
+                }
+            ]
+        };
+    },
+    methods: {
+        handleShowDictItem(dict) {
+            this.currentDict = dict;
+            this.showItem = true;
+        }
+    },
+    template: `
   <div style="padding: 15px;">
     <DictItem
       :dictCode="currentDict.dictCode"
@@ -390,5 +394,4 @@ define(["require", "exports", "PageBuilder", "plugins/table/SmartTableCRUD", "ut
     </SmartTableCRUD>
   </div>
   `
-    };
-});
+};

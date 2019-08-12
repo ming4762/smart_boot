@@ -1,10 +1,10 @@
 // @ts-ignore
-import Md5Utils from 'utils/Md5Utils'
+import Md5Utils from '../../utils/Md5Utils.js'
 
 // @ts-ignore
-import { STORE_KEYS } from 'Constants'
+import { STORE_KEYS } from '../../Constants.js'
 // @ts-ignore
-import StoreUtil from 'utils/StoreUtil'
+import StoreUtil from '../../utils/StoreUtil.js'
 
 /**
  * 创建密码
