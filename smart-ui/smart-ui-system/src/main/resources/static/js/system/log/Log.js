@@ -78,7 +78,8 @@ define(["require", "exports", "PageBuilder", "utils/TimeUtils", "plugins/table/S
                         label: '状态码',
                         prop: 'statusCode',
                         table: {
-                            fixed: 'right'
+                            fixed: 'right',
+                            sortable: true
                         },
                         form: {}
                     },

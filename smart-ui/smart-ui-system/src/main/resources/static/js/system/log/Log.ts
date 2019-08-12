@@ -88,7 +88,8 @@ export const LogComponent = {
           label: '状态码',
           prop: 'statusCode',
           table: {
-            fixed: 'right'
+            fixed: 'right',
+            sortable: true
           },
           form: {}
         },
