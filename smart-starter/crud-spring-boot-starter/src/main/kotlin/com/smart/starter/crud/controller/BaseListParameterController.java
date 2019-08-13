@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import java.util.List;
 
 /**
+ * 解决kotlin List<T> json转换 类型丢失问题
  * @author ming
  * 2019/7/5 下午8:32
  */
