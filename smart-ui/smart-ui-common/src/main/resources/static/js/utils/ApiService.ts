@@ -3,12 +3,11 @@ declare var axios
 declare var contextPath: string
 // @ts-ignore
 import StoreUtil from './StoreUtil.js'
+
 // @ts-ignore
 import RsaUtils from './RsaUtils.js'
 // @ts-ignore
 import Md5Utils from './Md5Utils.js'
-
-import { STORE_KEYS } from '../Constants.js'
 
 // 设置默认的请求头
 axios.defaults.headers.post['Content-Type'] = 'application/json;charset=UTF-8'
@@ -151,16 +150,6 @@ export default class ApiService  {
       // 保存公钥
       StoreUtil.setStore(RSA_SERVER_PUBLIC_KEYU, serverPublicKey, StoreUtil.SESSION_TYPE)
     })
-  }
-
-  /**
-   * 读取配置配置信息
-   */
-  public static readLocalConfig (): Promise<any> {
-    return this.postAjax('public/sys/readConfig', {})
-        .then(result => {
-          StoreUtil.setStore(STORE_KEYS.LOCAL_CONFIG_KEY, result)
-        })
   }
 
   /**

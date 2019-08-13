@@ -3,6 +3,8 @@ import UsernameLogin from './UsernameLogin.js'
 // @ts-ignore
 import ApiService from '../../utils/ApiService.js'
 // @ts-ignore
+import ConfigUtils from '../../utils/ConfigUtils.js'
+// @ts-ignore
 import MessageMixins from '../../mixins/MessageMixins.js'
 
 
@@ -38,7 +40,7 @@ export class Login {
       },
       mixins: [MessageMixins],
       created () {
-        ApiService.readLocalConfig()
+        ConfigUtils.loadConfig()
             .catch(error => {
               this.errorMessage(error.message, error)
             })

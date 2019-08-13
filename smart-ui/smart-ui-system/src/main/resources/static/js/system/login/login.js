@@ -1,5 +1,5 @@
 import UsernameLogin from './UsernameLogin.js';
-import ApiService from '../../utils/ApiService.js';
+import ConfigUtils from '../../utils/ConfigUtils.js';
 import MessageMixins from '../../mixins/MessageMixins.js';
 ready(function () {
     new Login().init();
@@ -17,7 +17,7 @@ export class Login {
             },
             mixins: [MessageMixins],
             created() {
-                ApiService.readLocalConfig()
+                ConfigUtils.loadConfig()
                     .catch(error => {
                     this.errorMessage(error.message, error);
                 });

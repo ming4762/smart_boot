@@ -5917,7 +5917,18 @@ var GisGraphicsLayer = null;
       graphicDataList: []
     };
   },
-  watch: {},
+  watch: {
+    /**
+     * 监控数据变化
+     */
+    data: {
+      deep: true,
+      handler: function handler() {
+        this.graphicDataList = this.convertData(this.data, this.graphicType);
+        this.refreshGraphics();
+      }
+    }
+  },
   methods: {
     /**
      * 获取图形元素集合
