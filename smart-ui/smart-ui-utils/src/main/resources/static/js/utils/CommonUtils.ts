@@ -83,4 +83,37 @@ export default class CommonUtil {
       doc.webkitExitFullscreen()
     }
   }
+
+  /**
+   * 加载js文件
+   * @param url
+   */
+  public static loadJS(url: string): Promise<any> {
+    return new Promise<any>((resolve) => {
+      const script = document.createElement('script')
+      script.type = 'text/javascript'
+      script.onload = () => {
+        resolve()
+      }
+      script.src = url
+      document.body.appendChild(script)
+    })
+  }
+
+  /**
+   * 加载css文件
+   * @param href
+   */
+  public static loadCSS(href: string): Promise<any> {
+    return new Promise<any>((resolve) => {
+      const link = document.createElement('link')
+      link.setAttribute("rel","stylesheet")
+      link.setAttribute("type","text/css")
+      link.setAttribute("href", href)
+      link.onload = () => {
+        resolve()
+      }
+      document.getElementsByTagName("head")[0].appendChild(link)
+    })
+  }
 }

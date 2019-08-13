@@ -62,4 +62,27 @@ export default class CommonUtil {
             doc.webkitExitFullscreen();
         }
     }
+    static loadJS(url) {
+        return new Promise((resolve) => {
+            const script = document.createElement('script');
+            script.type = 'text/javascript';
+            script.onload = () => {
+                resolve();
+            };
+            script.src = url;
+            document.body.appendChild(script);
+        });
+    }
+    static loadCSS(href) {
+        return new Promise((resolve) => {
+            const link = document.createElement('link');
+            link.setAttribute("rel", "stylesheet");
+            link.setAttribute("type", "text/css");
+            link.setAttribute("href", href);
+            link.onload = () => {
+                resolve();
+            };
+            document.getElementsByTagName("head")[0].appendChild(link);
+        });
+    }
 }
