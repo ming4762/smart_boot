@@ -35,16 +35,6 @@ class SystemDataSourceMybatisConfig {
         return DruidDataSourceBuilder.create().build()
     }
 
-    /**
-     * 创建数据库事物
-     * @param dataSource 系统数据源
-     * @return 事物类
-     */
-//    @Bean(name = ["systemTransactionManager"])
-//    fun systemTransactionManager(@Qualifier("systemDataSource") dataSource: DataSource): DataSourceTransactionManager {
-//        return DataSourceTransactionManager(dataSource)
-//    }
-
     @Bean(name = ["systemSqlSessionFactory"])
     @Throws(Exception::class)
     fun sqlSessionFactory(@Qualifier("systemDataSource") dataSource: DataSource): SqlSessionFactory? {
@@ -60,16 +50,6 @@ class SystemDataSourceMybatisConfig {
         val resolver = PathMatchingResourcePatternResolver()
         return resolver.getResources("classpath*:mybatis/system/*.xml")
     }
-
-    /**
-     * 创建SqlSessionTemplate
-     * @param sqlSessionFactory sqlSessionFactory
-     * @return 系统库SqlSessionTemplate
-     */
-//    @Bean(name = ["systemSqlSessionTemplate"])
-//    fun systemSqlSessionTemplate(@Qualifier("systemSqlSessionFactory") sqlSessionFactory: SqlSessionFactory): SqlSessionTemplate {
-//        return SqlSessionTemplate(sqlSessionFactory)
-//    }
 
     /**
     * 创建分页插件

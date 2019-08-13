@@ -29,18 +29,16 @@ const DictItem = {
         return {
             apiService: ApiService,
             defaultButtonConfig: {
-                defaultButtonConfig: {
-                    add: {
-                        rowShow: false,
-                        permission: 'sys:dictItem:save'
-                    },
-                    edit: {
-                        permission: 'sys:dictItem:update'
-                    },
-                    delete: {
-                        permission: 'sys:dictItem:delete'
-                    }
+                add: {
+                    rowShow: false,
+                    permission: 'sys:dictItem:save'
                 },
+                edit: {
+                    permission: 'sys:dictItem:update'
+                },
+                delete: {
+                    permission: 'sys:dictItem:delete'
+                }
             },
             columnOptions: [
                 {

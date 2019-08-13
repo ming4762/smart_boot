@@ -49,18 +49,16 @@ const DictItem = {
       apiService: ApiService,
       // TODO: 权限信息，待测试
       defaultButtonConfig: {
-        defaultButtonConfig: {
-          add: {
-            rowShow: false,
-            permission: 'sys:dictItem:save'
-          },
-          edit: {
-            permission: 'sys:dictItem:update'
-          },
-          delete: {
-            permission: 'sys:dictItem:delete'
-          }
+        add: {
+          rowShow: false,
+          permission: 'sys:dictItem:save'
         },
+        edit: {
+          permission: 'sys:dictItem:update'
+        },
+        delete: {
+          permission: 'sys:dictItem:delete'
+        }
       },
       columnOptions: [
         {
