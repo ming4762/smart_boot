@@ -7,5 +7,6 @@ export const STORE_KEYS = {
     THEME_KEY: 'smart_theme',
     MENU_URL_MAP_KEY: 'smart_url_menu_map',
     ACTIVE_TOP_MENU: 'smart_active_top_menu',
-    ACTIVE_MENU: 'smart_active_menu'
+    ACTIVE_MENU: 'smart_active_menu',
+    LOCAL_CONFIG_KEY: 'local_config_key'
 };

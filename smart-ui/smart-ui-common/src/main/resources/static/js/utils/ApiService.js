@@ -1,6 +1,7 @@
 import StoreUtil from './StoreUtil.js';
 import RsaUtils from './RsaUtils.js';
 import Md5Utils from './Md5Utils.js';
+import { STORE_KEYS } from '../Constants.js';
 axios.defaults.headers.post['Content-Type'] = 'application/json;charset=UTF-8';
 const service = axios.create({
     baseURL: localStorage.getItem('API_URL'),
@@ -84,6 +85,12 @@ export default class ApiService {
         return this.postAjax('auth/registerKey', rasKey.pubKey).then((serverPublicKey) => {
             StoreUtil.setStore(RSA_CLIENT_PRIVATE_KEY, rasKey.priKey, StoreUtil.SESSION_TYPE);
             StoreUtil.setStore(RSA_SERVER_PUBLIC_KEYU, serverPublicKey, StoreUtil.SESSION_TYPE);
+        });
+    }
+    static readLocalConfig() {
+        return this.postAjax('public/sys/readConfig', {})
+            .then(result => {
+            StoreUtil.setStore(STORE_KEYS.LOCAL_CONFIG_KEY, result);
         });
     }
     static toLoginPage() {

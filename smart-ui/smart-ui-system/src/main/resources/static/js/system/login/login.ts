@@ -1,5 +1,11 @@
 declare const Vue
 import UsernameLogin from './UsernameLogin.js'
+// @ts-ignore
+import ApiService from '../../utils/ApiService.js'
+// @ts-ignore
+import MessageMixins from '../../mixins/MessageMixins.js'
+
+
 declare const ready
 
 ready(function () {
@@ -29,6 +35,13 @@ export class Login {
       components: {
         // @ts-ignore
         'username-login': UsernameLogin
+      },
+      mixins: [MessageMixins],
+      created () {
+        ApiService.readLocalConfig()
+            .catch(error => {
+              this.errorMessage(error.message, error)
+            })
       }
     })
   }
