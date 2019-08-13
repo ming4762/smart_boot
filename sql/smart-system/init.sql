@@ -89,3 +89,34 @@ CREATE TABLE `sys_log` (
   `request_path` varchar(255) NOT NULL COMMENT '请求路径',
   PRIMARY KEY (`log_id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- 字典表
+CREATE TABLE `sys_dict` (
+  `dict_code` varchar(50) NOT NULL COMMENT '字典ID',
+  `dict_name` varchar(50) NOT NULL COMMENT '字典名称',
+  `create_user_id` varchar(50) DEFAULT NULL COMMENT '创建人员',
+  `create_time` datetime NOT NULL COMMENT '创建时间',
+  `remark` varchar(255) DEFAULT NULL COMMENT '描述',
+  `in_use` tinyint(1) NOT NULL COMMENT '是否启用',
+  `update_user_id` varchar(50) DEFAULT NULL COMMENT '更新人员',
+  `update_time` datetime DEFAULT NULL COMMENT '更新时间',
+  `seq` int(255) DEFAULT NULL COMMENT '序号',
+  PRIMARY KEY (`dict_code`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- 字典项表
+CREATE TABLE `sys_dict_item` (
+  `id` varchar(50) NOT NULL,
+  `item_code` varchar(50) NOT NULL,
+  `item_value` varchar(50) NOT NULL,
+  `seq` int(11) DEFAULT NULL,
+  `parent_code` varchar(50) DEFAULT NULL,
+  `remark` varchar(255) DEFAULT NULL,
+  `in_use` tinyint(1) NOT NULL,
+  `dict_code` varchar(50) NOT NULL,
+  `create_user_id` varchar(50) DEFAULT NULL,
+  `create_time` datetime NOT NULL,
+  `update_user_id` varchar(50) DEFAULT NULL,
+  `update_time` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
