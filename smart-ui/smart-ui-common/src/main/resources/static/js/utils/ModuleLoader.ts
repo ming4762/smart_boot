@@ -11,7 +11,10 @@ const moduleMap = {
     ]
   },
   'vue-echarts': {
-    js: ['/js/plugins/vue-echarts/vue-echarts.umd.min.js']
+    js: [
+        '/echarts/4.2.1/echarts.min.js',
+        '/js/plugins/vue-echarts/vue-echarts.umd.min.js'
+    ]
   },
   'vue-arcgis': {
     js: ['/js/plugins/vue-arcgis/vue-arcgis2.umd.min.js'],
@@ -31,7 +34,7 @@ const loadModule = (moduleName: string): Promise<any> => {
   }
   // 记载js
   const jsList = module['js']
-  return CommonUtil.loadJS(jsList)
+  return CommonUtil.loadJS(...jsList)
 }
 
 /**

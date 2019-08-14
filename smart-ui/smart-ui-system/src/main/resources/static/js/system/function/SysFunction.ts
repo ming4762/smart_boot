@@ -10,17 +10,23 @@ import SmartIconSelect from '../../plugins/icon/SmartIconSelect.js'
 import ValidateUtils from '../../utils/ValidateUtils.js'
 // @ts-ignore
 import TreeUtils from '../../utils/TreeUtils.js'
-import {OnlineUser} from "../onlineUser/OnlineUser";
+// @ts-ignore
+import CommonUtil from '../../utils/CommonUtils.js'
 
 declare const ready, smartModuleLoader
 
 ready(function () {
+  CommonUtil.loadCSS('/font-awesome/4.7.0/css/font-awesome.min.css', '/css/plugins/icon/icon.css')
   smartModuleLoader('smart-table').then(() => {
     // @ts-ignore
     new SysFunction().init()
   })
 })
 
+/**
+ * 功能管理页面
+ * TODO:添加修改弹窗上级显示不正确
+ */
 class SysFunction extends PageBuilder {
   /**
    * 构建函数

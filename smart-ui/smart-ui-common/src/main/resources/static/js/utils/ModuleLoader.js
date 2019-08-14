@@ -17,7 +17,10 @@ const moduleMap = {
         ]
     },
     'vue-echarts': {
-        js: ['/js/plugins/vue-echarts/vue-echarts.umd.min.js']
+        js: [
+            '/echarts/4.2.1/echarts.min.js',
+            '/js/plugins/vue-echarts/vue-echarts.umd.min.js'
+        ]
     },
     'vue-arcgis': {
         js: ['/js/plugins/vue-arcgis/vue-arcgis2.umd.min.js'],
@@ -33,7 +36,7 @@ const loadModule = (moduleName) => {
         CommonUtil.loadCSS(module['css']);
     }
     const jsList = module['js'];
-    return CommonUtil.loadJS(jsList);
+    return CommonUtil.loadJS(...jsList);
 };
 window['smartModuleLoader'] = (...moduleNames) => __awaiter(this, void 0, void 0, function* () {
     for (let moduleName of moduleNames) {

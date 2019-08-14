@@ -2552,12 +2552,12 @@ function _defineProperty(obj, key, value) {
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es6.function.name.js
 var es6_function_name = __webpack_require__("7f7f");
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"56fd6ea5-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./packages/echarts/src/main.vue?vue&type=template&id=7b29e6fa&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"56fd6ea5-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./packages/echarts/src/main.vue?vue&type=template&id=0220bde5&
 var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{style:(_vm.getDivStyle),attrs:{"id":_vm.elementId}})}
 var staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./packages/echarts/src/main.vue?vue&type=template&id=7b29e6fa&
+// CONCATENATED MODULE: ./packages/echarts/src/main.vue?vue&type=template&id=0220bde5&
 
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es7.symbol.async-iterator.js
 var es7_symbol_async_iterator = __webpack_require__("ac4d");
@@ -3172,7 +3172,7 @@ var EVENTS = ['legendselectchanged', 'legendselected', 'legendunselected', 'lege
           }, 100, {
             leading: true
           });
-          addListener(this.$el, this._resizeHandler);
+          addListener(this.$el, this.resizeHandler);
         }
 
         this.chart = chart;

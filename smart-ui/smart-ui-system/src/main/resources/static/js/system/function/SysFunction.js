@@ -4,7 +4,9 @@ import LayoutMixins from '../../mixins/LayoutMixins.js';
 import SmartIconSelect from '../../plugins/icon/SmartIconSelect.js';
 import ValidateUtils from '../../utils/ValidateUtils.js';
 import TreeUtils from '../../utils/TreeUtils.js';
+import CommonUtil from '../../utils/CommonUtils.js';
 ready(function () {
+    CommonUtil.loadCSS('/font-awesome/4.7.0/css/font-awesome.min.css', '/css/plugins/icon/icon.css');
     smartModuleLoader('smart-table').then(() => {
         new SysFunction().init();
     });
