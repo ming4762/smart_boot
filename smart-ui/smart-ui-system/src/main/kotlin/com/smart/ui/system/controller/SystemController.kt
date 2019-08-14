@@ -119,4 +119,12 @@ class SystemController {
     fun dict(@RequestParam parameter: Map<String, Any?>): ModelAndView {
         return ModelAndView("system/dict/dict", parameter)
     }
+
+    /**
+     * 跳转公共页面
+     */
+    @RequestMapping("/common")
+    fun common(@RequestParam parameter: Map<String, Any?>): ModelAndView {
+        return ModelAndView("system/commonPage", parameter)
+    }
 }

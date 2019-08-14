@@ -1,19 +1,19 @@
 // @ts-ignore
 import PageBuilder from '../../PageBuilder.js'
 // @ts-ignore
-import SmartTableCRUD from '../../plugins/table/SmartTableCRUD.js'
-// @ts-ignore
 import ApiService from '../../utils/ApiService.js'
 // @ts-ignore
 import LayoutMixins from '../../mixins/LayoutMixins.js'
 // @ts-ignore
 import MessageMixins from '../../mixins/MessageMixins.js'
 
-declare const ready
+declare const ready, smartModuleLoader
 
 ready(function () {
-  // @ts-ignore
-  new TimedTask().init()
+  smartModuleLoader('smart-table', () => {
+    // @ts-ignore
+    new TimedTask().init()
+  })
 })
 
 /**
@@ -27,7 +27,6 @@ class TimedTask extends PageBuilder {
 
 const page = {
   components: {
-    'smart-table-crud': SmartTableCRUD
   },
   mixins: [ LayoutMixins, MessageMixins ],
   data () {

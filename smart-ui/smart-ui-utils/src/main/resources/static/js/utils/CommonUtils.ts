@@ -86,9 +86,33 @@ export default class CommonUtil {
 
   /**
    * 加载js文件
+   * @param urls
+   */
+  public static async loadJS(...urls: Array<string>): Promise<any> {
+    for (let url of urls) {
+      await this.doLoadJS(url)
+    }
+    // return new Promise<any>((resolve) => {
+    //   resolve()
+    // })
+  }
+
+  /**
+   * 异步加载js
+   * @param urls
+   */
+  public static loadJSAsync(...urls: Array<string>) {
+    for (let url of urls) {
+      this.doLoadJS(url)
+    }
+  }
+
+
+  /**
+   * 加载js
    * @param url
    */
-  public static loadJS(url: string): Promise<any> {
+  private static doLoadJS(url: string): Promise<any> {
     return new Promise<any>((resolve) => {
       const script = document.createElement('script')
       script.type = 'text/javascript'
@@ -102,9 +126,29 @@ export default class CommonUtil {
 
   /**
    * 加载css文件
+   * @param hrefs
+   */
+  public static async loadCSS(...hrefs: Array<string>): Promise<any> {
+    for (let href of hrefs) {
+      await this.doLaodCSS(href)
+    }
+  }
+
+  /**
+   * 加载css文件
+   * @param hrefs
+   */
+  public static loadCSSAsync(...hrefs: Array<string>) {
+    for (let href of hrefs) {
+      this.doLaodCSS(href)
+    }
+  }
+
+  /**
+   * 加载css
    * @param href
    */
-  public static loadCSS(href: string): Promise<any> {
+  private static doLaodCSS(href: string): Promise<any> {
     return new Promise<any>((resolve) => {
       const link = document.createElement('link')
       link.setAttribute("rel","stylesheet")

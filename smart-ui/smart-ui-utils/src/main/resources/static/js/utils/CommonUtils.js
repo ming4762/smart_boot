@@ -1,3 +1,11 @@
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 export default class CommonUtil {
     static createUUID() {
         let s = [];
@@ -62,7 +70,19 @@ export default class CommonUtil {
             doc.webkitExitFullscreen();
         }
     }
-    static loadJS(url) {
+    static loadJS(...urls) {
+        return __awaiter(this, void 0, void 0, function* () {
+            for (let url of urls) {
+                yield this.doLoadJS(url);
+            }
+        });
+    }
+    static loadJSAsync(...urls) {
+        for (let url of urls) {
+            this.doLoadJS(url);
+        }
+    }
+    static doLoadJS(url) {
         return new Promise((resolve) => {
             const script = document.createElement('script');
             script.type = 'text/javascript';
@@ -73,7 +93,19 @@ export default class CommonUtil {
             document.body.appendChild(script);
         });
     }
-    static loadCSS(href) {
+    static loadCSS(...hrefs) {
+        return __awaiter(this, void 0, void 0, function* () {
+            for (let href of hrefs) {
+                yield this.doLaodCSS(href);
+            }
+        });
+    }
+    static loadCSSAsync(...hrefs) {
+        for (let href of hrefs) {
+            this.doLaodCSS(href);
+        }
+    }
+    static doLaodCSS(href) {
         return new Promise((resolve) => {
             const link = document.createElement('link');
             link.setAttribute("rel", "stylesheet");

@@ -1,10 +1,11 @@
 import PageBuilder from '../../PageBuilder.js';
-import SmartTableCRUD from '../../plugins/table/SmartTableCRUD.js';
 import ApiService from '../../utils/ApiService.js';
 import LayoutMixins from '../../mixins/LayoutMixins.js';
 import TimeUtils from '../../utils/TimeUtils.js';
 ready(function () {
-    new Log().init();
+    smartModuleLoader('smart-table', () => {
+        new Log().init();
+    });
 });
 class Log extends PageBuilder {
     build() {
@@ -12,9 +13,7 @@ class Log extends PageBuilder {
     }
 }
 export const LogComponent = {
-    components: {
-        'smart-table-crud': SmartTableCRUD
-    },
+    components: {},
     mixins: [LayoutMixins],
     props: {
         userId: String

@@ -1,12 +1,13 @@
 import PageBuilder from '../../PageBuilder.js';
-import SmartTableCRUD from '../../plugins/table/SmartTableCRUD.js';
 import ApiService from '../../utils/ApiService.js';
 import LayoutMixins from '../../mixins/LayoutMixins.js';
 import SmartIconSelect from '../../plugins/icon/SmartIconSelect.js';
 import ValidateUtils from '../../utils/ValidateUtils.js';
 import TreeUtils from '../../utils/TreeUtils.js';
 ready(function () {
-    new SysFunction().init();
+    smartModuleLoader('smart-table', () => {
+        new SysFunction().init();
+    });
 });
 class SysFunction extends PageBuilder {
     build() {
@@ -18,7 +19,6 @@ class SysFunction extends PageBuilder {
 }
 const page = {
     components: {
-        'smart-table-crud': SmartTableCRUD,
         'smart-icon-select': SmartIconSelect
     },
     mixins: [LayoutMixins],

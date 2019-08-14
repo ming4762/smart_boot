@@ -1,10 +1,11 @@
 import PageBuilder from '../../PageBuilder.js';
-import SmartTableCRUD from '../../plugins/table/SmartTableCRUD.js';
 import ApiService from '../../utils/ApiService.js';
 import LayoutMixins from '../../mixins/LayoutMixins.js';
 import ValidateUtils from '../../utils/ValidateUtils.js';
 ready(function () {
-    new User().init();
+    smartModuleLoader('smart-table', () => {
+        new User().init();
+    });
 });
 export class User extends PageBuilder {
     build() {
@@ -26,9 +27,7 @@ const validateMobile = (rule, value, callback) => {
     }
 };
 const page = {
-    components: {
-        'smart-table-crud': SmartTableCRUD
-    },
+    components: {},
     mixins: [LayoutMixins],
     data() {
         return {

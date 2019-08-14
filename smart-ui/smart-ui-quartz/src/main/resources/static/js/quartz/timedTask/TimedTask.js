@@ -1,10 +1,11 @@
 import PageBuilder from '../../PageBuilder.js';
-import SmartTableCRUD from '../../plugins/table/SmartTableCRUD.js';
 import ApiService from '../../utils/ApiService.js';
 import LayoutMixins from '../../mixins/LayoutMixins.js';
 import MessageMixins from '../../mixins/MessageMixins.js';
 ready(function () {
-    new TimedTask().init();
+    smartModuleLoader('smart-table', () => {
+        new TimedTask().init();
+    });
 });
 class TimedTask extends PageBuilder {
     build() {
@@ -12,9 +13,7 @@ class TimedTask extends PageBuilder {
     }
 }
 const page = {
-    components: {
-        'smart-table-crud': SmartTableCRUD
-    },
+    components: {},
     mixins: [LayoutMixins, MessageMixins],
     data() {
         return {

@@ -1,10 +1,11 @@
 import PageBuilder from '../../PageBuilder.js';
-import SmartTableCRUD from '../../plugins/table/SmartTableCRUD.js';
 import ApiService from '../../utils/ApiService.js';
 import LayoutMixins from '../../mixins/LayoutMixins.js';
 import TimeUtils from '../../utils/TimeUtils.js';
 ready(function () {
-    new Dict().init();
+    smartModuleLoader('smart-table', () => {
+        new Dict().init();
+    });
 });
 class Dict extends PageBuilder {
     build() {
@@ -12,9 +13,7 @@ class Dict extends PageBuilder {
     }
 }
 const DictItem = {
-    components: {
-        SmartTableCRUD
-    },
+    components: {},
     mixins: [
         LayoutMixins
     ],
@@ -189,7 +188,7 @@ const DictItem = {
         }
     },
     template: `
-  <SmartTableCRUD
+  <smart-table-crud
     ref="itemTable"
     :height="computedTableHeight"
     queryUrl="sys/dictItem/list"
@@ -226,12 +225,11 @@ const DictItem = {
           icon="el-icon-back"></el-button>
       </el-tooltip>
     </template>
-  </SmartTableCRUD>
+  </smart-table-crud>
   `
 };
 const page = {
     components: {
-        SmartTableCRUD,
         DictItem
     },
     mixins: [
@@ -363,7 +361,7 @@ const page = {
       :dictCode="currentDict.dictCode"
       :show.sync="showItem"
       v-show="showItem"/>
-    <SmartTableCRUD
+    <smart-table-crud
       v-show="!showItem"
       :height="computedTableHeight"
       queryUrl="sys/dict/list"
@@ -389,7 +387,7 @@ const page = {
       <template slot="table-inUse" slot-scope="{row}">
         <el-switch disabled v-model="row.inUse"></el-switch>
       </template>
-    </SmartTableCRUD>
+    </smart-table-crud>
   </div>
   `
 };

@@ -1,19 +1,19 @@
 // @ts-ignore
 import PageBuilder from '../../PageBuilder.js'
 // @ts-ignore
-import SmartTableCRUD from '../../plugins/table/SmartTableCRUD.js'
-// @ts-ignore
 import ApiService from '../../utils/ApiService.js'
 // @ts-ignore
 import LayoutMixins from '../../mixins/LayoutMixins.js'
 // @ts-ignore
 import TimeUtils from '../../utils/TimeUtils.js'
 
-declare const ready
+declare const ready, smartModuleLoader
 
 ready(function () {
-  // @ts-ignore
-  new Log().init()
+  smartModuleLoader('smart-table', () => {
+    // @ts-ignore
+    new Log().init()
+  })
 })
 
 class Log extends PageBuilder {
@@ -24,7 +24,6 @@ class Log extends PageBuilder {
 
 export const LogComponent = {
   components: {
-    'smart-table-crud': SmartTableCRUD
   },
   mixins: [ LayoutMixins ],
   props: {

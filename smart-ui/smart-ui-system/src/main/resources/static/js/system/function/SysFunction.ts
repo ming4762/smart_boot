@@ -1,8 +1,6 @@
 // @ts-ignore
 import PageBuilder from '../../PageBuilder.js'
 // @ts-ignore
-import SmartTableCRUD from '../../plugins/table/SmartTableCRUD.js'
-// @ts-ignore
 import ApiService from '../../utils/ApiService.js'
 // @ts-ignore
 import LayoutMixins from '../../mixins/LayoutMixins.js'
@@ -13,11 +11,13 @@ import ValidateUtils from '../../utils/ValidateUtils.js'
 // @ts-ignore
 import TreeUtils from '../../utils/TreeUtils.js'
 
-declare const ready
+declare const ready, smartModuleLoader
 
 ready(function () {
-  // @ts-ignore
-  new SysFunction().init()
+  smartModuleLoader('smart-table', () => {
+    // @ts-ignore
+    new SysFunction().init()
+  })
 })
 
 class SysFunction extends PageBuilder {
@@ -37,7 +37,6 @@ class SysFunction extends PageBuilder {
 
 const page = {
   components: {
-    'smart-table-crud': SmartTableCRUD,
     'smart-icon-select': SmartIconSelect
   },
   mixins: [LayoutMixins],
