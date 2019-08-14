@@ -10,11 +10,12 @@ import SmartIconSelect from '../../plugins/icon/SmartIconSelect.js'
 import ValidateUtils from '../../utils/ValidateUtils.js'
 // @ts-ignore
 import TreeUtils from '../../utils/TreeUtils.js'
+import {OnlineUser} from "../onlineUser/OnlineUser";
 
 declare const ready, smartModuleLoader
 
 ready(function () {
-  smartModuleLoader('smart-table', () => {
+  smartModuleLoader('smart-table').then(() => {
     // @ts-ignore
     new SysFunction().init()
   })

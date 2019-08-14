@@ -19,11 +19,7 @@ const moduleMap = {
   }
 }
 
-/**
- * 模块加载器
- * @param moduleName
- */
-window['smartModuleLoader'] = (moduleName: string, callback: Function): Promise<any> => {
+const loadModule = (moduleName: string): Promise<any> => {
   // 获取模块信息
   const module = moduleMap[moduleName]
   if (!module) {
@@ -36,9 +32,14 @@ window['smartModuleLoader'] = (moduleName: string, callback: Function): Promise<
   // 记载js
   const jsList = module['js']
   return CommonUtil.loadJS(jsList)
-      .then(() => {
-        if (callback) {
-          callback()
-        }
-      })
+}
+
+/**
+ * 模块加载器
+ * @param moduleNames
+ */
+window['smartModuleLoader'] = async (...moduleNames: Array<string>): Promise<any> => {
+  for (let moduleName of moduleNames) {
+    await loadModule(moduleName)
+  }
 }

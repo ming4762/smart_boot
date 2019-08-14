@@ -5,7 +5,7 @@ import SmartIconSelect from '../../plugins/icon/SmartIconSelect.js';
 import ValidateUtils from '../../utils/ValidateUtils.js';
 import TreeUtils from '../../utils/TreeUtils.js';
 ready(function () {
-    smartModuleLoader('smart-table', () => {
+    smartModuleLoader('smart-table').then(() => {
         new SysFunction().init();
     });
 });

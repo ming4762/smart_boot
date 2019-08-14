@@ -6,11 +6,12 @@ import ApiService from '../../utils/ApiService.js'
 import LayoutMixins from '../../mixins/LayoutMixins.js'
 // @ts-ignore
 import TimeUtils from '../../utils/TimeUtils.js'
+import {User} from "../user/User";
 
 declare const ready, smartModuleLoader
 
 ready(function () {
-  smartModuleLoader('smart-table', () => {
+  smartModuleLoader('smart-table').then(() => {
     // @ts-ignore
     new Log().init()
   })

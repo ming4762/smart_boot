@@ -10,7 +10,7 @@ import TimeUtils from '../../utils/TimeUtils.js'
 declare const ready, smartModuleLoader
 
 ready(function () {
-  smartModuleLoader('smart-table', () => {
+  smartModuleLoader('smart-table').then(() => {
     // @ts-ignore
     new Dict().init()
   })

@@ -3,7 +3,7 @@ import ApiService from '../../utils/ApiService.js';
 import LayoutMixins from '../../mixins/LayoutMixins.js';
 import TimeUtils from '../../utils/TimeUtils.js';
 ready(function () {
-    smartModuleLoader('smart-table', () => {
+    smartModuleLoader('smart-table').then(() => {
         new Log().init();
     });
 });

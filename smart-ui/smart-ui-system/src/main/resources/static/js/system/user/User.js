@@ -3,7 +3,7 @@ import ApiService from '../../utils/ApiService.js';
 import LayoutMixins from '../../mixins/LayoutMixins.js';
 import ValidateUtils from '../../utils/ValidateUtils.js';
 ready(function () {
-    smartModuleLoader('smart-table', () => {
+    smartModuleLoader('smart-table').then(() => {
         new User().init();
     });
 });

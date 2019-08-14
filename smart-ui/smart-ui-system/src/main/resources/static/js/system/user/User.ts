@@ -10,7 +10,7 @@ import ValidateUtils from '../../utils/ValidateUtils.js'
 declare const ready, smartModuleLoader
 
 ready(function () {
-  smartModuleLoader('smart-table', () => {
+  smartModuleLoader('smart-table').then(() => {
     // @ts-ignore
     new User().init()
   })

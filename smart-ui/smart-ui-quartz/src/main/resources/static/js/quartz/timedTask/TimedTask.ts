@@ -10,7 +10,7 @@ import MessageMixins from '../../mixins/MessageMixins.js'
 declare const ready, smartModuleLoader
 
 ready(function () {
-  smartModuleLoader('smart-table', () => {
+  smartModuleLoader('smart-table').then(() => {
     // @ts-ignore
     new TimedTask().init()
   })
