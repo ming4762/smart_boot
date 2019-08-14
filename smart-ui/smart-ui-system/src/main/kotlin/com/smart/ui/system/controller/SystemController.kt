@@ -41,14 +41,6 @@ class SystemController {
     }
 
     /**
-     * 跳转到用户
-     */
-    @RequestMapping("/user")
-    fun user(@RequestParam parameter: Map<String, Any?>): ModelAndView {
-        return ModelAndView("system/user/user", parameter)
-    }
-
-    /**
      * 跳转到组织机构页面
      */
     @RequestMapping("/organ")
@@ -64,13 +56,6 @@ class SystemController {
         return ModelAndView("system/role/role", parameter)
     }
 
-    /**
-     * 跳转到功能管理页面
-     */
-    @RequestMapping("/function")
-    fun function(@RequestParam parameter: Map<String, Any?>): ModelAndView {
-        return ModelAndView("system/function/function", parameter)
-    }
 
     /**
      * 跳转菜单分类管理页面
@@ -89,22 +74,6 @@ class SystemController {
     }
 
     /**
-     * 跳转日志管理页面
-     */
-    @RequestMapping("/log")
-    fun log(@RequestParam parameter: Map<String, Any?>): ModelAndView {
-        return ModelAndView("system/log/log", parameter)
-    }
-
-    /**
-     * 跳转在线用户页面
-     */
-    @RequestMapping("/onlineUser")
-    fun onlineUser(@RequestParam parameter: Map<String, Any?>): ModelAndView {
-        return ModelAndView("system/auth/onlineUser", parameter)
-    }
-
-    /**
      * 跳转账户信息页面
      */
     @RequestMapping("/accountMessage")
@@ -112,19 +81,6 @@ class SystemController {
         return ModelAndView("system/auth/accountMessage", parameter)
     }
 
-    /**
-     * 跳转字典管理页面
-     */
-    @RequestMapping("/dict")
-    fun dict(@RequestParam parameter: Map<String, Any?>): ModelAndView {
-        return ModelAndView("system/dict/dict", parameter)
-    }
 
-    /**
-     * 跳转公共页面
-     */
-    @RequestMapping("/common")
-    fun common(@RequestParam parameter: Map<String, Any?>): ModelAndView {
-        return ModelAndView("system/commonPage", parameter)
-    }
+
 }
