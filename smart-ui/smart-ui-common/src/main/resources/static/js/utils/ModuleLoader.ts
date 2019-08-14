@@ -12,6 +12,10 @@ const moduleMap = {
   },
   'vue-echarts': {
     js: ['/js/plugins/vue-echarts/vue-echarts.umd.min.js']
+  },
+  'vue-arcgis': {
+    js: ['/js/plugins/vue-arcgis/vue-arcgis2.umd.min.js'],
+    css: ['/js/plugins/vue-arcgis/vue-arcgis2.css']
   }
 }
 
