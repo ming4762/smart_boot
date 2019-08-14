@@ -18,7 +18,7 @@ export default class SysApiUtils {
     }
     const itemList: any[] = await ApiService.postAjax(URL.queryDictItem, parameter)
     let result: {[index: string]: any} = {}
-    if (itemList) {
+    if (itemList && itemList.length > 0) {
       const group = CollectionUtils.group(itemList, 'dictCode')
       if (dictCode.length === 1) {
         result = CollectionUtils.mapToObject(CollectionUtils.listToMap(group.values().next().value, 'itemCode', 'itemValue'))

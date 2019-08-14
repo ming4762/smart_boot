@@ -17,7 +17,7 @@ export default class SysApiUtils {
             };
             const itemList = yield ApiService.postAjax(URL.queryDictItem, parameter);
             let result = {};
-            if (itemList) {
+            if (itemList && itemList.length > 0) {
                 const group = CollectionUtils.group(itemList, 'dictCode');
                 if (dictCode.length === 1) {
                     result = CollectionUtils.mapToObject(CollectionUtils.listToMap(group.values().next().value, 'itemCode', 'itemValue'));
