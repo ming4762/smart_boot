@@ -170,30 +170,17 @@ object KettleActuator {
 
     @JvmStatic
     fun main(args: Array<String>) {
-//        KettleActuator.excuteTransfer("/Users/ming/Documents/temp/转换/监测断面水质监测阈值.ktr")
         val databaseMetaProperties = DatabaseMetaProperties()
         databaseMetaProperties.host = "charsming.f3322.org"
         databaseMetaProperties.port = "3309"
         databaseMetaProperties.db = "kettle_responsitory_8.0"
         databaseMetaProperties.dbUser = "root"
         databaseMetaProperties.dbPassword = "Charsming619"
-        val parameterMap = mapOf(
-                "parameter1" to "122ad",
-                "parameter2" to "你好啊"
-        )
-        val valueMap = mapOf(
-                "value1" to "这是测试value"
-        )
-        val params = arrayOf("这是测试params")
-        // 41842545,41842450
-//        KettleActuator.excuteDBTransfer(databaseMetaProperties, "Test_parameter", "雨情kettle", params = params, variableMap = valueMap, parameterMap = parameterMap)
-//        KettleActuator.excuteDBJob(databaseMetaProperties, "manual_rain_sync", "雨情kettle")
         val parameter = mapOf(
                 "startTime" to "2019-07-01",
                 "endTime" to "2019-08-01",
                 "stcds" to "41842545,41842450"
         )
         KettleActuator.excuteDBJob(databaseMetaProperties, "Rain_job", "Rain_kettle", params = parameter)
-//        KettleActuator.excuteDBTransfer(databaseMetaProperties, "RAIN_SUN_YT_0.05", "rain_kettle", variableMap = parameter)
     }
 }
