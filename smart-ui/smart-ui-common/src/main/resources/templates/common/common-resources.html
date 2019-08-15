@@ -6,9 +6,10 @@
 </head>
 <body>
 
-    <!--vue引入 TODO: 生产环境改为min-->
+    <!--vue引入-->
     <div th:fragment="common-resources-vue">
-        <script src="/vue/2.6.10/vue.js" th:src="@{/vue/2.6.10/vue.js}"></script>
+        <script th:if="${development == true}" src="/vue/2.6.10/vue.js" th:src="@{/vue/2.6.10/vue.js}"></script>
+        <script th:if="${development == false}" src="/vue/2.6.10/vue.min.js" th:src="@{/vue/2.6.10/vue.min.js}"></script>
     </div>
 
     <!--element-ui 引入-->
@@ -24,9 +25,10 @@
     <div th:fragment="common-resources-bootstrap-css">
         <link rel="stylesheet" href="/bootstrap/4.0.0/css/bootstrap.min.css" th:href="@{/bootstrap/4.0.0/css/bootstrap.min.css}"/>
     </div>
-    <!--requireJS TODO: 生产环境改为min-->
+    <!--requireJS-->
     <div th:fragment="common-resources-requireJS">
-        <script th:src="@{/requireJS/2.3.6/require.js}"></script>
+        <script th:if="${development == true}}" th:src="@{/requireJS/2.3.6/require.js}"></script>
+        <script th:if="${development == false}" th:src="@{/requireJS/2.3.6/require.min.js}"></script>
     </div>
     <!--layer 引入-->
     <div th:fragment="common-resources-layerJS">
