@@ -27,7 +27,7 @@
     </div>
     <!--requireJS-->
     <div th:fragment="common-resources-requireJS">
-        <script th:if="${development == true}}" th:src="@{/requireJS/2.3.6/require.js}"></script>
+        <script th:if="${development == true}" th:src="@{/requireJS/2.3.6/require.js}"></script>
         <script th:if="${development == false}" th:src="@{/requireJS/2.3.6/require.min.js}"></script>
     </div>
     <!--layer 引入-->

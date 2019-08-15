@@ -17,7 +17,7 @@ class EnvInterceptor(val profiles: String, val development: String) : HandlerInt
             var development = false
             if (this.development != "") {
                 development = java.lang.Boolean.valueOf(this.development)
-            } else if (this.profiles == "pro") {
+            } else if (this.profiles != "pro") {
                 development = true
             }
             modelAndView.model["development"] = development
