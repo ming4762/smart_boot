@@ -53,6 +53,9 @@ export default {
         },
         handleOpenMenu(menu) {
             this.getBus.setActiveTopMenu(menu);
+            if (!menu.isCatalog) {
+                this.getBus.addMenu(menu);
+            }
         },
         getDefaultTopMenuId() {
             if (this.computedUserMenuList.length > 0) {

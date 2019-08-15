@@ -85,6 +85,10 @@ export default {
     handleOpenMenu (menu: any) {
       // 设置激活的顶部菜单
       this.getBus.setActiveTopMenu(menu)
+      // 如果是菜单直接打开
+      if (!menu.isCatalog) {
+        this.getBus.addMenu(menu)
+      }
     },
     /**
      * 获取默认的顶级菜单ID
