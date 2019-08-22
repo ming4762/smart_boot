@@ -49,6 +49,10 @@
         <!--kettle工具包版本-->
         <smart-kettle-actuator.version>0.0.1-SNAPSHOT</smart-kettle-actuator.version>
         <commons-io.commons-io.version>2.6</commons-io.commons-io.version>
+        <file-spring-boot-starter.version>0.0.1-SNAPSHOT</file-spring-boot-starter.version>
+
+        <!--图片工具类版本-->
+        <thumbnailator.version>0.4.8</thumbnailator.version>
     </properties>
 
     <modules>

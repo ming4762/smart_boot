@@ -1,4 +1,4 @@
-
+declare const contextPath
 /**
  * common工具类
  * @author zhongming
@@ -159,5 +159,9 @@ export default class CommonUtil {
       }
       document.getElementsByTagName("head")[0].appendChild(link)
     })
+  }
+
+  static withContextPath (path: string): string {
+    return contextPath + path
   }
 }

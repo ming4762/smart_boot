@@ -117,4 +117,7 @@ export default class CommonUtil {
             document.getElementsByTagName("head")[0].appendChild(link);
         });
     }
+    static withContextPath(path) {
+        return contextPath + path;
+    }
 }
