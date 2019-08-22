@@ -16,4 +16,6 @@ interface ActualFileService {
 
     fun delete(id: String): Boolean
 
+
+    fun download(id: String): InputStream
 }

@@ -3,6 +3,8 @@ package com.smart.starter.file.service.impl
 import com.smart.common.utils.security.MD5Utils
 import com.smart.starter.file.service.ActualFileService
 import org.apache.commons.io.IOUtils
+import java.io.ByteArrayInputStream
+import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.InputStream
 import java.time.Instant
@@ -35,14 +37,23 @@ class ActualFileServiceDiskImpl(val basePath: String) : ActualFileService {
      * 保存文件
      */
     override fun save(inputStream: InputStream, filename: String?): String {
+        val outputStream = ByteArrayOutputStream()
+        IOUtils.copy(inputStream, outputStream)
         // 获取文件路径
-        val md5 = MD5Utils.md5(inputStream)
-        val filePath = this.getFileAbsolutePath(md5)
+        val md5 = MD5Utils.md5(ByteArrayInputStream(outputStream.toByteArray()))
+        // 获取文件路径
+        val folderPath = this.getFolderPath()
+        val folder = File(folderPath)
+        if (!folder.exists()) {
+            folder.mkdirs()
+        }
+        val filePath = "$folderPath${File.separator}$md5"
         val uploadFile = File(filePath)
         if (!uploadFile.exists()) {
             uploadFile.createNewFile()
         }
-        IOUtils.copy(inputStream, uploadFile.outputStream())
+        IOUtils.copy(ByteArrayInputStream(outputStream.toByteArray()), uploadFile.outputStream())
+        outputStream.close()
         return this.getFileId(md5)
     }
 
@@ -59,6 +70,13 @@ class ActualFileServiceDiskImpl(val basePath: String) : ActualFileService {
         return false
     }
 
+    override fun download(id: String): InputStream {
+        // 获取文件路径
+        val filePath = this.getFileAbsolutePathById(id)
+        val file = File(filePath)
+        return file.inputStream()
+    }
+
     /**
      * 获取文件ID
      */
@@ -71,8 +89,15 @@ class ActualFileServiceDiskImpl(val basePath: String) : ActualFileService {
      * 获取文件绝对路径
      */
     private fun getFileAbsolutePath(md5: String): String {
+        return "${this.getFolderPath()}${File.separator}$md5"
+    }
+
+    /**
+     * 获取文件夹路径
+     */
+    private fun getFolderPath(): String {
         val dateStr = FORMATTER.format(Instant.now())
-        return "${this.basePath}${File.separator}$dateStr${File.separator}$md5"
+        return "${this.basePath}${File.separator}$dateStr"
     }
 
     /**

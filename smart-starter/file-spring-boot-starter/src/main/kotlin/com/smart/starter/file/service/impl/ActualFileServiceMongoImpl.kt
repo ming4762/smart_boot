@@ -1,7 +1,10 @@
 package com.smart.starter.file.service.impl
 
+import com.mongodb.client.gridfs.GridFSBuckets
 import com.smart.starter.file.service.ActualFileService
+import org.bson.types.ObjectId
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.data.mongodb.MongoDbFactory
 import org.springframework.data.mongodb.core.query.Criteria
 import org.springframework.data.mongodb.core.query.Query
 import org.springframework.data.mongodb.gridfs.GridFsTemplate
@@ -17,6 +20,12 @@ class ActualFileServiceMongoImpl : ActualFileService {
 
     @Autowired
     private lateinit var gridFsTemplate: GridFsTemplate
+
+    /**
+     * MongoDB工厂
+     */
+    @Autowired
+    private lateinit var dbFactory: MongoDbFactory
 
     /**
      * 保存文件
@@ -40,5 +49,9 @@ class ActualFileServiceMongoImpl : ActualFileService {
                 Query.query(Criteria.where("_id").`is`(id))
         )
         return true
+    }
+
+    override fun download(id: String): InputStream {
+        return GridFSBuckets.create(dbFactory.db).openDownloadStream(ObjectId(id))
     }
 }

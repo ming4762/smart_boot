@@ -13,6 +13,7 @@ import org.springframework.context.annotation.Configuration
  * 自动配置启动类
  * @author ming
  * 2019/6/14 下午8:43
+ * TODO: 使用本地存储系统删除mongo配置
  */
 @Configuration
 @EnableConfigurationProperties(SmartFileProperties :: class)
