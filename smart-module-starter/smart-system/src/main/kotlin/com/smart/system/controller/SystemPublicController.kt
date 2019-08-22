@@ -13,10 +13,10 @@ import org.springframework.web.bind.annotation.RestController
  */
 @RestController
 @RequestMapping("public/sys")
-class PublicController {
+class SystemPublicController {
 
-    @Autowired
-    private lateinit var localConfigProperties: LocalConfigProperties
+    @Autowired(required = false)
+    private var localConfigProperties: LocalConfigProperties? = null
 
     /**
      * 读取本地配置信息
@@ -24,7 +24,7 @@ class PublicController {
     @RequestMapping("/readConfig")
     fun readConfig (): Result<Any?> {
         return try {
-            Result.success(this.localConfigProperties.config)
+            Result.success(this.localConfigProperties?.config)
         } catch (e: Exception) {
             e.printStackTrace()
             Result.failure(e.message)
