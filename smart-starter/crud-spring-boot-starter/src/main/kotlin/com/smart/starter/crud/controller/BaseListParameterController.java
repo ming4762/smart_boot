@@ -4,7 +4,6 @@ import com.smart.common.message.Result;
 import com.smart.common.message.ResultCodeEnum;
 import com.smart.starter.crud.model.BaseModel;
 import com.smart.starter.crud.service.BaseService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -17,10 +16,6 @@ import java.util.List;
  * 2019/7/5 下午8:32
  */
 public class BaseListParameterController<K extends BaseService<T>, T extends BaseModel> extends BaseControllerQuery<K, T> {
-
-    @Autowired
-    protected K service;
-
 
     /**
      * 批量删除

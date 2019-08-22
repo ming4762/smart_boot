@@ -37,7 +37,7 @@ open class BaseControllerQuery<K : BaseService<T>, T : BaseModel> {
     private val keywordField = "keyword"
 
     @Autowired
-    private lateinit var service: K
+    protected lateinit var service: K
 
     /**
      * 查询列表
