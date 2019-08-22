@@ -2,7 +2,9 @@ package com.smart.auth.common.utils
 
 import com.smart.auth.common.model.SysUserDO
 import org.apache.shiro.SecurityUtils
+import org.apache.shiro.UnavailableSecurityManagerException
 import org.apache.shiro.session.Session
+import org.apache.shiro.subject.Subject
 
 /**
  * 认证工具类
@@ -22,7 +24,13 @@ object AuthUtils {
      * 获取当前用户信息
      */
     fun getCurrentUser(): SysUserDO? {
-        return SecurityUtils.getSubject().principal as SysUserDO?
+        var subject: Subject? = null
+        try {
+            subject = SecurityUtils.getSubject()
+            return subject?.principal as SysUserDO?
+        } catch (e: UnavailableSecurityManagerException) {
+            return null
+        }
     }
 
     fun getCurrentUserId(): String? {
