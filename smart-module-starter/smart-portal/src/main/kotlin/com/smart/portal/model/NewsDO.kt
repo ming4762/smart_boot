@@ -6,20 +6,11 @@ import com.baomidou.mybatisplus.annotation.TableName
 import com.smart.starter.crud.model.BaseModel
 import java.util.*
 
-/**
- * 图文素材实体类
- * @author ming
- * 2019/8/1 下午2:43
- */
-@TableName("smart_portal_material_gt")
-class PortalMaterialGtDO : BaseModel() {
-
-    companion object {
-        private const val serialVersionUID = 1564645245202L
-    }
+@TableName("smart_portal_news")
+class NewsDO : BaseModel() {
 
     @TableId(type = IdType.UUID)
-    var materialId: String? = null
+    var newsId: String? = null
 
     var title: String? = null
 
@@ -42,4 +33,16 @@ class PortalMaterialGtDO : BaseModel() {
     var updateTime: Date? = null
 
     var content: String? = null
+
+    var moduleId: String? = null
+
+    var praiseNum: Int? = null
+
+    var readNum: Int? = null
+
+    var commentNum: Int? = null
+
+    var top: Boolean = false
+
+    var sources: String? = null
 }
