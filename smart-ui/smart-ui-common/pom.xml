@@ -22,6 +22,12 @@
             <artifactId>smart-ui-utils</artifactId>
             <version>${smart-ui-utils.version}</version>
         </dependency>
+        <!--引入plugins-->
+        <dependency>
+            <groupId>com.smart</groupId>
+            <artifactId>smart-ui-plugins</artifactId>
+            <version>${smart-ui-plugins.version}</version>
+        </dependency>
         <!--引入library-->
         <dependency>
             <groupId>com.smart</groupId>
