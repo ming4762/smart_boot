@@ -111,7 +111,7 @@ const page = {
     created() {
         this.loadModuleTree();
         if (this.newsId) {
-            const news = ApiService.postAjax('portal/news/queryDetail', this.newsId)
+            const news = ApiService.postAjax('public/portal/news/queryDetail', this.newsId)
                 .then(data => {
                 this.formModel = data;
             }).catch(error => {
@@ -122,7 +122,7 @@ const page = {
     methods: {
         getPath: getPath,
         loadModuleTree() {
-            ApiService.postAjax('portal/module/list', {})
+            ApiService.postAjax('public/portal/module/list', {})
                 .then((data) => {
                 this.moduleList = TreeUtils.convertList2Tree(data, ['moduleId', 'parentId'], '0');
             }).catch(error => {

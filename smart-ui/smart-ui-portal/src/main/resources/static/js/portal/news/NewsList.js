@@ -192,7 +192,7 @@ const page = {
   <div style="padding: 15px;">
     <smart-table-crud
       ref="table"
-      queryUrl="portal/news/listWthAll"
+      queryUrl="public/portal/news/listWthAll"
       deleteUrl="portal/news/batchDelete"
       saveUpdateUrl="portal/news/saveUpdate"
       :height="computedTableHeight"

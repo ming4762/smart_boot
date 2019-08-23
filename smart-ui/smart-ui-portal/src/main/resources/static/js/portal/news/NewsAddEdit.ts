@@ -139,7 +139,7 @@ const page = {
     this.loadModuleTree()
     if (this.newsId) {
       // 查询新闻信息
-      const news = ApiService.postAjax('portal/news/queryDetail', this.newsId)
+      const news = ApiService.postAjax('public/portal/news/queryDetail', this.newsId)
           .then(data => {
             this.formModel = data
           }).catch(error => {
@@ -153,7 +153,7 @@ const page = {
      * 加载模块列表
      */
     loadModuleTree () {
-      ApiService.postAjax('portal/module/list', {})
+      ApiService.postAjax('public/portal/module/list', {})
           .then((data) => {
             this.moduleList = TreeUtils.convertList2Tree(data, ['moduleId', 'parentId'], '0')
           }).catch(error => {

@@ -56,7 +56,7 @@ export default {
      * 查询新闻详情
      */
     queryNewsDetail () {
-      ApiService.postAjax('portal/news/queryDetail', this.newsId)
+      ApiService.postAjax('public/portal/news/queryDetail', this.newsId)
           .then(data => {
             this.news = data
             this.queryAttachmentFile()

@@ -40,7 +40,7 @@ export default {
     },
     methods: {
         queryNewsDetail() {
-            ApiService.postAjax('portal/news/queryDetail', this.newsId)
+            ApiService.postAjax('public/portal/news/queryDetail', this.newsId)
                 .then(data => {
                 this.news = data;
                 this.queryAttachmentFile();
