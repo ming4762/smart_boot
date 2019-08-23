@@ -79,6 +79,23 @@ class FileServiceImpl : BaseServiceImpl<FileMapper, SmartFileDO>(),  FileService
         return fileDO
     }
 
+    /**
+     * 批量删除文件
+     */
+    override fun batchDeleteFile(fileIdList: List<String>): Boolean {
+        return if (fileIdList.isNotEmpty()) {
+            val fileList = this.listByIds(fileIdList)
+            fileList.forEach { file ->
+                file.dbId?.let {
+                    this.actualFileService.delete(it)
+                }
+            }
+            this.removeByIds(fileIdList)
+        } else {
+            true
+        }
+    }
+
     override fun downLoad(id: String): SmartFileDTO? {
         // 获取文件信息
         val fileDO = this.getById(id)

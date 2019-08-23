@@ -14,6 +14,8 @@ interface FileService : BaseService<SmartFileDO> {
 
     fun deleteFile (id: String): SmartFileDO?
 
+    fun batchDeleteFile (fileIdList: List<String>): Boolean
+
     fun downLoad(id: String): SmartFileDTO?
 
     fun downLoad(file: SmartFileDO): SmartFileDTO
