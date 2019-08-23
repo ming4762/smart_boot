@@ -18,7 +18,7 @@ import java.lang.reflect.Type
 import java.util.*
 
 /**
- *
+ * 基础查询功能
  * @author ming
  * 2019/8/7 上午10:52
  */
