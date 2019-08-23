@@ -12,11 +12,11 @@ import TreeUtils from '../../utils/TreeUtils.js'
 import SmartUpload from '../../plugins/upload/SmartUpload.js'
 // 引入上传工具类
 // @ts-ignore
-import UploadService from '../../utils/UploadService.js'
+import FileService from '../../utils/FileService.js'
 
 const getPath = CommonUtils.withContextPath
 
-declare const ready, smartModuleLoader
+declare const ready, smartModuleLoader, pageParameter
 
 ready(function () {
   smartModuleLoader('smart-table').then(() => {
@@ -26,14 +26,18 @@ ready(function () {
     )
   }).then(() => {
     // @ts-ignore
-    new NewsAdd().init()
+    new NewsAddEdit().init()
   })
 })
 
 const NEW_FILE_TYPE = 'NEWS_FILE'
 const ATTACHMENT_FILE_TYPE = "NEWS_ATTACHMENT_FILE"
 
-class NewsAdd extends PageBuilder {
+/**
+ * 新闻添加编辑
+ * TODO:编辑功能待完善
+ */
+class NewsAddEdit extends PageBuilder {
   /**
    * 构建函数
    */
@@ -51,10 +55,10 @@ const page = {
   },
   data () {
     return {
-      content: '',
       formModel: {
         releaseTime: new Date()
       },
+      newsId: pageParameter,
       formColumns: [
         {
           prop: 'title',
@@ -133,6 +137,15 @@ const page = {
   },
   created () {
     this.loadModuleTree()
+    if (this.newsId) {
+      // 查询新闻信息
+      const news = ApiService.postAjax('portal/news/queryDetail', this.newsId)
+          .then(data => {
+            this.formModel = data
+          }).catch(error => {
+            this.errorMessage('加载新闻失败，请稍后重试', error)
+          })
+    }
   },
   methods: {
     getPath: getPath,
@@ -148,10 +161,10 @@ const page = {
       })
     },
     handleUpload (blob, success, fail) {
-      UploadService.upload(blob.blob(), {
+      FileService.upload(blob.blob(), {
         type: NEW_FILE_TYPE
       }).then((data) => {
-        success(UploadService.getImageUrl(data.fileId))
+        success(FileService.getImageUrl(data.fileId))
       }).catch(error => {
         fail('上传失败')
         console.error(error)
@@ -166,8 +179,7 @@ const page = {
         if (valid) {
           // 保存新闻
           const news = Object.assign({
-            newsId: newId,
-            content: this.content
+            newsId: newId
           }, this.formModel)
           news.moduleId = news.moduleId[0]
           // 保存新闻信息
@@ -185,16 +197,20 @@ const page = {
       // 批量上传附件
       const attachmentList = this.$refs['fileUpload'].getFileList()
       if (attachmentList.length > 0) {
-        const files = UploadService.batchUpload(attachmentList.map(item => item.raw), {
+        const files = FileService.batchUpload(attachmentList.map(item => item.raw), {
           type: ATTACHMENT_FILE_TYPE
         }).then(data => {
           // 保存附件
           this.saveAttachment(newsId, data.map((file) => file.fileId))
           // 保存附件信息
+        }).then(() => {
+          window.location.href = getPath(`ui/portal/newsDetail/${newsId}`)
         }).catch(error => {
-          this.errorMessage('上传附近发生错误', error)
+          this.errorMessage('上传附件发生错误', error)
           this.deleteNews(newsId)
         })
+      } else {
+        window.location.href = getPath(`ui/portal/newsDetail/${newsId}`)
       }
     },
     /**
@@ -268,7 +284,7 @@ const page = {
     <vue-tinymce-edit
       :uploadHandler="handleUpload"
       :js-path="getPath('js/plugins/vue-tinymce/tinymce/4.8.3')" 
-      v-model="content"/>
+      v-model="formModel.content"/>
     <div style="width:80%;margin-left:10%;text-align: center;">
       <br>
       <el-row>

@@ -29,6 +29,10 @@ const page = {
                 add: {
                     rowShow: false,
                     topShow: false
+                },
+                edit: {
+                    rowShow: false,
+                    topShow: false
                 }
             },
             columnOptions: [
@@ -175,10 +179,13 @@ const page = {
             return Object.assign(para, parameter);
         },
         handleShowNewsAdd() {
-            console.log(this);
+            window.open(getPath('ui/common?title=添加新闻&page=portal/news/NewsAddEdit'));
         },
-        handleGetDetailHref() {
-            return getPath(``);
+        handleGetDetailHref(newsId) {
+            return getPath(`ui/portal/newsDetail/${newsId}`);
+        },
+        handleEdit(newsId) {
+            window.open(getPath(`ui/common?title=添加新闻&page=portal/news/NewsAddEdit&pageParameter=${newsId}`));
         }
     },
     template: `
@@ -194,17 +201,26 @@ const page = {
       :columnOptions="columnOptions"
       :queryParameterFormatter="handleQueryParameterFormatter"
       :defaultButtonConfig="defaultButtonConfig"
-      :keys="['news_id']">
+      :keys="['newsId']">
       <!-- 标题插槽 -->
       <template slot="table-title" slot-scope="{ row }">
         <el-tooltip v-if="row.newsId" :enterable="false" effect="dark" :content="\`查看详情\`" placement="left">
-          <a target="_blank" :href="handleGetDetailHref(row)" :title="row.title">{{formatTitle(row.title)}}</a>
+          <a target="_blank" :href="handleGetDetailHref(row.newsId)" :title="row.title">{{formatTitle(row.title)}}</a>
           <!--<router-link :to="\`/portal/newsDetail/{row.newsId}\`" :title="row.title" target="_blank">{{formatTitle(row.title)}}</router-link>-->
         </el-tooltip>
         <span v-else>—</span>
       </template>
       <template v-slot:table-subtitle="{row}">
         <span :title="row.subtitle">{{ formatTitle(row.subtitle) }}</span>
+      </template>
+      <template v-slot:row-operation="{row}">
+        <el-tooltip placement="top" content="修改">
+          <el-button
+            size="mini"
+            icon="el-icon-edit-outline"
+            @click="handleEdit(row.newsId)"
+            type="warning"></el-button>
+        </el-tooltip>
       </template>
       <!--是否置顶插槽-->
       <template v-slot:table-top="{row}">
