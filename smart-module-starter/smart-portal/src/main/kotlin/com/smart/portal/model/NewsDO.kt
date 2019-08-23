@@ -7,7 +7,7 @@ import com.smart.starter.crud.model.BaseModel
 import java.util.*
 
 @TableName("smart_portal_news")
-class NewsDO : BaseModel() {
+open class NewsDO : BaseModel() {
 
     @TableId(type = IdType.UUID)
     var newsId: String? = null

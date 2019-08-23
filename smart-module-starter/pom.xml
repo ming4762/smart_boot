@@ -19,6 +19,8 @@
 
     <modules>
         <module>smart-auth</module>
+        <module>smart-file</module>
+        <module>smart-portal</module>
         <module>smart-quartz</module>
         <!--系统模块-->
         <module>smart-system</module>
