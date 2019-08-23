@@ -24,6 +24,13 @@
             <version>${crud-spring-boot-starter.version}</version>
         </dependency>
 
+        <!--引入文件模块-->
+        <dependency>
+            <groupId>com.smart</groupId>
+            <artifactId>smart-file</artifactId>
+            <version>${smart-file.version}</version>
+        </dependency>
+
         <!--引入认证common-->
         <dependency>
             <groupId>com.smart</groupId>

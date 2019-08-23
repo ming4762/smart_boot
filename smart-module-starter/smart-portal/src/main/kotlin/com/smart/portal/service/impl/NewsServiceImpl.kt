@@ -1,11 +1,14 @@
 package com.smart.portal.service.impl
 
 import com.baomidou.mybatisplus.core.conditions.Wrapper
+import com.baomidou.mybatisplus.extension.kotlin.KtQueryWrapper
 import com.smart.auth.common.utils.AuthUtils
 import com.smart.common.utils.BeanMapUtils
 import com.smart.portal.mapper.NewsMapper
+import com.smart.portal.model.NewsAttachmentDO
 import com.smart.portal.model.NewsDO
 import com.smart.portal.model.NewsDTO
+import com.smart.portal.service.NewsAttachmentService
 import com.smart.portal.service.NewsService
 import com.smart.portal.service.PortalModuleService
 import com.smart.starter.crud.constants.CRUDConstants
@@ -19,6 +22,9 @@ class NewsServiceImpl : BaseServiceImpl<NewsMapper, NewsDO>(), NewsService {
 
     @Autowired
     private lateinit var moduleService: PortalModuleService
+
+    @Autowired
+    private lateinit var newsAttachmentService: NewsAttachmentService
 
     /**
      * 重写保存修改方法
@@ -58,6 +64,34 @@ class NewsServiceImpl : BaseServiceImpl<NewsMapper, NewsDO>(), NewsService {
             }
         }
         return list
+    }
+
+    /**
+     * 重写批量删除方法
+     * 删除附件
+     */
+    override fun batchDelete(tList: List<NewsDO>): Int {
+        // 删除附件
+        this.newsAttachmentService.deleteByNewsId(tList.map { it.newsId!! })
+        return super.batchDelete(tList)
+    }
+
+    /**
+     * 重写查询详情
+     */
+    override fun queryDetail(t: NewsDO): NewsDO? {
+        // 查询新闻
+        val news = this.get(t)
+        if (news != null) {
+            // 查询附件
+            val newsAttachmentList = this.newsAttachmentService.list(
+                    KtQueryWrapper(NewsAttachmentDO::class.java).eq(NewsAttachmentDO :: newsId, news.newsId)
+            )
+            val newsDTO = BeanMapUtils.createFromParent(news, NewsDTO :: class.java)
+            newsDTO.attachmentFileIdList = newsAttachmentList.map { it.fileId!! }
+            return newsDTO
+        }
+        return null
     }
 
     /**

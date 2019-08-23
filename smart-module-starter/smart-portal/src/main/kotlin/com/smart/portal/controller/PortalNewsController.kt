@@ -22,4 +22,17 @@ class PortalNewsController : BaseController<NewsService, NewsDO>() {
         parameter[CRUDConstants.WITH_ALL.name] = true
         return super.list(parameter)
     }
+
+    @PostMapping("queryDetail")
+    fun queryDetail(@RequestBody newsId: String): Result<NewsDO?> {
+        return try {
+            val news = NewsDO()
+            news.newsId = newsId
+            Result.success(this.service.queryDetail(news))
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Result.failure(e.message)
+        }
+    }
+
 }

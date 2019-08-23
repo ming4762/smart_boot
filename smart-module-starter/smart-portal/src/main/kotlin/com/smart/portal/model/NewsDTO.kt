@@ -8,4 +8,7 @@ package com.smart.portal.model
 class NewsDTO : NewsDO() {
 
     var module: PortalModuleDO? = null
+
+    // 附件列表
+    var attachmentFileIdList: List<String>? = null
 }
