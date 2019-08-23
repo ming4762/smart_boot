@@ -5,7 +5,7 @@ const service = axios.create({
     timeout: 10000
 });
 const TOKEN_KEY = 'Authorization';
-export default class UploadService {
+export default class FileService {
     static upload(file, parameter) {
         const formData = new FormData();
         formData.append('file', file);
@@ -55,5 +55,8 @@ export default class UploadService {
     }
     static getImageUrl(fileId) {
         return `${baseUrl}/public/image/show/${fileId}`;
+    }
+    static getDownloadURL(fileId) {
+        return `${baseUrl}//public/file/download/${fileId}`;
     }
 }

@@ -14,11 +14,7 @@ const service = axios.create({
  */
 const TOKEN_KEY: string = 'Authorization'
 
-/**
- * 上传服务
- */
-export default class UploadService {
-
+export default class FileService {
   /**
    * 上传文件
    * @param file
@@ -86,5 +82,13 @@ export default class UploadService {
    */
   public static getImageUrl (fileId: string): string {
     return `${baseUrl}/public/image/show/${fileId}`
+  }
+
+  /**
+   * 获取下载地址
+   * @param fileId
+   */
+  public static getDownloadURL (fileId: string): string {
+    return `${baseUrl}//public/file/download/${fileId}`
   }
 }
