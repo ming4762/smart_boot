@@ -1,18 +1,20 @@
-import PageBuilder from 'PageBuilder';
-import SmartForm from 'plugins/form/SmartForm';
-import ApiService from 'utils/ApiService';
-import MessageMixins from 'mixins/MessageMixins';
-import AuthUtils, { createPassword } from 'system/utils/AuthUtils';
-import { LogComponent } from 'system/log/Log';
-export class AccountMessage extends PageBuilder {
+import PageBuilder from '../../PageBuilder.js';
+import ApiService from '../../utils/ApiService.js';
+import MessageMixins from '../../mixins/MessageMixins.js';
+import AuthUtils, { createPassword } from '../utils/AuthUtils.js';
+import { LogComponent } from '../log/Log.js';
+ready(function () {
+    smartModuleLoader('smart-table').then(() => {
+        new AccountMessage().init();
+    });
+});
+class AccountMessage extends PageBuilder {
     build() {
         return page;
     }
 }
 const ChangePassword = {
-    components: {
-        SmartForm
-    },
+    components: {},
     mixins: [MessageMixins],
     data() {
         const validateConfirmPassword = (rule, value, callback) => {
@@ -83,10 +85,10 @@ const ChangePassword = {
     },
     template: `
   <div>
-    <SmartForm
+    <smart-form
       ref="form"
       :columnOptions="columnOptions"
-      :model="model"></SmartForm>
+      :model="model"></smart-form>
     <el-button
       @click="handleSave"
       type="primary">确认修改</el-button>
