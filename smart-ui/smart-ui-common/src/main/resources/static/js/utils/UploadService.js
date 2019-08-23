@@ -1,13 +1,27 @@
 import AuthUtils from './AuthUtils.js';
+const baseUrl = localStorage.getItem('API_URL');
 const service = axios.create({
-    baseURL: localStorage.getItem('API_URL'),
+    baseURL: baseUrl,
     timeout: 10000
 });
 const TOKEN_KEY = 'Authorization';
 export default class UploadService {
-    static upload(file, filename, parameter) {
+    static upload(file, parameter) {
         const formData = new FormData();
-        formData.append('file', file, filename);
+        formData.append('file', file);
+        return this.doUpload(formData, false, parameter);
+    }
+    static batchUpload(fileList, parameter) {
+        if (fileList.length > 0) {
+            const formData = new FormData();
+            fileList.forEach((file) => {
+                formData.append('files', file);
+            });
+            return this.doUpload(formData, true, parameter);
+        }
+        return Promise.resolve(null);
+    }
+    static doUpload(formData, batch, parameter) {
         if (parameter) {
             Object.keys(parameter)
                 .forEach(key => {
@@ -21,7 +35,8 @@ export default class UploadService {
         if (token) {
             headers[TOKEN_KEY] = token;
         }
-        return service.post('file/upload', formData, headers)
+        const url = batch ? 'public/file/batchUpload' : 'public/file/upload';
+        return service.post(url, formData, headers)
             .then(response => {
             if (response.status === 200) {
                 if (response.data) {
@@ -37,5 +52,8 @@ export default class UploadService {
                 return Promise.reject(response);
             }
         });
+    }
+    static getImageUrl(fileId) {
+        return `${baseUrl}/public/image/show/${fileId}`;
     }
 }

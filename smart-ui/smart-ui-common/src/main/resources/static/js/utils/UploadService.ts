@@ -2,9 +2,10 @@ declare const axios
 
 import AuthUtils from './AuthUtils.js'
 
+const baseUrl = localStorage.getItem('API_URL')
+
 const service = axios.create({
-  // baseURL: StoreUtil.getStore('API_URL'),
-  baseURL: localStorage.getItem('API_URL'),
+  baseURL: baseUrl,
   timeout: 10000
 })
 /**
@@ -21,13 +22,32 @@ export default class UploadService {
   /**
    * 上传文件
    * @param file
-   * @param filename
    * @param parameter
    */
-  public static upload (file: File, filename: string, parameter?: {[index: string]: any}) {
+  public static upload (file: File, parameter?: {[index: string]: any}) {
     // 创建formData
     const formData = new FormData()
-    formData.append('file', file, filename)
+    formData.append('file', file)
+    return this.doUpload(formData, false, parameter)
+  }
+
+  /**
+   * 批量上传
+   * @param fileList
+   * @param parameter
+   */
+  public static batchUpload (fileList, parameter?: {[index: string]: any}) {
+    if (fileList.length > 0) {
+      const formData = new FormData()
+      fileList.forEach((file) => {
+        formData.append('files', file)
+      })
+      return this.doUpload(formData, true, parameter)
+    }
+    return Promise.resolve(null)
+  }
+
+  private static doUpload (formData, batch: boolean, parameter?: {[index: string]: any}): Promise<any> {
     // 添加其他参数
     if (parameter) {
       Object.keys(parameter)
@@ -43,7 +63,8 @@ export default class UploadService {
     if (token) {
       headers[TOKEN_KEY] = token
     }
-    return service.post('file/upload', formData, headers)
+    const url = batch ? 'public/file/batchUpload' : 'public/file/upload'
+    return service.post(url, formData, headers)
         .then(response => {
           if (response.status === 200) {
             if (response.data) {
@@ -57,5 +78,13 @@ export default class UploadService {
             return Promise.reject(response)
           }
         })
+  }
+
+  /**
+   * 获取文件显示路径
+   * @param fileId
+   */
+  public static getImageUrl (fileId: string): string {
+    return `${baseUrl}/public/image/show/${fileId}`
   }
 }
