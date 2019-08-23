@@ -1,8 +1,6 @@
 // @ts-ignore
 import PageBuilder from '../../PageBuilder.js'
 // @ts-ignore
-import SmartTableCRUD from '../../plugins/table/SmartTableCRUD.js'
-// @ts-ignore
 import ApiService from '../../utils/ApiService.js'
 // @ts-ignore
 import LayoutMixins from '../../mixins/LayoutMixins.js'
@@ -12,11 +10,14 @@ import TimeUtils from '../../utils/TimeUtils.js'
 // @ts-ignore
 import TreeUtils from '../../utils/TreeUtils.js'
 
-declare const ready
+declare const ready, smartModuleLoader
 
 ready(function () {
-  // @ts-ignore
-  new Module().init()
+  smartModuleLoader('smart-table').then(() => {
+    console.log(this)
+    // @ts-ignore
+    new Module().init()
+  })
 })
 
 class Module extends PageBuilder {
@@ -33,7 +34,6 @@ class Module extends PageBuilder {
  */
 const page = {
   components: {
-    SmartTableCRUD
   },
   mixins: [
     LayoutMixins
@@ -199,7 +199,7 @@ const page = {
   },
   template: `
   <div style="padding: 15px;">
-    <SmartTableCRUD
+    <smart-table-crud
       :defaultButtonConfig="defaultButtonConfig"
       queryUrl="portal/module/list"
       deleteUrl="portal/module/batchDelete"
@@ -219,7 +219,7 @@ const page = {
           <el-input disabled v-model="parentName"></el-input>
         </el-form-item>
       </template>
-    </SmartTableCRUD>
+    </smart-table-crud>
   </div>
   `
 }

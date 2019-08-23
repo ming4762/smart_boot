@@ -1,11 +1,13 @@
 import PageBuilder from '../../PageBuilder.js';
-import SmartTableCRUD from '../../plugins/table/SmartTableCRUD.js';
 import ApiService from '../../utils/ApiService.js';
 import LayoutMixins from '../../mixins/LayoutMixins.js';
 import TimeUtils from '../../utils/TimeUtils.js';
 import TreeUtils from '../../utils/TreeUtils.js';
 ready(function () {
-    new Module().init();
+    smartModuleLoader('smart-table').then(() => {
+        console.log(this);
+        new Module().init();
+    });
 });
 class Module extends PageBuilder {
     build() {
@@ -13,9 +15,7 @@ class Module extends PageBuilder {
     }
 }
 const page = {
-    components: {
-        SmartTableCRUD
-    },
+    components: {},
     mixins: [
         LayoutMixins
     ],
@@ -177,7 +177,7 @@ const page = {
     },
     template: `
   <div style="padding: 15px;">
-    <SmartTableCRUD
+    <smart-table-crud
       :defaultButtonConfig="defaultButtonConfig"
       queryUrl="portal/module/list"
       deleteUrl="portal/module/batchDelete"
@@ -197,7 +197,7 @@ const page = {
           <el-input disabled v-model="parentName"></el-input>
         </el-form-item>
       </template>
-    </SmartTableCRUD>
+    </smart-table-crud>
   </div>
   `
 };

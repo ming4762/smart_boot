@@ -17,6 +17,12 @@
 	</properties>
 
 	<dependencies>
+		<!--引入uicommon模块-->
+		<dependency>
+			<groupId>com.smart</groupId>
+			<artifactId>smart-ui-common</artifactId>
+			<version>${smart-ui-common.version}</version>
+		</dependency>
 	</dependencies>
 
 
