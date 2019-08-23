@@ -161,6 +161,24 @@ export default class CommonUtil {
     })
   }
 
+  /**
+   * 添加css代码
+   * @param cssText
+   */
+  public static addCSS (cssText) {
+    // 创建一个style元素
+    const style = document.createElement('style')
+    // 获取head元素
+    const head  = document.head || document.getElementsByTagName('head')[0]
+    const id = '' + new Date().getTime()
+    style.id = id
+    style.type = 'text/css'
+    const textNode = document.createTextNode(cssText)
+    style.appendChild(textNode)
+    head.appendChild(style)
+    return id
+  }
+
   static withContextPath (path: string): string {
     return contextPath + path
   }

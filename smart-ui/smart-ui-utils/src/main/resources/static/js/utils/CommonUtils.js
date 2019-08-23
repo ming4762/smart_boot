@@ -117,6 +117,17 @@ export default class CommonUtil {
             document.getElementsByTagName("head")[0].appendChild(link);
         });
     }
+    static addCSS(cssText) {
+        const style = document.createElement('style');
+        const head = document.head || document.getElementsByTagName('head')[0];
+        const id = '' + new Date().getTime();
+        style.id = id;
+        style.type = 'text/css';
+        const textNode = document.createTextNode(cssText);
+        style.appendChild(textNode);
+        head.appendChild(style);
+        return id;
+    }
     static withContextPath(path) {
         return contextPath + path;
     }
