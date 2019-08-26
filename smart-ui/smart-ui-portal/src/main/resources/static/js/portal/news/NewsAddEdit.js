@@ -5,8 +5,10 @@ import MessageMixins from '../../mixins/MessageMixins.js';
 import TreeUtils from '../../utils/TreeUtils.js';
 import SmartUpload from '../../plugins/upload/SmartUpload.js';
 import FileService from '../../utils/FileService.js';
+import AuthUtils from '../../utils/AuthUtils.js';
 const getPath = CommonUtils.withContextPath;
 ready(function () {
+    CommonUtils.addCSS(css);
     smartModuleLoader('smart-table').then(() => {
         return CommonUtils.loadJS(getPath('js/plugins/vue-tinymce/tinymce/4.8.3/tinymce.min.js'), getPath('js/plugins/vue-tinymce/vue-tinymce.umd.min.js'));
     }).then(() => {
@@ -28,11 +30,15 @@ const page = {
         SmartUpload
     },
     data() {
+        const currentUser = AuthUtils.getCurrentUser();
+        console.log(currentUser);
         return {
             formModel: {
-                releaseTime: new Date()
+                releaseTime: new Date(),
+                author: currentUser ? currentUser.name : null,
             },
             newsId: pageParameter,
+            coverPicId: null,
             formColumns: [
                 {
                     prop: 'title',
@@ -66,14 +72,18 @@ const page = {
                 },
                 {
                     prop: 'top',
-                    label: '是否首页显示',
+                    label: '是否置顶',
                     type: 'boolean',
                     defaultValue: false,
                     span: 12
                 },
                 {
+                    prop: 'coverPicId',
+                    label: '封面图片',
+                },
+                {
                     prop: 'upload',
-                    label: '上传附件'
+                    label: '上传附件',
                 }
             ],
             pickerOptions: {
@@ -144,7 +154,8 @@ const page = {
             this.$refs['newsForm'].validate().then((valid) => {
                 if (valid) {
                     const news = Object.assign({
-                        newsId: newId
+                        newsId: newId,
+                        coverPicId: this.coverPicId
                     }, this.formModel);
                     news.moduleId = news.moduleId[0];
                     return ApiService.postAjax('portal/news/saveUpdate', news);
@@ -187,6 +198,17 @@ const page = {
                     newsId: newsId
                 }
             ]);
+        },
+        getImageSrc(fileId) {
+            return FileService.getImageUrl(fileId);
+        },
+        handleCoverSuccess(response) {
+            if (response.ok === true) {
+                this.coverPicId = response.data.fileId;
+            }
+            else {
+                this.errorMessage('上传封面图片失败，请稍后重试', response);
+            }
         }
     },
     template: `
@@ -215,7 +237,23 @@ const page = {
             change-on-select></el-cascader>
         </el-form-item>
       </template>
-      <!--上传附近-->
+      <!--上传封面图片-->
+      <template v-slot:coverPicId="{model}">
+        <el-form-item label="封面图片">
+          <SmartUpload
+            class="avatar-uploader"
+            :on-success="handleCoverSuccess"
+            :show-file-list="false"
+            ref="converPicUpload"
+            :multiple="false"
+            type="news_cover"
+            list-type="text">
+            <img v-if="coverPicId" :src="getImageSrc(coverPicId)" class="avatar">
+            <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+          </SmartUpload>
+        </el-form-item>
+      </template>
+      <!--上传附件-->
       <template v-slot:upload="{}">
         <el-form-item label="上传附件">
           <SmartUpload
@@ -244,3 +282,28 @@ const page = {
   </div>
   `
 };
+const css = `
+.avatar-uploader .el-upload {
+    border: 1px dashed #d9d9d9;
+    border-radius: 6px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+  .avatar-uploader .el-upload:hover {
+    border-color: #409EFF;
+  }
+  .avatar-uploader-icon {
+    font-size: 28px;
+    color: #8c939d;
+    width: 178px;
+    height: 178px;
+    line-height: 178px !important;
+    text-align: center;
+  }
+  .avatar {
+    width: 178px;
+    height: 178px;
+    display: block;
+  }
+`;

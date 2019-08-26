@@ -15,6 +15,8 @@ class PortalModuleDO : BaseModel() {
     @TableId(type = IdType.UUID)
     var moduleId: String? = null
 
+    var moduleCode: String? = null
+
     var moduleName: String? = null
 
     var module_icon: String? = null
