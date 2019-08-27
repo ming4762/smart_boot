@@ -21,27 +21,15 @@
   <div th:replace="common/common-resources :: common-resources-contextPath"></div>
 </head>
 <body>
-    <div class="full-height login-outer" id="login-container" v-cloak>
-        <div class="login-container">
-            <div class="login-main">
-                <div class="login-title">
-                    <h2>smart-ui</h2>
-                    <p>欢迎访问smart</p>
-                </div>
-                <div class="login-form-container">
-                    <username-login/>
-                </div>
-            </div>
-        </div>
+    <div class="full-height login-outer" id="vue-container">
+        <vue-main/>
     </div>
-
 <!--引入axios-->
 <script th:src="@{/axios/0.19.0/axios.min.js}"></script>
 <!--引入vue-->
 <div th:replace="common/common-resources :: common-resources-vue"></div>
 <!--引入element ui-->
 <div th:replace="common/common-resources :: common-resources-element-js"></div>
-<div th:replace="common/common-resources :: common-resources-requireJS"></div>
 
 <script th:src="@{/js/common.js}"></script>
 <!--引入页面js-->
