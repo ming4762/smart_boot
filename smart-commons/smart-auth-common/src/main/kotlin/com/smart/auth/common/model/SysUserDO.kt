@@ -31,6 +31,8 @@ class SysUserDO : BaseModel() {
 
     var email: String? = null
 
+    var mobile: String? = null
+
     var telephone: String? = null
 
     var status: String? = null
