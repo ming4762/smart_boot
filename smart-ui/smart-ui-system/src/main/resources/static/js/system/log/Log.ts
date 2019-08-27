@@ -95,9 +95,11 @@ export const LogComponent = {
           label: '状态码',
           prop: 'statusCode',
           table: {
+            width: 100,
             fixed: 'right',
             sortable: true
           },
+          search: {},
           form: {}
         },
         {
@@ -114,7 +116,7 @@ export const LogComponent = {
           table: {
             width: 100,
             fixed: 'right',
-            formatter: (row, column, value) => {
+            formatter: (row) => {
               if (row.user) {
                 return row.user.name
               } else {
@@ -176,6 +178,20 @@ export const LogComponent = {
         <el-tooltip effect="dark" content="查看详情" placement="left">
           <a @click="handleShowParamsDetail(row.params)">{{formatParams(row.params)}}</a>
         </el-tooltip>
+      </template>
+      
+      <!--状态码搜索插槽-->
+      <template v-slot:search-statusCode="{model}">
+        <el-form-item label="状态码">
+          <el-select  v-model="model.statusCode" placeholder="请选择">
+            <el-option
+              label="200"
+              value="200"/>
+            <el-option
+              label="500"
+              value="500"/>
+          </el-select> 
+        </el-form-item> 
       </template>
     </smart-table-crud>
   </div>
