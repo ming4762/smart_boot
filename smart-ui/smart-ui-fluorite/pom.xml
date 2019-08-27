@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.smart</groupId>
+        <artifactId>smart-ui</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+    </parent>
+    <artifactId>smart-ui-fluorite</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>smart-ui-fluorite</name>
+    <description>萤石云UI模块</description>
+
+    <properties>
+
+    </properties>
+
+    <dependencies>
+        <!--引入ui common包-->
+        <dependency>
+            <groupId>com.smart</groupId>
+            <artifactId>smart-ui-common</artifactId>
+            <version>${smart-ui-common.version}</version>
+        </dependency>
+    </dependencies>
+
+
+</project>
