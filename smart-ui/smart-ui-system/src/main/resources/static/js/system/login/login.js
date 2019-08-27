@@ -1,32 +1,28 @@
-import UsernameLogin from './UsernameLogin.js';
-import ConfigUtils from '../../utils/ConfigUtils.js';
-import MessageMixins from '../../mixins/MessageMixins.js';
+import PageBuilder from '../../PageBuilder.js';
+import LoginMixins from './LoginMixins.js';
 ready(function () {
     new Login().init();
 });
-export class Login {
-    init() {
-        Login.pageToTop();
-        this.initVue();
-    }
-    initVue() {
-        this.vue = new Vue({
-            el: '#login-container',
-            components: {
-                'username-login': UsernameLogin
-            },
-            mixins: [MessageMixins],
-            created() {
-                ConfigUtils.loadConfig()
-                    .catch(error => {
-                    this.errorMessage(error.message, error);
-                });
-            }
-        });
-    }
-    static pageToTop() {
-        if (window.frames.length != parent.frames.length) {
-            parent.location.href = window.location.href;
-        }
+class Login extends PageBuilder {
+    build() {
+        return page;
     }
 }
+const page = {
+    mixins: [
+        LoginMixins
+    ],
+    template: `
+  <div class="login-container">
+    <div class="login-main">
+      <div class="login-title">
+        <h2>smart-ui</h2>
+        <p>欢迎访问smart</p>
+      </div>
+      <div class="login-form-container">
+        <username-login/>
+      </div>
+    </div>
+  </div>
+  `
+};
