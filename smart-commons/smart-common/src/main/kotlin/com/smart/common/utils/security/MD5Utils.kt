@@ -18,7 +18,7 @@ object MD5Utils {
         var hash = DigestUtils.md5Hex(value)
         if (hashIterations > 1) {
             for (i in 1 until hashIterations) {
-                hash = DigestUtils.md5Hex(value)
+                hash = DigestUtils.md5Hex(hash)
             }
         }
         return hash
@@ -33,4 +33,5 @@ object MD5Utils {
     fun md5(inputStream: InputStream): String {
         return DigestUtils.md5Hex(inputStream)
     }
+
 }
