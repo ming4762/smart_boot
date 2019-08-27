@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-@RequestMapping("/hikvision/ptz")
+@RequestMapping("/fluorite/ptz")
 class PtzController {
 
     @Autowired
