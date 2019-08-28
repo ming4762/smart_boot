@@ -7,6 +7,8 @@ import ApiService from '../../utils/ApiService.js'
 // @ts-ignore
 import LayoutMixins from '../../mixins/LayoutMixins.js'
 // @ts-ignore
+import MessageMixins from '../../mixins/MessageMixins.js'
+// @ts-ignore
 import TimeUtils from '../../utils/TimeUtils.js'
 
 const getPath = CommonUtils.withContextPath
@@ -31,7 +33,8 @@ class NewsList extends PageBuilder {
 
 const page = {
   mixins: [
-    LayoutMixins
+    LayoutMixins,
+    MessageMixins
   ],
   props: {
     moduleId: String
@@ -39,7 +42,7 @@ const page = {
   data () {
     return {
       apiService: ApiService,
-      moduleMap: {},
+      moduleList: [],
       defaultButtonConfig: {
         add: {
           rowShow: false,
@@ -68,6 +71,9 @@ const page = {
           table: {
             fixed: true,
             width: 160
+          },
+          search: {
+            symbol: 'like'
           },
           form: {
             span: 12,
@@ -130,6 +136,7 @@ const page = {
         {
           label: '模块',
           prop: 'moduleId',
+          search: {},
           table: {
             formatter: (row) => {
               if (row.module) {
@@ -175,6 +182,9 @@ const page = {
       ]
     }
   },
+  created () {
+    this.loadModule()
+  },
   methods: {
     titleTooltip () {
       return
@@ -216,6 +226,17 @@ const page = {
     },
     handleEdit (newsId): void {
       window.open(getPath(`ui/common?title=添加新闻&page=portal/news/NewsAddEdit&pageParameter=${newsId}`))
+    },
+    /**
+     * 加载模块数据
+     */
+    loadModule () {
+      ApiService.postAjax('portal/module/list', {})
+          .then(data => {
+            this.moduleList = data
+          }).catch(error => {
+            this.errorMessage('加载模块数据失败', error)
+      })
     }
   },
   template: `
@@ -266,6 +287,18 @@ const page = {
           size="small"
           @click="handleShowNewsAdd"
           type="primary">添加</el-button>
+      </template>
+      <!--模块搜索插槽-->
+      <template v-slot:search-moduleId="{model}">
+        <el-form-item label="模块">
+          <el-select v-model="model.moduleId">
+            <el-option
+              :key="item.moduleId"
+              :value="item.moduleId"
+              :label="item.moduleName"
+              v-for="item in moduleList"/>
+          </el-select>
+        </el-form-item>
       </template>
     </smart-table-crud>
   </div>
