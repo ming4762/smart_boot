@@ -13,7 +13,8 @@ export default class SysApiUtils {
     static getDictItem(...dictCode) {
         return __awaiter(this, void 0, void 0, function* () {
             const parameter = {
-                'dictCode@in': dictCode
+                'dictCode@in': dictCode,
+                sortOrder: 'seq'
             };
             const itemList = yield ApiService.postAjax(URL.queryDictItem, parameter);
             let result = {};
@@ -25,6 +26,35 @@ export default class SysApiUtils {
                 else {
                     group.forEach((value, key) => {
                         result[key] = CollectionUtils.mapToObject(CollectionUtils.listToMap(value, 'itemCode', 'itemValue'));
+                    });
+                }
+            }
+            return result;
+        });
+    }
+    static getDictItemList(...dictCode) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const parameter = {
+                'dictCode@in': dictCode,
+                sortOrder: 'seq'
+            };
+            const itemList = yield ApiService.postAjax(URL.queryDictItem, parameter);
+            let result = [];
+            if (itemList && itemList.length > 0) {
+                const dealItemList = itemList.map(item => {
+                    return {
+                        label: item.itemValue,
+                        value: item.itemCode,
+                        dictCode: item.dictCode
+                    };
+                });
+                const group = CollectionUtils.group(itemList, 'dictCode');
+                if (dictCode.length === 1) {
+                    result = dealItemList;
+                }
+                else {
+                    group.forEach((value, key) => {
+                        result[key] = value;
                     });
                 }
             }
