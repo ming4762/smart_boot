@@ -19,7 +19,7 @@ class PortalModuleDO : BaseModel() {
 
     var moduleName: String? = null
 
-    var module_icon: String? = null
+    var moduleIcon: String? = null
 
     var coverPicId: String? = null
 
