@@ -156,6 +156,17 @@ class SysUserServiceImpl : BaseServiceImpl<SysUserMapper, SysUserDO>(), SysUserS
         return super.batchDelete(tList)
     }
 
+    /**
+     * 批量保存更新
+     */
+    @Transactional
+    override fun saveOrUpdateBatch(entityList: MutableCollection<SysUserDO>): Boolean {
+        val result = entityList.map {
+            return@map this.saveOrUpdate(it)
+        }
+        return result.all { it }
+    }
+
     @Transactional
     override fun saveOrUpdate(entity: SysUserDO): Boolean {
         var isAdd = false
@@ -167,7 +178,9 @@ class SysUserServiceImpl : BaseServiceImpl<SysUserMapper, SysUserDO>(), SysUserS
         return if (isAdd) {
             entity.createTime = Date()
             entity.createUserId = AuthUtils.getCurrentUserId()
-            entity.password = this.createDefaultPassword(entity)
+            if (entity.password == null) {
+                entity.password = this.createDefaultPassword(entity)
+            }
             this.save(entity)
         } else {
             entity.updateTime = Date()
