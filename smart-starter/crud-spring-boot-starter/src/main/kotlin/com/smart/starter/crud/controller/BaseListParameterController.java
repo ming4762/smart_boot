@@ -46,4 +46,18 @@ public class BaseListParameterController<K extends BaseService<T>, T extends Bas
             return Result.failure(e.getMessage(), false);
         }
     }
+
+    /**
+     * 批量保存/更新
+     */
+    @RequestMapping("/batchSaveUpdate")
+    @ResponseBody
+    protected Result<Boolean> batchSaveUpdate(@RequestBody List<T> tList) {
+        try {
+            return Result.success(this.service.saveOrUpdateBatch(tList), ResultCodeEnum.SUCCESS.getMsg());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Result.failure(e.getMessage(), false);
+        }
+    }
 }
