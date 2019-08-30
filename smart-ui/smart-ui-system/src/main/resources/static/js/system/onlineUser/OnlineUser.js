@@ -3,6 +3,7 @@ import ApiService from '../../utils/ApiService.js';
 import LayoutMixins from '../../mixins/LayoutMixins.js';
 import MessageMixins from '../../mixins/MessageMixins.js';
 ready(function () {
+    ApiService.validateLogin();
     smartModuleLoader('smart-table').then(() => {
         new OnlineUser().init();
     });

@@ -10,6 +10,8 @@ import MessageMixins from '../../mixins/MessageMixins.js'
 declare const ready, smartModuleLoader
 
 ready(function () {
+  // 校验登录状态
+  ApiService.validateLogin()
   smartModuleLoader('smart-table').then(() => {
     // @ts-ignore
     new OnlineUser().init()
