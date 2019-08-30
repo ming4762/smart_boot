@@ -1,6 +1,6 @@
 package com.smart.system.service.impl
 
-import com.baomidou.mybatisplus.core.conditions.Wrapper
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper
 import com.baomidou.mybatisplus.extension.kotlin.KtQueryWrapper
 import com.smart.auth.common.model.SysUserDO
 import com.smart.auth.common.utils.AuthUtils
@@ -45,7 +45,7 @@ class SysRoleServiceImpl : BaseServiceImpl<SysRoleMapper, SysRoleDO>(), SysRoleS
     @Autowired
     private lateinit var roleMenuFunctionService: SysRoleMenuFunctionService
 
-    override fun list(queryWrapper: Wrapper<SysRoleDO>, parameters: Map<String, Any?>, paging: Boolean): List<SysRoleDO> {
+    override fun list(queryWrapper: QueryWrapper<SysRoleDO>, parameters: Map<String, Any?>, paging: Boolean): List<SysRoleDO> {
         val list = super<BaseServiceImpl>.list(queryWrapper, parameters, paging)
         val withAll = parameters[CRUDConstants.WITH_ALL.name]
         if (withAll is Boolean && withAll == true) {

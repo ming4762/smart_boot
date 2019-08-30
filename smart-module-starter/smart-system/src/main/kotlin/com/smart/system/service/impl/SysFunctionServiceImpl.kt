@@ -1,6 +1,5 @@
 package com.smart.system.service.impl
 
-import com.baomidou.mybatisplus.core.conditions.Wrapper
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper
 import com.baomidou.mybatisplus.extension.kotlin.KtQueryWrapper
 import com.smart.auth.common.utils.AuthUtils
@@ -43,7 +42,7 @@ class SysFunctionServiceImpl : BaseServiceImpl<SysFunctionMapper, SysFunctionDO>
      * 重写LIST方法添加排序
      * TODO:排序根据参数执行
      */
-    override fun list(queryWrapper: Wrapper<SysFunctionDO>, parameters: Map<String, Any?>, paging: Boolean): List<SysFunctionDO> {
+    override fun list(queryWrapper: QueryWrapper<SysFunctionDO>, parameters: Map<String, Any?>, paging: Boolean): List<SysFunctionDO> {
         queryWrapper as QueryWrapper<SysFunctionDO>
         queryWrapper.orderByAsc(MybatisUtil.getDbField(SysFunctionDO :: seq))
         return super<BaseServiceImpl>.list(queryWrapper)
