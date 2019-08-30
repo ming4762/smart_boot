@@ -4,6 +4,7 @@ import com.smart.auth.common.model.SysUserDO
 import com.smart.auth.model.dto.OnlineUserDTO
 import com.smart.auth.model.vo.OnlineUserVO
 import com.smart.auth.service.AuthService
+import org.apache.shiro.session.Session
 import org.apache.shiro.session.mgt.eis.SessionDAO
 import org.apache.shiro.subject.SimplePrincipalCollection
 import org.apache.shiro.subject.support.DefaultSubjectContext
@@ -21,6 +22,7 @@ class AuthServiceImpl : AuthService {
 
     @Autowired
     private lateinit var sessionDAO: SessionDAO
+
 
     /**
      * 获取所有在线用户
@@ -69,11 +71,13 @@ class AuthServiceImpl : AuthService {
         val onlineUserList = mutableListOf<OnlineUserDTO>()
         // 遍历session获取用户信息
         for (session in activeSessions) {
-            if (session?.getAttribute(DefaultSubjectContext.AUTHENTICATED_SESSION_KEY) == null) continue
-            val principalCollection = session.getAttribute(DefaultSubjectContext.PRINCIPALS_SESSION_KEY) as SimplePrincipalCollection
-            val user = principalCollection.primaryPrincipal as SysUserDO
-            val onlineUser = OnlineUserDTO(user, session)
-            onlineUserList.add(onlineUser)
+            if (session is Session) {
+                if (session.getAttribute(DefaultSubjectContext.AUTHENTICATED_SESSION_KEY) == null) continue
+                val principalCollection = session.getAttribute(DefaultSubjectContext.PRINCIPALS_SESSION_KEY) as SimplePrincipalCollection
+                val user = principalCollection.primaryPrincipal as SysUserDO
+                val onlineUser = OnlineUserDTO(user, session)
+                onlineUserList.add(onlineUser)
+            }
         }
         return if (userIdList.isEmpty()) {
             onlineUserList

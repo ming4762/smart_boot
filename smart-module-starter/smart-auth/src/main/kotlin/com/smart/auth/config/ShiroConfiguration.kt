@@ -5,11 +5,11 @@ import com.smart.auth.shiro.OptionsAdoptFilter
 import com.smart.auth.shiro.StatelessRealm
 import com.smart.auth.shiro.TokenSessionManager
 import com.smart.shiro.redis.cache.RedisCacheManager
-import com.smart.shiro.redis.session.RedisSessionDAO
 import com.smart.starter.redis.service.RedisService
 import org.apache.shiro.cache.CacheManager
 import org.apache.shiro.mgt.SecurityManager
 import org.apache.shiro.session.mgt.SessionManager
+import org.apache.shiro.session.mgt.eis.EnterpriseCacheSessionDAO
 import org.apache.shiro.session.mgt.eis.SessionDAO
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean
@@ -37,6 +37,10 @@ class ShiroConfiguration {
     // 缓存类型
     @Value("\${smart.auth.cacheType:redis}")
     private lateinit var cacheType: String
+
+    // 服务唯一标识
+    @Value("\${smart.serviceId:}")
+    private lateinit var serviceId: String
 
     // 是否是开发模式
     @Value("\${smart.auth.development:false}")
@@ -83,6 +87,11 @@ class ShiroConfiguration {
         return securityManager
     }
 
+    @Bean
+    fun sessionDAO (): SessionDAO {
+        return EnterpriseCacheSessionDAO()
+    }
+
     /**
      * 配置sessionmanager
      */
@@ -91,12 +100,6 @@ class ShiroConfiguration {
         sessionManager.sessionDAO = sessionDAO
         return sessionManager
     }
-
-    @Bean
-    fun sessionDAO(@Autowired @Lazy redisService: RedisService): SessionDAO {
-        return RedisSessionDAO(redisService)
-    }
-
 
 
     /**
@@ -139,6 +142,10 @@ class ShiroConfiguration {
     private fun createRedisCacheManager(redisService: RedisService): CacheManager {
         val cacheManager = RedisCacheManager()
         cacheManager.redisService = redisService
+        // 设置服务ID，解决多个 服务公用一个redis冲突问题
+        if (!StringUtils.isEmpty(this.serviceId)) {
+            cacheManager.ident = this.serviceId
+        }
         return cacheManager
     }
 }

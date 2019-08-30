@@ -16,12 +16,15 @@ class RedisCacheManager : CacheManager {
 
     lateinit var redisService: RedisService
 
+    var ident = "normal"
+
     var keyPrefix = "shiro_redis_cache:"
 
-    override fun <K : Any?, V : Any?> getCache(name: String): Cache<K, V> {
+    override fun <K : Any, V : Any> getCache(name: String): Cache<K, V> {
         var cache = caches[name]
         if (cache == null) {
-            cache = RedisCache(redisService, keyPrefix)
+            cache = RedisCache(redisService, "${keyPrefix}${ident}_$name")
+            caches[name] = cache
         }
         return cache as Cache<K, V>
     }
