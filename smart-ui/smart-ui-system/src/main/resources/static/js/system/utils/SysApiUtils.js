@@ -6,9 +6,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-import URL from '../URL.js';
 import ApiService from '../../utils/ApiService.js';
 import CollectionUtils from '../../utils/CollectionUtils.js';
+const queryDictItemURL = 'public/sys/dictItem/list';
 export default class SysApiUtils {
     static getDictItem(...dictCode) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -16,7 +16,7 @@ export default class SysApiUtils {
                 'dictCode@in': dictCode,
                 sortOrder: 'seq'
             };
-            const itemList = yield ApiService.postAjax(URL.queryDictItem, parameter);
+            const itemList = yield ApiService.postAjax(queryDictItemURL, parameter);
             let result = {};
             if (itemList && itemList.length > 0) {
                 const group = CollectionUtils.group(itemList, 'dictCode');
@@ -38,7 +38,7 @@ export default class SysApiUtils {
                 'dictCode@in': dictCode,
                 sortOrder: 'seq'
             };
-            const itemList = yield ApiService.postAjax(URL.queryDictItem, parameter);
+            const itemList = yield ApiService.postAjax(queryDictItemURL, parameter);
             let result = [];
             if (itemList && itemList.length > 0) {
                 const dealItemList = itemList.map(item => {

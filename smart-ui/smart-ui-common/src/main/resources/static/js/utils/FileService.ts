@@ -91,4 +91,5 @@ export default class FileService {
   public static getDownloadURL (fileId: string): string {
     return `${baseUrl}//public/file/download/${fileId}`
   }
+
 }

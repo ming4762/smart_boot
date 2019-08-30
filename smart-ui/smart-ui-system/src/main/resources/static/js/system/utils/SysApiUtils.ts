@@ -1,8 +1,9 @@
-import URL from '../URL.js'
 // @ts-ignore
 import ApiService from '../../utils/ApiService.js'
 // @ts-ignore
 import CollectionUtils from '../../utils/CollectionUtils.js'
+
+const queryDictItemURL = 'public/sys/dictItem/list'
 
 /**
  * 系统模块API工具类
@@ -17,7 +18,7 @@ export default class SysApiUtils {
       'dictCode@in': dictCode,
       sortOrder: 'seq'
     }
-    const itemList: any[] = await ApiService.postAjax(URL.queryDictItem, parameter)
+    const itemList: any[] = await ApiService.postAjax(queryDictItemURL, parameter)
     let result: {[index: string]: any} = {}
     if (itemList && itemList.length > 0) {
       const group = CollectionUtils.group(itemList, 'dictCode')
@@ -41,7 +42,7 @@ export default class SysApiUtils {
       'dictCode@in': dictCode,
       sortOrder: 'seq'
     }
-    const itemList: any[] = await ApiService.postAjax(URL.queryDictItem, parameter)
+    const itemList: any[] = await ApiService.postAjax(queryDictItemURL, parameter)
     let result = []
     if (itemList && itemList.length > 0) {
       const dealItemList = itemList.map(item => {
