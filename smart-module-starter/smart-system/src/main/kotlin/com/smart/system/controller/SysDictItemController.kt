@@ -18,12 +18,6 @@ class SysDictItemController : BaseController<SysDictItemService, SysDictItemDO>(
         private const val SAVE = "sys:dictItem:save"
         private const val DELETE = "sys:dictItem:delete"
         private const val UPDATE = "sys:dictItem:update"
-        private const val QUERY = "sys:dictItem:query"
-    }
-
-//    @RequiresPermissions(QUERY)
-    override fun list(@RequestBody parameters: MutableMap<String, Any?>): Result<Any?> {
-        return super.list(parameters)
     }
 
     @RequiresPermissions(SAVE, UPDATE, logical = Logical.OR)
