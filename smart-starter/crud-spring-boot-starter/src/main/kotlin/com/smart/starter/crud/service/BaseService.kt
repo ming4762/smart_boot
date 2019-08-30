@@ -1,6 +1,6 @@
 package com.smart.starter.crud.service
 
-import com.baomidou.mybatisplus.core.conditions.Wrapper
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper
 import com.baomidou.mybatisplus.extension.service.IService
 import com.smart.starter.crud.model.BaseModel
 
@@ -34,5 +34,5 @@ interface BaseService<T: BaseModel> : IService<T> {
     /**
      * 查询方法
      */
-    fun list(queryWrapper: Wrapper<T>, parameters: Map<String, Any?>, paging: Boolean = false): List<T>
+    fun list(queryWrapper: QueryWrapper<T>, parameters: Map<String, Any?>, paging: Boolean = false): List<T>
 }

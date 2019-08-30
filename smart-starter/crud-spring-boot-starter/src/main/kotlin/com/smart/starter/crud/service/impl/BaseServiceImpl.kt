@@ -32,7 +32,7 @@ open class BaseServiceImpl<K: CloudBaseMapper<T>, T: BaseModel> : ServiceImpl<K,
     /**
      * list方法
      */
-    override fun list(queryWrapper: Wrapper<T>, parameters: Map<String, Any?>, paging: Boolean): List<T> {
+    override fun list(queryWrapper: QueryWrapper<T>, parameters: Map<String, Any?>, paging: Boolean): List<T> {
         if (!paging) {
             // 如果不是分页情况，参数中存在排序则添加排序
             val sortName = parameters[SORT_NAME] as String?
