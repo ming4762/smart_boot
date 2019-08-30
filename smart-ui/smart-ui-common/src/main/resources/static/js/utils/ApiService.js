@@ -14,6 +14,24 @@ const getToken = () => {
 };
 const TOKEN_KEY = 'Authorization';
 export default class ApiService {
+    static validateLogin() {
+        const token = getToken();
+        if (!token || token === '') {
+            this.toLoginPage();
+        }
+        else {
+            ApiService.postAjax('public/auth/validateToken', {})
+                .then(result => {
+                if (result === false) {
+                    ApiService.toLoginPage();
+                }
+            }).catch(error => {
+                if (error.response && error.response.status === 401) {
+                    ApiService.toLoginPage();
+                }
+            });
+        }
+    }
     static postAjax(url, parameter, headers, ideConfig) {
         const rsaUtils = new RsaUtils();
         headers = headers || {};
@@ -63,9 +81,15 @@ export default class ApiService {
     static logout() {
         return this.postAjax('logout', {});
     }
-    static goToLogin() {
+    static toLoginPage() {
+        const loginUrl = `${contextPath}ui/system/login`;
         window.sessionStorage.clear();
-        window.location.href = `${contextPath}ui/system/login`;
+        if (window.frames.length != parent.frames.length) {
+            parent.location.href = loginUrl;
+        }
+        else {
+            window.location.href = loginUrl;
+        }
     }
     static saveToken(token) {
         StoreUtil.setStore(STORE_TOKEN_KEY, token, StoreUtil.SESSION_TYPE);
@@ -85,15 +109,6 @@ export default class ApiService {
             StoreUtil.setStore(RSA_CLIENT_PRIVATE_KEY, rasKey.priKey, StoreUtil.SESSION_TYPE);
             StoreUtil.setStore(RSA_SERVER_PUBLIC_KEYU, serverPublicKey, StoreUtil.SESSION_TYPE);
         });
-    }
-    static toLoginPage() {
-        const loginUrl = `${contextPath}ui/system/login`;
-        if (window.frames.length != parent.frames.length) {
-            parent.location.href = loginUrl;
-        }
-        else {
-            window.location.href = loginUrl;
-        }
     }
     static isEncrypt(ideConfig) {
         return ideConfig && ideConfig.encrypt === true && this.useIde();

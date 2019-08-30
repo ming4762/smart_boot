@@ -12,7 +12,6 @@ import Md5Utils from './Md5Utils.js'
 // 设置默认的请求头
 axios.defaults.headers.post['Content-Type'] = 'application/json;charset=UTF-8'
 const service = axios.create({
-    // baseURL: StoreUtil.getStore('API_URL'),
     baseURL: localStorage.getItem('API_URL'),
     timeout: 10000
 })
@@ -33,6 +32,28 @@ const getToken = () => {
 const TOKEN_KEY: string = 'Authorization'
 
 export default class ApiService  {
+
+  /**
+   * 验证是否登录
+   */
+  public static validateLogin () {
+    const token = getToken()
+    if (!token || token === '') {
+      this.toLoginPage()
+    } else {
+      ApiService.postAjax('public/auth/validateToken', {})
+          .then(result => {
+            if (result === false) {
+              ApiService.toLoginPage()
+            }
+          }).catch(error => {
+            if (error.response && error.response.status === 401) {
+              // 未登录跳转到登录页面
+              ApiService.toLoginPage()
+            }
+          })
+    }
+  }
 
   /**
    * 发送ajax请求
@@ -100,12 +121,19 @@ export default class ApiService  {
     })
   }
 
+
   /**
-   * 跳转到登录页面
+   * 跳转到登录页面，TODO：登录页面可配置
    */
-  public static goToLogin () {
+  private static toLoginPage () {
+    const loginUrl = `${contextPath}ui/system/login`
     window.sessionStorage.clear()
-    window.location.href = `${contextPath}ui/system/login`
+    // 判断是否在iframe中
+    if (window.frames.length != parent.frames.length) {
+      parent.location.href = loginUrl
+    } else {
+      window.location.href = loginUrl
+    }
   }
 
   /**
@@ -152,18 +180,7 @@ export default class ApiService  {
     })
   }
 
-  /**
-   * 跳转到登录页面，TODO：登录页面可配置
-   */
-  private static toLoginPage () {
-    const loginUrl = `${contextPath}ui/system/login`
-    // 判断是否在iframe中
-    if (window.frames.length != parent.frames.length) {
-      parent.location.href = loginUrl
-    } else {
-      window.location.href = loginUrl
-    }
-  }
+
 
   /**
    * 判断是否要进行参数加密
