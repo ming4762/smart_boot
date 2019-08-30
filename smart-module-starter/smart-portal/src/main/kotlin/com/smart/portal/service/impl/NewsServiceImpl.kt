@@ -1,6 +1,6 @@
 package com.smart.portal.service.impl
 
-import com.baomidou.mybatisplus.core.conditions.Wrapper
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper
 import com.baomidou.mybatisplus.extension.kotlin.KtQueryWrapper
 import com.smart.auth.common.utils.AuthUtils
 import com.smart.common.utils.BeanMapUtils
@@ -13,8 +13,10 @@ import com.smart.portal.service.NewsService
 import com.smart.portal.service.PortalModuleService
 import com.smart.starter.crud.constants.CRUDConstants
 import com.smart.starter.crud.service.impl.BaseServiceImpl
+import com.smart.starter.crud.utils.MybatisUtil
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
+import org.springframework.util.StringUtils
 import java.util.*
 
 @Service
@@ -47,7 +49,14 @@ class NewsServiceImpl : BaseServiceImpl<NewsMapper, NewsDO>(), NewsService {
     }
 
 
-    override fun list(queryWrapper: Wrapper<NewsDO>, parameters: Map<String, Any?>, paging: Boolean): List<NewsDO> {
+    override fun list(queryWrapper: QueryWrapper<NewsDO>, parameters: Map<String, Any?>, paging: Boolean): List<NewsDO> {
+        // moduleCode参数处理
+        val moduleCode = parameters["moduleCode"]
+        if (!StringUtils.isEmpty(moduleCode)) {
+            // 查询模块
+            val insql = "select module_id from smart_portal_module where module_code = '$moduleCode'"
+            queryWrapper.inSql(MybatisUtil.getDbField(NewsDO :: moduleId), insql)
+        }
         val list = super<BaseServiceImpl>.list(queryWrapper, parameters, paging)
         if (list.isNotEmpty()) {
             // 判断是否带有内容，性能优化
