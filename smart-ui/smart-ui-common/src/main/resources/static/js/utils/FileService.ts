@@ -43,7 +43,7 @@ export default class FileService {
     return Promise.resolve(null)
   }
 
-  private static doUpload (formData, batch: boolean, parameter?: {[index: string]: any}): Promise<any> {
+  public static doUpload (formData, batch: boolean, parameter?: {[index: string]: any}): Promise<any> {
     // 添加其他参数
     if (parameter) {
       Object.keys(parameter)

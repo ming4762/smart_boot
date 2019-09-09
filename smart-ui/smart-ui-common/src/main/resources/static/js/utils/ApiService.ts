@@ -1,3 +1,5 @@
+import AuthUtils from './AuthUtils.js'
+
 declare var axios
 // 项目跟路径
 declare var contextPath: string
@@ -22,9 +24,7 @@ const RSA_SERVER_PUBLIC_KEYU = "RSA_SERVER_PUBLIC_KEYU"
 /**
  * 获取token
  */
-const getToken = () => {
-    return StoreUtil.getStore(STORE_TOKEN_KEY)
-}
+const getToken = AuthUtils.getToken
 
 /**
  * token请求头key
@@ -53,6 +53,50 @@ export default class ApiService  {
             }
           })
     }
+  }
+
+  /**
+   * 发送请求带文件
+   * @param url
+   * @param fileList
+   * @param parameter
+   * @param headers
+   */
+  public static postWithFile(url: string, fileList: Array<File>, parameter?: any, headers?: {[index: string]: any}): Promise<any> {
+    // 创建formData
+    const formData = new FormData()
+    fileList.forEach((file) => {
+      formData.append('files', file)
+    })
+    // 添加其他参数
+    if (parameter) {
+      Object.keys(parameter)
+          .forEach(key => {
+            formData.append(key, parameter[key])
+          })
+    }
+    // 设置请求头
+    const postHeaders = Object.assign({
+      'Content-Type': 'multipart/form-data'
+    }, headers || {})
+    const token = AuthUtils.getToken()
+    if (token) {
+      headers[TOKEN_KEY] = token
+    }
+    return service.post(url, formData, postHeaders)
+        .then(response => {
+          if (response.status === 200) {
+            if (response.data) {
+              if(response.data.ok === true) {
+                return response.data.data
+              } else {
+                return Promise.reject(response)
+              }
+            }
+          } else {
+            return Promise.reject(response)
+          }
+        })
   }
 
   /**

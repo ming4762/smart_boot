@@ -1,3 +1,4 @@
+import AuthUtils from './AuthUtils.js';
 import StoreUtil from './StoreUtil.js';
 import RsaUtils from './RsaUtils.js';
 import Md5Utils from './Md5Utils.js';
@@ -9,9 +10,7 @@ const service = axios.create({
 const STORE_TOKEN_KEY = 'SMART_AUTHORIATION';
 const RSA_CLIENT_PRIVATE_KEY = "RSA_CLIENT_PRIVATE_KEY";
 const RSA_SERVER_PUBLIC_KEYU = "RSA_SERVER_PUBLIC_KEYU";
-const getToken = () => {
-    return StoreUtil.getStore(STORE_TOKEN_KEY);
-};
+const getToken = AuthUtils.getToken;
 const TOKEN_KEY = 'Authorization';
 export default class ApiService {
     static validateLogin() {
@@ -31,6 +30,41 @@ export default class ApiService {
                 }
             });
         }
+    }
+    static postWithFile(url, fileList, parameter, headers) {
+        const formData = new FormData();
+        fileList.forEach((file) => {
+            formData.append('files', file);
+        });
+        if (parameter) {
+            Object.keys(parameter)
+                .forEach(key => {
+                formData.append(key, parameter[key]);
+            });
+        }
+        const postHeaders = Object.assign({
+            'Content-Type': 'multipart/form-data'
+        }, headers || {});
+        const token = AuthUtils.getToken();
+        if (token) {
+            headers[TOKEN_KEY] = token;
+        }
+        return service.post(url, formData, postHeaders)
+            .then(response => {
+            if (response.status === 200) {
+                if (response.data) {
+                    if (response.data.ok === true) {
+                        return response.data.data;
+                    }
+                    else {
+                        return Promise.reject(response);
+                    }
+                }
+            }
+            else {
+                return Promise.reject(response);
+            }
+        });
     }
     static postAjax(url, parameter, headers, ideConfig) {
         const rsaUtils = new RsaUtils();
