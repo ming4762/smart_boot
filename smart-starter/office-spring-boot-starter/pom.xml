@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.smart</groupId>
+        <artifactId>smart-starter</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+    </parent>
+    <artifactId>office-spring-boot-starter</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>office-spring-boot-starter</name>
+    <description>office启动器</description>
+
+    <properties>
+        <org.openoffice.version>4.1.2</org.openoffice.version>
+        <com.artofsolving.jodconverter.version>2.2.1</com.artofsolving.jodconverter.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.artofsolving</groupId>
+            <artifactId>jodconverter</artifactId>
+            <version>${com.artofsolving.jodconverter.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openoffice</groupId>
+            <artifactId>ridl</artifactId>
+            <version>${org.openoffice.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openoffice</groupId>
+            <artifactId>unoil</artifactId>
+            <version>${org.openoffice.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openoffice</groupId>
+            <artifactId>juh</artifactId>
+            <version>${org.openoffice.version}</version>
+        </dependency>
+    </dependencies>
+
+</project>
