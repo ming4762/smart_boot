@@ -47,7 +47,7 @@ export default class ApiService {
         }, headers || {});
         const token = AuthUtils.getToken();
         if (token) {
-            headers[TOKEN_KEY] = token;
+            postHeaders[TOKEN_KEY] = token;
         }
         return service.post(url, formData, postHeaders)
             .then(response => {
