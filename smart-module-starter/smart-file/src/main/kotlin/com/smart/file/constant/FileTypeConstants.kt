@@ -16,5 +16,7 @@ enum class FileTypeConstants private constructor(val value: String) {
      */
     TEST("test"),
 
-    TEMP("TEMP")
+    TEMP("TEMP"),
+
+    APP("AP")
 }
