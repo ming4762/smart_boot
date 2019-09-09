@@ -25,4 +25,18 @@ class FileController : PublicFileController() {
             Result.failure(e.message)
         }
     }
+
+    /**
+     * 批量删除接口
+     */
+    @PostMapping("batchDelete")
+    fun batchDelete(@RequestBody fileList: List<SmartFileDO>): Result<Boolean?> {
+        return try {
+            Result.success(this.service.batchDeleteFile(fileList.map { it.fileId!! }))
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Result.failure(e.message)
+        }
+    }
+
 }

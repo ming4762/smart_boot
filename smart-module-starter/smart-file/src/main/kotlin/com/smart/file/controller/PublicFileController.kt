@@ -57,8 +57,8 @@ class PublicFileController : BaseControllerQuery<FileService, SmartFileDO>() {
      */
     @GetMapping("download/{id}")
     @ResponseBody
-    fun download (@PathVariable("id")id: String, response: HttpServletResponse): Result<Boolean?> {
-        return try {
+    fun download (@PathVariable("id")id: String, response: HttpServletResponse) {
+        try {
             val smartFileDTO = this.service.downLoad(id)
             if (smartFileDTO != null) {
                 //设置文件名并转码
@@ -68,10 +68,9 @@ class PublicFileController : BaseControllerQuery<FileService, SmartFileDO>() {
                 //写入文件流
                 FileCopyUtils.copy(smartFileDTO.inputStream, response.outputStream)
             }
-            Result.success(true)
         } catch (e: Exception) {
             e.printStackTrace()
-            Result.failure(e.message)
+            throw e
         }
     }
 }
