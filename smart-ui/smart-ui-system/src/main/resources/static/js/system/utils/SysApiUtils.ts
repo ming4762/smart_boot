@@ -16,7 +16,7 @@ export default class SysApiUtils {
   public static async getDictItem (...dictCode: Array<string>): Promise<any> {
     const parameter = {
       'dictCode@in': dictCode,
-      sortOrder: 'seq'
+      sortName: 'seq'
     }
     const itemList: any[] = await ApiService.postAjax(queryDictItemURL, parameter)
     let result: {[index: string]: any} = {}
@@ -40,7 +40,7 @@ export default class SysApiUtils {
   public static async getDictItemList (...dictCode: Array<string>): Promise<any> {
     const parameter = {
       'dictCode@in': dictCode,
-      sortOrder: 'seq'
+      sortName: 'seq'
     }
     const itemList: any[] = await ApiService.postAjax(queryDictItemURL, parameter)
     let result = []

@@ -14,7 +14,7 @@ export default class SysApiUtils {
         return __awaiter(this, void 0, void 0, function* () {
             const parameter = {
                 'dictCode@in': dictCode,
-                sortOrder: 'seq'
+                sortName: 'seq'
             };
             const itemList = yield ApiService.postAjax(queryDictItemURL, parameter);
             let result = {};
@@ -36,7 +36,7 @@ export default class SysApiUtils {
         return __awaiter(this, void 0, void 0, function* () {
             const parameter = {
                 'dictCode@in': dictCode,
-                sortOrder: 'seq'
+                sortName: 'seq'
             };
             const itemList = yield ApiService.postAjax(queryDictItemURL, parameter);
             let result = [];

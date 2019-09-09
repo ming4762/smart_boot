@@ -104,7 +104,7 @@ export default {
       }).then(() => {
         return ApiService.logout()
       }).then(() => {
-        ApiService.goToLogin()
+        ApiService.toLoginPage()
       }).catch(error => {
         if (error !== 'cancel') {
           this.errorMessage('退出时发生错误，请稍后重试', error)
