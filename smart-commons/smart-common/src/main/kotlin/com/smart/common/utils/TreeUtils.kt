@@ -84,7 +84,6 @@ object TreeUtils {
      * 反转父子关系
      */
     @JvmStatic
-    @Deprecated("")
     fun reverseParentChild(parentChildren: Map<String, List<String>>, withSelf: Boolean = true): Map<String, List<String>> {
         var selefParentChildren = parentChildren
         if (withSelf) {
