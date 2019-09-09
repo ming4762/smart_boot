@@ -1,6 +1,6 @@
 package com.smart.quartz.service.impl
 
-import com.baomidou.mybatisplus.core.conditions.Wrapper
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper
 import com.baomidou.mybatisplus.extension.kotlin.KtUpdateWrapper
 import com.smart.common.utils.UUIDGenerator
 import com.smart.quartz.mapper.SmartTimedTaskMapper
@@ -23,7 +23,7 @@ class SmartTimedTaskServiceImpl : BaseServiceImpl<SmartTimedTaskMapper, SmartTim
     @Autowired
     private lateinit var quartzService: QuartzService
 
-    override fun list(queryWrapper: Wrapper<SmartTimedTaskDO>, parameters: Map<String, Any?>, paging: Boolean): List<SmartTimedTaskDO> {
+    override fun list(queryWrapper: QueryWrapper<SmartTimedTaskDO>, parameters: Map<String, Any?>, paging: Boolean): List<SmartTimedTaskDO> {
         return super<BaseServiceImpl>.list(queryWrapper, parameters, paging)
     }
 
