@@ -8,7 +8,8 @@ export default {
     type: { type: String, required: true },
     data: { type: Object, default: () => { return {} } },
     // 允许的扩展名
-    acceptExtension: String
+    acceptExtension: String,
+    beforeUpload: Function
   },
   data () {
     return {
@@ -33,14 +34,13 @@ export default {
      * 上传前操作
      */
     handleBeforeUpload(file: any): boolean {
-      this.$emit('before-upload', file)
       if (this.acceptExtension) {
         if (!this.fileInAcceptExtension(file.name, this.acceptExtension)) {
           this.$message.error(`只能上传${this.acceptExtension}文件`)
           return false
         }
       }
-      return true
+      return this.beforeUpload ? this.beforeUpload(file) : true
     },
     /**
      * 判断文件名是否在允许的文件扩展名内

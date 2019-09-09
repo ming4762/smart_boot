@@ -3,7 +3,8 @@ export default {
         action: String,
         type: { type: String, required: true },
         data: { type: Object, default: () => { return {}; } },
-        acceptExtension: String
+        acceptExtension: String,
+        beforeUpload: Function
     },
     data() {
         return {
@@ -25,14 +26,13 @@ export default {
     },
     methods: {
         handleBeforeUpload(file) {
-            this.$emit('before-upload', file);
             if (this.acceptExtension) {
                 if (!this.fileInAcceptExtension(file.name, this.acceptExtension)) {
                     this.$message.error(`只能上传${this.acceptExtension}文件`);
                     return false;
                 }
             }
-            return true;
+            return this.beforeUpload ? this.beforeUpload(file) : true;
         },
         fileInAcceptExtension(filename, acceptExtension) {
             const acceptList = acceptExtension.split(',');
