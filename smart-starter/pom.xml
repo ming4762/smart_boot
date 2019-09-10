@@ -24,6 +24,7 @@
         <module>kettle-spring-boot-starter</module>
         <module>log-spring-boot-starter</module>
         <module>message-spring-boot-starter</module>
+        <module>office-spring-boot-starter</module>
         <module>queue-spring-boot-starter</module>
         <module>smartquartz-spring-boot-starter</module>
     </modules>
