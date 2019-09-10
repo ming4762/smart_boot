@@ -1,5 +1,6 @@
 package com.smart.system
 
+import com.smart.common.import.EnableGlobalException
 import org.springframework.context.annotation.ComponentScan
 import org.springframework.context.annotation.Configuration
 
@@ -10,5 +11,6 @@ import org.springframework.context.annotation.Configuration
  */
 @Configuration
 @ComponentScan
+@EnableGlobalException
 class SmartSystemAutoConfiguration {
 }
