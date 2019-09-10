@@ -35,6 +35,12 @@
             <artifactId>crud-spring-boot-starter</artifactId>
             <version>${crud-spring-boot-starter.version}</version>
         </dependency>
+        <!--引入office启动器-->
+        <dependency>
+            <groupId>com.smart</groupId>
+            <artifactId>office-spring-boot-starter</artifactId>
+            <version>${office-spring-boot-starter.version}</version>
+        </dependency>
     </dependencies>
 
     <build>

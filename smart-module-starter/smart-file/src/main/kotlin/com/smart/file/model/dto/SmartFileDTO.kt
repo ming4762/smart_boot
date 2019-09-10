@@ -29,8 +29,8 @@ class SmartFileDTO {
         this.inputStream = multipartFile.inputStream
     }
 
-    constructor(cloudFile: SmartFileDO, inputStream: InputStream) {
-        this.smartFile = cloudFile
+    constructor(smartFile: SmartFileDO, inputStream: InputStream) {
+        this.smartFile = smartFile
         this.inputStream = inputStream
     }
 }
