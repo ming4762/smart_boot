@@ -13,6 +13,14 @@ CREATE TABLE `smart_file` (
   PRIMARY KEY (`file_id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='文件信息表';
 
+-- 文件关系表
+CREATE TABLE `smart_file_relation` (
+  `file_id` varchar(50) NOT NULL COMMENT '文件ID',
+  `relation_file_id` varchar(50) NOT NULL COMMENT '关联文件ID',
+  `relation_type` varchar(20) NOT NULL COMMENT '关联关系',
+  PRIMARY KEY (`file_id`,`relation_file_id`,`relation_type`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 -- app信息
 CREATE TABLE `smart_app` (
   `app_id` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT 'APPID',
