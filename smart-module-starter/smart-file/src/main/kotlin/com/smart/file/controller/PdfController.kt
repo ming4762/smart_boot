@@ -44,11 +44,7 @@ class PdfController {
      */
     @PostMapping("/convert/{id}")
     fun convert(@PathVariable("id")id: String): Result<Boolean?> {
-        return try {
-            this.fileService.convertPDF(id, true)
-            Result.success(true)
-        } catch (e: Exception) {
-            Result.failure(e.message)
-        }
+        this.fileService.convertPDF(id, true)
+        return Result.success(true)
     }
 }

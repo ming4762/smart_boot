@@ -182,6 +182,7 @@ class FileServiceImpl : BaseServiceImpl<FileMapper, SmartFileDO>(),  FileService
                 // 判断MD5相同的文件是否存在pdf转换
                 val md5Files = this.list(
                         KtQueryWrapper(SmartFileDO()).eq(SmartFileDO :: md5, sourceFile.md5)
+                                .ne(SmartFileDO :: fileId, sourceFile.fileId)
                 )
                 // 查询MD5相同文件的PDF转换
                 if (md5Files.isNotEmpty()) {
