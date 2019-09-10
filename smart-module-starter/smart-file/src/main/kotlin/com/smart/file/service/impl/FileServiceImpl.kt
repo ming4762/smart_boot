@@ -17,6 +17,7 @@ import com.smart.starter.crud.service.impl.BaseServiceImpl
 import com.smart.starter.file.service.ActualFileService
 import com.smart.starter.office.converter.DefaultDocumentFormatRegistry
 import com.smart.starter.office.converter.DocumentConverter
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -36,6 +37,10 @@ import java.util.*
  */
 @Service
 class FileServiceImpl : BaseServiceImpl<FileMapper, SmartFileDO>(),  FileService {
+
+    companion object {
+        private val LOGGER = LoggerFactory.getLogger(FileServiceImpl :: class.java)
+    }
 
     /**
      * 文件执行器
@@ -147,6 +152,13 @@ class FileServiceImpl : BaseServiceImpl<FileMapper, SmartFileDO>(),  FileService
      */
     @Transactional
     override fun convertPDF(id: String, cache: Boolean): InputStream {
+        val sourceFile = this.getById(id) ?: throw java.lang.Exception("转换PDF失败，未找到原文件")
+        // 判断文件本身是否是PDF
+        val fileExtension = FileUtils.getExtension(sourceFile.fileName!!)
+        if (fileExtension == "PDF" || fileExtension == "pdf") {
+            LOGGER.debug("文件是pdf格式无需转换")
+            return this.downLoad(sourceFile).inputStream
+        }
         var pdfId: String? = null
         // 获取是否已经存在pdf
         if (cache) {
@@ -159,7 +171,6 @@ class FileServiceImpl : BaseServiceImpl<FileMapper, SmartFileDO>(),  FileService
                 pdfId = pdfList[0].relationFileId
             } else {
                 // 判断MD5相同的文件是否存在pdf转换
-                val sourceFile = this.getById(id) ?: throw java.lang.Exception("转换PDF失败，未找到原文件")
                 val md5Files = this.list(
                         KtQueryWrapper(SmartFileDO()).eq(SmartFileDO :: md5, sourceFile.md5)
                 )
@@ -182,7 +193,7 @@ class FileServiceImpl : BaseServiceImpl<FileMapper, SmartFileDO>(),  FileService
             }
         }
         // 转换PDF文件
-        val file = this.downLoad(id) ?: throw java.lang.Exception("未找到需要转换的文件")
+        val file = this.downLoad(sourceFile)
         // 获取文件扩展名
         var extension = FileUtils.getExtension(file.smartFile.fileName!!)
         if (extension == "docx") extension = "doc"
