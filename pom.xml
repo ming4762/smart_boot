@@ -51,6 +51,7 @@
         <commons-io.commons-io.version>2.6</commons-io.commons-io.version>
         <file-spring-boot-starter.version>0.0.1-SNAPSHOT</file-spring-boot-starter.version>
         <smart-file.version>0.0.1-SNAPSHOT</smart-file.version>
+        <office-spring-boot-starter.version>0.0.1-SNAPSHOT</office-spring-boot-starter.version>
         <!--图片工具类版本-->
         <thumbnailator.version>0.4.8</thumbnailator.version>
     </properties>

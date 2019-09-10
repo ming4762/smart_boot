@@ -15,4 +15,13 @@ object FileUtils {
         val stringList = fileName.split(".")
         return stringList[stringList.size - 1]
     }
+
+    /**
+     * 校验扩展名
+     * @author zhongming
+     */
+    @JvmStatic
+    fun validateExtension(fileName: String, allowExtensions: List<String>): Boolean {
+        return allowExtensions.contains(getExtension(fileName))
+    }
 }
