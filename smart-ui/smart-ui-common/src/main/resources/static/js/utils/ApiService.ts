@@ -11,10 +11,12 @@ import RsaUtils from './RsaUtils.js'
 // @ts-ignore
 import Md5Utils from './Md5Utils.js'
 
+const API_URL = localStorage.getItem('API_URL')
+
 // 设置默认的请求头
 axios.defaults.headers.post['Content-Type'] = 'application/json;charset=UTF-8'
 const service = axios.create({
-    baseURL: localStorage.getItem('API_URL'),
+    baseURL: API_URL,
     timeout: 10000
 })
 // 存储token的key
@@ -38,6 +40,13 @@ export default class ApiService  {
    */
   public static isProduction (): boolean {
     return development === false
+  }
+
+  /**
+   * 获取后台地址
+   */
+  public static getApiUrl (): string {
+    return API_URL
   }
 
   /**
@@ -92,8 +101,9 @@ export default class ApiService  {
     if (token) {
       postHeaders[TOKEN_KEY] = token
     }
-    return service.post(url, formData, postHeaders)
-        .then(response => {
+    return service.post(url, formData, {
+      headers: postHeaders
+    }).then(response => {
           if (response.status === 200) {
             if (response.data) {
               if(response.data.ok === true) {
@@ -115,7 +125,7 @@ export default class ApiService  {
    * @param headers
    * @param ideConfig 接口加密配置
    */
-  public static postAjax(url: string, parameter?: any, headers?: {[index: string]: any}, ideConfig?: IdeConfig): Promise<any> {
+  public static postAjax(url: string, parameter?: any, headers?: {[index: string]: any}, ideConfig?: IdeConfig, timeout?: number): Promise<any> {
     const rsaUtils = new RsaUtils()
     headers = headers || {}
     const token = getToken()
@@ -126,9 +136,13 @@ export default class ApiService  {
     if (this.isEncrypt(ideConfig)) {
       parameter = rsaUtils.rsaEncrypt(this.getServerPublicKey(), JSON.stringify(this.createEncryptParameter(parameter, ideConfig)))
     }
-    return service.post(url, parameter, {
+    const config = {
       headers: headers
-    }).then((result: any) => {
+    }
+    if (timeout) {
+      config['timeout'] = timeout
+    }
+    return service.post(url, parameter, config).then((result: any) => {
       let resultSuccess = true
       let data
       if (result && result.status === 200) {

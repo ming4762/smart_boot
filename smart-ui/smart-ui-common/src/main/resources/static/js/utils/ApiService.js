@@ -2,9 +2,10 @@ import AuthUtils from './AuthUtils.js';
 import StoreUtil from './StoreUtil.js';
 import RsaUtils from './RsaUtils.js';
 import Md5Utils from './Md5Utils.js';
+const API_URL = localStorage.getItem('API_URL');
 axios.defaults.headers.post['Content-Type'] = 'application/json;charset=UTF-8';
 const service = axios.create({
-    baseURL: localStorage.getItem('API_URL'),
+    baseURL: API_URL,
     timeout: 10000
 });
 const STORE_TOKEN_KEY = 'SMART_AUTHORIATION';
@@ -15,6 +16,9 @@ const TOKEN_KEY = 'Authorization';
 export default class ApiService {
     static isProduction() {
         return development === false;
+    }
+    static getApiUrl() {
+        return API_URL;
     }
     static validateLogin() {
         if (this.isProduction() === false)
@@ -54,8 +58,9 @@ export default class ApiService {
         if (token) {
             postHeaders[TOKEN_KEY] = token;
         }
-        return service.post(url, formData, postHeaders)
-            .then(response => {
+        return service.post(url, formData, {
+            headers: postHeaders
+        }).then(response => {
             if (response.status === 200) {
                 if (response.data) {
                     if (response.data.ok === true) {
@@ -71,7 +76,7 @@ export default class ApiService {
             }
         });
     }
-    static postAjax(url, parameter, headers, ideConfig) {
+    static postAjax(url, parameter, headers, ideConfig, timeout) {
         const rsaUtils = new RsaUtils();
         headers = headers || {};
         const token = getToken();
@@ -82,9 +87,13 @@ export default class ApiService {
         if (this.isEncrypt(ideConfig)) {
             parameter = rsaUtils.rsaEncrypt(this.getServerPublicKey(), JSON.stringify(this.createEncryptParameter(parameter, ideConfig)));
         }
-        return service.post(url, parameter, {
+        const config = {
             headers: headers
-        }).then((result) => {
+        };
+        if (timeout) {
+            config['timeout'] = timeout;
+        }
+        return service.post(url, parameter, config).then((result) => {
             let resultSuccess = true;
             let data;
             if (result && result.status === 200) {
