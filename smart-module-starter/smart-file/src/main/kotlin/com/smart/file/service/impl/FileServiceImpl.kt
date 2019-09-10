@@ -63,6 +63,15 @@ class FileServiceImpl : BaseServiceImpl<FileMapper, SmartFileDO>(),  FileService
     /**
      * 保存文件
      */
+    override fun saveFile(multipartFile: MultipartFile, type: String): SmartFileDO {
+        val smartFileDO = SmartFileDO()
+        smartFileDO.type = type
+        return this.saveFile(multipartFile, smartFileDO)
+    }
+
+    /**
+     * 保存文件
+     */
     @Transactional
     override fun saveFile(smartFileDTO: SmartFileDTO): SmartFileDO {
         // 根据MD5 判断文件是否已经存在

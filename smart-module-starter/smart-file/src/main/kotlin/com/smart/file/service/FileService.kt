@@ -12,6 +12,8 @@ interface FileService : BaseService<SmartFileDO> {
 
     fun saveFile(smartFileDTO: SmartFileDTO): SmartFileDO
 
+    fun saveFile(multipartFile: MultipartFile, type: String): SmartFileDO
+
     fun deleteFile (id: String): SmartFileDO?
 
     fun batchDeleteFile (fileIdList: List<String>): Boolean
