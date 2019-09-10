@@ -1,6 +1,6 @@
 import AuthUtils from './AuthUtils.js'
 
-declare var axios
+declare var axios, development: Boolean
 // 项目跟路径
 declare var contextPath: string
 // @ts-ignore
@@ -34,9 +34,18 @@ const TOKEN_KEY: string = 'Authorization'
 export default class ApiService  {
 
   /**
+   * 是否是生产环境
+   */
+  public static isProduction (): boolean {
+    return development === false
+  }
+
+  /**
    * 验证是否登录
    */
   public static validateLogin () {
+    // 是否是开发模式
+    if (this.isProduction() === false) return true
     const token = getToken()
     if (!token || token === '') {
       this.toLoginPage()

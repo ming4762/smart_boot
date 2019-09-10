@@ -19,7 +19,7 @@ class CommonAutoConfiguration : WebMvcConfigurer {
     @Value("\${spring.profiles.active:}")
     private lateinit var profiles: String
 
-    @Value("\${smart.env.development:}")
+    @Value("\${smart.auth.development:}")
     private lateinit var development: String
 
     /**

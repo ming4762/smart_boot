@@ -13,7 +13,12 @@ const RSA_SERVER_PUBLIC_KEYU = "RSA_SERVER_PUBLIC_KEYU";
 const getToken = AuthUtils.getToken;
 const TOKEN_KEY = 'Authorization';
 export default class ApiService {
+    static isProduction() {
+        return development === false;
+    }
     static validateLogin() {
+        if (this.isProduction() === false)
+            return true;
         const token = getToken();
         if (!token || token === '') {
             this.toLoginPage();
