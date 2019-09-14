@@ -7,7 +7,7 @@ package com.smart.common.message
  */
 class Result<T: Any?> {
 
-    var code: Int? = null
+    var code: Int = 200
 
     var message: String? = null
 
@@ -49,7 +49,7 @@ class Result<T: Any?> {
             return result
         }
 
-        @JvmStatic fun <T: Any> failure(errorCode: Int?, message: String?, data: T?): Result<T?> {
+        @JvmStatic fun <T: Any> failure(errorCode: Int, message: String?, data: T?): Result<T?> {
             val result = newInstance<T>()
             result.code = errorCode
             result.message = message
@@ -62,7 +62,7 @@ class Result<T: Any?> {
             return result
         }
 
-        @JvmStatic fun <T: Any> failure(errorCode: Int?, message: String?): Result<T?> {
+        @JvmStatic fun <T: Any> failure(errorCode: Int, message: String?): Result<T?> {
             val result = newInstance<T>()
             result.code = errorCode
             result.message = message
