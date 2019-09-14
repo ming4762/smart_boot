@@ -5,6 +5,9 @@ import com.github.pagehelper.Page
 import com.github.pagehelper.PageHelper
 import com.smart.common.message.Result
 import com.smart.starter.crud.model.BaseModel
+import com.smart.starter.crud.model.PageData
+import com.smart.starter.crud.query.PageQueryParameter
+import com.smart.starter.crud.query.SortQueryParameter
 import com.smart.starter.crud.service.BaseService
 import com.smart.starter.crud.utils.MybatisUtil
 import org.springframework.beans.factory.annotation.Autowired
@@ -24,18 +27,6 @@ import java.util.*
  */
 open class BaseControllerQuery<K : BaseService<T>, T : BaseModel> {
 
-    private val PAGE_SIZE = "limit"
-    private val OFFSET = "offset"
-    private val ROWS = "rows"
-    private val TOTAL = "total"
-    private val SORT_NAME = "sortName"
-    private val SORT_ORDER = "sortOrder"
-
-    /**
-     * 关键字字段名
-     */
-    private val keywordField = "keyword"
-
     @Autowired
     protected lateinit var service: K
 
@@ -46,21 +37,17 @@ open class BaseControllerQuery<K : BaseService<T>, T : BaseModel> {
      */
     @RequestMapping("list")
     @ResponseBody
-    protected open fun list(@RequestBody parameters: MutableMap<String, Any?>): Result<Any?> {
+    protected open fun list(@RequestBody parameter: PageQueryParameter<T>): Result<Any?> {
         try {
-            val page = this.doPage(parameters)
-            val wrapper = MybatisUtil.createQueryWrapperFromParameters<T>(parameters, this.getModelType())
+            val page = this.doPage(parameter)
+            val queryWrapper = MybatisUtil.createQueryWrapperFromParameters(parameter, this.getModelType())
             // 添加keyword查询
-            val keyword = parameters[keywordField] as String?
-            if (!StringUtils.isEmpty(keyword)) {
-                this.addKeyword(wrapper, keyword!!)
+            if (!StringUtils.isEmpty(parameter.keyword)) {
+                this.addKeyword(queryWrapper, parameter.keyword!!)
             }
-            val data = this.service.list(wrapper, parameters, page != null)
+            val data = this.service.list(queryWrapper, parameter, page != null)
             if (page != null) {
-                val returnData = HashMap<String, Any>(2)
-                returnData[ROWS] = data
-                returnData[TOTAL] = page.total
-                return Result.success(returnData)
+                return Result.success(PageData(data, page.total))
             }
             return Result.success(data)
         } catch (e: Exception) {
@@ -75,7 +62,7 @@ open class BaseControllerQuery<K : BaseService<T>, T : BaseModel> {
      */
     @RequestMapping("/get")
     @ResponseBody
-    protected open operator fun get(@RequestBody t: T): Result<T?> {
+    protected open fun get(@RequestBody t: T): Result<T?> {
         return try {
             Result.success(this.service.get(t))
         } catch (e: Exception) {
@@ -87,38 +74,37 @@ open class BaseControllerQuery<K : BaseService<T>, T : BaseModel> {
 
     /**
      * 执行分页
-     * @param parameterSet 前台参数
+     * @param parameter 前台参数
      * @return 分页结果
      */
-    protected open fun doPage(parameterSet: Map<String, Any?>): Page<T>? {
+    protected open fun doPage(parameter:  PageQueryParameter<T>): Page<T>? {
         var page: Page<T>? = null
-        if (parameterSet[PAGE_SIZE] != null) {
-            val limit = parameterSet[PAGE_SIZE] as Int
-            val offset = if (parameterSet[OFFSET] == null) 0 else parameterSet[OFFSET] as Int
-            val order = this.analysisOrder(parameterSet)
-            if (!StringUtils.isEmpty(order)) {
-                PageHelper.orderBy(order)
+        if (parameter.limit != null) {
+            // 解析排序信息
+            val orderMessage = this.analysisOrder(parameter)
+            if (!StringUtils.isEmpty(orderMessage)) {
+                PageHelper.orderBy(orderMessage)
             }
-            page = PageHelper.offsetPage(offset, limit)
+            page = PageHelper.offsetPage(parameter.offset, parameter.limit!!)
         }
         return page
     }
 
+
     /**
      * 解析排序字段
-     * @param parameters 前台参数
+     * @param parameter 前台参数
      * @return 排序字段
      */
-    protected open fun analysisOrder(parameters: Map<String, Any?>): String? {
-        val sortName = parameters[SORT_NAME] as String?
-        if (!StringUtils.isEmpty(sortName)) {
-            val sortOrder = parameters[SORT_ORDER] as String?
-            // 解析数据库字段
-            val orderMessage = StringBuilder()
-
-            val clazz = MybatisUtil.getModelClass(this.getModelType())
-            val sortList = MybatisUtil.analysisOrder(sortName, sortOrder, clazz)
-            if (clazz != null && sortList != null) {
+    protected open fun analysisOrder(parameter: SortQueryParameter<T>): String? {
+        if (!StringUtils.isEmpty(parameter.sortName)) {
+            // 获取实体类
+            val clazz = MybatisUtil.getModelClassByType(getModelType())
+            if (clazz != null) {
+                // 解析数据库字段
+                val orderMessage = StringBuilder()
+                val sortList = MybatisUtil.analysisOrder(parameter.sortName!!, parameter.sortOrder, clazz)
+                if (sortList.isEmpty()) return null
                 sortList.forEach { sort ->
                     orderMessage.append(sort.dbName)
                             .append(" ")
@@ -148,11 +134,16 @@ open class BaseControllerQuery<K : BaseService<T>, T : BaseModel> {
      */
     private fun addKeyword(wrapper: QueryWrapper<T>, keyword: String) {
         // 获取实体类的实际类型
-        val tClass = MybatisUtil.getModelClass(this.getModelType())
+        val tClass = MybatisUtil.getModelClassByType(this.getModelType())
         if (tClass != null) {
-            val fieldList = Arrays.asList<Field>(*tClass.fields)
-            // 遍历添加liken
-            fieldList.forEach { field -> wrapper.like(field.name, keyword) }
+            val fieldList = Arrays.asList<Field>(*tClass.declaredFields)
+            if (fieldList.isNotEmpty()) {
+                wrapper.and {
+                    // 遍历添加liken
+                    fieldList.forEach { field -> it.or().like(MybatisUtil.getDbField(field), keyword) }
+                }
+            }
+
         }
     }
 

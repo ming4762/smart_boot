@@ -5,9 +5,8 @@ package com.smart.starter.crud.model
  * @author ming
  * 2019/6/12 上午10:42
  */
-class Sort(var name: String, order: String?) {
+class Sort(val name: String, val order: String = "asc") {
 
-    var order: String = order ?: "asc"
-
-    var dbName: String? = null
+    // 数据库名称
+    lateinit var dbName: String
 }
