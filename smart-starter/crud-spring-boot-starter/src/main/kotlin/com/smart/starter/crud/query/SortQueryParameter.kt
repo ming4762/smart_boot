@@ -18,5 +18,4 @@ open class SortQueryParameter<T: BaseModel> : QueryParameter<T>() {
         return "${super.toString()}, sortName=$sortName, sortOrder=$sortOrder"
     }
 
-
 }

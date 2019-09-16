@@ -14,6 +14,9 @@ open class PageQueryParameter<T: BaseModel> : SortQueryParameter<T>() {
 
     var offset: Int = 0
 
+    // 关键字查询
+    var keyword: String? = null
+
     override fun toString(): String {
         return "${super.toString()}, limit=$limit, offset=$offset)"
     }
