@@ -27,12 +27,12 @@ object RSAUtils {
     /**
      * RSA最大加密明文大小
      */
-    private val MAX_ENCRYPT_BLOCK = 117
+    private const val MAX_ENCRYPT_BLOCK = 117
 
     /**
      * RSA最大解密密文大小
      */
-    private val MAX_DECRYPT_BLOCK = 128
+    private const val MAX_DECRYPT_BLOCK = 128
 
     /**
      * RSA 位数

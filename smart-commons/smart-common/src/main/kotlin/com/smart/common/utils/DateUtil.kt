@@ -48,6 +48,7 @@ object DateUtil {
      */
     @JvmStatic
     fun convertDate(dateStr: String?): Date? {
+        var isUTC = false
         if (StringUtils.isEmpty(dateStr)) return null
         dateStr as String
         if (dateStr.contains("CST")) {
@@ -81,10 +82,14 @@ object DateUtil {
         if (Pattern.compile("[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}.[0-9]{0,3}Z").matcher(dateDealStr).matches()) {
             dateDealStr = dateDealStr.replace("Z", " UTC")
             dateFormatStr = "yyyy-MM-dd'T'HH:mm:ss.SSS Z"
+            isUTC = true
         }
-
         if (!StringUtils.isEmpty(dateFormatStr)) {
-            return SimpleDateFormat(dateFormatStr).parse(dateDealStr)
+            val format = SimpleDateFormat(dateFormatStr)
+            if (isUTC) {
+                format.timeZone = TimeZone.getTimeZone("UTC")
+            }
+            return format.parse(dateDealStr)
         }
         return null
     }
