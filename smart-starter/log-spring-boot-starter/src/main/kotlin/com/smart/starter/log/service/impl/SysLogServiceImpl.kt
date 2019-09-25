@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper
 import com.smart.auth.common.service.AuthUserService
 import com.smart.common.utils.BeanMapUtils
 import com.smart.starter.crud.constants.CRUDConstants
+import com.smart.starter.crud.query.PageQueryParameter
 import com.smart.starter.crud.service.impl.BaseServiceImpl
 import com.smart.starter.log.mapper.SysLogMapper
 import com.smart.starter.log.model.SysLogDO
@@ -23,9 +24,9 @@ class SysLogServiceImpl : BaseServiceImpl<SysLogMapper, SysLogDO>(), SysLogServi
     @Autowired
     private lateinit var authUserService: AuthUserService
 
-    override fun list(queryWrapper: QueryWrapper<SysLogDO>, parameters: Map<String, Any?>, paging: Boolean): List<SysLogDO> {
-        val list = super<BaseServiceImpl>.list(queryWrapper, parameters, paging)
-        val withAll = parameters[CRUDConstants.WITH_ALL.name]
+    override fun list(queryWrapper: QueryWrapper<SysLogDO>, parameter: PageQueryParameter, paging: Boolean): List<SysLogDO> {
+        val list = super<BaseServiceImpl>.list(queryWrapper, parameter, paging)
+        val withAll = parameter[CRUDConstants.WITH_ALL.name]
         if (withAll is Boolean && withAll) {
             return this.listWithAll(list)
         }
