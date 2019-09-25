@@ -2,6 +2,8 @@ declare var busVue, indexPage
 // @ts-ignore
 import ApiService from '../../utils/ApiService.js'
 // @ts-ignore
+import ResizeHandler from '../../utils/ResizeHandler.js'
+// @ts-ignore
 import MessageMixins from '../../mixins/MessageMixins.js'
 
 import Navbar from './navbar/Navbar.js'
@@ -20,6 +22,11 @@ export default {
   mixins: [
     MessageMixins
   ],
+  created () {
+    // 绑定宽度监控
+    this.bindWidthChange()
+    this.getBus.handleWidthChange(document.body.offsetWidth)
+  },
   mounted () {
     this.loadUserMenu()
     this.addSetIndexPage()
@@ -44,6 +51,12 @@ export default {
     }
   },
   methods: {
+    bindWidthChange () {
+      ResizeHandler.bind(() => {
+        this.getBus.handleWidthChange(document.body.offsetWidth)
+      })
+    },
+
     addSetIndexPage () {
       if (this.isSetIndexPage) {
         this.getBus.addMenu({

@@ -6,6 +6,7 @@ const defaultTheme = {
     menuTheme: 'dark',
     themeColor: '#46a0fc'
 };
+const openWidth = 1000;
 const initBus = () => {
     return new Vue({
         data: {
@@ -21,6 +22,12 @@ const initBus = () => {
             activeMenu: StoreUtil.getStore(STORE_KEYS.ACTIVE_MENU, debug) || {}
         },
         methods: {
+            handleWidthChange(width) {
+                this.hideOpenSidebar(width);
+            },
+            hideOpenSidebar(width) {
+                this.sidebar.opened = width > openWidth;
+            },
             setUserMenulist(userMenuList) {
                 this.userMenuList = userMenuList;
                 StoreUtil.setStore(STORE_KEYS.USER_MENU_LIST, userMenuList, StoreUtil.SESSION_TYPE);

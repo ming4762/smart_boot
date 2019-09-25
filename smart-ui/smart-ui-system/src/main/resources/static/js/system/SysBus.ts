@@ -12,6 +12,8 @@ const defaultTheme: any = {
   menuTheme: 'dark',
   themeColor: '#46a0fc'
 }
+// 侧边栏打开的宽度
+const openWidth = 1000
 
 const initBus = () => {
   // @ts-ignore
@@ -36,6 +38,13 @@ const initBus = () => {
       activeMenu: StoreUtil.getStore(STORE_KEYS.ACTIVE_MENU, debug) || {}
     },
     methods: {
+      // 页面宽度变化
+      handleWidthChange (width) {
+        this.hideOpenSidebar(width)
+      },
+      hideOpenSidebar (width) {
+        this.sidebar.opened = width > openWidth
+      },
       /**
        * 设置用户菜单列表
        * @param userMenuList
