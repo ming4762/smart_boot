@@ -75,9 +75,9 @@ const page = {
           prop: 'functionName',
           table: {
             fixed: true,
-            width: 180,
             align: 'left',
-            headerAlign: 'center'
+            headerAlign: 'center',
+            width: 160
           },
           form: {
             span: 24,
