@@ -22,6 +22,7 @@ export default {
   ],
   mounted () {
     this.loadUserMenu()
+    this.addSetIndexPage()
   },
   data () {
     return {
@@ -43,6 +44,14 @@ export default {
     }
   },
   methods: {
+    addSetIndexPage () {
+      if (this.isSetIndexPage) {
+        this.getBus.addMenu({
+          name: '首页',
+          path: indexPage
+        })
+      }
+    },
     // 加载用户菜单信息
     loadUserMenu () {
       if (!this.getBus.userMenuList || this.getBus.userMenuList.length === 0) {

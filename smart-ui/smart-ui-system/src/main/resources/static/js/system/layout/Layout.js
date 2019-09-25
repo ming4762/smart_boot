@@ -16,6 +16,7 @@ export default {
     ],
     mounted() {
         this.loadUserMenu();
+        this.addSetIndexPage();
     },
     data() {
         return {
@@ -36,6 +37,14 @@ export default {
         }
     },
     methods: {
+        addSetIndexPage() {
+            if (this.isSetIndexPage) {
+                this.getBus.addMenu({
+                    name: '首页',
+                    path: indexPage
+                });
+            }
+        },
         loadUserMenu() {
             if (!this.getBus.userMenuList || this.getBus.userMenuList.length === 0) {
                 ApiService.postAjax('sys/menu/queryUserMenu', {})
