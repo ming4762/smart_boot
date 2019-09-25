@@ -1,4 +1,4 @@
-declare var busVue
+declare var busVue, indexPage
 // @ts-ignore
 import ApiService from '../../utils/ApiService.js'
 // @ts-ignore
@@ -22,6 +22,12 @@ export default {
   ],
   mounted () {
     this.loadUserMenu()
+  },
+  data () {
+    return {
+      // 是否设置了主页
+      isSetIndexPage: indexPage !== ""
+    }
   },
   computed: {
     getBus () {
@@ -47,11 +53,40 @@ export default {
                 const menuUrlMap = {}
                 this.dealMenuData(data, resultList, null, menuUrlMap)
               }
+              // 如果为设置主页，则菜单的第一个页面作为菜单
+              if (!this.isSetIndexPage) {
+                this.setIndexPageFromMenuList(resultList)
+              }
+              console.log(resultList)
               // 设置菜单
               this.getBus.setUserMenulist(resultList)
             }).catch(error => {
-              this.errorMessage('记载菜单数据失败，请刷新重试', error)
+              this.errorMessage('加载菜单数据失败，请刷新重试', error)
             })
+      }
+    },
+    /**
+     * 从菜单列表中设置第一个菜单
+     * @param menuList
+     */
+    setIndexPageFromMenuList (menuList) {
+      new Promise(() => {
+        const firstMenu = this.getFirstMenu(menuList)
+        if (firstMenu) {
+          this.getBus.addMenu(firstMenu)
+        }
+      })
+    },
+    /**
+     * 使用递归获取第一个菜单
+     * @param menuList
+     */
+    getFirstMenu (menuList) {
+      const menu = menuList[0]
+      if (!menu.children || menu.children.length === 0) {
+        return menu
+      } else {
+        return this.getFirstMenu(menu.children)
       }
     },
     /**

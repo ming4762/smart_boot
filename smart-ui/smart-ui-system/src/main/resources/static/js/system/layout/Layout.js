@@ -17,6 +17,11 @@ export default {
     mounted() {
         this.loadUserMenu();
     },
+    data() {
+        return {
+            isSetIndexPage: indexPage !== ""
+        };
+    },
     computed: {
         getBus() {
             return busVue;
@@ -40,10 +45,31 @@ export default {
                         const menuUrlMap = {};
                         this.dealMenuData(data, resultList, null, menuUrlMap);
                     }
+                    if (!this.isSetIndexPage) {
+                        this.setIndexPageFromMenuList(resultList);
+                    }
+                    console.log(resultList);
                     this.getBus.setUserMenulist(resultList);
                 }).catch(error => {
-                    this.errorMessage('记载菜单数据失败，请刷新重试', error);
+                    this.errorMessage('加载菜单数据失败，请刷新重试', error);
                 });
+            }
+        },
+        setIndexPageFromMenuList(menuList) {
+            new Promise(() => {
+                const firstMenu = this.getFirstMenu(menuList);
+                if (firstMenu) {
+                    this.getBus.addMenu(firstMenu);
+                }
+            });
+        },
+        getFirstMenu(menuList) {
+            const menu = menuList[0];
+            if (!menu.children || menu.children.length === 0) {
+                return menu;
+            }
+            else {
+                return this.getFirstMenu(menu.children);
             }
         },
         dealMenuData(menuList, resultList, topId, menuUrlMap) {

@@ -30,13 +30,14 @@ export default {
     <scroll-pane class="tags-view-wrapper" ref="scrollPane">
       <a
         @click="handleActiveMenu(menu)"
-        v-for="menu in computedOpenMenuList"
+        v-for="(menu, index) in computedOpenMenuList"
         :class="isActive(menu)?'active':''"
         class="tags-view-item"
         @contextmenu.prevent.native="handleOpenOperate(menu, $event)"
         :key="menu.path">
         {{menu.name}}
-        <span class="el-icon-close" @click.prevent.stop="handleCloseSelectedMenu(menu)" />
+        <!--第一菜单不显示关闭按钮-->
+        <span v-if="index !== 0" class="el-icon-close" @click.prevent.stop="handleCloseSelectedMenu(menu)" />
       </a>
     </scroll-pane>
   </div>

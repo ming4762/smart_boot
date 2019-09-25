@@ -21,6 +21,8 @@ class SystemController {
     // 是否启用接口加密
     @Value("\${smart.auth.useIde:false}")
     private var useIde: Boolean = false
+    @Value("\${smart.ui.indexPage:}")
+    private lateinit var indexPage: String
 
     /**
      * 跳转到登录页
@@ -36,7 +38,8 @@ class SystemController {
      * 跳转到主页
      */
     @RequestMapping("/home")
-    fun home(@RequestParam parameter: Map<String, Any?>): ModelAndView {
+    fun home(@RequestParam parameter: MutableMap<String, Any?>): ModelAndView {
+        parameter["indexPage"] =this.indexPage
         return ModelAndView("system/home/home", parameter)
     }
 

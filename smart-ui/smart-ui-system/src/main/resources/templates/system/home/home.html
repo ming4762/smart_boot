@@ -10,7 +10,10 @@
     <link rel="stylesheet" th:href="@{/css/layout/layout.css}"/>
     <link rel="stylesheet" th:href="@{/font-awesome/4.7.0/css/font-awesome.css}"/>
     <div th:replace="common/common-resources :: common-resources-contextPath"></div>
-
+    <script th:inline="javascript">
+      // 主页地址
+      var indexPage = [[${indexPage}]]
+    </script>
     <script>
         var busVue
     </script>
