@@ -8,7 +8,7 @@ import com.smart.starter.crud.model.BaseModel
  * @author ming
  * 2019/9/13 下午6:06
  */
-open class SortQueryParameter<T: BaseModel> : QueryParameter<T>() {
+open class SortQueryParameter : QueryParameter() {
     // 排序字段
     var sortName: String? = null
     // 排序方向

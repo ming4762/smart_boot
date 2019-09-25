@@ -1,14 +1,12 @@
 package com.smart.starter.crud.query
 
-import com.smart.starter.crud.model.BaseModel
-
 
 /**
  * 分页查询参数
  * @author ming
  * 2019/9/13 下午6:00
  */
-open class PageQueryParameter<T: BaseModel> : SortQueryParameter<T>() {
+open class PageQueryParameter : SortQueryParameter() {
 
     var limit: Int? = null
 

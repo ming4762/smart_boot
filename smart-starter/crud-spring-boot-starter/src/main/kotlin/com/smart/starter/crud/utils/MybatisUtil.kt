@@ -182,7 +182,7 @@ object MybatisUtil {
             val clazzGet = Class.forName(type.typeName)
             val isChild = BaseModel :: class.java.isAssignableFrom(clazzGet)
             if (isChild) {
-                clazz = clazzGet as Class<out BaseModel>
+                clazz = clazzGet as Class<BaseModel>
                 typeClassCache[type] = clazz
             }
         }
@@ -247,11 +247,11 @@ object MybatisUtil {
      * 从参数中创建查询条件
      */
     @JvmStatic
-    fun <T: BaseModel> createQueryWrapperFromParameters(parameters: QueryParameter<T>, type: Type): QueryWrapper<T> {
+    fun <T: BaseModel> createQueryWrapperFromParameters(parameters: QueryParameter, type: Type): QueryWrapper<T> {
         val queryWrapper = QueryWrapper<T>()
         val clazz = this.getModelClassByType(type)
         if (clazz != null) {
-            return MybatisUtil.createQueryWrapperFromParameters(parameters, clazz)
+            return MybatisUtil.createQueryWrapperFromParameters(parameters, clazz as Class<T>)
         }
         return queryWrapper
     }
@@ -260,7 +260,7 @@ object MybatisUtil {
      * 从参数中创建查询条件
      */
     @JvmStatic
-    fun <T: BaseModel> createQueryWrapperFromParameters(parameters: QueryParameter<T>, clazz: Class<out BaseModel>): QueryWrapper<T> {
+    fun <T: BaseModel> createQueryWrapperFromParameters(parameters: QueryParameter, clazz: Class<T>): QueryWrapper<T> {
         val queryWrapper = QueryWrapper<T>()
         MybatisUtil.createBaseQueryWrapperFromParameters(parameters, clazz, queryWrapper)
         return queryWrapper
@@ -271,7 +271,7 @@ object MybatisUtil {
      * 从参数创建查询条件，kotlin
      */
     @JvmStatic
-    fun <T: BaseModel> createKtQueryWrapperFromParameters(parameters: QueryParameter<T>, clazz: KClass<T>): KtQueryWrapper<T> {
+    fun <T: BaseModel> createKtQueryWrapperFromParameters(parameters: QueryParameter, clazz: KClass<T>): KtQueryWrapper<T> {
         val queryWrapper = KtQueryWrapper(clazz.java)
         MybatisUtil.createBaseQueryWrapperFromParameters(parameters, clazz, queryWrapper)
         return queryWrapper
@@ -282,7 +282,7 @@ object MybatisUtil {
      */
     @Suppress("IMPLICIT_CAST_TO_ANY", "UNCHECKED_CAST")
     @JvmStatic
-    private fun <T: BaseModel> createBaseQueryWrapperFromParameters(parameters: QueryParameter<T>, clazz: Any, wrapper: Wrapper<T>) {
+    private fun <T: BaseModel> createBaseQueryWrapperFromParameters(parameters: QueryParameter, clazz: Any, wrapper: Wrapper<T>) {
         // 判断是否是kotlin
         val isKotlin = when (wrapper) {
             is QueryWrapper -> false
@@ -298,9 +298,9 @@ object MybatisUtil {
                 if (symbol != null) {
                     // 获取第一个参数，实体类属性/数据库字段名
                     val parameter1 = if (isKotlin) {
-                        MybatisUtil.getKPropertyByName(clazz as KClass<BaseModel>, keySplit[0])
+                        MybatisUtil.getKPropertyByName(clazz as KClass<out BaseModel>, keySplit[0])
                     } else {
-                        MybatisUtil.getDbField(clazz as Class<BaseModel>, keySplit[0])
+                        MybatisUtil.getDbField(clazz as Class<out BaseModel>, keySplit[0])
                     }
                     if (parameter1 == null) {
                         logger.warn("参数无效，未找到实体类对应属性：$keySplit[0]")

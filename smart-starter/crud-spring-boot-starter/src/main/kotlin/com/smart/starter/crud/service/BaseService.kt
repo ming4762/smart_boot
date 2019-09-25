@@ -35,5 +35,5 @@ interface BaseService<T: BaseModel> : IService<T> {
     /**
      * 查询方法
      */
-    fun list(queryWrapper: QueryWrapper<T>, parameter: PageQueryParameter<T>, paging: Boolean = false): List<T>
+    fun list(queryWrapper: QueryWrapper<T>, parameter: PageQueryParameter, paging: Boolean = false): List<T>
 }

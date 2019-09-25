@@ -2,7 +2,6 @@ package com.smart.starter.crud.advice
 
 import com.smart.common.utils.DateUtil
 import com.smart.common.utils.JsonUtil
-import com.smart.starter.crud.model.BaseModel
 import com.smart.starter.crud.query.QueryParameter
 import org.springframework.core.MethodParameter
 import org.springframework.http.HttpInputMessage
@@ -28,8 +27,8 @@ class ParameterConvertRequestBodyAdvice : RequestBodyAdvice {
     }
 
     override fun afterBodyRead(body: Any, inputMessage: HttpInputMessage, parameter: MethodParameter, targetType: Type, converterType: Class<out HttpMessageConverter<*>>): Any {
-        if (body is QueryParameter<out BaseModel>) {
-            this.convertBody(body, parameter)
+        if (body is QueryParameter) {
+            this.convertBody(body)
         }
         return body
     }
@@ -48,12 +47,9 @@ class ParameterConvertRequestBodyAdvice : RequestBodyAdvice {
 
     /**
      * 转换数据
-     * TODO:过滤非@参数
      */
     @Suppress("UNCHECKED_CAST")
-    private fun convertBody(data: QueryParameter<out BaseModel>, parameter: MethodParameter) {
-        // 获取泛型类型
-//        val modelClass = (parameter.nestedGenericParameterType as ParameterizedType).actualTypeArguments[0] as Class<out BaseModel>
+    private fun convertBody(data: QueryParameter) {
         // 获取对象的所有树形
         val properties = data :: class.memberProperties
         properties.forEach { property ->
@@ -62,7 +58,7 @@ class ParameterConvertRequestBodyAdvice : RequestBodyAdvice {
             if (!excludeProperties.contains(name) && value != null) {
                 val propertyType = property.javaField!!.type
                 if (property is KMutableProperty1) {
-                    property as KMutableProperty1<QueryParameter<out BaseModel>, Any?>
+                    property as KMutableProperty1<QueryParameter, Any?>
                     when {
                         value is Map<*, *> -> property.set(data, JsonUtil.toJavaObject(value, propertyType))
                         propertyType == Date :: class.java -> // 处理时间类型
@@ -73,14 +69,5 @@ class ParameterConvertRequestBodyAdvice : RequestBodyAdvice {
                 }
             }
         }
-//        data.model = modelClass.newInstance()
-//        modelClass.declaredFields.forEach { field ->
-//            val name = field.name
-//            field.isAccessible = true
-//            if (data[name] != null) {
-//                field.set(data.model, data[name])
-//                data.remove(name)
-//            }
-//        }
     }
 }

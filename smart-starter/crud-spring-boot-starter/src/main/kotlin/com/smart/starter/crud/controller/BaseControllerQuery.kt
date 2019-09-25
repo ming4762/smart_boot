@@ -10,6 +10,7 @@ import com.smart.starter.crud.query.PageQueryParameter
 import com.smart.starter.crud.query.SortQueryParameter
 import com.smart.starter.crud.service.BaseService
 import com.smart.starter.crud.utils.MybatisUtil
+import com.smart.starter.crud.utils.PageActuator
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.util.StringUtils
 import org.springframework.web.bind.annotation.RequestBody
@@ -37,17 +38,19 @@ open class BaseControllerQuery<K : BaseService<T>, T : BaseModel> {
      */
     @RequestMapping("list")
     @ResponseBody
-    protected open fun list(@RequestBody parameter: PageQueryParameter<T>): Result<Any?> {
+    protected open fun list(@RequestBody parameter: PageQueryParameter): Result<Any?> {
         try {
+            PageActuator.clearListPage()
             val page = this.doPage(parameter)
-            val queryWrapper = MybatisUtil.createQueryWrapperFromParameters(parameter, this.getModelType())
+            if (page != null) PageActuator.setListPage(page)
+            val queryWrapper = MybatisUtil.createQueryWrapperFromParameters<T>(parameter, this.getModelType())
             // 添加keyword查询
             if (!StringUtils.isEmpty(parameter.keyword)) {
                 this.addKeyword(queryWrapper, parameter.keyword!!)
             }
             val data = this.service.list(queryWrapper, parameter, page != null)
-            if (page != null) {
-                return Result.success(PageData(data, page.total))
+            if (PageActuator.getListPage<T>() != null) {
+                return Result.success(PageData(data, PageActuator.getListPage<T>()!!.total))
             }
             return Result.success(data)
         } catch (e: Exception) {
@@ -77,7 +80,7 @@ open class BaseControllerQuery<K : BaseService<T>, T : BaseModel> {
      * @param parameter 前台参数
      * @return 分页结果
      */
-    protected open fun doPage(parameter:  PageQueryParameter<T>): Page<T>? {
+    protected open fun doPage(parameter:  PageQueryParameter): Page<T>? {
         var page: Page<T>? = null
         if (parameter.limit != null) {
             // 解析排序信息
@@ -96,7 +99,7 @@ open class BaseControllerQuery<K : BaseService<T>, T : BaseModel> {
      * @param parameter 前台参数
      * @return 排序字段
      */
-    protected open fun analysisOrder(parameter: SortQueryParameter<T>): String? {
+    protected open fun analysisOrder(parameter: SortQueryParameter): String? {
         if (!StringUtils.isEmpty(parameter.sortName)) {
             // 获取实体类
             val clazz = MybatisUtil.getModelClassByType(getModelType())
