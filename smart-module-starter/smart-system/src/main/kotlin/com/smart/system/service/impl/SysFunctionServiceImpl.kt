@@ -6,6 +6,8 @@ import com.smart.auth.common.utils.AuthUtils
 import com.smart.common.model.Tree
 import com.smart.common.utils.TreeUtils
 import com.smart.common.utils.UUIDGenerator
+import com.smart.starter.crud.query.PageQueryParameter
+import com.smart.starter.crud.query.QueryParameter
 import com.smart.starter.crud.service.impl.BaseServiceImpl
 import com.smart.starter.crud.utils.MybatisUtil
 import com.smart.system.mapper.SysFunctionMapper
@@ -42,8 +44,7 @@ class SysFunctionServiceImpl : BaseServiceImpl<SysFunctionMapper, SysFunctionDO>
      * 重写LIST方法添加排序
      * TODO:排序根据参数执行
      */
-    override fun list(queryWrapper: QueryWrapper<SysFunctionDO>, parameters: Map<String, Any?>, paging: Boolean): List<SysFunctionDO> {
-        queryWrapper as QueryWrapper<SysFunctionDO>
+    override fun list(queryWrapper: QueryWrapper<SysFunctionDO>, parameter: PageQueryParameter, paging: Boolean): List<SysFunctionDO> {
         queryWrapper.orderByAsc(MybatisUtil.getDbField(SysFunctionDO :: seq))
         return super<BaseServiceImpl>.list(queryWrapper)
     }
@@ -106,9 +107,9 @@ class SysFunctionServiceImpl : BaseServiceImpl<SysFunctionMapper, SysFunctionDO>
      * 删除功能同时删除默认配置
      */
     @Transactional(rollbackFor = [Exception :: class])
-    override fun batchDelete(tList: List<SysFunctionDO>): Int {
+    override fun batchDelete(modelList: List<SysFunctionDO>): Int {
         val functionList = mutableListOf<SysFunctionDO>()
-        tList.forEach {
+        modelList.forEach {
             this.getAllChildren(it, functionList)
         }
         // 获取删除的所有ID
@@ -218,7 +219,7 @@ class SysFunctionServiceImpl : BaseServiceImpl<SysFunctionMapper, SysFunctionDO>
     /**
      * 查询所有树形结构
      */
-    override fun queryAllFunctionTree(parameters: Map<String, Any?>): List<Tree<SysFunctionDO>> {
+    override fun queryAllFunctionTree(parameters: QueryParameter): List<Tree<SysFunctionDO>> {
         // 判断查询菜单功能还是非菜单功能
         var isMenu = parameters["isMenu"] as Boolean?
         if (isMenu == null) {
@@ -242,7 +243,7 @@ class SysFunctionServiceImpl : BaseServiceImpl<SysFunctionMapper, SysFunctionDO>
     /**
      * 查询功能和下级
      */
-    override fun queryWithChildren(parameters: Map<String, Any?>): List<Tree<SysFunctionDO>> {
+    override fun queryWithChildren(parameters: QueryParameter): List<Tree<SysFunctionDO>> {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 }

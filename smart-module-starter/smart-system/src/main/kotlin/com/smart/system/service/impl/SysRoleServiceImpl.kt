@@ -8,6 +8,7 @@ import com.smart.common.model.Tree
 import com.smart.common.utils.BeanMapUtils
 import com.smart.common.utils.TreeUtils
 import com.smart.starter.crud.constants.CRUDConstants
+import com.smart.starter.crud.query.PageQueryParameter
 import com.smart.starter.crud.service.impl.BaseServiceImpl
 import com.smart.system.mapper.SysRoleMapper
 import com.smart.system.mapper.SysUserRoleMapper
@@ -45,9 +46,9 @@ class SysRoleServiceImpl : BaseServiceImpl<SysRoleMapper, SysRoleDO>(), SysRoleS
     @Autowired
     private lateinit var roleMenuFunctionService: SysRoleMenuFunctionService
 
-    override fun list(queryWrapper: QueryWrapper<SysRoleDO>, parameters: Map<String, Any?>, paging: Boolean): List<SysRoleDO> {
-        val list = super<BaseServiceImpl>.list(queryWrapper, parameters, paging)
-        val withAll = parameters[CRUDConstants.WITH_ALL.name]
+    override fun list(queryWrapper: QueryWrapper<SysRoleDO>, parameter: PageQueryParameter, paging: Boolean): List<SysRoleDO> {
+        val list = super<BaseServiceImpl>.list(queryWrapper, parameter, paging)
+        val withAll = parameter[CRUDConstants.WITH_ALL.name]
         if (withAll is Boolean && withAll == true) {
             return this.listWithAll(list)
         }
@@ -100,14 +101,14 @@ class SysRoleServiceImpl : BaseServiceImpl<SysRoleMapper, SysRoleDO>(), SysRoleS
      * 重写删除方法
      */
     @Transactional
-    override fun delete(t: SysRoleDO): Int {
+    override fun delete(model: SysRoleDO): Int {
         // 删除角色人员关系
         this.userRoleService.remove(
-                KtQueryWrapper(SysUserRoleDO::class.java).eq(SysUserRoleDO :: roleId, t.roleId)
+                KtQueryWrapper(SysUserRoleDO::class.java).eq(SysUserRoleDO :: roleId, model.roleId)
         )
         // TODO:删除角色功能关系
         // 删除角色
-        return this.baseMapper.deleteById(t.roleId)
+        return this.baseMapper.deleteById(model.roleId)
     }
 
     /**

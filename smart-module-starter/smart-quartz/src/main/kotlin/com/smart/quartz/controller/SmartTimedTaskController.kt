@@ -6,6 +6,7 @@ import com.smart.quartz.model.SmartTimedTaskDO
 import com.smart.quartz.preset.PresetClass
 import com.smart.quartz.service.SmartTimedTaskService
 import com.smart.starter.crud.controller.BaseController
+import com.smart.starter.crud.query.PageQueryParameter
 import org.apache.shiro.authz.annotation.Logical
 import org.apache.shiro.authz.annotation.RequiresPermissions
 import org.springframework.web.bind.annotation.RequestBody
@@ -23,8 +24,8 @@ class SmartTimedTaskController : BaseController<SmartTimedTaskService, SmartTime
 
     @RequiresPermissions("quartz:timeTask:query")
     @RequestMapping("/list")
-    override fun list(@RequestBody parameters: MutableMap<String, Any?>): Result<Any?> {
-        val list = super.list(parameters)
+    override fun list(@RequestBody parameter: PageQueryParameter): Result<Any?> {
+        val list = super.list(parameter)
         return list
     }
 

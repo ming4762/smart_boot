@@ -6,6 +6,7 @@ import com.smart.common.message.Result
 import com.smart.common.model.Tree
 import com.smart.starter.crud.constants.CRUDConstants
 import com.smart.starter.crud.controller.BaseController
+import com.smart.starter.crud.query.PageQueryParameter
 import com.smart.starter.crud.utils.MybatisUtil
 import com.smart.system.model.SysRoleDO
 import com.smart.system.model.SysRoleMenuFunctionDO
@@ -40,7 +41,7 @@ class SysRoleController : BaseController<SysRoleService, SysRoleDO>() {
      */
     @RequiresPermissions("system:role:query")
     @RequestMapping("/listWithAll")
-    fun listWithAll(@RequestBody parameter: MutableMap<String, Any?>): Result<Any?> {
+    fun listWithAll(@RequestBody parameter: PageQueryParameter): Result<Any?> {
         parameter[CRUDConstants.WITH_ALL.name] = true
         return this.list(parameter)
     }

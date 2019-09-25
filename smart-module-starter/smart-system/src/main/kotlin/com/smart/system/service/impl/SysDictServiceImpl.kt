@@ -42,13 +42,13 @@ class SysDictServiceImpl : BaseServiceImpl<SysDictMapper, SysDictDO>(), SysDictS
     /**
      * 重写批量删除方法
      */
-    override fun batchDelete(tList: List<SysDictDO>): Int {
+    override fun batchDelete(modelList: List<SysDictDO>): Int {
         // 删除字典项
-        val dictCodeList = tList.map { it.dictCode!! }
+        val dictCodeList = modelList.map { it.dictCode!! }
         val deleteQuery = KtQueryWrapper(SysDictItemDO :: class.java)
                 .`in`(SysDictItemDO :: dictCode, dictCodeList)
         this.dictItemService.remove(deleteQuery)
         // 删除字典
-        return super.batchDelete(tList)
+        return super.batchDelete(modelList)
     }
 }

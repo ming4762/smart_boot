@@ -6,6 +6,7 @@ import com.smart.common.utils.UUIDGenerator
 import com.smart.quartz.mapper.SmartTimedTaskMapper
 import com.smart.quartz.model.SmartTimedTaskDO
 import com.smart.quartz.service.SmartTimedTaskService
+import com.smart.starter.crud.query.PageQueryParameter
 import com.smart.starter.crud.service.impl.BaseServiceImpl
 import com.smart.starter.quartz.service.QuartzService
 import org.springframework.beans.factory.annotation.Autowired
@@ -23,25 +24,25 @@ class SmartTimedTaskServiceImpl : BaseServiceImpl<SmartTimedTaskMapper, SmartTim
     @Autowired
     private lateinit var quartzService: QuartzService
 
-    override fun list(queryWrapper: QueryWrapper<SmartTimedTaskDO>, parameters: Map<String, Any?>, paging: Boolean): List<SmartTimedTaskDO> {
-        return super<BaseServiceImpl>.list(queryWrapper, parameters, paging)
+    override fun list(queryWrapper: QueryWrapper<SmartTimedTaskDO>, parameter: PageQueryParameter, paging: Boolean): List<SmartTimedTaskDO> {
+        return super<BaseServiceImpl>.list(queryWrapper, parameter, paging)
     }
 
     /**
      * 批量删除
      */
     @Transactional(value = "quartzTransactionManager", rollbackFor = [Exception::class])
-    override fun batchDelete(tList: List<SmartTimedTaskDO>): Int {
+    override fun batchDelete(modelList: List<SmartTimedTaskDO>): Int {
         // 移除定时任务
-        this.quartzService.removeTask(tList.mapNotNull { it.taskId })
-        return super.batchDelete(tList)
+        this.quartzService.removeTask(modelList.mapNotNull { it.taskId })
+        return super.batchDelete(modelList)
     }
 
     @Transactional(value = "quartzTransactionManager", rollbackFor = [Exception::class])
-    override fun delete(t: SmartTimedTaskDO): Int {
+    override fun delete(model: SmartTimedTaskDO): Int {
         // 移除定时任务
-        this.quartzService.removeTask(t.taskId!!)
-        return super.delete(t)
+        this.quartzService.removeTask(model.taskId!!)
+        return super.delete(model)
     }
 
     @Transactional(value = "quartzTransactionManager", rollbackFor = [Exception::class])

@@ -2,6 +2,7 @@ package com.smart.system.controller
 
 import com.smart.common.message.Result
 import com.smart.starter.crud.controller.BaseController
+import com.smart.starter.crud.query.PageQueryParameter
 import com.smart.system.model.SysDictDO
 import com.smart.system.service.SysDictService
 import org.apache.shiro.authz.annotation.Logical
@@ -22,8 +23,8 @@ class SysDictController : BaseController<SysDictService, SysDictDO>() {
     }
 
 //    @RequiresPermissions(QUERY)
-    override fun list(@RequestBody parameters: MutableMap<String, Any?>): Result<Any?> {
-        return super.list(parameters)
+    override fun list(@RequestBody parameter: PageQueryParameter): Result<Any?> {
+        return super.list(parameter)
     }
 
     @RequiresPermissions(SAVE, UPDATE, logical = Logical.OR)

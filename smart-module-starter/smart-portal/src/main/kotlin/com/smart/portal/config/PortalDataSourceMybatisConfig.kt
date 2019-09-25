@@ -40,8 +40,8 @@ class PortalDataSourceMybatisConfig {
     fun sqlSessionFactory(@Qualifier("portalDataSource") dataSource: DataSource): SqlSessionFactory? {
         val sqlSessionFactoryBean = MybatisSqlSessionFactoryBean()
         sqlSessionFactoryBean.setDataSource(dataSource)
-        sqlSessionFactoryBean.setMapperLocations(matchMapperLocations())
-        sqlSessionFactoryBean.setPlugins(arrayOf(this.createPageHelperPlugins()))
+        sqlSessionFactoryBean.setMapperLocations(*matchMapperLocations())
+        sqlSessionFactoryBean.setPlugins(this.createPageHelperPlugins())
         return sqlSessionFactoryBean.getObject()
     }
 

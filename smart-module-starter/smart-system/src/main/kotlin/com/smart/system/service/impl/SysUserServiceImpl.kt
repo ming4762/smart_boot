@@ -152,8 +152,8 @@ class SysUserServiceImpl : BaseServiceImpl<SysUserMapper, SysUserDO>(), SysUserS
     }
 
     @Transactional
-    override fun batchDelete(tList: List<SysUserDO>): Int {
-        return super.batchDelete(tList)
+    override fun batchDelete(modelList: List<SysUserDO>): Int {
+        return super.batchDelete(modelList)
     }
 
     /**

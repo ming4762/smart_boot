@@ -42,11 +42,11 @@ class SysUserRoleServiceImpl : BaseServiceImpl<SysUserRoleMapper, SysUserRoleDO>
 
     @Transactional
     override fun saveOrUpdate(entity: SysUserRoleDO?): Boolean {
-        return super.saveOrUpdate(entity)
+        return super<BaseServiceImpl>.saveOrUpdate(entity)
     }
 
     @Transactional
-    override fun batchDelete(tList: List<SysUserRoleDO>): Int {
-        return super.batchDelete(tList)
+    override fun batchDelete(modelList: List<SysUserRoleDO>): Int {
+        return super.batchDelete(modelList)
     }
 }

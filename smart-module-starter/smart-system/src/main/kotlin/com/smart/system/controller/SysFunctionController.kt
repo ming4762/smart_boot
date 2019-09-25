@@ -4,6 +4,7 @@ import com.smart.common.log.annotation.Log
 import com.smart.common.message.Result
 import com.smart.common.model.Tree
 import com.smart.starter.crud.controller.BaseController
+import com.smart.starter.crud.query.PageQueryParameter
 import com.smart.system.model.SysFunctionDO
 import com.smart.system.service.SysFunctionService
 import org.apache.shiro.authz.annotation.Logical
@@ -26,7 +27,7 @@ class SysFunctionController : BaseController<SysFunctionService, SysFunctionDO>(
      */
     @RequiresPermissions("system:function:query")
     @RequestMapping("/queryFunctionTree")
-    fun queryFunctionTree(@RequestBody parameters: Map<String, Any?>): Result<List<Tree<SysFunctionDO>>?> {
+    fun queryFunctionTree(@RequestBody parameters: PageQueryParameter): Result<List<Tree<SysFunctionDO>>?> {
         return try {
             val menuId = parameters["menuId"]
             if (menuId == null) {
@@ -41,8 +42,8 @@ class SysFunctionController : BaseController<SysFunctionService, SysFunctionDO>(
     }
 
     @RequiresPermissions("system:function:query")
-    override fun list(@RequestBody parameters: MutableMap<String, Any?>): Result<Any?> {
-        return super.list(parameters)
+    override fun list(@RequestBody parameter: PageQueryParameter): Result<Any?> {
+        return super.list(parameter)
     }
 
     @RequiresPermissions("system:function:save", "system:function:update", logical = Logical.OR)

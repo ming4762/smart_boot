@@ -6,6 +6,7 @@ import com.smart.common.model.Tree
 import com.smart.common.utils.BeanMapUtils
 import com.smart.common.utils.TreeUtils
 import com.smart.common.utils.UUIDGenerator
+import com.smart.starter.crud.query.QueryParameter
 import com.smart.starter.crud.service.impl.BaseServiceImpl
 import com.smart.starter.crud.utils.MybatisUtil
 import com.smart.system.mapper.SysMenuMapper
@@ -103,7 +104,7 @@ class SysMenuServiceImpl : BaseServiceImpl<SysMenuMapper, SysMenuDO>(), SysMenuS
     /**
      * 查询菜单列表和菜单包含的功能
      */
-    override fun listWithFunction(parameters: Map<String, Any?>): List<SysMenuVO>? {
+    override fun listWithFunction(parameters: QueryParameter): List<SysMenuVO>? {
         val queryWrapper = MybatisUtil.createQueryWrapperFromParameters(parameters, SysMenuDO :: class.java)
         val menuListBase = this.list(queryWrapper.orderByAsc(MybatisUtil.getDbField(SysMenuDO :: seq)))
         val menuList = menuListBase.map {
@@ -231,6 +232,6 @@ class SysMenuServiceImpl : BaseServiceImpl<SysMenuMapper, SysMenuDO>(), SysMenuS
             menu.updateTime = Date()
             menu.updateUserId = AuthUtils.getCurrentUserId()
         }
-        return super.saveOrUpdate(menu)
+        return super<BaseServiceImpl>.saveOrUpdate(menu)
     }
 }

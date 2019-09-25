@@ -39,15 +39,15 @@ class PortalModuleServiceImpl : BaseServiceImpl<PortalModuleMapper, PortalModule
             entity.updateTime = Date()
             entity.updateUserId = AuthUtils.getCurrentUserId()
         }
-        return super.saveOrUpdate(entity)
+        return super<BaseServiceImpl>.saveOrUpdate(entity)
     }
 
     /**
      * 重写删除方法，删除上级同时删除下级
      */
-    override fun batchDelete(tList: List<PortalModuleDO>): Int {
+    override fun batchDelete(modelList: List<PortalModuleDO>): Int {
         val deleteIdList = mutableListOf<String>()
-        tList.forEach {
+        modelList.forEach {
             deleteIdList.add(it.moduleId!!)
             this.getChildIdList(it.moduleId!!, deleteIdList)
         }

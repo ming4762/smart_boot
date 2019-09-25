@@ -71,16 +71,16 @@ class SysMenuConfigServiceImpl : BaseServiceImpl<SysMenuConfigMapper, SysMenuCon
      * 删除配置对应的菜单信息
      */
     @Transactional(rollbackFor = [Exception::class])
-    override fun batchDelete(tList: List<SysMenuConfigDO>): Int {
+    override fun batchDelete(modelList: List<SysMenuConfigDO>): Int {
         // 删除配置对应的菜单信息
         // 构建删除条件
         val wrapper = QueryWrapper<SysMenuDO>()
-        val configIdList = tList.map {
+        val configIdList = modelList.map {
             it.configId
         }
         wrapper.`in`("menu_config_id", configIdList)
         // 执行删除
-        return this.menuMapper.delete(wrapper) + super.batchDelete(tList)
+        return this.menuMapper.delete(wrapper) + super.batchDelete(modelList)
     }
 
     /**

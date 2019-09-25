@@ -4,6 +4,7 @@ import com.smart.auth.common.utils.AuthUtils
 import com.smart.common.message.Result
 import com.smart.common.model.Tree
 import com.smart.starter.crud.controller.BaseController
+import com.smart.starter.crud.query.PageQueryParameter
 import com.smart.system.model.SysMenuDO
 import com.smart.system.model.vo.SysMenuVO
 import com.smart.system.service.SysMenuService
@@ -26,7 +27,7 @@ class SysMenuController : BaseController<SysMenuService, SysMenuDO>() {
      */
     @RequiresPermissions("system:menu:query")
     @RequestMapping("/listWithFunction")
-    fun listWithFunction (@RequestBody parameters: Map<String, Any?>): Result<List<SysMenuVO>?> {
+    fun listWithFunction (@RequestBody parameters: PageQueryParameter): Result<List<SysMenuVO>?> {
         return try {
             Result.success(this.service.listWithFunction(parameters))
         } catch (e: Exception) {

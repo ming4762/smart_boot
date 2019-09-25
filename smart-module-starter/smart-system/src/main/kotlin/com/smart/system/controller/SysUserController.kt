@@ -3,6 +3,7 @@ package com.smart.system.controller
 import com.smart.auth.common.model.SysUserDO
 import com.smart.common.message.Result
 import com.smart.starter.crud.controller.BaseController
+import com.smart.starter.crud.query.PageQueryParameter
 import com.smart.system.service.SysUserService
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
@@ -16,10 +17,6 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @RequestMapping("/sys/user")
 class SysUserController : BaseController<SysUserService, SysUserDO>() {
-
-    override fun list(@RequestBody parameters: MutableMap<String, Any?>): Result<Any?> {
-        return super.list(parameters)
-    }
 
     /**
      * 查询用户权限

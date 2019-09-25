@@ -12,6 +12,7 @@ import com.smart.portal.service.NewsAttachmentService
 import com.smart.portal.service.NewsService
 import com.smart.portal.service.PortalModuleService
 import com.smart.starter.crud.constants.CRUDConstants
+import com.smart.starter.crud.query.PageQueryParameter
 import com.smart.starter.crud.service.impl.BaseServiceImpl
 import com.smart.starter.crud.utils.MybatisUtil
 import org.springframework.beans.factory.annotation.Autowired
@@ -45,29 +46,30 @@ class NewsServiceImpl : BaseServiceImpl<NewsMapper, NewsDO>(), NewsService {
             entity.updateTime = Date()
             entity.updateUserId = AuthUtils.getCurrentUserId()
         }
-        return super.saveOrUpdate(entity)
+        return super<BaseServiceImpl>.saveOrUpdate(entity)
     }
 
 
-    override fun list(queryWrapper: QueryWrapper<NewsDO>, parameters: Map<String, Any?>, paging: Boolean): List<NewsDO> {
+    override fun list(queryWrapper: QueryWrapper<NewsDO>, parameter: PageQueryParameter, paging: Boolean): List<NewsDO> {
         // moduleCode参数处理
-        val moduleCode = parameters["moduleCode"]
+        // 规范优化，moduleCode改为实体类参数
+        val moduleCode = parameter["moduleCode"]
         if (!StringUtils.isEmpty(moduleCode)) {
             // 查询模块
             val insql = "select module_id from smart_portal_module where module_code = '$moduleCode'"
             queryWrapper.inSql(MybatisUtil.getDbField(NewsDO :: moduleId), insql)
         }
-        val list = super<BaseServiceImpl>.list(queryWrapper, parameters, paging)
+        val list = super<BaseServiceImpl>.list(queryWrapper, parameter, paging)
         if (list.isNotEmpty()) {
             // 判断是否带有内容，性能优化
-            val withContent = parameters["withContent"]
+            val withContent = parameter["withContent"]
             if (withContent is Boolean && withContent == false) {
                 list.forEach {
                     it.content = null
                 }
             }
             // 查询所有
-            val withAll = parameters[CRUDConstants.WITH_ALL.name]
+            val withAll = parameter[CRUDConstants.WITH_ALL.name]
             if (withAll is Boolean && withAll) {
                 return this.listWithAll(list)
             }
@@ -79,10 +81,10 @@ class NewsServiceImpl : BaseServiceImpl<NewsMapper, NewsDO>(), NewsService {
      * 重写批量删除方法
      * 删除附件
      */
-    override fun batchDelete(tList: List<NewsDO>): Int {
+    override fun batchDelete(modelList: List<NewsDO>): Int {
         // 删除附件
-        this.newsAttachmentService.deleteByNewsId(tList.map { it.newsId!! })
-        return super.batchDelete(tList)
+        this.newsAttachmentService.deleteByNewsId(modelList.map { it.newsId!! })
+        return super.batchDelete(modelList)
     }
 
     /**
