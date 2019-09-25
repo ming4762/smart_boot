@@ -32,7 +32,7 @@
         <!--缓存工具包版本-->
         <smart-cache-common.version>0.0.1-SNAPSHOT</smart-cache-common.version>
         <!--crud启动器版本-->
-        <crud-spring-boot-starter.version>0.0.1-SNAPSHOT</crud-spring-boot-starter.version>
+        <crud-spring-boot-starter.version>0.0.2-SNAPSHOT</crud-spring-boot-starter.version>
         <smart-queue-common.version>0.0.1-SNAPSHOT</smart-queue-common.version>
         <!--日志启动器-->
         <log-spring-boot-starter.version>0.0.1-SNAPSHOT</log-spring-boot-starter.version>
