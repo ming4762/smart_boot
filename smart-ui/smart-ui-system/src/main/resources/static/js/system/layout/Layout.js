@@ -52,7 +52,7 @@ export default {
                 this.getBus.addMenu({
                     name: '首页',
                     path: indexPage
-                });
+                }, !this.hasActiveMenu());
             }
         },
         loadUserMenu() {
@@ -67,7 +67,6 @@ export default {
                     if (!this.isSetIndexPage) {
                         this.setIndexPageFromMenuList(resultList);
                     }
-                    console.log(resultList);
                     this.getBus.setUserMenulist(resultList);
                 }).catch(error => {
                     this.errorMessage('加载菜单数据失败，请刷新重试', error);
@@ -78,9 +77,12 @@ export default {
             new Promise(() => {
                 const firstMenu = this.getFirstMenu(menuList);
                 if (firstMenu) {
-                    this.getBus.addMenu(firstMenu);
+                    this.getBus.addMenu(firstMenu, !this.hasActiveMenu());
                 }
             });
+        },
+        hasActiveMenu() {
+            return this.getBus.activeMenu.id !== undefined && this.getBus.activeMenu.id !== null;
         },
         getFirstMenu(menuList) {
             const menu = menuList[0];

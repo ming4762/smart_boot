@@ -56,13 +56,12 @@ export default {
         this.getBus.handleWidthChange()
       })
     },
-
     addSetIndexPage () {
       if (this.isSetIndexPage) {
         this.getBus.addMenu({
           name: '首页',
           path: indexPage
-        })
+        }, !this.hasActiveMenu())
       }
     },
     // 加载用户菜单信息
@@ -79,7 +78,6 @@ export default {
               if (!this.isSetIndexPage) {
                 this.setIndexPageFromMenuList(resultList)
               }
-              console.log(resultList)
               // 设置菜单
               this.getBus.setUserMenulist(resultList)
             }).catch(error => {
@@ -95,9 +93,16 @@ export default {
       new Promise(() => {
         const firstMenu = this.getFirstMenu(menuList)
         if (firstMenu) {
-          this.getBus.addMenu(firstMenu)
+          // 判断激活的菜单是否已经存在
+          this.getBus.addMenu(firstMenu, !this.hasActiveMenu())
         }
       })
+    },
+    /**
+     * 是否存在激活的菜单
+     */
+    hasActiveMenu () {
+      return this.getBus.activeMenu.id !== undefined && this.getBus.activeMenu.id !== null
     },
     /**
      * 使用递归获取第一个菜单

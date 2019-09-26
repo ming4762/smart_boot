@@ -71,10 +71,29 @@ const initBus = () => {
             setActiveMenu(menu) {
                 this.activeMenu = menu;
                 StoreUtil.setStore(STORE_KEYS.ACTIVE_MENU, menu, StoreUtil.SESSION_TYPE);
+                this.dealActionTopMenu();
             },
-            addMenu(menu) {
+            dealActionTopMenu() {
+                const activeTopId = this.activeMenu.topId;
+                if (activeTopId) {
+                    if (this.activeTopMenu == null || this.activeTopMenu.id !== activeTopId) {
+                        for (let i in this.userMenuList) {
+                            if (activeTopId === this.userMenuList[i].topId) {
+                                this.setActiveTopMenu(this.userMenuList[i]);
+                                break;
+                            }
+                        }
+                    }
+                }
+                else {
+                    this.setActiveTopMenu(null);
+                }
+            },
+            addMenu(menu, active) {
                 return new Promise(() => {
-                    this.setActiveMenu(menu);
+                    if (active !== false) {
+                        this.setActiveMenu(menu);
+                    }
                     const notHasMenu = this.openMenuList.every((value) => {
                         return value.path !== menu.path;
                     });

@@ -97,7 +97,7 @@ const initBus = () => {
        * 设置激活的顶部菜单
        * @param menu
        */
-      setActiveTopMenu (menu: any) {
+      setActiveTopMenu (menu?: any) {
         this.activeTopMenu = menu
         StoreUtil.setStore(STORE_KEYS.ACTIVE_TOP_MENU, menu, StoreUtil.SESSION_TYPE)
       },
@@ -108,15 +108,36 @@ const initBus = () => {
       setActiveMenu (menu: any) {
         this.activeMenu = menu
         StoreUtil.setStore(STORE_KEYS.ACTIVE_MENU, menu, StoreUtil.SESSION_TYPE)
+        this.dealActionTopMenu()
+      },
+      /**
+       * 获取顶级菜单
+       */
+      dealActionTopMenu () {
+        const activeTopId = this.activeMenu.topId
+        if (activeTopId) {
+          if (this.activeTopMenu == null || this.activeTopMenu.id !== activeTopId) {
+            for (let i in this.userMenuList) {
+              if (activeTopId === this.userMenuList[i].topId) {
+                this.setActiveTopMenu(this.userMenuList[i])
+                break
+              }
+            }
+          }
+        } else {
+          this.setActiveTopMenu(null)
+        }
       },
       /**
        * 添加菜单
        * @param menu
        */
-      addMenu (menu: any): Promise<any> {
+      addMenu (menu: any, active: boolean): Promise<any> {
         return new Promise(() => {
-          // 设置激活的菜单
-          this.setActiveMenu(menu)
+          if (active !== false) {
+            // 设置激活的菜单
+            this.setActiveMenu(menu)
+          }
           // 判断菜单是否已经存在
           const notHasMenu: boolean = this.openMenuList.every((value) => {
             return value.path !== menu.path;

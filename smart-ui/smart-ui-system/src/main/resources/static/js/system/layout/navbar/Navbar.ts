@@ -72,12 +72,12 @@ export default {
     }
   },
   watch: {
-    'computedActiveMenu': function (_new, old) {
-      if (_new && _new.topId !== old.topId) {
-        // 获取当前激活的顶级菜单
-        this.setActiveTopMenu()
-      }
-    }
+    // 'computedActiveMenu': function (_new, old) {
+    //   if (_new && _new.topId !== old.topId) {
+    //     // 获取当前激活的顶级菜单
+    //     this.setActiveTopMenu()
+    //   }
+    // }
   },
   mounted () {
     // console.log(this)
@@ -125,28 +125,39 @@ export default {
     /**
      * 获取激活的顶部菜单
      */
-    setActiveTopMenu (): any {
-      const activeTopMenu = this.getBus.activeTopMenu
-      const activeTopId = this.computedActiveMenu.topId
-      if (activeTopMenu.id !== activeTopId) {
-        const userMenuList = this.getBus.userMenuList
-        for (let i in userMenuList) {
-          if (activeTopId === userMenuList[i].topId) {
-            this.getBus.setActiveTopMenu(userMenuList[i])
-            break
-          }
-        }
-      }
-    },
+    // setActiveTopMenu (): any {
+    //   const activeTopMenu = this.getBus.activeTopMenu
+    //   const activeTopId = this.computedActiveMenu.topId
+    //   if (activeTopMenu.id !== activeTopId) {
+    //     const userMenuList = this.getBus.userMenuList
+    //     for (let i in userMenuList) {
+    //       if (activeTopId === userMenuList[i].topId) {
+    //         this.getBus.setActiveTopMenu(userMenuList[i])
+    //         break
+    //       }
+    //     }
+    //   }
+    // },
     /**
      * 判断菜单是否激活
      */
     isActive (menuId: string) {
+      console.log(menuId)
       if (!this.computedActiveMenu.topId) {
         return false
       } else {
         return this.getBus.activeTopMenu.id === menuId
       }
+    },
+    /**
+     * 判断更多按钮是否激活
+     */
+    isMoreActive() {
+      if (this.computedMoreMenu && this.getBus.activeTopMenu) {
+        const childrenMenuId: Array<string> = this.computedMoreMenu.children.map(menu => menu.id)
+        return childrenMenuId.indexOf(this.getBus.activeTopMenu.id) > -1
+      }
+      return false
     }
   },
   template: `
@@ -204,7 +215,7 @@ export default {
           <!-- TODO: 激活状态待处理-->
           <menu-item
             :color="getTopTextColor"
-            :active="isActive(computedMoreMenu.id)"
+            :active="isMoreActive()"
             :icon="computedMoreMenu.icon"
             :activeColor="topActiveTextColor"
             :title="computedMoreMenu.name"/>

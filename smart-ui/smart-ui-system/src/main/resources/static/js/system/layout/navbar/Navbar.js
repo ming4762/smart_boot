@@ -51,13 +51,7 @@ export default {
             return null;
         }
     },
-    watch: {
-        'computedActiveMenu': function (_new, old) {
-            if (_new && _new.topId !== old.topId) {
-                this.setActiveTopMenu();
-            }
-        }
-    },
+    watch: {},
     mounted() {
     },
     methods: {
@@ -84,26 +78,21 @@ export default {
             }
             return '';
         },
-        setActiveTopMenu() {
-            const activeTopMenu = this.getBus.activeTopMenu;
-            const activeTopId = this.computedActiveMenu.topId;
-            if (activeTopMenu.id !== activeTopId) {
-                const userMenuList = this.getBus.userMenuList;
-                for (let i in userMenuList) {
-                    if (activeTopId === userMenuList[i].topId) {
-                        this.getBus.setActiveTopMenu(userMenuList[i]);
-                        break;
-                    }
-                }
-            }
-        },
         isActive(menuId) {
+            console.log(menuId);
             if (!this.computedActiveMenu.topId) {
                 return false;
             }
             else {
                 return this.getBus.activeTopMenu.id === menuId;
             }
+        },
+        isMoreActive() {
+            if (this.computedMoreMenu && this.getBus.activeTopMenu) {
+                const childrenMenuId = this.computedMoreMenu.children.map(menu => menu.id);
+                return childrenMenuId.indexOf(this.getBus.activeTopMenu.id) > -1;
+            }
+            return false;
         }
     },
     template: `
@@ -161,7 +150,7 @@ export default {
           <!-- TODO: 激活状态待处理-->
           <menu-item
             :color="getTopTextColor"
-            :active="isActive(computedMoreMenu.id)"
+            :active="isMoreActive()"
             :icon="computedMoreMenu.icon"
             :activeColor="topActiveTextColor"
             :title="computedMoreMenu.name"/>
