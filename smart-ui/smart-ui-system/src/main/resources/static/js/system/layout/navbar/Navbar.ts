@@ -17,7 +17,7 @@ export default {
       // 激活菜单的标识 TODO:废弃
       activeIndex: '',
       // sidebar 对象
-      sidebar: {}
+      sidebar: {},
     }
   },
   mixins: [
@@ -44,13 +44,31 @@ export default {
      * 获取用户菜单列表
      */
     computedUserMenuList (): any[] {
-      return this.getBus.userMenuList
+      return this.getBus.convertUserMenuList
     },
     /**
      * 获取激活的菜单
      */
     computedActiveMenu (): any {
       return this.getBus.activeMenu
+    },
+    /**
+     * 普通菜单计算属性
+     */
+    computedNormalMenu () {
+      const lastMenu = this.computedUserMenuList[this.computedUserMenuList.length - 1]
+      if (lastMenu.id === 'more') {
+        return this.computedUserMenuList.splice(0, this.computedUserMenuList.length - 1)
+      } else {
+        return this.computedUserMenuList
+      }
+    },
+    computedMoreMenu () {
+      const lastMenu = this.computedUserMenuList[this.computedUserMenuList.length - 1]
+      if (lastMenu.id === 'more') {
+        return lastMenu
+      }
+      return null
     }
   },
   watch: {
@@ -83,11 +101,13 @@ export default {
      * @param menu
      */
     handleOpenMenu (menu: any) {
-      // 设置激活的顶部菜单
-      this.getBus.setActiveTopMenu(menu)
-      // 如果是菜单直接打开
-      if (!menu.isCatalog) {
-        this.getBus.addMenu(menu)
+      if (menu.id !== 'more') {
+        // 设置激活的顶部菜单
+        this.getBus.setActiveTopMenu(menu)
+        // 如果是菜单直接打开
+        if (!menu.isCatalog) {
+          this.getBus.addMenu(menu)
+        }
       }
     },
     /**
@@ -132,6 +152,7 @@ export default {
   template: `
   <div :style="getTopDivStyle" class="navbar-outer-a">
     <el-menu
+      menu-trigger="click"
       ref="topMenu"
       :default-active="computedActiveMenu.topId"
       :background-color="getTopColor"
@@ -170,7 +191,7 @@ export default {
         :key="menu.id"
         :index="menu.id"
         @click="handleOpenMenu(menu)"
-        v-for="menu in computedUserMenuList">
+        v-for="menu in computedNormalMenu">
         <menu-item
           :color="getTopTextColor"
           :active="isActive(menu.id)"
@@ -178,6 +199,31 @@ export default {
           :activeColor="topActiveTextColor"
           :title="menu.name"/>
       </el-menu-item>
+      <el-submenu v-if="computedMoreMenu !== null" index="computedMoreMenu.id">
+        <template slot="title">
+          <!-- TODO: 激活状态待处理-->
+          <menu-item
+            :color="getTopTextColor"
+            :active="isActive(computedMoreMenu.id)"
+            :icon="computedMoreMenu.icon"
+            :activeColor="topActiveTextColor"
+            :title="computedMoreMenu.name"/>
+          <!--<i class="el-icon-location"></i>-->
+          <!--<span>{{computedMoreMenu.name}}</span>-->
+        </template>
+        <el-menu-item 
+          :key="menu.id"
+          @click="handleOpenMenu(menu)"
+          v-for="menu in computedMoreMenu.children"
+          :index="menu.id">
+          <menu-item
+            :color="getTopTextColor"
+            :active="isActive(menu.id)"
+            :icon="menu.icon"
+            :activeColor="topActiveTextColor"
+            :title="menu.name"/>
+        </el-menu-item>
+      </el-submenu>
     </el-menu>
     <!--顶部按钮列-->
     <navbar-button class="navbar-button-container"/>

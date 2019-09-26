@@ -19,14 +19,46 @@ const initBus = () => {
             userMenuList: StoreUtil.getStore(STORE_KEYS.USER_MENU_LIST, debug) || [],
             activeTopMenu: StoreUtil.getStore(STORE_KEYS.ACTIVE_TOP_MENU, debug) || {},
             openMenuList: StoreUtil.getStore(STORE_KEYS.OPEN_MENU_LIST, debug) || [],
-            activeMenu: StoreUtil.getStore(STORE_KEYS.ACTIVE_MENU, debug) || {}
+            activeMenu: StoreUtil.getStore(STORE_KEYS.ACTIVE_MENU, debug) || {},
+            convertUserMenuList: []
         },
         methods: {
-            handleWidthChange(width) {
+            handleWidthChange() {
+                const width = document.body.offsetWidth;
                 this.hideOpenSidebar(width);
+                this.convertTopMenuByWidth();
             },
             hideOpenSidebar(width) {
                 this.sidebar.opened = width > openWidth;
+            },
+            convertTopMenuByWidth() {
+                const width = this.getTopMenuAvailableWidth();
+                const oneWidth = 130;
+                const num = parseInt(width / oneWidth + '');
+                if (this.userMenuList.length <= num) {
+                    this.convertUserMenuList = this.userMenuList;
+                }
+                else {
+                    const convertUserMenuList = [];
+                    const moreChildren = num === 0 ? this.userMenuList : this.userMenuList.slice(num - 1, this.userMenuList.length);
+                    if (num > 0) {
+                        convertUserMenuList.push(...this.userMenuList.slice(0, num - 1));
+                    }
+                    convertUserMenuList.push({
+                        id: 'more',
+                        name: '更多',
+                        icon: 'el-icon-more',
+                        isCatalog: true,
+                        topId: 'more',
+                        children: moreChildren
+                    });
+                    this.convertUserMenuList = convertUserMenuList;
+                }
+            },
+            getTopMenuAvailableWidth() {
+                const width = document.body.offsetWidth - (227 + 35);
+                const sibarWidth = this.sidebar.opened ? 180 : 36;
+                return width - sibarWidth - 40;
             },
             setUserMenulist(userMenuList) {
                 this.userMenuList = userMenuList;

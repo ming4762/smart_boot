@@ -9,7 +9,7 @@ export default {
     data() {
         return {
             activeIndex: '',
-            sidebar: {}
+            sidebar: {},
         };
     },
     mixins: [
@@ -29,10 +29,26 @@ export default {
             return 'background-color:' + this.getBus.theme.topColor;
         },
         computedUserMenuList() {
-            return this.getBus.userMenuList;
+            return this.getBus.convertUserMenuList;
         },
         computedActiveMenu() {
             return this.getBus.activeMenu;
+        },
+        computedNormalMenu() {
+            const lastMenu = this.computedUserMenuList[this.computedUserMenuList.length - 1];
+            if (lastMenu.id === 'more') {
+                return this.computedUserMenuList.splice(0, this.computedUserMenuList.length - 1);
+            }
+            else {
+                return this.computedUserMenuList;
+            }
+        },
+        computedMoreMenu() {
+            const lastMenu = this.computedUserMenuList[this.computedUserMenuList.length - 1];
+            if (lastMenu.id === 'more') {
+                return lastMenu;
+            }
+            return null;
         }
     },
     watch: {
@@ -52,9 +68,11 @@ export default {
             this.getBus.sidebar.opened = !this.getBus.sidebar.opened;
         },
         handleOpenMenu(menu) {
-            this.getBus.setActiveTopMenu(menu);
-            if (!menu.isCatalog) {
-                this.getBus.addMenu(menu);
+            if (menu.id !== 'more') {
+                this.getBus.setActiveTopMenu(menu);
+                if (!menu.isCatalog) {
+                    this.getBus.addMenu(menu);
+                }
             }
         },
         getDefaultTopMenuId() {
@@ -91,6 +109,7 @@ export default {
     template: `
   <div :style="getTopDivStyle" class="navbar-outer-a">
     <el-menu
+      menu-trigger="click"
       ref="topMenu"
       :default-active="computedActiveMenu.topId"
       :background-color="getTopColor"
@@ -129,7 +148,7 @@ export default {
         :key="menu.id"
         :index="menu.id"
         @click="handleOpenMenu(menu)"
-        v-for="menu in computedUserMenuList">
+        v-for="menu in computedNormalMenu">
         <menu-item
           :color="getTopTextColor"
           :active="isActive(menu.id)"
@@ -137,6 +156,31 @@ export default {
           :activeColor="topActiveTextColor"
           :title="menu.name"/>
       </el-menu-item>
+      <el-submenu v-if="computedMoreMenu !== null" index="computedMoreMenu.id">
+        <template slot="title">
+          <!-- TODO: 激活状态待处理-->
+          <menu-item
+            :color="getTopTextColor"
+            :active="isActive(computedMoreMenu.id)"
+            :icon="computedMoreMenu.icon"
+            :activeColor="topActiveTextColor"
+            :title="computedMoreMenu.name"/>
+          <!--<i class="el-icon-location"></i>-->
+          <!--<span>{{computedMoreMenu.name}}</span>-->
+        </template>
+        <el-menu-item 
+          :key="menu.id"
+          @click="handleOpenMenu(menu)"
+          v-for="menu in computedMoreMenu.children"
+          :index="menu.id">
+          <menu-item
+            :color="getTopTextColor"
+            :active="isActive(menu.id)"
+            :icon="menu.icon"
+            :activeColor="topActiveTextColor"
+            :title="menu.name"/>
+        </el-menu-item>
+      </el-submenu>
     </el-menu>
     <!--顶部按钮列-->
     <navbar-button class="navbar-button-container"/>

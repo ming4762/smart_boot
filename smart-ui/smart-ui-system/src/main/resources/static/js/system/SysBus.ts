@@ -35,15 +35,55 @@ const initBus = () => {
       // 打开的菜单列表
       openMenuList: StoreUtil.getStore(STORE_KEYS.OPEN_MENU_LIST, debug) || [],
       // 激活的菜单
-      activeMenu: StoreUtil.getStore(STORE_KEYS.ACTIVE_MENU, debug) || {}
+      activeMenu: StoreUtil.getStore(STORE_KEYS.ACTIVE_MENU, debug) || {},
+      // 转换的人员菜单列表
+      convertUserMenuList: []
     },
     methods: {
       // 页面宽度变化
-      handleWidthChange (width) {
+      handleWidthChange () {
+        const width = document.body.offsetWidth
         this.hideOpenSidebar(width)
+        this.convertTopMenuByWidth()
       },
       hideOpenSidebar (width) {
         this.sidebar.opened = width > openWidth
+      },
+      /**
+       * 设置
+       */
+      convertTopMenuByWidth () {
+        // 获取顶部宽度
+        const width = this.getTopMenuAvailableWidth()
+        //
+        const oneWidth = 130
+        const num = parseInt(width / oneWidth + '')
+        if (this.userMenuList.length <= num) {
+          this.convertUserMenuList = this.userMenuList
+        } else {
+          const convertUserMenuList = []
+          const moreChildren = num === 0 ? this.userMenuList : this.userMenuList.slice(num - 1, this.userMenuList.length)
+          if (num > 0) {
+            convertUserMenuList.push(...this.userMenuList.slice(0, num - 1))
+          }
+          convertUserMenuList.push({
+            id: 'more',
+            name: '更多',
+            icon: 'el-icon-more',
+            isCatalog: true,
+            topId: 'more',
+            children: moreChildren
+          })
+          this.convertUserMenuList = convertUserMenuList
+        }
+      },
+      getTopMenuAvailableWidth () {
+        // 减去顶部按钮宽度
+        const width = document.body.offsetWidth - (227 + 35)
+        // 侧边栏宽度
+        const sibarWidth = this.sidebar.opened ? 180 : 36
+        // 40是切换按钮长度
+        return width - sibarWidth - 40
       },
       /**
        * 设置用户菜单列表

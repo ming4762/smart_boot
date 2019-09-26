@@ -25,7 +25,7 @@ export default {
   created () {
     // 绑定宽度监控
     this.bindWidthChange()
-    this.getBus.handleWidthChange(document.body.offsetWidth)
+    this.getBus.handleWidthChange()
   },
   mounted () {
     this.loadUserMenu()
@@ -53,7 +53,7 @@ export default {
   methods: {
     bindWidthChange () {
       ResizeHandler.bind(() => {
-        this.getBus.handleWidthChange(document.body.offsetWidth)
+        this.getBus.handleWidthChange()
       })
     },
 
