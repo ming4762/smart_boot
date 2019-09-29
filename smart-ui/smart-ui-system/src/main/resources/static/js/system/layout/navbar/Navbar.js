@@ -35,6 +35,9 @@ export default {
             return this.getBus.activeMenu;
         },
         computedNormalMenu() {
+            if (this.computedUserMenuList.length === 0) {
+                return [];
+            }
             const lastMenu = this.computedUserMenuList[this.computedUserMenuList.length - 1];
             if (lastMenu.id === 'more') {
                 return this.computedUserMenuList.splice(0, this.computedUserMenuList.length - 1);
@@ -44,6 +47,9 @@ export default {
             }
         },
         computedMoreMenu() {
+            if (this.computedUserMenuList.length === 0) {
+                return null;
+            }
             const lastMenu = this.computedUserMenuList[this.computedUserMenuList.length - 1];
             if (lastMenu.id === 'more') {
                 return lastMenu;
@@ -51,8 +57,20 @@ export default {
             return null;
         }
     },
-    watch: {},
     mounted() {
+        if (this.computedActiveMenu && this.computedActiveMenu.topId) {
+            this.$refs['topMenu'].activeIndex = this.computedActiveMenu.topId;
+        }
+    },
+    watch: {
+        'computedActiveMenu.topId'(_new, old) {
+            if (_new !== old) {
+                this.$refs['topMenu'].activeIndex = _new;
+            }
+        },
+        'computedNormalMenu.length'() {
+            this.$refs['topMenu'].activeIndex = this.computedActiveMenu.topId;
+        }
     },
     methods: {
         handleMenuSelectEvent(index) {
@@ -78,15 +96,6 @@ export default {
             }
             return '';
         },
-        isActive(menuId) {
-            console.log(menuId);
-            if (!this.computedActiveMenu.topId) {
-                return false;
-            }
-            else {
-                return this.getBus.activeTopMenu.id === menuId;
-            }
-        },
         isMoreActive() {
             if (this.computedMoreMenu && this.getBus.activeTopMenu) {
                 const childrenMenuId = this.computedMoreMenu.children.map(menu => menu.id);
@@ -100,7 +109,6 @@ export default {
     <el-menu
       menu-trigger="click"
       ref="topMenu"
-      :default-active="computedActiveMenu.topId"
       :background-color="getTopColor"
       :text-color="getTopTextColor"
       :active-text-color="topActiveTextColor"
@@ -140,12 +148,12 @@ export default {
         v-for="menu in computedNormalMenu">
         <menu-item
           :color="getTopTextColor"
-          :active="isActive(menu.id)"
+          :menuId="menu.id"
           :icon="menu.icon"
           :activeColor="topActiveTextColor"
           :title="menu.name"/>
       </el-menu-item>
-      <el-submenu v-if="computedMoreMenu !== null" index="computedMoreMenu.id">
+      <el-submenu v-if="computedMoreMenu !== null" :index="computedMoreMenu.id">
         <template slot="title">
           <!-- TODO: 激活状态待处理-->
           <menu-item
@@ -164,7 +172,7 @@ export default {
           :index="menu.id">
           <menu-item
             :color="getTopTextColor"
-            :active="isActive(menu.id)"
+            :menuId="menu.id"
             :icon="menu.icon"
             :activeColor="topActiveTextColor"
             :title="menu.name"/>

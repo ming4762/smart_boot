@@ -3,6 +3,7 @@
  */
 export default {
   props: {
+    menuId: String,
     icon: {
       type: String,
       default: ''
@@ -19,21 +20,36 @@ export default {
       type: String,
       default: '#FFFFFF'
     },
-    active: {
-      type: Boolean,
-      default: false
-    }
+    active: Boolean,
   },
   computed: {
-    computedIconStyle () {
-      const color = this.active ? this.activeColor : this.color
+    computedColorStyle () {
+      const color = this.computedActive ? this.activeColor : this.color
       return 'color: ' + color
+    },
+    getBus (): any {
+      // @ts-ignore
+      return busVue
+    },
+    /**
+     * 激活状态计算属性
+     */
+    computedActive () {
+      if (this.menuId && this.getBus.activeTopMenu) {
+        if (this.getBus.activeTopMenu.id === this.menuId) {
+          return true
+        }
+      }
+      if (this.active !== undefined) {
+        return this.active
+      }
+      return false
     }
   },
   template: `
   <div>
-    <i v-if="icon" style="margin-right: 10px;" :class="icon" :style="computedIconStyle"></i>
-    <span v-if="title" slot="title">{{title}}</span>
+    <i v-if="icon" style="margin-right: 10px;" :class="icon" :style="computedColorStyle"></i>
+    <span v-if="title" :style="computedColorStyle" slot="title">{{title}}</span>
   </div>
   `
 }

@@ -39,6 +39,11 @@ const initBus = () => {
       // 转换的人员菜单列表
       convertUserMenuList: []
     },
+    watch: {
+      "userMenuList.length" () {
+        this.convertTopMenuByWidth()
+      }
+    },
     methods: {
       // 页面宽度变化
       handleWidthChange () {
@@ -56,7 +61,7 @@ const initBus = () => {
         // 获取顶部宽度
         const width = this.getTopMenuAvailableWidth()
         //
-        const oneWidth = 130
+        const oneWidth = 120
         const num = parseInt(width / oneWidth + '')
         if (this.userMenuList.length <= num) {
           this.convertUserMenuList = this.userMenuList

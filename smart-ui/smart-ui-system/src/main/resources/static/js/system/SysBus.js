@@ -22,6 +22,11 @@ const initBus = () => {
             activeMenu: StoreUtil.getStore(STORE_KEYS.ACTIVE_MENU, debug) || {},
             convertUserMenuList: []
         },
+        watch: {
+            "userMenuList.length"() {
+                this.convertTopMenuByWidth();
+            }
+        },
         methods: {
             handleWidthChange() {
                 const width = document.body.offsetWidth;
@@ -33,7 +38,7 @@ const initBus = () => {
             },
             convertTopMenuByWidth() {
                 const width = this.getTopMenuAvailableWidth();
-                const oneWidth = 130;
+                const oneWidth = 120;
                 const num = parseInt(width / oneWidth + '');
                 if (this.userMenuList.length <= num) {
                     this.convertUserMenuList = this.userMenuList;

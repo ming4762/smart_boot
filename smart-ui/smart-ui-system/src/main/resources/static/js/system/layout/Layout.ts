@@ -74,12 +74,12 @@ export default {
                 const menuUrlMap = {}
                 this.dealMenuData(data, resultList, null, menuUrlMap)
               }
+              // 设置菜单
+              this.getBus.setUserMenulist(resultList)
               // 如果为设置主页，则菜单的第一个页面作为菜单
               if (!this.isSetIndexPage) {
                 this.setIndexPageFromMenuList(resultList)
               }
-              // 设置菜单
-              this.getBus.setUserMenulist(resultList)
             }).catch(error => {
               this.errorMessage('加载菜单数据失败，请刷新重试', error)
             })

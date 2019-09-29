@@ -64,10 +64,10 @@ export default {
                         const menuUrlMap = {};
                         this.dealMenuData(data, resultList, null, menuUrlMap);
                     }
+                    this.getBus.setUserMenulist(resultList);
                     if (!this.isSetIndexPage) {
                         this.setIndexPageFromMenuList(resultList);
                     }
-                    this.getBus.setUserMenulist(resultList);
                 }).catch(error => {
                     this.errorMessage('加载菜单数据失败，请刷新重试', error);
                 });
