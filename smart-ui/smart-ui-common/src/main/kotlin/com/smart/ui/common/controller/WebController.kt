@@ -18,4 +18,12 @@ class WebController {
     fun common(@RequestParam parameter: Map<String, String>): ModelAndView {
         return ModelAndView("common/commonPage", parameter)
     }
+
+    /**
+     * 跳转到移动端页面
+     */
+    @RequestMapping("mobile")
+    fun mobile(@RequestParam parameter: Map<String, String>): ModelAndView {
+        return ModelAndView("common/commonMobilePage", parameter)
+    }
 }

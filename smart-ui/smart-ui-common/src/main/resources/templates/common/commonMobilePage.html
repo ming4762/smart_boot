@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title th:text="${title}">公共页面</title>
+
+  <div th:replace="common/common-resources :: common-resources-contextPath"></div>
+
+  <script type="text/javascript" th:inline="javascript">
+    var PagePath = [[${page}]]
+    var pageParameter = [[${parameter}]]
+  </script>
+</head>
+<body>
+<div id="vue-container" class="full-height">
+  <vue-main/>
+</div>
+
+<!--引入axios-->
+<script th:src="@{/axios/0.19.0/axios.min.js}"></script>
+<!--引入vue-->
+<div th:replace="common/common-resources :: common-resources-vue"></div>
+<!--模块加载器-->
+<script type="module" th:src="@{/js/utils/ModuleLoader.js}"></script>
+<script th:src="@{/js/common.js}"></script>
+<!--引入页面js-->
+<script type="module" th:src="@{'/js/'+${page}+'.js'}"></script>
+</body>
+</html>
