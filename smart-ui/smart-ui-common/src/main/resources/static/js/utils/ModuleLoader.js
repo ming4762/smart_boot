@@ -29,6 +29,11 @@ const moduleMap = {
         js: ['js/plugins/vue-arcgis/vue-arcgis2.umd.min.js'],
         css: ['js/plugins/vue-arcgis/vue-arcgis2.css']
     },
+    'vue-weui': {
+        name: 'vue-weui',
+        js: ['js/plugins/vue-weui/vue-weui.umd.min.js'],
+        css: ['js/plugins/vue-weui/vue-weui.css']
+    },
     layer: {
         name: 'layer',
         js: [
