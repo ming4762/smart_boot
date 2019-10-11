@@ -31,8 +31,8 @@ const moduleMap = {
     },
     'vue-weui': {
         name: 'vue-weui',
-        js: ['js/plugins/vue-weui/vue-weui.umd.min.js'],
-        css: ['js/plugins/vue-weui/vue-weui.css']
+        js: ['js/plugins/mobile/vue-weui/vue-weui.umd.min.js'],
+        css: ['js/plugins/mobile/vue-weui/vue-weui.css']
     },
     'vue-amap': {
         name: 'vue-amap',
