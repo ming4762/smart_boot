@@ -34,6 +34,16 @@ const moduleMap = {
         js: ['js/plugins/vue-weui/vue-weui.umd.min.js'],
         css: ['js/plugins/vue-weui/vue-weui.css']
     },
+    'vue-amap': {
+        name: 'vue-amap',
+        js: ['js/plugins/mobile/vue-amap/vue-amap.umd.min.js'],
+        css: ['js/plugins/mobile/vue-amap/vue-amap.css']
+    },
+    'swiper': {
+        name: 'vue-weui-swiper',
+        css: ['swiper/swiper.min.css'],
+        js: ['swiper/swiper.min.js']
+    },
     layer: {
         name: 'layer',
         js: [
@@ -60,8 +70,15 @@ const loadModule = (moduleName) => {
     const jsList = module['js'].map(item => getPath(item));
     return CommonUtil.loadJS(...jsList);
 };
+window['loadMoules'] = [];
 window['smartModuleLoader'] = (...moduleNames) => __awaiter(this, void 0, void 0, function* () {
     for (let moduleName of moduleNames) {
-        yield loadModule(moduleName);
+        if (window['loadMoules'].indexOf(moduleName) === -1) {
+            yield loadModule(moduleName);
+            window['loadMoules'].push(moduleName);
+        }
+        else {
+            console.warn(`${moduleName}已加载，请勿重复加载`);
+        }
     }
 });

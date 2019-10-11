@@ -28,6 +28,16 @@ const moduleMap = {
     js: ['js/plugins/vue-weui/vue-weui.umd.min.js'],
     css: ['js/plugins/vue-weui/vue-weui.css']
   },
+  'vue-amap': {
+    name: 'vue-amap',
+    js: ['js/plugins/mobile/vue-amap/vue-amap.umd.min.js'],
+    css: ['js/plugins/mobile/vue-amap/vue-amap.css']
+  },
+  'swiper': {
+    name: 'vue-weui-swiper',
+    css: ['swiper/swiper.min.css'],
+    js: ['swiper/swiper.min.js']
+  },
   // 加载弹出层组件
   layer: {
     name: 'layer',
@@ -43,7 +53,6 @@ const moduleMap = {
  * @param path
  */
 const getPath = CommonUtil.withContextPath
-
 /**
  * 加载模块
  * @param moduleName
@@ -70,6 +79,8 @@ const loadModule = (moduleName: string): Promise<any> => {
   return CommonUtil.loadJS(...jsList)
 }
 
+window['loadMoules'] = []
+
 /**
  * 模块加载器
  * TODO: 判断模块是否已经加载
@@ -77,7 +88,12 @@ const loadModule = (moduleName: string): Promise<any> => {
  */
 window['smartModuleLoader'] = async (...moduleNames: Array<string>): Promise<any> => {
   for (let moduleName of moduleNames) {
+    if (window['loadMoules'].indexOf(moduleName) === -1) {
+      await loadModule(moduleName)
+      window['loadMoules'].push(moduleName)
+    } else {
+      console.warn(`${moduleName}已加载，请勿重复加载`)
+    }
     // 判断是否已经加载
-    await loadModule(moduleName)
   }
 }
