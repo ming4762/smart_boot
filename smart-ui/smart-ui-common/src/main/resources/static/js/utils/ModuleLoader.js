@@ -57,6 +57,7 @@ const loadModule = (moduleName) => {
     const module = moduleMap[moduleName];
     if (!module) {
         console.warn('模块加载失败，未找到模块');
+        return new Promise(resolve => resolve(null));
     }
     if (window[module.name]) {
         return new Promise(resolve => resolve(null));

@@ -62,6 +62,7 @@ const loadModule = (moduleName: string): Promise<any> => {
   const module = moduleMap[moduleName]
   if (!module) {
     console.warn('模块加载失败，未找到模块')
+    return new Promise<any>(resolve => resolve(null))
   }
   if (window[module.name]) {
     // 模块已经加载
