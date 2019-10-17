@@ -1,6 +1,7 @@
 package com.smart.file.service.impl
 
 import com.baomidou.mybatisplus.extension.kotlin.KtQueryWrapper
+import com.smart.common.spring.ApplicationContextRegister
 import com.smart.common.utils.FileUtils
 import com.smart.common.utils.ImageUtil
 import com.smart.common.utils.UUIDGenerator
@@ -50,9 +51,6 @@ class FileServiceImpl : BaseServiceImpl<FileMapper, SmartFileDO>(),  FileService
 
     @Autowired
     private lateinit var fileRelationService: FileRelationService
-
-    @Autowired
-    private lateinit var documentConverter: DocumentConverter
 
     override fun saveFile(multipartFile: MultipartFile, cloudFile: SmartFileDO): SmartFileDO {
         // 创建文件传输对象
@@ -210,7 +208,8 @@ class FileServiceImpl : BaseServiceImpl<FileMapper, SmartFileDO>(),  FileService
         if (extension == "xlsx") extension = "xls"
         // 执行转换
         val pdfOutputStream = ByteArrayOutputStream()
-        this.documentConverter.from(file.inputStream)
+        val documentConverter = ApplicationContextRegister.getBean(DocumentConverter :: class.java) ?: throw Exception("PDF转换失败，请初始化转换器（在启动类他添加@EnableDocumentConvert注解）")
+        documentConverter.from(file.inputStream)
                 .`as`(DefaultDocumentFormatRegistry.getFormatByFileExtension(extension))
                 .to(pdfOutputStream)
                 .`as`(DefaultDocumentFormatRegistry.PDF)
