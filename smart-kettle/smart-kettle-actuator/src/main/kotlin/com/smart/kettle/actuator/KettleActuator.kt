@@ -165,22 +165,4 @@ object KettleActuator {
         repository.connect(databaseMetaProperties.resUser,databaseMetaProperties.resPassword)
         return repository
     }
-
-
-
-    @JvmStatic
-    fun main(args: Array<String>) {
-        val databaseMetaProperties = DatabaseMetaProperties()
-        databaseMetaProperties.host = "charsming.f3322.org"
-        databaseMetaProperties.port = "3309"
-        databaseMetaProperties.db = "kettle_responsitory_8.0"
-        databaseMetaProperties.dbUser = "root"
-        databaseMetaProperties.dbPassword = "Charsming619"
-        val parameter = mapOf(
-                "startTime" to "2019-07-01",
-                "endTime" to "2019-08-01",
-                "stcds" to "41842545,41842450"
-        )
-        KettleActuator.excuteDBJob(databaseMetaProperties, "Rain_job", "Rain_kettle", params = parameter)
-    }
 }
