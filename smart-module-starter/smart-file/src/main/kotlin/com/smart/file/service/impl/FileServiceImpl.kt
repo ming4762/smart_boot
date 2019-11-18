@@ -251,6 +251,6 @@ class FileServiceImpl : BaseServiceImpl<FileMapper, SmartFileDO>(),  FileService
      * 保存真实文件
      */
     private fun saveActualFile(fileDTO: SmartFileDTO): String {
-        return this.actualFileService.save(fileDTO.inputStream, fileDTO.smartFile.fileName)
+        return this.actualFileService.save(fileDTO.inputStream, fileDTO.smartFile.fileName!!)
     }
 }

@@ -26,7 +26,7 @@ class PublicImageController {
      * @param id 文件ID
      * @param width 图片压缩宽度
      * @param height 图片压缩高度
-     * @param thumbnail TODO:缩略图
+     * @param thumbnail TODO:缩略图未处理
      * @param response
      */
     @GetMapping("show/{id}")
