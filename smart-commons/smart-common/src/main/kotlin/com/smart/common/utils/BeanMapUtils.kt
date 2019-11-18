@@ -19,7 +19,7 @@ object BeanMapUtils {
         // 将map根据配置转为另一个map
         val resultMap = convertMap(map, config)
         // 将map转为bean
-        val json = JSON.toJSON(resultMap)
+//        val json = JSON.toJSON(resultMap)
         return this.map2Bean(resultMap, clazz)
     }
 

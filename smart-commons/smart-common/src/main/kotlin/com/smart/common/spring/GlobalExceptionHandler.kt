@@ -26,7 +26,7 @@ class GlobalExceptionHandler {
     @ResponseBody
     @ExceptionHandler(Exception :: class)
     fun handleException(e: Exception): Result<Any?> {
-        LOGGER.error(e.toString())
+        LOGGER.error(e.toString(), e)
         return Result.failure(e.message)
     }
 }
