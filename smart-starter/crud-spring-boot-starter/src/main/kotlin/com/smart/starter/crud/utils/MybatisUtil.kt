@@ -22,7 +22,7 @@ import kotlin.reflect.full.memberProperties
 import kotlin.reflect.jvm.javaField
 
 /**
- *
+ * 
  * @author ming
  * 2019/6/12 上午10:41
  */
@@ -391,6 +391,7 @@ object MybatisUtil {
     /**
      * 解析排序
      */
+    @JvmStatic
     fun analysisOrder(sortName: String, sortOrder: String?, clazz: Class<out BaseModel>): List<Sort> {
         val sortNameList = sortName.split(",")
         val sortOrderList = sortOrder?.split(",") ?: listOf()
@@ -404,7 +405,7 @@ object MybatisUtil {
             if (dbName != null) {
                 it.dbName = dbName
             } else {
-                logger.warn("为找到排序字段对应的数据库字段：${it.name}，该排序属性被忽略")
+                logger.warn("未找到排序字段对应的数据库字段：${it.name}，该排序属性被忽略")
             }
             return@filter dbName != null
         }

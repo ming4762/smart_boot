@@ -3,12 +3,11 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.1.5.RELEASE</version>
+        <groupId>com.smart</groupId>
+        <artifactId>smart-boot-dependencies</artifactId>
+        <version>0.0.2-RELEASE</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>com.smart</groupId>
     <artifactId>smart_boot</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>smart_boot</name>
@@ -54,6 +53,7 @@
         <office-spring-boot-starter.version>0.0.1-SNAPSHOT</office-spring-boot-starter.version>
         <!--图片工具类版本-->
         <thumbnailator.version>0.4.8</thumbnailator.version>
+        <smart-queue-common.version>0.0.1-SNAPSHOT</smart-queue-common.version>
     </properties>
 
     <modules>
@@ -63,7 +63,6 @@
         <module>smart-kettle</module>
         <!--模块启动器-->
         <module>smart-module-starter</module>
-        <module>smart-office</module>
         <module>smart-shiro</module>
         <module>smart-ui</module>
         <!--启动器模块-->
@@ -139,16 +138,27 @@
         </plugins>
     </build>
 
+<!--    <distributionManagement>-->
+<!--        <repository>-->
+<!--            <id>nexus</id>-->
+<!--            <name>Releases</name>-->
+<!--            <url>http://charsming.f3322.org:8081/repository/maven-releases</url>-->
+<!--        </repository>-->
+<!--        <snapshotRepository>-->
+<!--            <id>nexus</id>-->
+<!--            <name>Snapshot</name>-->
+<!--            <url>http://charsming.f3322.org:8081/repository/maven-snapshots</url>-->
+<!--        </snapshotRepository>-->
+<!--    </distributionManagement>-->
+
     <distributionManagement>
         <repository>
-            <id>nexus</id>
-            <name>Releases</name>
-            <url>http://charsming.f3322.org:8081/repository/maven-releases</url>
+            <id>rdc-releases</id>
+            <url>https://repo.rdc.aliyun.com/repository/111930-release-qwTFmA/</url>
         </repository>
         <snapshotRepository>
-            <id>nexus</id>
-            <name>Snapshot</name>
-            <url>http://charsming.f3322.org:8081/repository/maven-snapshots</url>
+            <id>rdc-snapshots</id>
+            <url>https://repo.rdc.aliyun.com/repository/111930-snapshot-KJhTZd/</url>
         </snapshotRepository>
     </distributionManagement>
 
