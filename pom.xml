@@ -54,6 +54,7 @@
         <!--图片工具类版本-->
         <thumbnailator.version>0.4.8</thumbnailator.version>
         <database-spring-boot-starter.version>0.0.1-SNAPSHOT</database-spring-boot-starter.version>
+        <smart-queue-common.version>0.0.1-SNAPSHOT</smart-queue-common.version>
     </properties>
 
     <modules>
@@ -64,7 +65,6 @@
         <module>smart-kettle</module>
         <!--模块启动器-->
         <module>smart-module-starter</module>
-        <module>smart-office</module>
         <module>smart-shiro</module>
         <module>smart-ui</module>
         <!--启动器模块-->
@@ -139,6 +139,19 @@
             </plugin>
         </plugins>
     </build>
+
+<!--    <distributionManagement>-->
+<!--        <repository>-->
+<!--            <id>nexus</id>-->
+<!--            <name>Releases</name>-->
+<!--            <url>http://charsming.f3322.org:8081/repository/maven-releases</url>-->
+<!--        </repository>-->
+<!--        <snapshotRepository>-->
+<!--            <id>nexus</id>-->
+<!--            <name>Snapshot</name>-->
+<!--            <url>http://charsming.f3322.org:8081/repository/maven-snapshots</url>-->
+<!--        </snapshotRepository>-->
+<!--    </distributionManagement>-->
 
     <distributionManagement>
         <repository>

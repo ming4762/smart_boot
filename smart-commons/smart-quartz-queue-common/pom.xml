@@ -17,8 +17,6 @@
     </properties>
 
     <dependencies>
-
-
         <dependency>
             <groupId>com.smart</groupId>
             <artifactId>queue-spring-boot-starter</artifactId>
