@@ -17,6 +17,8 @@
     </properties>
 
     <modules>
+        <module>activiti-spring-boot-starter</module>
+        <module>cros-spring-boot-starter</module>
         <!--crud启动器-->
         <module>crud-spring-boot-starter</module>
         <!--文件启动器-->
