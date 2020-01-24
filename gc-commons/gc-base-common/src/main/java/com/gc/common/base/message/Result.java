@@ -3,8 +3,12 @@ package com.gc.common.base.message;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.jetbrains.annotations.NotNull;
+import org.springframework.context.support.DefaultMessageSourceResolvable;
+import org.springframework.validation.BindingResult;
 
 import java.lang.reflect.Field;
+import java.util.Optional;
 
 /**
  * 后台传输工具类
@@ -116,7 +120,22 @@ public class Result<T> {
      * @param <T>
      * @return
      */
+    @org.jetbrains.annotations.NotNull
     public static <T> Result<T> failure(String message) {
         return Result.failure(ResultCodeEnum.FAILURE.getCode(), message);
+    }
+
+    /**
+     * 失败消息
+     * @param bindingResult
+     * @param <T>
+     * @return
+     */
+    @org.jetbrains.annotations.NotNull
+    public static <T> Result<T> failure(@NotNull BindingResult bindingResult) {
+        String errorMessage = Optional.ofNullable(bindingResult.getFieldError())
+                .map(DefaultMessageSourceResolvable::getDefaultMessage)
+                .orElse("参数校验失败");
+        return failure(errorMessage);
     }
 }
