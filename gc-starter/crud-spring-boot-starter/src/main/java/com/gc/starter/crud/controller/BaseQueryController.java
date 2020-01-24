@@ -1,23 +1,21 @@
 package com.gc.starter.crud.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.gc.starter.crud.constants.CrudConstants;
-import com.gc.starter.crud.model.Sort;
-import com.gc.starter.crud.service.BaseService;
-import com.github.pagehelper.Page;
-import com.github.pagehelper.PageHelper;
 import com.gc.common.base.message.Result;
+import com.gc.starter.crud.constants.CrudConstants;
 import com.gc.starter.crud.model.BaseModel;
 import com.gc.starter.crud.model.PageData;
+import com.gc.starter.crud.model.Sort;
+import com.gc.starter.crud.service.BaseService;
 import com.gc.starter.crud.utils.CrudUtils;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
@@ -39,8 +37,8 @@ public abstract class BaseQueryController<K extends BaseService<T>, T extends Ba
     @Autowired
     protected K service;
 
-    @RequestMapping("list")
-    @ResponseBody
+//    @RequestMapping("list")
+//    @ResponseBody
     protected Result<Object> list(@RequestBody Map<String, Object> parameter) {
         final Page<T> page = this.doPage(parameter);
         final QueryWrapper<T> queryWrapper = CrudUtils.createQueryWrapperFromParameters(parameter, this.getModelType());
@@ -55,8 +53,8 @@ public abstract class BaseQueryController<K extends BaseService<T>, T extends Ba
         return Result.success(data);
     }
 
-    @RequestMapping("get")
-    @ResponseBody
+//    @RequestMapping("get")
+//    @ResponseBody
     private Result<T> get(@RequestBody T model) {
         return Result.success(this.service.get(model));
     }
