@@ -14,4 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("sys/user")
 public class SysUserController extends BaseController<SysUserService, SysUserPO> {
+
+
 }

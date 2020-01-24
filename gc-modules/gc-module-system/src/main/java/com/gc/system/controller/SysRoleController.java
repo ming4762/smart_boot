@@ -1,8 +1,12 @@
 package com.gc.system.controller;
 
+import com.gc.common.auth.utils.AuthUtils;
+import com.gc.common.base.message.Result;
 import com.gc.starter.crud.controller.BaseController;
 import com.gc.system.model.SysRolePO;
 import com.gc.system.service.SysRoleService;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -14,4 +18,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("sys/role")
 public class SysRoleController extends BaseController<SysRoleService, SysRolePO> {
+
+    @Override
+    @PostMapping("save")
+    protected Result<Boolean> save(@RequestBody SysRolePO model) throws Exception {
+        return Result.success(this.service.saveWithUser(model, AuthUtils.getCurrentUserId()));
+    }
 }
