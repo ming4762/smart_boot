@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.gc</groupId>
+        <artifactId>gc-modules</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+    </parent>
+    <artifactId>gc-module-code</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>gc-module-code</name>
+    <description>代码生成器模块</description>
+
+    <properties>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.gc</groupId>
+            <artifactId>crud-spring-boot-starter</artifactId>
+        </dependency>
+
+        <!--	日志启动器	-->
+        <dependency>
+            <groupId>com.gc</groupId>
+            <artifactId>log-spring-boot-starter</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.gc</groupId>
+            <artifactId>gc-database-message</artifactId>
+        </dependency>
+    </dependencies>
+
+</project>
