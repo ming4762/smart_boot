@@ -12,9 +12,12 @@
     <name>gc-commons</name>
     <description>Demo project for Spring Boot</description>
 
+    <packaging>pom</packaging>
 
     <modules>
-        <module>gc-common</module>
+        <module>gc-auth-common</module>
+        <module>gc-base-common</module>
+        <module>gc-cache-common</module>
     </modules>
 
     <properties>
