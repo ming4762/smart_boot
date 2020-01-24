@@ -75,6 +75,7 @@ public class SecurityAutoConfiguration extends WebSecurityConfigurerAdapter {
                     .permitAll()
                     .antMatchers("/public/**")
                     .permitAll()
+                    .antMatchers().hasRole("SUPERADMIN").anyRequest().permitAll()
                     // 其他请求全部拦截
                     .anyRequest().authenticated()
                     .and()
