@@ -36,3 +36,5 @@ logs/
 
 ### VS CODE ###
 .vscode/
+
+gc-tests/

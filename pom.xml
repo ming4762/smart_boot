@@ -3,20 +3,31 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<groupId>org.springframework.boot</groupId>
-		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.2.2.RELEASE</version>
+		<groupId>com.gc</groupId>
+		<artifactId>gc-boot-dependencies</artifactId>
+		<version>0.0.3-SNAPSHOT</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.gc</groupId>
 	<artifactId>gc-boot</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>gc-boot</name>
 	<description>Demo project for Spring Boot</description>
 
+	<packaging>pom</packaging>
+
 	<properties>
-		<java.version>11</java.version>
+		<java.version>8</java.version>
+
+		<gc-boot.version>0.0.1-SNAPSHOT</gc-boot.version>
 	</properties>
+
+	<modules>
+		<module>gc-auth</module>
+		<module>gc-commons</module>
+		<module>gc-database</module>
+		<module>gc-modules</module>
+		<module>gc-starter</module>
+	</modules>
 
 	<dependencies>
 		<dependency>
@@ -25,66 +36,54 @@
 		</dependency>
 
 		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-test</artifactId>
-			<scope>test</scope>
-			<exclusions>
-				<exclusion>
-					<groupId>org.junit.vintage</groupId>
-					<artifactId>junit-vintage-engine</artifactId>
-				</exclusion>
-			</exclusions>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
 		</dependency>
-
 		<dependency>
 			<groupId>org.jetbrains</groupId>
 			<artifactId>annotations</artifactId>
 		</dependency>
 	</dependencies>
 
-
 	<dependencyManagement>
 		<dependencies>
-			<!--  lombok	-->
+
 			<dependency>
-				<groupId>org.projectlombok</groupId>
-				<artifactId>lombok</artifactId>
-				<version>1.18.10</version>
-				<scope>provided</scope>
-			</dependency>
-			<dependency>
-				<groupId>org.jetbrains</groupId>
-				<artifactId>annotations</artifactId>
-				<version>18.0.0</version>
+				<groupId>com.gc</groupId>
+				<artifactId>gc-auth-common</artifactId>
+				<version>${gc-boot.version}</version>
 			</dependency>
 
 			<dependency>
-				<groupId>org.apache.commons</groupId>
-				<artifactId>commons-lang3</artifactId>
-				<version>3.9</version>
+				<groupId>com.gc</groupId>
+				<artifactId>gc-cache-common</artifactId>
+				<version>${gc-boot.version}</version>
 			</dependency>
 
 			<dependency>
-				<groupId>com.google.guava</groupId>
-				<artifactId>guava</artifactId>
-				<version>28.2-jre</version>
+				<groupId>com.gc</groupId>
+				<artifactId>gc-base-common</artifactId>
+				<version>${gc-boot.version}</version>
 			</dependency>
 
 			<dependency>
-				<groupId>commons-codec</groupId>
-				<artifactId>commons-codec</artifactId>
-				<version>1.13</version>
+				<groupId>com.gc</groupId>
+				<artifactId>crud-spring-boot-starter</artifactId>
+				<version>${gc-boot.version}</version>
 			</dependency>
 
 			<dependency>
-				<groupId>com.alibaba</groupId>
-				<artifactId>fastjson</artifactId>
-				<version>1.2.62</version>
+				<groupId>com.gc</groupId>
+				<artifactId>log-spring-boot-starter</artifactId>
+				<version>${gc-boot.version}</version>
 			</dependency>
 
-
+			<dependency>
+				<groupId>com.gc</groupId>
+				<artifactId>gc-database-message</artifactId>
+				<version>${gc-boot.version}</version>
+			</dependency>
 
 		</dependencies>
 	</dependencyManagement>
-
 </project>

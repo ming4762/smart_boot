@@ -1,0 +1,26 @@
+-- 系统用户表
+CREATE TABLE `sys_user` (
+  `user_id` int(42) NOT NULL DEFAULT '3' COMMENT '用户ID',
+  `username` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '用户名',
+  `realname` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '姓名',
+  `password` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '密码',
+  `email` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '邮箱',
+  `mobile` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '手机',
+  `telephone` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '电话',
+  `sex` int(1) NOT NULL COMMENT '性别 ',
+  `birthday` datetime DEFAULT NULL COMMENT '生日',
+  `deptId` int(42) DEFAULT NULL COMMENT '部门ID',
+  `status` char(2) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '10' COMMENT '状态（10：启用，20：禁用）',
+  `userType` char(2) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '用户类型（10：系统用户，20：业务用户）',
+  `create_user_id` int(42) NOT NULL COMMENT '创建人员ID',
+  `create_time` datetime NOT NULL COMMENT '创建时间',
+  `update_user_id` int(42) DEFAULT NULL COMMENT '更新人员ID',
+  `update_time` datetime DEFAULT NULL COMMENT '更新时间',
+  `post_id` int(42) DEFAULT NULL COMMENT '职务ID',
+  `work_no` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '工号',
+  `seq` int(11) NOT NULL COMMENT '序号',
+  PRIMARY KEY (`user_id`),
+  UNIQUE KEY `uni_user_name` (`username`) USING BTREE COMMENT '用户名唯一键',
+  UNIQUE KEY `uni_work_no` (`work_no`) USING BTREE COMMENT '工号唯一键',
+  KEY `idx_post_id` (`post_id`) COMMENT '部门ID索引'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='系统用户表';
