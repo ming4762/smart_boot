@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.gc</groupId>
+        <artifactId>gc-boot</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+    </parent>
+    <artifactId>gc-auth</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>gc-auth</name>
+    <description>权限模块</description>
+
+    <packaging>pom</packaging>
+
+    <properties>
+    </properties>
+
+    <modules>
+        <module>gc-auth-security</module>
+        <module>gc-auth-shiro</module>
+    </modules>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.gc</groupId>
+            <artifactId>gc-auth-common</artifactId>
+        </dependency>
+    </dependencies>
+
+
+</project>
