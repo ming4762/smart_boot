@@ -1,6 +1,8 @@
 package com.gc.starter.crud.model;
 
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.Date;
@@ -11,6 +13,8 @@ import java.util.Date;
  */
 @Getter
 @Setter
+@Builder
+@NoArgsConstructor
 public abstract class BaseModelCreateUserTime extends BaseModel {
 
     private static final long serialVersionUID = 5157863351256809974L;
