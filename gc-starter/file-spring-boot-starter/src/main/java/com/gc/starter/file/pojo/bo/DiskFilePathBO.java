@@ -1,6 +1,6 @@
 package com.gc.starter.file.pojo.bo;
 
-import com.smart.common.base.utils.Base64Util;
+import com.gc.common.base.utils.Base64Util;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.jetbrains.annotations.NotNull;

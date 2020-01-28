@@ -2,7 +2,7 @@ package com.gc.starter.file.serice.impl;
 
 import com.gc.starter.file.pojo.bo.DiskFilePathBO;
 import com.gc.starter.file.serice.ActualFileService;
-import com.smart.common.base.utils.security.MD5Utils;
+import com.gc.common.base.utils.security.MD5Utils;
 import org.apache.commons.io.IOUtils;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.util.StringUtils;

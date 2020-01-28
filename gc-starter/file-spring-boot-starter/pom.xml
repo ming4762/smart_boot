@@ -8,7 +8,7 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
     <artifactId>file-spring-boot-starter</artifactId>
-    <version>${gc-boot-version}</version>
+    <version>0.0.1-SNAPSHOT</version>
     <name>file-spring-boot-starter</name>
     <description>文件启动器</description>
 
