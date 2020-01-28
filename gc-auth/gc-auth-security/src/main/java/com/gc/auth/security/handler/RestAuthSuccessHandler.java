@@ -1,7 +1,11 @@
 package com.gc.auth.security.handler;
 
 import com.gc.auth.security.model.RestUserDetails;
+import com.gc.common.auth.properties.AuthProperties;
 import com.gc.common.base.message.Result;
+import com.google.common.collect.ImmutableMap;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
@@ -19,10 +23,34 @@ import java.io.IOException;
 @Component
 public class RestAuthSuccessHandler implements AuthenticationSuccessHandler {
 
+    private static final String LOGIN_TYPE = "type";
+
+    private static final String MOBILE_LOGIN_TYPE = "mobile";
+
+    /**
+     * 认证参数
+     */
+    @Autowired
+    private AuthProperties authProperties;
+
     @Override
     public void onAuthenticationSuccess(HttpServletRequest httpServletRequest, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-        RestUserDetails userDetails = (RestUserDetails) authentication.getPrincipal();
-        httpServletRequest.getSession().setAttribute("user", userDetails);
-        RestJsonWriter.writeJson(response, Result.success(userDetails));
+       this.setSessionMaxInactiveInterval(httpServletRequest);
+        final RestUserDetails userDetails = (RestUserDetails) authentication.getPrincipal();
+        final ImmutableMap<String, Object> result = ImmutableMap.of("user", userDetails, "token", httpServletRequest.getSession().getId());
+        RestJsonWriter.writeJson(response, Result.success(result));
     }
+
+    /**
+     * 设置session过期时间
+     * @param request 请求信息
+     */
+    private void setSessionMaxInactiveInterval(HttpServletRequest request) {
+        int global = this.authProperties.getSession().getTimeout().getGlobal();
+        if (StringUtils.equals(MOBILE_LOGIN_TYPE, (String)request.getAttribute(LOGIN_TYPE))) {
+            global = this.authProperties.getSession().getTimeout().getMobile();
+        }
+        request.getSession().setMaxInactiveInterval(global);
+    }
+
 }

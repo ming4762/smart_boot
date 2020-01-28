@@ -27,6 +27,7 @@ public class RestAuthenticationProvider extends AbstractUserDetailsAuthenticatio
 
     @Override
     protected void additionalAuthenticationChecks(UserDetails userDetails, UsernamePasswordAuthenticationToken authentication) throws AuthenticationException {
+
         if (ObjectUtils.isEmpty(authentication.getCredentials())) {
             logger.debug("登录失败:密码不存在");
             throw new InternalAuthenticationServiceException(USERNAME_PASSWORD_NULL);
