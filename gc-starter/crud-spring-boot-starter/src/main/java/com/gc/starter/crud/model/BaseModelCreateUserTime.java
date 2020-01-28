@@ -1,6 +1,5 @@
 package com.gc.starter.crud.model;
 
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -13,7 +12,6 @@ import java.util.Date;
  */
 @Getter
 @Setter
-@Builder
 @NoArgsConstructor
 public abstract class BaseModelCreateUserTime extends BaseModel {
 

@@ -20,7 +20,7 @@ import java.util.Map;
 public class DatabaseConnectionController extends BaseController<DatabaseConnectionService, DatabaseConnectionPO> {
 
     @RequestMapping("list")
-    @PreAuthorize("hasRole('abc')")
+    @PreAuthorize("hasRole('1')")
 //    @PreAuthorize("hasPermission('abc', '123') or hasPermission('user', '123')")
 //    @PreAuthorize("hasPermission('abc', '123')")
     @Override

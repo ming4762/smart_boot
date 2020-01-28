@@ -39,7 +39,7 @@ public class RestUserDetailsServiceImpl implements UserDetailsService{
         if (Objects.isNull(user)) {
             return null;
         }
-        Set<GrantedAuthority> grantedAuthoritySet = Sets.newHashSet((GrantedAuthority) () -> "ROLE_abc", (GrantedAuthority) () -> "123");
+        Set<GrantedAuthority> grantedAuthoritySet = Sets.newHashSet((GrantedAuthority) () -> "ROLE_admin", (GrantedAuthority) () -> "123");
         // 查询用户角色信息
         final RestUserDetails restUserDetails = new RestUserDetails();
         restUserDetails.setUsername(user.getUsername());

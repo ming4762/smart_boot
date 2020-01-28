@@ -16,4 +16,5 @@ import org.springframework.web.bind.annotation.RestController;
 public class SysUserController extends BaseController<AuthUserService, SysUserPO> {
 
 
+
 }
