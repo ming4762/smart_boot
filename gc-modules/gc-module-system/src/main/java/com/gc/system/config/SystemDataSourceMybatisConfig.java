@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
@@ -30,14 +29,12 @@ import java.util.Properties;
 public class SystemDataSourceMybatisConfig {
 
     @Bean(name = "systemDataSource")
-    @Primary
     @ConfigurationProperties("spring.datasource.system")
     public DataSource systemDataSource() {
         return DruidDataSourceBuilder.create().build();
     }
 
     @Bean("systemSqlSessionFactory")
-    @Primary
     public SqlSessionFactory systemSqlSessionFactory(@Qualifier("systemDataSource") DataSource dataSource) throws Exception {
         MybatisSqlSessionFactoryBean mybatisSqlSessionFactoryBean = new MybatisSqlSessionFactoryBean();
         mybatisSqlSessionFactoryBean.setDataSource(dataSource);
@@ -47,12 +44,10 @@ public class SystemDataSourceMybatisConfig {
     }
 
     @Bean("systemSqlSessionTemplate")
-    @Primary
     public SqlSessionTemplate systemSqlSessionTemplate(@Qualifier("systemSqlSessionFactory") SqlSessionFactory sqlSessionFactory) {
         return new SqlSessionTemplate(sqlSessionFactory);
     }
 
-    @Primary
     @Bean(name = "systemTransactionManager")
     public DataSourceTransactionManager systemTransactionManager(@Qualifier("systemDataSource") DataSource dataSource) {
         return new DataSourceTransactionManager(dataSource);
