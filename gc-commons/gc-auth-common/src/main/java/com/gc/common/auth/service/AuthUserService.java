@@ -7,5 +7,6 @@ import com.gc.starter.crud.service.BaseService;
  * @author jackson
  * 2020/1/23 7:39 下午
  */
-public interface SysUserService extends BaseService<SysUserPO> {
+public interface AuthUserService extends BaseService<SysUserPO> {
+
 }

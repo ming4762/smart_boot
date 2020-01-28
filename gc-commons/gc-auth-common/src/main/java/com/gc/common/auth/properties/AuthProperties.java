@@ -16,6 +16,8 @@ public class AuthProperties {
 
     private Session session = new Session();
 
+    private String permitAll;
+
     /**
      * 是否是开发模式
      */
@@ -23,15 +25,16 @@ public class AuthProperties {
 
     @Getter
     @Setter
-    class Session {
+    public class Session {
         private Timeout timeout = new Timeout();
     }
 
     @Getter
     @Setter
-    class Timeout {
-        private Long global = 3600L;
-
-        private Long mobile = 604800L;
+    public class Timeout {
+        // 默认 30分钟
+        private Integer global = 1800;
+        // 默认30天
+        private Integer mobile = 2592000;
     }
 }
