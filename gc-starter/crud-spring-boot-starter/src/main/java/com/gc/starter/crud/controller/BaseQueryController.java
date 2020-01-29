@@ -14,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -74,7 +75,9 @@ public abstract class BaseQueryController<K extends BaseService<T>, T extends Ba
                 log.warn("参数类型无效，limit应为int类型，limit：{}", limit);
                 return null;
             }
-            if (!(offset instanceof Integer)) {
+            if (ObjectUtils.isEmpty(offset)) {
+                offset = 0;
+            } else if (!(offset instanceof Integer)) {
                 log.warn("参数类型无效，offset应为int类型，offset：{}，使用默认值：0", offset);
                 offset = 0;
             }
