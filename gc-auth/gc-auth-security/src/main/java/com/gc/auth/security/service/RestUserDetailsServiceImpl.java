@@ -1,13 +1,15 @@
 package com.gc.auth.security.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.gc.common.auth.core.GcGrantedAuthority;
+import com.gc.common.auth.core.PermissionGrantedAuthority;
+import com.gc.common.auth.core.RoleGrantedAuthority;
 import com.gc.common.auth.model.RestUserDetails;
 import com.gc.common.auth.model.SysUserPO;
 import com.gc.common.auth.service.AuthUserService;
 import com.google.common.collect.Sets;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -39,7 +41,10 @@ public class RestUserDetailsServiceImpl implements UserDetailsService{
         if (Objects.isNull(user)) {
             return null;
         }
-        Set<GrantedAuthority> grantedAuthoritySet = Sets.newHashSet((GrantedAuthority) () -> "ROLE_admin", (GrantedAuthority) () -> "123");
+        Set<GcGrantedAuthority> grantedAuthoritySet = Sets.newHashSet(
+          new RoleGrantedAuthority("SUPERADMIN"),
+          new PermissionGrantedAuthority("123")
+        );
         // 查询用户角色信息
         final RestUserDetails restUserDetails = new RestUserDetails();
         restUserDetails.setUserId(user.getUserId());

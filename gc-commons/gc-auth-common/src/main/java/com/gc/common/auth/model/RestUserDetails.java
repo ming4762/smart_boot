@@ -1,9 +1,9 @@
 package com.gc.common.auth.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.gc.common.auth.core.GcGrantedAuthority;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.io.Serializable;
@@ -19,8 +19,6 @@ import java.util.stream.Collectors;
 public class RestUserDetails implements UserDetails, Serializable {
     private static final long serialVersionUID = -6184955894751051086L;
 
-    private static final String ROLE_START = "ROLE_";
-
     @Getter
     private Long userId;
 
@@ -32,33 +30,34 @@ public class RestUserDetails implements UserDetails, Serializable {
     @Getter
     private SysUserPO user;
 
-    private Set<? extends GrantedAuthority> authorities;
+    private Set<GcGrantedAuthority> authorities;
 
     @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
+    public Collection<GcGrantedAuthority> getAuthorities() {
         return this.authorities;
     }
 
     /**
      * 获取用户的角色编码
-     * @return
+     * @return 用户角色列表
      */
     public Set<String> getRoles() {
         return this.authorities.stream()
-                .map(GrantedAuthority::getAuthority)
-                .filter(item -> item.startsWith(ROLE_START))
-                .map(item -> item.replace(ROLE_START, ""))
+//                .map(item -> (GcGrantedAuthority)item)
+                .filter(GcGrantedAuthority::isRole)
+                .map(GcGrantedAuthority::getAuthorityValue)
                 .collect(Collectors.toSet());
     }
 
     /**
      * 获取用户的权限列表
-     * @return
+     * @return 用户权限列表
      */
     public Set<String> getPermissions() {
         return this.authorities.stream()
-                .map(GrantedAuthority::getAuthority)
-                .filter(item -> !item.startsWith(ROLE_START))
+//                .map(item -> (GcGrantedAuthority)item)
+                .filter(GcGrantedAuthority :: isPermission)
+                .map(GcGrantedAuthority :: getAuthorityValue)
                 .collect(Collectors.toSet());
     }
 

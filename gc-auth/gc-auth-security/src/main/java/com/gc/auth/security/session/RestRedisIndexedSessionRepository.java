@@ -33,8 +33,8 @@ import java.util.Set;
  * @author jackson
  * 2020/1/25 5:10 下午
  */
-@Component
-@Primary
+//@Component
+//@Primary
 public class RestRedisIndexedSessionRepository implements FindByIndexNameSessionRepository<RestRedisIndexedSessionRepository.RestRedisSession>, MessageListener {
 
     private static final Log logger = LogFactory.getLog(RedisIndexedSessionRepository.class);

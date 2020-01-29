@@ -1,7 +1,9 @@
 package com.gc.common.auth.utils;
 
+import com.gc.common.auth.model.RestUserDetails;
 import com.gc.common.auth.model.SysUserPO;
 import org.jetbrains.annotations.Nullable;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 /**
  * 认证工具类
@@ -16,7 +18,7 @@ public final class AuthUtils {
      */
     @Nullable
     public static SysUserPO getCurrentUser() {
-        return null;
+        return ((RestUserDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUser();
     }
 
     /**
