@@ -8,7 +8,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * @author shizhongming
  * 2020/1/15 9:03 下午
  */
-@ConfigurationProperties(prefix = "smart.file")
+@ConfigurationProperties(prefix = "gc.file")
 @Getter
 @Setter
 public class SmartFileProperties {
