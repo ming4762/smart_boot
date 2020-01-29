@@ -1,5 +1,7 @@
 package com.gc.module.file.model;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.gc.starter.crud.model.BaseModelCreateUserTime;
 import lombok.*;
@@ -21,6 +23,7 @@ public class SysFilePO extends BaseModelCreateUserTime {
     /**
      * 文件ID
      */
+    @TableId(type = IdType.ASSIGN_ID)
     private Long fileId;
 
     /**
