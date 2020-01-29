@@ -3,6 +3,7 @@ package com.gc.common.auth.model;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.gc.starter.crud.model.BaseModelUserTime;
 import lombok.Getter;
 import lombok.Setter;
@@ -42,6 +43,7 @@ public class SysUserPO extends BaseModelUserTime {
     /**
      * 密码
      */
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
     /**

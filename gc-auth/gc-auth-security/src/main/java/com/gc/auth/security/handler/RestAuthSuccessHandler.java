@@ -1,6 +1,6 @@
 package com.gc.auth.security.handler;
 
-import com.gc.auth.security.model.RestUserDetails;
+import com.gc.common.auth.model.RestUserDetails;
 import com.gc.common.auth.properties.AuthProperties;
 import com.gc.common.base.message.Result;
 import com.google.common.collect.ImmutableMap;
@@ -14,6 +14,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Map;
 
 /**
  * 登录成功执行器
@@ -35,10 +36,27 @@ public class RestAuthSuccessHandler implements AuthenticationSuccessHandler {
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest httpServletRequest, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-       this.setSessionMaxInactiveInterval(httpServletRequest);
+        this.setSessionMaxInactiveInterval(httpServletRequest);
+        RestJsonWriter.writeJson(response, Result.success(this.successData(authentication, httpServletRequest)));
+    }
+
+    /**
+     * 获取返回信息
+     * @param authentication
+     * @param httpServletRequest
+     * @return
+     */
+    private Result<Map<String, Object>> successData(Authentication authentication, HttpServletRequest httpServletRequest) {
+        final String roleStart = "ROLE_";
         final RestUserDetails userDetails = (RestUserDetails) authentication.getPrincipal();
-        final ImmutableMap<String, Object> result = ImmutableMap.of("user", userDetails, "token", httpServletRequest.getSession().getId());
-        RestJsonWriter.writeJson(response, Result.success(result));
+        // 处理用户权限信息
+        final ImmutableMap<String, Object> result = ImmutableMap.of(
+                "user", userDetails.getUser(),
+                "token", httpServletRequest.getSession().getId(),
+                "roles", userDetails.getRoles(),
+                "permissions", userDetails.getPermissions()
+        );
+        return Result.success(result);
     }
 
     /**

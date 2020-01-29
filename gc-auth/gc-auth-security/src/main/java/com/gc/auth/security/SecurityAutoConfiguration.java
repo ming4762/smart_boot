@@ -55,11 +55,6 @@ public class SecurityAutoConfiguration extends WebSecurityConfigurerAdapter {
     @Autowired
     private RestAuthenticationProvider provider;
 
-//    @Autowired
-//    private RestRedisIndexedSessionRepository redisIndexedSessionRepository;
-
-
-
     /**
      * 创建session id 读取类
      * @return session id 读取
@@ -87,6 +82,8 @@ public class SecurityAutoConfiguration extends WebSecurityConfigurerAdapter {
 
         http.cors()
                 .and().csrf().disable().authorizeRequests()
+                // 设置自定义投票器
+//                .accessDecisionManager()
                 .antMatchers(HttpMethod.OPTIONS)
                 .permitAll()
                 .and()
@@ -107,17 +104,12 @@ public class SecurityAutoConfiguration extends WebSecurityConfigurerAdapter {
                 .logoutUrl("/public/auth/logout")
                 // 登出成功
                 .logoutSuccessHandler(restLogoutSuccessHandler);
-//                .and()
-//                .sessionManagement()
-//                .maximumSessions(2)
-//                .sessionRegistry(sessionRegistry());
 
 
         if (this.authProperties.getDevelopment()) {
             http.cors().and().authorizeRequests().anyRequest().permitAll();
         } else {
             http.authorizeRequests()
-//                    .antMatchers("/**").hasRole("SUPERADMIN")
                     .and();
             if (ObjectUtils.isNotEmpty(permitAllUrl)) {
                 String[] matchers = new String[permitAllUrl.size()];
@@ -129,8 +121,11 @@ public class SecurityAutoConfiguration extends WebSecurityConfigurerAdapter {
         }
     }
 
-//    @Bean
-//    public SpringSessionBackedSessionRegistry<RestRedisIndexedSessionRepository.RestRedisSession> sessionRegistry() {
-//        return new SpringSessionBackedSessionRegistry<>(redisIndexedSessionRepository);
+    /**
+     * 创建投票器
+     * @return
+     */
+//    private AccessDecisionManager createAccessDecisionManager() {
+//        this.methodSecurityConfiguration.
 //    }
 }

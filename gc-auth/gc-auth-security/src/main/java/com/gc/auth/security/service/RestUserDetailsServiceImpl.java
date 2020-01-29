@@ -1,7 +1,7 @@
 package com.gc.auth.security.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.gc.auth.security.model.RestUserDetails;
+import com.gc.common.auth.model.RestUserDetails;
 import com.gc.common.auth.model.SysUserPO;
 import com.gc.common.auth.service.AuthUserService;
 import com.google.common.collect.Sets;
@@ -42,6 +42,8 @@ public class RestUserDetailsServiceImpl implements UserDetailsService{
         Set<GrantedAuthority> grantedAuthoritySet = Sets.newHashSet((GrantedAuthority) () -> "ROLE_admin", (GrantedAuthority) () -> "123");
         // 查询用户角色信息
         final RestUserDetails restUserDetails = new RestUserDetails();
+        restUserDetails.setUserId(user.getUserId());
+        restUserDetails.setUser(user);
         restUserDetails.setUsername(user.getUsername());
         restUserDetails.setPassword(user.getPassword());
         restUserDetails.setAuthorities(grantedAuthoritySet);

@@ -15,7 +15,7 @@ import java.io.Serializable;
 public class RestPermissionEvaluatorImpl implements PermissionEvaluator {
     @Override
     public boolean hasPermission(Authentication authentication, Object targetDomainObject, Object permission) {
-        return false;
+        return true;
     }
 
     @Override
