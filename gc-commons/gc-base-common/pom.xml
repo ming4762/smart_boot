@@ -21,6 +21,12 @@
 			<artifactId>commons-lang3</artifactId>
 		</dependency>
 
+		<!--	引入swagger支持	-->
+		<dependency>
+			<groupId>io.springfox</groupId>
+			<artifactId>springfox-swagger2</artifactId>
+		</dependency>
+
 		<!--引入web支持-->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

@@ -1,6 +1,8 @@
 package com.gc.common.base.message;
 
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
@@ -16,14 +18,19 @@ import java.util.Optional;
  */
 @Getter
 @Setter
+@ApiModel(value = "通用api接口", description = "通用api接口返回")
 public class Result<T> {
 
+    @ApiModelProperty(value = "状态码", example = "200", required = true)
     private Integer code = ResultCodeEnum.SUCCESS.getCode();
 
+    @ApiModelProperty(value = "返回信息", example = "成功")
     private String message = null;
 
+    @ApiModelProperty(value = "接口返回状态", example = "true", required = true)
     private Boolean ok = Boolean.TRUE;
 
+    @ApiModelProperty(value = "接口返回数据")
     private T data = null;
 
     private static <T> Result<T> newInstance() {
