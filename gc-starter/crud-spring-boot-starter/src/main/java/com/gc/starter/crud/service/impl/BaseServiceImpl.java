@@ -84,6 +84,19 @@ public abstract class BaseServiceImpl<K extends BaseMapper<T>, T extends BaseMod
     }
 
     /**
+     * 重写批量删除方法，如果ID只有一个调用removeById方法
+     * @param idList ID列表
+     * @return 删除结果
+     */
+    @Override
+    public boolean removeByIds(Collection<? extends Serializable> idList) {
+        if (idList.size() == 1) {
+            return this.removeById(idList.iterator().next());
+        }
+        return super.removeByIds(idList);
+    }
+
+    /**
      * 查询单一实体
      * @param model
      * @return
