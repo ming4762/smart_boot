@@ -19,6 +19,8 @@
 		<java.version>8</java.version>
 
 		<gc-boot.version>0.0.1-SNAPSHOT</gc-boot.version>
+
+		<swagger.version>2.9.2</swagger.version>
 	</properties>
 
 	<modules>
@@ -88,6 +90,12 @@
 				<groupId>com.gc</groupId>
 				<artifactId>gc-database-message</artifactId>
 				<version>${gc-boot.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>io.springfox</groupId>
+				<artifactId>springfox-swagger2</artifactId>
+				<version>${swagger.version}</version>
 			</dependency>
 
 		</dependencies>
