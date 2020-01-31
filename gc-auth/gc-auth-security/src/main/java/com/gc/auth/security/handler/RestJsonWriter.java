@@ -12,7 +12,7 @@ import java.io.IOException;
  */
 public class RestJsonWriter {
 
-    public static void writeJson(HttpServletResponse response, Result<Object> result) throws IOException {
+    public static void writeJson(HttpServletResponse response, Result<?> result) throws IOException {
         response.setContentType("application/json;charset=UTF-8");
         response.getWriter().write(JSON.toJSONString(result));
     }

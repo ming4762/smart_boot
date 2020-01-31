@@ -37,7 +37,7 @@ public class RestAuthSuccessHandler implements AuthenticationSuccessHandler {
     @Override
     public void onAuthenticationSuccess(HttpServletRequest httpServletRequest, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         this.setSessionMaxInactiveInterval(httpServletRequest);
-        RestJsonWriter.writeJson(response, Result.success(this.successData(authentication, httpServletRequest)));
+        RestJsonWriter.writeJson(response, this.successData(authentication, httpServletRequest));
     }
 
     /**
