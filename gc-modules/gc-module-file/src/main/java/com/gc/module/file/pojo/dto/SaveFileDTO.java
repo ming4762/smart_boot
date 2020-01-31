@@ -1,5 +1,6 @@
 package com.gc.module.file.pojo.dto;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,6 +12,7 @@ import java.io.Serializable;
  */
 @Getter
 @Setter
+@Builder
 public class SaveFileDTO implements Serializable {
 
     private static final long serialVersionUID = 8030356270886177531L;

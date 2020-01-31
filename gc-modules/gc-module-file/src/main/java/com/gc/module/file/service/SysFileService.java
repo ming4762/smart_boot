@@ -8,7 +8,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Collection;
 
@@ -25,7 +24,7 @@ public interface SysFileService extends BaseService<SysFilePO> {
      * @return
      */
     @NotNull
-    SysFilePO saveFile(@NotNull MultipartFile multipartFile, @NotNull SaveFileDTO saveFileDTO) throws IOException;
+    SysFilePO saveFile(@NotNull MultipartFile multipartFile, @NotNull SaveFileDTO saveFileDTO) throws IOException, Exception;
 
     /**
      * 保存文件
@@ -33,7 +32,7 @@ public interface SysFileService extends BaseService<SysFilePO> {
      * @return
      */
     @NotNull
-    SysFilePO saveFile(@NotNull SysFileBO file) throws IOException;
+    SysFilePO saveFile(@NotNull SysFileBO file)  throws Exception;
 
     /**
      * 保存文件
@@ -41,7 +40,7 @@ public interface SysFileService extends BaseService<SysFilePO> {
      * @param type
      * @return
      */
-    SysFilePO saveFile(@NotNull MultipartFile multipartFile, String type) throws IOException;
+    SysFilePO saveFile(@NotNull MultipartFile multipartFile, String type);
 
     /**
      * 删除文件
@@ -64,12 +63,12 @@ public interface SysFileService extends BaseService<SysFilePO> {
      * @param fileId 文件ID
      * @return 文件信息
      */
-    SysFileBO downLoad(@NotNull Long fileId) throws FileNotFoundException;
+    SysFileBO downLoad(@NotNull Long fileId);
 
     /**
      * 下载文件
      * @param file 文件实体类信息
      * @return 文件信息
      */
-    SysFileBO download(@NotNull SysFilePO file) throws FileNotFoundException;
+    SysFileBO download(@NotNull SysFilePO file);
 }

@@ -39,6 +39,7 @@ public class SysFileBO implements Serializable {
                 .size(multipartFile.getSize())
                 .build();
         this.inputStream = multipartFile.getInputStream();
+        throw new IOException("abc");
     }
 
 }

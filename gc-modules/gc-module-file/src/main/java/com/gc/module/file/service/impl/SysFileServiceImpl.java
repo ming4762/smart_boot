@@ -1,6 +1,7 @@
 package com.gc.module.file.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.gc.common.auth.utils.AuthUtils;
 import com.gc.common.base.exception.ServiceException;
 import com.gc.module.file.constants.FileDatabaseConstants;
 import com.gc.module.file.constants.FileTypeConstants;
@@ -47,7 +48,7 @@ public class SysFileServiceImpl extends BaseServiceImpl<SysFileMapper, SysFilePO
      */
     @Override
     @Transactional(value = FileDatabaseConstants.TRANSACTION_MANAGER, rollbackFor = Exception.class)
-    public @NotNull SysFilePO saveFile(@NotNull MultipartFile multipartFile, @NotNull SaveFileDTO saveFileDto) throws IOException {
+    public @NotNull SysFilePO saveFile(@NotNull MultipartFile multipartFile, @NotNull SaveFileDTO saveFileDto) throws Exception {
         return this.saveFile(new SysFileBO(multipartFile, saveFileDto.getFilename(), saveFileDto.getType()));
     }
 
@@ -58,7 +59,7 @@ public class SysFileServiceImpl extends BaseServiceImpl<SysFileMapper, SysFilePO
      */
     @Override
     @Transactional(value = FileDatabaseConstants.TRANSACTION_MANAGER, rollbackFor = Exception.class)
-    public @NotNull SysFilePO saveFile(@NotNull SysFileBO file) throws IOException {
+    public @NotNull SysFilePO saveFile(@NotNull SysFileBO file) throws Exception {
         // 根据md5判断文件是否存在
         final List<SysFilePO> md5FileList = this.list(
                 new QueryWrapper<SysFilePO>().lambda().eq(SysFilePO :: getMd5, file.getFile().getMd5())
@@ -70,7 +71,7 @@ public class SysFileServiceImpl extends BaseServiceImpl<SysFileMapper, SysFilePO
                 if (StringUtils.isEmpty(file.getFile().getType())) {
                     file.getFile().setType(FileTypeConstants.TEMP.name());
                 }
-                this.save(file.getFile());
+                this.saveWithUser(file.getFile(), AuthUtils.getCurrentUserId());
                 return file.getFile();
             } catch (Exception e) {
                 log.error("保存文件信息到数据库发生错误，删除保存的文件");
@@ -90,10 +91,15 @@ public class SysFileServiceImpl extends BaseServiceImpl<SysFileMapper, SysFilePO
      * @throws IOException
      */
     @Override
-    public SysFilePO saveFile(@NotNull MultipartFile multipartFile, String type) throws IOException {
+    @Transactional(value = FileDatabaseConstants.TRANSACTION_MANAGER, rollbackFor = Exception.class)
+    public SysFilePO saveFile(@NotNull MultipartFile multipartFile, String type) throws RuntimeException {
         final SysFilePO file = new SysFilePO();
         file.setType(type);
-        return this.saveFile(new SysFileBO(multipartFile, null, type));
+        try {
+            return this.saveFile(new SysFileBO(multipartFile, null, type));
+        } catch (Exception e) {
+            throw new ServiceException("系统发生未知异常", e);
+        }
     }
 
     /**
@@ -145,7 +151,7 @@ public class SysFileServiceImpl extends BaseServiceImpl<SysFileMapper, SysFilePO
      */
     @Override
     @Nullable
-    public SysFileBO downLoad(@NotNull Long fileId) throws FileNotFoundException {
+    public SysFileBO downLoad(@NotNull Long fileId) {
         final SysFilePO file = this.getById(fileId);
         if (ObjectUtils.isNotEmpty(file)) {
             return this.download(file);
@@ -160,9 +166,13 @@ public class SysFileServiceImpl extends BaseServiceImpl<SysFileMapper, SysFilePO
      */
     @Override
     @NotNull
-    public SysFileBO download(@NotNull SysFilePO file) throws FileNotFoundException {
+    public SysFileBO download(@NotNull SysFilePO file) {
         Assert.notNull(file.getDbId(), "实际文件ID未空，删除失败");
-        return new SysFileBO(file, this.actualFileService.download(file.getDbId()));
+        try {
+            return new SysFileBO(file, this.actualFileService.download(file.getDbId()));
+        } catch (FileNotFoundException e) {
+            throw new ServiceException("文件未找到", e);
+        }
     }
 
     /**
