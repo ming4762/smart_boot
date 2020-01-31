@@ -43,7 +43,6 @@ public class RestUserDetails implements UserDetails, Serializable {
      */
     public Set<String> getRoles() {
         return this.authorities.stream()
-//                .map(item -> (GcGrantedAuthority)item)
                 .filter(GcGrantedAuthority::isRole)
                 .map(GcGrantedAuthority::getAuthorityValue)
                 .collect(Collectors.toSet());
@@ -55,7 +54,6 @@ public class RestUserDetails implements UserDetails, Serializable {
      */
     public Set<String> getPermissions() {
         return this.authorities.stream()
-//                .map(item -> (GcGrantedAuthority)item)
                 .filter(GcGrantedAuthority :: isPermission)
                 .map(GcGrantedAuthority :: getAuthorityValue)
                 .collect(Collectors.toSet());

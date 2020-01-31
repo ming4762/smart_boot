@@ -28,7 +28,7 @@ public class SysUserPO extends BaseModelUserTime {
      * 用户ID
      */
     @TableId(type = IdType.ASSIGN_ID)
-    private long userId;
+    private Long userId;
 
     /**
      * 用户名
@@ -64,7 +64,7 @@ public class SysUserPO extends BaseModelUserTime {
     /**
      * 性别
      */
-    private int sex;
+    private Integer sex;
 
     /**
      * 生日
@@ -74,7 +74,7 @@ public class SysUserPO extends BaseModelUserTime {
     /**
      * 部门ID
      */
-    private int deptId;
+    private Integer deptId;
 
     /**
      * 状态（10：启用，20：禁用）
@@ -90,7 +90,7 @@ public class SysUserPO extends BaseModelUserTime {
     /**
      * 职务ID
      */
-    private int postId;
+    private Integer postId;
 
     /**
      * 工号
@@ -100,5 +100,5 @@ public class SysUserPO extends BaseModelUserTime {
     /**
      * 序号
      */
-    private int seq;
+    private Integer seq;
 }
