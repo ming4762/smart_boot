@@ -19,8 +19,15 @@ public class ServiceException extends RuntimeException {
 
     private String message = "系统发生未知错误";
 
+    private Throwable e;
+
 
     public ServiceException(String message) {
+        this.message = message;
+    }
+
+    public ServiceException(String message, Throwable e) {
+        this.e = e;
         this.message = message;
     }
 }
