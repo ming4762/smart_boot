@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.gc.starter.crud.model.BaseModelCreateUserTime;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,6 +15,7 @@ import lombok.Setter;
 @TableName("sys_user_group_user")
 @Getter
 @Setter
+@Builder
 public class SysUserGroupUserPO extends BaseModelCreateUserTime {
     @TableField(exist = false)
     private static final long serialVersionUID = 6003195650534799142L;
