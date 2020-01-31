@@ -11,6 +11,8 @@ import java.util.Collection;
 import java.util.List;
 
 /**
+ * 自定义投票器
+ * TODO: 待开发
  * @author jackson
  * 2020/1/28 7:26 下午
  */

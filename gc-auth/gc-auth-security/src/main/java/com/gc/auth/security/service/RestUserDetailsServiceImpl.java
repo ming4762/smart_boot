@@ -41,6 +41,7 @@ public class RestUserDetailsServiceImpl implements UserDetailsService{
         if (Objects.isNull(user)) {
             return null;
         }
+        // todo：测试数据
         Set<GcGrantedAuthority> grantedAuthoritySet = Sets.newHashSet(
           new RoleGrantedAuthority("SUPERADMIN"),
           new PermissionGrantedAuthority("123")

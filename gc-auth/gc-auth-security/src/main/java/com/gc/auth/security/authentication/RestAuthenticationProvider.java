@@ -12,6 +12,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 /**
+ * 登录管理
  * @author jackson
  * 2020/1/23 8:17 下午
  */
