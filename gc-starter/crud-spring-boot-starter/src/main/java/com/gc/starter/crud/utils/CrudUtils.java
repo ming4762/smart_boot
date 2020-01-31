@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.gc.starter.crud.model.BaseModel;
 import com.gc.starter.crud.model.Sort;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.gc.common.base.utils.ExceptionUtils;
@@ -30,23 +31,21 @@ import java.util.*;
 @Slf4j
 public final class CrudUtils {
 
-    private static final Map<String, SymbolParameterType> WRAPPER_METHOD_PARAMETER_MAP = Maps.newHashMap();
-
-    static {
-        WRAPPER_METHOD_PARAMETER_MAP.put("=", new SymbolParameterType("eq", new Class[]{Object.class, Object.class}));
-        WRAPPER_METHOD_PARAMETER_MAP.put("like", new SymbolParameterType("like", new Class[]{Object.class, Object.class}));
-        WRAPPER_METHOD_PARAMETER_MAP.put(">", new SymbolParameterType("gt", new Class[]{Object.class, Object.class}));
-        WRAPPER_METHOD_PARAMETER_MAP.put(">=", new SymbolParameterType("ge", new Class[]{Object.class, Object.class}));
-        WRAPPER_METHOD_PARAMETER_MAP.put("<>", new SymbolParameterType("ne", new Class[]{Object.class, Object.class}));
-        WRAPPER_METHOD_PARAMETER_MAP.put("<", new SymbolParameterType("lt", new Class[]{Object.class, Object.class}));
-        WRAPPER_METHOD_PARAMETER_MAP.put("<=", new SymbolParameterType("le", new Class[]{Object.class, Object.class}));
-        WRAPPER_METHOD_PARAMETER_MAP.put("in", new SymbolParameterType("in", new Class[]{Object.class, Collection.class}));
-        WRAPPER_METHOD_PARAMETER_MAP.put("notLike", new SymbolParameterType("notLike", new Class[]{Object.class, Object.class}));
-        WRAPPER_METHOD_PARAMETER_MAP.put("likeLeft", new SymbolParameterType("likeLeft", new Class[]{Object.class, Object.class}));
-        WRAPPER_METHOD_PARAMETER_MAP.put("likeRight", new SymbolParameterType("likeRight", new Class[]{Object.class, Object.class}));
-        WRAPPER_METHOD_PARAMETER_MAP.put("notIn", new SymbolParameterType("notIn", new Class[]{Object.class, Collection.class}));
-        WRAPPER_METHOD_PARAMETER_MAP.put("groupBy", new SymbolParameterType("groupBy", new Class[]{Object.class}));
-    }
+    private static final ImmutableMap<String, SymbolParameterType> WRAPPER_METHOD_PARAMETER_MAP= ImmutableMap.<String, SymbolParameterType>builder()
+            .put("=", new SymbolParameterType("eq", new Class[]{Object.class, Object.class}))
+            .put("like", new SymbolParameterType("like", new Class[]{Object.class, Object.class}))
+            .put(">", new SymbolParameterType("gt", new Class[]{Object.class, Object.class}))
+            .put(">=", new SymbolParameterType("ge", new Class[]{Object.class, Object.class}))
+            .put("<>", new SymbolParameterType("ne", new Class[]{Object.class, Object.class}))
+            .put("<", new SymbolParameterType("lt", new Class[]{Object.class, Object.class}))
+            .put("<=", new SymbolParameterType("le", new Class[]{Object.class, Object.class}))
+            .put("in", new SymbolParameterType("in", new Class[]{Object.class, Collection.class}))
+            .put("notLike", new SymbolParameterType("notLike", new Class[]{Object.class, Object.class}))
+            .put("likeLeft", new SymbolParameterType("likeLeft", new Class[]{Object.class, Object.class}))
+            .put("likeRight", new SymbolParameterType("likeRight", new Class[]{Object.class, Object.class}))
+            .put("notIn", new SymbolParameterType("notIn", new Class[]{Object.class, Collection.class}))
+            .put("groupBy", new SymbolParameterType("groupBy", new Class[]{Object.class}))
+            .build();
 
     /**
      * class-keys缓存
