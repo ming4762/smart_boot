@@ -1,7 +1,7 @@
 package com.gc.auth.security.handler;
 
+import com.gc.common.base.http.HttpStatus;
 import com.gc.common.base.message.Result;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.stereotype.Component;
@@ -20,6 +20,6 @@ import java.io.IOException;
 public class RestAuthAccessDeniedHandler implements AccessDeniedHandler {
     @Override
     public void handle(HttpServletRequest httpServletRequest, HttpServletResponse response, AccessDeniedException e) throws IOException, ServletException {
-        RestJsonWriter.writeJson(response, Result.failure(HttpStatus.FORBIDDEN.value(), e.getMessage()));
+        RestJsonWriter.writeJson(response, Result.ofStatus(HttpStatus.FORBIDDEN));
     }
 }

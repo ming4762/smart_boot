@@ -43,6 +43,16 @@
 			<artifactId>spring-session-data-redis</artifactId>
 		</dependency>
 
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>com.gc</groupId>
+			<artifactId>gc-cache-common</artifactId>
+		</dependency>
+
 	</dependencies>
 
 

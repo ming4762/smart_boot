@@ -64,11 +64,11 @@ public class RestAuthSuccessHandler implements AuthenticationSuccessHandler {
      * @param request 请求信息
      */
     private void setSessionMaxInactiveInterval(HttpServletRequest request) {
-        int global = this.authProperties.getSession().getTimeout().getGlobal();
+        Long global = this.authProperties.getSession().getTimeout().getGlobal();
         if (StringUtils.equals(MOBILE_LOGIN_TYPE, (String)request.getAttribute(LOGIN_TYPE))) {
             global = this.authProperties.getSession().getTimeout().getMobile();
         }
-        request.getSession().setMaxInactiveInterval(global);
+        request.getSession().setMaxInactiveInterval(global.intValue());
     }
 
 }

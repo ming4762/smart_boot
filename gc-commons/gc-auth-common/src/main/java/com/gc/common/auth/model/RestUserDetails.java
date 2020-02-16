@@ -3,7 +3,9 @@ package com.gc.common.auth.model;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.gc.common.auth.core.GcGrantedAuthority;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.io.Serializable;
@@ -16,6 +18,7 @@ import java.util.stream.Collectors;
  * 2020/1/16 9:11 下午
  */
 @Setter
+@NoArgsConstructor
 public class RestUserDetails implements UserDetails, Serializable {
     private static final long serialVersionUID = -6184955894751051086L;
 
@@ -87,5 +90,15 @@ public class RestUserDetails implements UserDetails, Serializable {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    @NotNull
+    public static RestUserDetails createByUser(@NotNull SysUserPO user) {
+        final RestUserDetails restUserDetails = new RestUserDetails();
+        restUserDetails.setUserId(user.getUserId());
+        restUserDetails.setUser(user);
+        restUserDetails.setUsername(user.getUsername());
+        restUserDetails.setPassword(user.getPassword());
+        return restUserDetails;
     }
 }

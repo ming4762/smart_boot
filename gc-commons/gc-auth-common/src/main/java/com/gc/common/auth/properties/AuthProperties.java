@@ -17,6 +17,10 @@ import java.util.List;
 @Setter
 public class AuthProperties {
 
+    private String jwtKey = "gc-it";
+
+    private boolean jwt = true;
+
     private Session session = new Session();
 
     private IgnoreConfig ignores = new IgnoreConfig();
@@ -36,9 +40,11 @@ public class AuthProperties {
     @Setter
     public static class Timeout {
         // 默认 30分钟
-        private Integer global = 1800;
+        private Long global = 1800L;
         // 默认30天
-        private Integer mobile = 2592000;
+        private Long mobile = 2592000L;
+        // 默认7天
+        private Long remember = 604800L;
     }
 
     /**
@@ -52,6 +58,14 @@ public class AuthProperties {
          * 需要忽略的 URL 格式，不考虑请求方法
          */
         private List<String> pattern = Lists.newArrayList("/public/**");
+
+        public List<String> getPattern() {
+            String publicStr = "/public/**";
+            if (!pattern.contains(publicStr)) {
+                pattern.add(publicStr);
+            }
+            return pattern;
+        }
 
         /**
          * 需要忽略的 GET 请求

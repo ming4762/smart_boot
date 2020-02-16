@@ -2,6 +2,8 @@ package com.gc.common.auth.core;
 
 import com.gc.common.auth.constants.GrantedAuthorityType;
 import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -9,6 +11,8 @@ import org.jetbrains.annotations.NotNull;
  * 2020/1/29 9:04 下午
  */
 @AllArgsConstructor
+@NoArgsConstructor
+@Data
 public class RoleGrantedAuthority implements GcGrantedAuthority {
     private static final long serialVersionUID = 4316900997007482876L;
 

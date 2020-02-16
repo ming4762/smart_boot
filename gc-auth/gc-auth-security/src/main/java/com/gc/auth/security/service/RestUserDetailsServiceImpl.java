@@ -43,15 +43,11 @@ public class RestUserDetailsServiceImpl implements UserDetailsService{
         }
         // todo：测试数据
         Set<GcGrantedAuthority> grantedAuthoritySet = Sets.newHashSet(
-          new RoleGrantedAuthority("SUPERADMIN"),
+          new RoleGrantedAuthority("SUPERADMIN1"),
           new PermissionGrantedAuthority("123")
         );
         // 查询用户角色信息
-        final RestUserDetails restUserDetails = new RestUserDetails();
-        restUserDetails.setUserId(user.getUserId());
-        restUserDetails.setUser(user);
-        restUserDetails.setUsername(user.getUsername());
-        restUserDetails.setPassword(user.getPassword());
+        final RestUserDetails restUserDetails = RestUserDetails.createByUser(user);
         restUserDetails.setAuthorities(grantedAuthoritySet);
         return restUserDetails;
     }
