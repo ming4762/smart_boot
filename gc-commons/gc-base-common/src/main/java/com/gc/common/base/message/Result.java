@@ -1,6 +1,9 @@
 package com.gc.common.base.message;
 
 
+import com.gc.common.base.exception.BaseException;
+import com.gc.common.base.http.HttpStatus;
+import com.gc.common.base.http.IHttpStatus;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
@@ -10,6 +13,7 @@ import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.validation.BindingResult;
 
 import java.lang.reflect.Field;
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -143,6 +147,37 @@ public class Result<T> {
         String errorMessage = Optional.ofNullable(bindingResult.getFieldError())
                 .map(DefaultMessageSourceResolvable::getDefaultMessage)
                 .orElse("参数校验失败");
-        return failure(errorMessage);
+        return failure(HttpStatus.BAD_REQUEST.getCode(), errorMessage);
+    }
+
+    /**
+     * 错误信息
+     * @param e
+     * @return
+     */
+    public static Result<Object> failure(@NotNull BaseException e) {
+        return failure(e.getCode(), e.getMessage());
+    }
+
+    /**
+     *
+     * @param status
+     * @param <T>
+     * @return
+     */
+    public static <T> Result<T> ofStatus(IHttpStatus status) {
+        return ofStatus(status, null);
+    }
+
+    public static Result<String> ofExceptionStatus(IHttpStatus status, Exception e) {
+        return ofStatus(status, e.getMessage());
+    }
+
+    public static <T> Result<T> ofStatus(IHttpStatus status,T data) {
+        if (Objects.equals(status.getCode(), 200)) {
+            return success(status.getCode(), status.getMessage(), data);
+        } else {
+            return failure(status.getCode(), status.getMessage(), data);
+        }
     }
 }
