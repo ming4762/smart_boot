@@ -21,6 +21,7 @@
 		<gc-boot.version>0.0.1-SNAPSHOT</gc-boot.version>
 
 		<swagger.version>2.9.2</swagger.version>
+		<jjwt.veersion>0.9.1</jjwt.veersion>
 	</properties>
 
 	<modules>
@@ -96,6 +97,18 @@
 				<groupId>io.springfox</groupId>
 				<artifactId>springfox-swagger2</artifactId>
 				<version>${swagger.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>commons-beanutils</groupId>
+				<artifactId>commons-beanutils</artifactId>
+				<version>1.9.4</version>
+			</dependency>
+
+			<dependency>
+				<groupId>io.jsonwebtoken</groupId>
+				<artifactId>jjwt</artifactId>
+				<version>${jjwt.veersion}</version>
 			</dependency>
 
 		</dependencies>
