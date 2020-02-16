@@ -67,6 +67,26 @@ public class RedisServiceImpl implements RedisService {
         });
     }
 
+    /**
+     * 设置key的过期时间
+     * @param key key
+     * @param timeout 过期时间
+     */
+    @Override
+    public void expire(@NotNull Object key, long timeout) {
+        this.redisTemplate.expire(key, timeout, TimeUnit.SECONDS);
+    }
+
+    /**
+     * 批量设置key的过期时间
+     * @param keys key
+     * @param timeout 过期时间
+     */
+    @Override
+    public void batchExpire(@NotNull Collection<Object> keys, long timeout) {
+        keys.forEach(key -> this.expire(key, timeout));
+    }
+
     @Override
     public void batchPut(@NotNull Map<Object, Object> keyValues, @NotNull Date expireTime) {
         this.redisTemplate.executePipelined((RedisCallback<Object>) connection -> {

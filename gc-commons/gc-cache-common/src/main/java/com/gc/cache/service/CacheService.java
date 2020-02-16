@@ -50,6 +50,19 @@ public interface CacheService {
      */
     void batchPut(@NotNull Map<Object, Object> keyValues, long timeout);
 
+    /**
+     * 设置key的过期时间
+     * @param key key
+     * @param timeout 过期时间
+     */
+    void expire(@NotNull Object key, long timeout);
+
+    /**
+     * 批量设置key的过期时间
+     * @param keys key
+     * @param timeout 过期时间
+     */
+    void batchExpire(@NotNull Collection<Object> keys, long timeout);
 
     /**
      * 批量写入缓存,并设置过期时间
