@@ -4,6 +4,7 @@ import com.gc.common.auth.model.SysUserPO;
 import com.gc.common.auth.utils.AuthUtils;
 import com.gc.common.base.message.Result;
 import com.gc.starter.crud.controller.BaseController;
+import com.gc.starter.crud.query.PageQueryParameter;
 import com.gc.system.model.SysUserGroupPO;
 import com.gc.system.pojo.dto.UserGroupUserSaveDTO;
 import com.gc.system.pojo.dto.UserUserGroupSaveDTO;
@@ -55,7 +56,7 @@ public class SysUserGroupController extends BaseController<SysUserGroupService, 
     @PostMapping("list")
     @ApiOperation(value = "查询用户组列表（支持分页、实体类属性查询）")
     @PreAuthorize("hasPermission('sys:userGroup', 'query')")
-    protected Result<Object> list(@RequestBody Map<String, Object> parameter) {
+    protected Result<Object> list(@RequestBody PageQueryParameter<String, Object> parameter) {
         return super.list(parameter);
     }
 
