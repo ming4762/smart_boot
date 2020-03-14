@@ -1,7 +1,7 @@
 package com.gc.common.auth.exception;
 
 import com.gc.common.base.exception.BaseException;
-import org.springframework.http.HttpStatus;
+import com.gc.common.base.http.HttpStatus;
 
 /**
  * @author jackson
@@ -11,10 +11,14 @@ public class AuthException extends BaseException {
     private static final long serialVersionUID = -6922142660105351058L;
 
     public AuthException(HttpStatus status) {
-        super(status.value(), status.getReasonPhrase(), null);
+        super(status.getCode(), status.getMessage(), null);
     }
 
     public AuthException(HttpStatus status, String message) {
-        super(status.value(), message, null);
+        super(status.getCode(), message, null);
+    }
+
+    public AuthException(HttpStatus status, String message, Throwable e) {
+        super(status.getCode(), message, e);
     }
 }
