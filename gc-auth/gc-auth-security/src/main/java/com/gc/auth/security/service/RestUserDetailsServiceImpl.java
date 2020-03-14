@@ -43,7 +43,7 @@ public class RestUserDetailsServiceImpl implements UserDetailsService{
         }
         // todo：测试数据
         Set<GcGrantedAuthority> grantedAuthoritySet = Sets.newHashSet(
-          new RoleGrantedAuthority("SUPERADMIN1"),
+          new RoleGrantedAuthority("SUPERADMIN"),
           new PermissionGrantedAuthority("123")
         );
         // 查询用户角色信息

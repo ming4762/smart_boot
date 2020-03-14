@@ -7,11 +7,11 @@ import com.gc.common.auth.model.RestUserDetails;
 import com.gc.common.auth.model.SysUserPO;
 import com.gc.common.auth.properties.AuthProperties;
 import com.gc.common.auth.utils.AuthUtils;
+import com.gc.common.base.http.HttpStatus;
 import com.google.common.collect.ImmutableList;
 import org.apache.commons.lang3.ObjectUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.util.Assert;
 

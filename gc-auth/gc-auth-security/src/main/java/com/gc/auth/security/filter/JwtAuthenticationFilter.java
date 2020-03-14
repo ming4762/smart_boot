@@ -13,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
@@ -47,7 +48,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(@NotNull HttpServletRequest request, @NotNull HttpServletResponse response, @NotNull FilterChain filterChain) throws ServletException, IOException {
-        if (checkIgnores(request)) {
+        if (this.authProperties.getDevelopment() || checkIgnores(request)) {
             filterChain.doFilter(request, response);
         } else {
             try {
@@ -67,6 +68,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             } catch (AuthException e) {
                 log.error(e.getMessage(), e);
                 RestJsonWriter.writeJson(response, Result.failure(e.getCode(), e.getMessage()));
+            } catch (InternalAuthenticationServiceException e) {
+                log.error(e.getMessage(), e);
+                RestJsonWriter.writeJson(response, Result.failure(HttpStatus.UNAUTHORIZED.getCode(), e.getMessage()));
             }
 
         }

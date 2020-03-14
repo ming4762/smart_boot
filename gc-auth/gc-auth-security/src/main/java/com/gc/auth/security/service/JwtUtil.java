@@ -3,9 +3,10 @@ package com.gc.auth.security.service;
 import com.gc.common.auth.core.GcGrantedAuthority;
 import com.gc.common.auth.core.PermissionGrantedAuthority;
 import com.gc.common.auth.core.RoleGrantedAuthority;
+import com.gc.common.auth.exception.AuthException;
 import com.gc.common.auth.model.RestUserDetails;
 import com.gc.common.auth.model.SysUserPO;
-import com.gc.common.base.exception.BaseException;
+import com.gc.common.base.http.HttpStatus;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
@@ -106,7 +107,7 @@ public class JwtUtil {
             restUserDetails.setAuthorities(authorities);
             return restUserDetails;
         } catch (Exception e) {
-            throw new BaseException(e);
+            throw new AuthException(HttpStatus.UNAUTHORIZED, "JWT解析失败", e);
         }
     }
 

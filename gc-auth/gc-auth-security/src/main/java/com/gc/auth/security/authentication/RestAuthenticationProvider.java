@@ -43,7 +43,7 @@ public class RestAuthenticationProvider extends AbstractUserDetailsAuthenticatio
     @Override
     protected UserDetails retrieveUser(String username, UsernamePasswordAuthenticationToken authentication) throws AuthenticationException {
         String password = (String) authentication.getCredentials();
-        if (StringUtils.isEmpty(username) || StringUtils.isEmpty(password)) {
+        if (StringUtils.isEmpty(username) || StringUtils.isEmpty(password) || StringUtils.equals("NONE_PROVIDED", username)) {
             throw new InternalAuthenticationServiceException(USERNAME_PASSWORD_NULL);
         }
         UserDetails user = this.restUserDetailsService.loadUserByUsername(username);
