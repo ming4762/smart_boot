@@ -2,7 +2,7 @@ package com.gc.module.file.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.gc.common.auth.utils.AuthUtils;
-import com.gc.common.base.exception.ServiceException;
+import com.gc.common.base.exception.BaseException;
 import com.gc.module.file.constants.FileDatabaseConstants;
 import com.gc.module.file.constants.FileTypeConstants;
 import com.gc.module.file.mapper.SysFileMapper;
@@ -98,7 +98,7 @@ public class SysFileServiceImpl extends BaseServiceImpl<SysFileMapper, SysFilePO
         try {
             return this.saveFile(new SysFileBO(multipartFile, null, type));
         } catch (Exception e) {
-            throw new ServiceException("系统发生未知异常", e);
+            throw new BaseException("系统发生未知异常", e);
         }
     }
 
@@ -115,7 +115,7 @@ public class SysFileServiceImpl extends BaseServiceImpl<SysFileMapper, SysFilePO
             this.removeById(fileId);
             // 删除实际文件
             if (ObjectUtils.isEmpty(file.getDbId())) {
-                throw new ServiceException("实际文件ID未空，删除失败");
+                throw new BaseException("实际文件ID未空，删除失败");
             }
             this.actualFileService.delete(file.getDbId());
         }
@@ -171,7 +171,7 @@ public class SysFileServiceImpl extends BaseServiceImpl<SysFileMapper, SysFilePO
         try {
             return new SysFileBO(file, this.actualFileService.download(file.getDbId()));
         } catch (FileNotFoundException e) {
-            throw new ServiceException("文件未找到", e);
+            throw new BaseException("文件未找到", e);
         }
     }
 
