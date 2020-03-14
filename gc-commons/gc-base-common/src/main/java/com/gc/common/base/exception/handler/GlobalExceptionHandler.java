@@ -7,6 +7,7 @@ import com.gc.common.base.utils.JsonUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -57,6 +58,9 @@ public class GlobalExceptionHandler {
         } else if (e instanceof AccessDeniedException) {
             // security 认证错误不拦截，交给security过滤器处理
             throw e;
+        } else if (e instanceof InternalAuthenticationServiceException) {
+            log.error("登录异常");
+            return Result.failure(HttpStatus.UNAUTHORIZED.getCode(), e.getMessage());
         }
         log.error("系统发生未知异常", e);
         return Result.ofStatus(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
