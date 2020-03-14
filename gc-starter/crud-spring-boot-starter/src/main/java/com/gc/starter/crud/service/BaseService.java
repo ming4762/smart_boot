@@ -3,12 +3,12 @@ package com.gc.starter.crud.service;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.gc.starter.crud.model.BaseModel;
+import com.gc.starter.crud.query.PageQueryParameter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
-import java.util.Map;
 
 /**
  * 基础serivce层
@@ -54,5 +54,5 @@ public interface BaseService<T extends BaseModel> extends IService<T> {
     boolean updateWithUserById(@NotNull T model, Long userId) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException;
 
     @NotNull
-    List<T> list(@NotNull QueryWrapper<T> queryWrapper, @NotNull Map<String, Object> parameter, @NotNull Boolean paging);
+    List<T> list(@NotNull QueryWrapper<T> queryWrapper, @NotNull PageQueryParameter<String, Object> parameter, @NotNull Boolean paging);
 }

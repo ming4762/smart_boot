@@ -6,6 +6,7 @@ import com.gc.starter.crud.constants.CrudConstants;
 import com.gc.starter.crud.model.BaseModel;
 import com.gc.starter.crud.model.PageData;
 import com.gc.starter.crud.model.Sort;
+import com.gc.starter.crud.query.PageQueryParameter;
 import com.gc.starter.crud.service.BaseService;
 import com.gc.starter.crud.utils.CrudUtils;
 import com.github.pagehelper.Page;
@@ -21,10 +22,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -40,7 +39,7 @@ public abstract class BaseQueryController<K extends BaseService<T>, T extends Ba
 
 //    @RequestMapping("list")
 //    @ResponseBody
-    protected Result<Object> list(@RequestBody Map<String, Object> parameter) {
+    protected Result<Object> list(@RequestBody PageQueryParameter<String, Object> parameter) {
         final Page<T> page = this.doPage(parameter);
         final QueryWrapper<T> queryWrapper = CrudUtils.createQueryWrapperFromParameters(parameter, this.getModelType());
         final Object keyword = parameter.get(CrudConstants.keyword.name());
@@ -66,27 +65,28 @@ public abstract class BaseQueryController<K extends BaseService<T>, T extends Ba
      * @return
      */
     @Nullable
-    protected Page<T> doPage(@NotNull Map<String, Object> parameter) {
+    protected Page<T> doPage(@NotNull PageQueryParameter<String, Object> parameter) {
         Page<T> page = null;
-        final Object limit = parameter.get(CrudConstants.limit.name());
-        Object offset = parameter.get(CrudConstants.offset.name());
+        final Integer limit = parameter.getLimit();
+        Integer offset = parameter.getOffset();
         if (limit != null) {
-            if (!(limit instanceof Integer)) {
-                log.warn("参数类型无效，limit应为int类型，limit：{}", limit);
-                return null;
-            }
+//            if (!(limit instanceof Integer)) {
+//                log.warn("参数类型无效，limit应为int类型，limit：{}", limit);
+//                return null;
+//            }
             if (ObjectUtils.isEmpty(offset)) {
                 offset = 0;
-            } else if (!(offset instanceof Integer)) {
-                log.warn("参数类型无效，offset应为int类型，offset：{}，使用默认值：0", offset);
-                offset = 0;
             }
+//            } else if (!(offset instanceof Integer)) {
+//                log.warn("参数类型无效，offset应为int类型，offset：{}，使用默认值：0", offset);
+//                offset = 0;
+//            }
             // 解析排序字段
             final String orderMessage = this.analysisOrder(parameter);
             if (!StringUtils.isEmpty(orderMessage)) {
                 PageHelper.orderBy(orderMessage);
             }
-            page = PageHelper.offsetPage((Integer) offset, (Integer) limit);
+            page = PageHelper.offsetPage(offset, limit);
         }
         return page;
     }
@@ -97,10 +97,10 @@ public abstract class BaseQueryController<K extends BaseService<T>, T extends Ba
      * @return
      */
     @Nullable
-    protected String analysisOrder(@NotNull Map<String, Object> parameter) {
-        final String sortName = (String) parameter.get(CrudConstants.sortName.name());
+    protected String analysisOrder(@NotNull PageQueryParameter<String, Object> parameter) {
+        final String sortName = parameter.getSortName();
         if (!StringUtils.isEmpty(sortName)) {
-            final String sortOrder = (String) parameter.get(CrudConstants.sortOrder.name());
+            final String sortOrder = parameter.getSortOrder();
             final Class<? extends BaseModel> clazz = CrudUtils.getModelClassByType(this.getModelType());
             final List<Sort> sortList = CrudUtils.analysisOrder(sortName, sortOrder, clazz);
             if (sortList.isEmpty()) {
@@ -108,7 +108,7 @@ public abstract class BaseQueryController<K extends BaseService<T>, T extends Ba
             }
             return sortList
                     .stream()
-                    .map(sort -> MessageFormat.format("{1} {2}", sort.getDbName(), sort.getOrder()))
+                    .map(sort -> String.format("%s %s", sort.getDbName(), sort.getOrder()))
                     .collect(Collectors.joining(","));
         }
         return null;

@@ -8,10 +8,10 @@ import com.baomidou.mybatisplus.core.toolkit.ReflectionKit;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.gc.common.base.utils.ReflectUtil;
-import com.gc.starter.crud.constants.CrudConstants;
 import com.gc.starter.crud.mapper.BaseMapper;
 import com.gc.starter.crud.model.BaseModel;
 import com.gc.starter.crud.model.Sort;
+import com.gc.starter.crud.query.PageQueryParameter;
 import com.gc.starter.crud.service.BaseService;
 import com.gc.starter.crud.utils.CrudUtils;
 import com.google.common.collect.Lists;
@@ -149,7 +149,7 @@ public abstract class BaseServiceImpl<K extends BaseMapper<T>, T extends BaseMod
      * @return
      */
     @Override
-    public @NotNull List<T> list(@NotNull QueryWrapper<T> queryWrapper, @NotNull Map<String, Object> parameter, @NotNull Boolean paging) {
+    public @NotNull List<T> list(@NotNull QueryWrapper<T> queryWrapper, @NotNull PageQueryParameter<String, Object> parameter, @NotNull Boolean paging) {
         this.analysisOrder(queryWrapper, parameter, paging);
         return super.list(queryWrapper);
     }
@@ -222,11 +222,11 @@ public abstract class BaseServiceImpl<K extends BaseMapper<T>, T extends BaseMod
      * @param parameter
      * @param paging
      */
-    public void analysisOrder(@NotNull QueryWrapper<T> queryWrapper, @NotNull Map<String, Object> parameter, @NotNull Boolean paging) {
-        final String sortName = (String) parameter.get(CrudConstants.sortName.name());
+    public void analysisOrder(@NotNull QueryWrapper<T> queryWrapper, @NotNull PageQueryParameter<String, Object> parameter, @NotNull Boolean paging) {
+        final String sortName = parameter.getSortName();
         // 如果灭有分页且存在排序字段手动进行排序
         if (!paging && sortName != null) {
-            final String sortOrder = (String) parameter.get(CrudConstants.sortOrder.name());
+            final String sortOrder = parameter.getSortOrder();
             final Class<? extends BaseModel> clazz = CrudUtils.getModelClassByType(this.getModelType());
             final List<Sort> sortList = CrudUtils.analysisOrder(sortName, sortOrder, clazz);
             if (!sortList.isEmpty()) {
