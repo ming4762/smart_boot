@@ -1,6 +1,8 @@
 package com.gc.system.model;
 
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.gc.starter.crud.model.BaseModelUserTime;
 import lombok.Getter;
@@ -20,6 +22,7 @@ public class SysFunctionPO extends BaseModelUserTime {
     /**
      * 功能ID
      */
+    @TableId(type = IdType.ASSIGN_ID)
     private Long functionId;
 
     /**
@@ -55,7 +58,7 @@ public class SysFunctionPO extends BaseModelUserTime {
     /**
      * 权限
      */
-    private String premission;
+    private String permission;
 
     /**
      * 是否菜单

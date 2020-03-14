@@ -12,7 +12,6 @@ import com.google.common.collect.ImmutableList;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,13 +31,11 @@ import java.util.Map;
 @Api(value = "用户组管理", tags = "系统模块")
 public class SysUserGroupController extends BaseController<SysUserGroupService, SysUserGroupPO> {
 
+    @Override
     @ApiOperation(value = "添加修改用户组")
     @PostMapping("saveUpdate")
     @PreAuthorize("hasPermission('sys:userGroup', 'save') or hasPermission('sys:userGroup', 'update')")
-    protected Result<Boolean> saveUpdate(@RequestBody @Valid SysUserGroupPO model, BindingResult result) throws Exception {
-        if (result.hasErrors()) {
-            return Result.failure(result);
-        }
+    protected Result<Boolean> saveUpdate(@RequestBody @Valid SysUserGroupPO model) throws Exception {
         return Result.success(this.service.saveOrUpdateWithAllUser(model, AuthUtils.getCurrentUserId()));
     }
 
@@ -97,32 +94,24 @@ public class SysUserGroupController extends BaseController<SysUserGroupService, 
     /**
      * 保存用户
      * @param parameter
-     * @param result
      * @return
      */
     @PostMapping("saveUserGroupByGroupId")
     @PreAuthorize("hasPermission('sys:userGroup', 'saveUser')")
     @ApiOperation(value = "设置用户组包含的用户")
-    public Result<Boolean> saveUserGroupByGroupId(@RequestBody @Valid UserGroupUserSaveDTO parameter, BindingResult result) {
-        if (result.hasErrors()) {
-            return Result.failure(result);
-        }
+    public Result<Boolean> saveUserGroupByGroupId(@RequestBody @Valid UserGroupUserSaveDTO parameter) {
         return Result.success(this.service.saveUserGroupByGroupId(parameter));
     }
 
     /**
      * 保存用户
      * @param parameter
-     * @param result
      * @return
      */
     @PostMapping("saveUserGroupByUserId")
     @ApiOperation(value = "设置用户所属用户组")
     @PreAuthorize("hasPermission('sys:userGroup', 'saveUser')")
-    public Result<Boolean> saveUserGroupByUserId(@RequestBody @Valid UserUserGroupSaveDTO parameter, BindingResult result) {
-        if (result.hasErrors()) {
-            return Result.failure(result);
-        }
+    public Result<Boolean> saveUserGroupByUserId(@RequestBody @Valid UserUserGroupSaveDTO parameter) {
         return Result.success(this.service.saveUserGroupByUserId(parameter));
     }
 }
