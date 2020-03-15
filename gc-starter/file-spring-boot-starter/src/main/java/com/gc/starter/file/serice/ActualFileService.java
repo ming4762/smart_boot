@@ -25,6 +25,7 @@ public interface ActualFileService {
      * 保存文件
      * @param inputStream 文件流
      * @param filename 文件名
+     * @throws IOException 保存文件发生IO错误
      * @return 文件ID
      */
     @NotNull
@@ -50,10 +51,17 @@ public interface ActualFileService {
     /**
      * 下载文件
      * @param id 文件id
+     * @throws FileNotFoundException 未找到下载文件错误
      * @return 文件流
      */
     InputStream download(@NotNull String id) throws FileNotFoundException;
 
+    /**
+     * 下载文件
+     * @param id 文件ID
+     * @param outputStream 输出流
+     * @throws IOException 下载文件发生IO错误
+     */
     void download(@NotNull String id, @NotNull OutputStream outputStream) throws IOException;
 
 }

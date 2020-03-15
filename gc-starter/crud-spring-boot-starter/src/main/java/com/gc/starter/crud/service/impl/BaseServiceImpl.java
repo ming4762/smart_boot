@@ -35,6 +35,8 @@ import java.util.stream.Collectors;
  */
 public abstract class BaseServiceImpl<K extends BaseMapper<T>, T extends BaseModel> extends ServiceImpl<K, T> implements BaseService<T> {
 
+    private static final String SORT_ASC = "ASC";
+
     /**
      * 通过实体删除
      * @param model 实体类
@@ -62,8 +64,8 @@ public abstract class BaseServiceImpl<K extends BaseMapper<T>, T extends BaseMod
 
     /**
      * 通过实体类批量删除
-     * @param modelList
-     * @return
+     * @param modelList 包含key信息的实体类
+     * @return 删除数量
      */
     @Override
     public @NotNull Integer batchDelete(@NotNull List<T> modelList) {
@@ -104,8 +106,8 @@ public abstract class BaseServiceImpl<K extends BaseMapper<T>, T extends BaseMod
 
     /**
      * 查询单一实体
-     * @param model
-     * @return
+     * @param model 包含key信息的实体类
+     * @return 实体类
      */
     @Nullable
     @Override
@@ -239,8 +241,8 @@ public abstract class BaseServiceImpl<K extends BaseMapper<T>, T extends BaseMod
 
     /**
      * 插入更新带有创建用户
-     * @param model
-     * @return
+     * @param model 实体
+     * @return 是否成功
      */
     @Override
     public boolean saveOrUpdateWithCreateUser(@NotNull T model, Long userId) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
@@ -254,9 +256,9 @@ public abstract class BaseServiceImpl<K extends BaseMapper<T>, T extends BaseMod
 
     /**
      * 插入更新带有更新人员
-     * @param model
-     * @param userId
-     * @return
+     * @param model 实体类
+     * @param userId 用户ID
+     * @return 是否成功
      */
     @Override
     public boolean saveOrUpdateWithUpdateUser(@NotNull T model, Long userId) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
@@ -270,9 +272,9 @@ public abstract class BaseServiceImpl<K extends BaseMapper<T>, T extends BaseMod
 
     /**
      * 插入更新带有所有人员
-     * @param model
-     * @param userId
-     * @return
+     * @param model 实体类
+     * @param userId 用户ID
+     * @return 是否成功
      */
     @Override
     public boolean saveOrUpdateWithAllUser(@NotNull T model, Long userId) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
@@ -284,7 +286,15 @@ public abstract class BaseServiceImpl<K extends BaseMapper<T>, T extends BaseMod
         }
     }
 
-
+    /**
+     * 保存带有创建人员信息
+     * @param model 实体类
+     * @param userId 用户ID
+     * @return 是否保存成功
+     * @throws NoSuchMethodException 未找到设置创建人员ID异常
+     * @throws IllegalAccessException IllegalAccessException
+     * @throws InvocationTargetException InvocationTargetException
+     */
     @Override
     public boolean saveWithUser(@NotNull T model, Long userId) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
         this.setCreateUserId(model, userId);
@@ -303,9 +313,9 @@ public abstract class BaseServiceImpl<K extends BaseMapper<T>, T extends BaseMod
 
     /**
      * 解析排序字段
-     * @param queryWrapper
-     * @param parameter
-     * @param paging
+     * @param queryWrapper 查询类
+     * @param parameter 参数
+     * @param paging 是否分页
      */
     public void analysisOrder(@NotNull QueryWrapper<T> queryWrapper, @NotNull PageQueryParameter<String, Object> parameter, @NotNull Boolean paging) {
         final String sortName = parameter.getSortName();
@@ -316,7 +326,7 @@ public abstract class BaseServiceImpl<K extends BaseMapper<T>, T extends BaseMod
             final List<Sort> sortList = CrudUtils.analysisOrder(sortName, sortOrder, clazz);
             if (!sortList.isEmpty()) {
                 sortList.forEach(sort -> {
-                    if ("ASC".equals(sort.getOrder().toUpperCase())) {
+                    if (SORT_ASC.equals(sort.getOrder().toUpperCase())) {
                         queryWrapper.orderByAsc(sort.getDbName());
                     } else {
                         queryWrapper.orderByDesc(sort.getDbName());

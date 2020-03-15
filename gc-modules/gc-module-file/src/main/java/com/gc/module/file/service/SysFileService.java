@@ -8,7 +8,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.Collection;
 
 /**
@@ -19,26 +18,28 @@ public interface SysFileService extends BaseService<SysFilePO> {
 
     /**
      * 保存文件
-     * @param multipartFile
-     * @param saveFileDTO
-     * @return
+     * @param multipartFile 文件信息
+     * @param saveFileDTO 文件信息
+     * @return 文件实体
+     * @throws Exception 异常信息
      */
     @NotNull
-    SysFilePO saveFile(@NotNull MultipartFile multipartFile, @NotNull SaveFileDTO saveFileDTO) throws IOException, Exception;
+    SysFilePO saveFile(@NotNull MultipartFile multipartFile, @NotNull SaveFileDTO saveFileDTO) throws Exception;
 
     /**
      * 保存文件
-     * @param file
-     * @return
+     * @param file 文件信息
+     * @return 文件信息
+     * @throws Exception 异常信息
      */
     @NotNull
     SysFilePO saveFile(@NotNull SysFileBO file)  throws Exception;
 
     /**
      * 保存文件
-     * @param multipartFile
-     * @param type
-     * @return
+     * @param multipartFile 文件信息
+     * @param type 文件类型
+     * @return 文件实体信息
      */
     SysFilePO saveFile(@NotNull MultipartFile multipartFile, String type);
 

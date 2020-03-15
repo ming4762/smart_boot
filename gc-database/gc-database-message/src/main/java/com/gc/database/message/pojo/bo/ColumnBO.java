@@ -98,7 +98,7 @@ public class ColumnBO extends AbstractTableBaseBO {
     /**
      * 是否是主键
      */
-    private Boolean primaryKey = Boolean.FALSE;
+    private Boolean primaryKey;
 
     /**
      * 主键序号
@@ -114,7 +114,7 @@ public class ColumnBO extends AbstractTableBaseBO {
     /**
      * 是否是外键
      */
-    private Boolean importKey = Boolean.FALSE;
+    private Boolean importKey;
 
     /**
      * 外键名称
@@ -126,12 +126,12 @@ public class ColumnBO extends AbstractTableBaseBO {
     /**
      * 是否是索引
      */
-    private Boolean indexed = Boolean.FALSE;
+    private Boolean indexed;
 
     /**
      * 是否是唯一索引
      */
-    private Boolean unique = Boolean.FALSE;
+    private Boolean unique;
 
     /**
      * 索引类型
