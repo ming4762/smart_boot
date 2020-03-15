@@ -23,6 +23,8 @@ public class RestAuthenticationProvider extends AbstractUserDetailsAuthenticatio
 
     private static final String USERNAME_PASSWORD_ERROR = "用户名密码错误";
 
+    private static final String NONE_PROVIDED = "NONE_PROVIDED";
+
     @Autowired
     private RestUserDetailsServiceImpl restUserDetailsService;
 
@@ -43,7 +45,7 @@ public class RestAuthenticationProvider extends AbstractUserDetailsAuthenticatio
     @Override
     protected UserDetails retrieveUser(String username, UsernamePasswordAuthenticationToken authentication) throws AuthenticationException {
         String password = (String) authentication.getCredentials();
-        if (StringUtils.isEmpty(username) || StringUtils.isEmpty(password) || StringUtils.equals("NONE_PROVIDED", username)) {
+        if (StringUtils.isEmpty(username) || StringUtils.isEmpty(password) || StringUtils.equals(NONE_PROVIDED, username)) {
             throw new InternalAuthenticationServiceException(USERNAME_PASSWORD_NULL);
         }
         UserDetails user = this.restUserDetailsService.loadUserByUsername(username);

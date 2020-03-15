@@ -5,6 +5,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 /**
  * 用户登录dto
@@ -22,5 +23,12 @@ public class UserLoginDTO implements Serializable {
 
     private String password;
 
-    private Boolean remember = false;
+    private Boolean remember;
+
+    public Boolean getRemember() {
+        if (Objects.isNull(remember)) {
+            remember = Boolean.FALSE;
+        }
+        return remember;
+    }
 }
