@@ -1,5 +1,6 @@
 package com.gc.starter.crud.service.impl;
 
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.TableInfo;
 import com.baomidou.mybatisplus.core.metadata.TableInfoHelper;
@@ -7,6 +8,7 @@ import com.baomidou.mybatisplus.core.toolkit.Assert;
 import com.baomidou.mybatisplus.core.toolkit.ReflectionKit;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.gc.common.base.exception.BaseException;
 import com.gc.common.base.utils.ReflectUtil;
 import com.gc.starter.crud.mapper.BaseMapper;
 import com.gc.starter.crud.model.BaseModel;
@@ -14,10 +16,14 @@ import com.gc.starter.crud.model.Sort;
 import com.gc.starter.crud.query.PageQueryParameter;
 import com.gc.starter.crud.service.BaseService;
 import com.gc.starter.crud.utils.CrudUtils;
+import com.gc.starter.crud.utils.IdGenerator;
 import com.google.common.collect.Lists;
+import org.apache.commons.lang3.ObjectUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.springframework.lang.NonNull;
 
+import java.beans.PropertyDescriptor;
 import java.io.Serializable;
 import java.lang.reflect.*;
 import java.util.*;
@@ -121,6 +127,83 @@ public abstract class BaseServiceImpl<K extends BaseMapper<T>, T extends BaseMod
         }
     }
 
+    /**
+     * 重写save方法，修改ID的生成策略
+     * @author jackson
+     * @param entity 实体类
+     * @return 是否保存成功
+     */
+    @Override
+    public boolean save(@NonNull T entity) {
+        Class<?> cls = entity.getClass();
+        // 获取key
+        final TableInfo tableInfo = this.getTableInfo();
+        String keyProperty = tableInfo.getKeyProperty();
+        Assert.notEmpty(keyProperty, "error: can not execute. because can not find column for id from entity!");
+        Object idVal = ReflectionKit.getMethodValue(cls, entity, tableInfo.getKeyProperty());
+        if (StringUtils.checkValNull(idVal)) {
+            // 如果ID为null 手动设置ID
+            this.setNumberId(entity, tableInfo);
+        }
+        return super.save(entity);
+    }
+
+    /**
+     * 重写批量save方法，修改ID的生成策略
+     * TODO:未测试功能
+     * @author jackson
+     * @return 是否保存成功
+     */
+    @Override
+    public boolean saveBatch(Collection<T> entityList, int batchSize) {
+        if (ObjectUtils.isEmpty(entityList)) {
+            return false;
+        }
+        // 获取实体类tableInfo
+        final TableInfo tableInfo = this.getTableInfo();
+        Class<? extends BaseModel> clazz = this.getModelClass();
+        String keyProperty = tableInfo.getKeyProperty();
+        Assert.notEmpty(keyProperty, "error: can not execute. because can not find column for id from entity!");
+        // 遍历实体类设置主键
+        entityList.forEach(entity -> {
+            Object idVal = ReflectionKit.getMethodValue(clazz, entity, keyProperty);
+            if (StringUtils.checkValNull(idVal)) {
+                // 如果ID为null 手动设置ID
+                this.setNumberId(entity, tableInfo);
+            }
+        });
+        return super.saveBatch(entityList, batchSize);
+    }
+
+    /**
+     * 获取 TableInfo
+     * @return 实体类TableInfo信息
+     */
+    @NonNull
+    private TableInfo getTableInfo() {
+        final TableInfo tableInfo = TableInfoHelper.getTableInfo(this.getModelClass());
+        Assert.notNull(tableInfo, "error: can not execute. because can not find cache of TableInfo for entity!");
+        return tableInfo;
+    }
+
+
+    /**
+     * 设置number类型的ID
+     * 修改主键生成策略
+     * @param entity 实体类
+     * @param tableInfo 表信息
+     */
+    private void setNumberId(@NonNull T entity, @NonNull TableInfo tableInfo) {
+        final IdType idType = tableInfo.getIdType();
+        if (idType.getKey() == IdType.ASSIGN_ID.getKey() && Number.class.isAssignableFrom(tableInfo.getKeyType())) {
+            try {
+                PropertyDescriptor propertyDescriptor = new PropertyDescriptor(tableInfo.getKeyProperty(), entity.getClass());
+                propertyDescriptor.getWriteMethod().invoke(entity, IdGenerator.nextId());
+            } catch (Exception e) {
+                throw new BaseException(e.getMessage(), e);
+            }
+        }
+    }
 
     /**
      * 重写方法
@@ -209,6 +292,8 @@ public abstract class BaseServiceImpl<K extends BaseMapper<T>, T extends BaseMod
         return this.save(model);
     }
 
+
+
     @Override
     public boolean updateWithUserById(@NotNull T model, Long userId) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
         this.setUpdateTime(model);
@@ -245,8 +330,17 @@ public abstract class BaseServiceImpl<K extends BaseMapper<T>, T extends BaseMod
      * 获取实体类类型
      * @return 实体类类型
      */
+    @NonNull
     private Type getModelType() {
         return ((ParameterizedType)this.getClass().getGenericSuperclass()).getActualTypeArguments()[0];
+    }
+
+    /**
+     * 获取实体类的类型
+     * @return 实体类类型
+     */
+    private Class<? extends BaseModel> getModelClass() {
+        return CrudUtils.getModelClassByType(this.getModelType());
     }
 
     /**

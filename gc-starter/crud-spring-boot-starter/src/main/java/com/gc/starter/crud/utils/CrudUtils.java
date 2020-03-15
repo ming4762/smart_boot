@@ -47,6 +47,10 @@ public final class CrudUtils {
             .put("groupBy", new SymbolParameterType("groupBy", new Class[]{Object.class}))
             .build();
 
+    private static final String SYMBOL_EQUAL = "=";
+
+    private static final String SYMBOL_NOT_EQUAL = "<>";
+
     /**
      * class-keys缓存
      */
@@ -252,7 +256,7 @@ public final class CrudUtils {
                         final String dbFieldName = getDbField(clazz, fieldName);
                         if (value != null) {
                             // 值不为null处理
-                            if (value != "") {
+                            if (org.apache.commons.lang3.StringUtils.isNotEmpty(value.toString())) {
                                 final Method method = getWrapperMethod(queryWrapper.getClass(), symbol);
                                 if (method == null) {
                                     log.warn("参数无效，未找到符号对应执行方法：{}", symbol);
@@ -268,9 +272,9 @@ public final class CrudUtils {
                             }
                         } else {
                             // null 处理
-                            if ("=".equals(symbol)) {
+                            if (org.apache.commons.lang3.StringUtils.equals(SYMBOL_EQUAL, symbol)) {
                                 ((QueryWrapper<T>) queryWrapper).isNull(dbFieldName);
-                            } else if ("<>".equals(symbol)) {
+                            } else if (org.apache.commons.lang3.StringUtils.equals(symbol, SYMBOL_NOT_EQUAL)) {
                                 ((QueryWrapper<T>) queryWrapper).isNotNull(dbFieldName);
                             } else {
                                 log.warn("null值参数只能使用'='或'<>'");
