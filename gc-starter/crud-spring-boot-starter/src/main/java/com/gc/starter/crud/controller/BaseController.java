@@ -17,8 +17,6 @@ public abstract class BaseController<K extends BaseService<T>, T extends BaseMod
     /**
      * 删除接口
      */
-//    @RequestMapping("/delete")
-//    @ResponseBody
     protected Result<Integer> delete(@RequestBody T model) {
         return Result.success(this.service.delete(model));
     }
@@ -26,8 +24,6 @@ public abstract class BaseController<K extends BaseService<T>, T extends BaseMod
     /**
      * 添加更新
      */
-//    @RequestMapping("/saveUpdate")
-//    @ResponseBody
     protected Result<Boolean> saveUpdate(@RequestBody T model) throws Exception {
         return Result.success(this.service.saveOrUpdate(model));
     }
@@ -35,8 +31,6 @@ public abstract class BaseController<K extends BaseService<T>, T extends BaseMod
     /**
      * 保存
      */
-//    @RequestMapping("/save")
-//    @ResponseBody
     protected Result<Boolean> save(@RequestBody T model) throws Exception {
         return Result.success(this.service.save(model));
     }
@@ -44,8 +38,6 @@ public abstract class BaseController<K extends BaseService<T>, T extends BaseMod
     /**
      * 更新
      */
-//    @RequestMapping("/update")
-//    @ResponseBody
     protected Result<Boolean> update(@RequestBody T model) throws Exception {
         return Result.success(this.service.updateById(model));
     }
@@ -55,8 +47,6 @@ public abstract class BaseController<K extends BaseService<T>, T extends BaseMod
      * @param modelList
      * @return
      */
-//    @RequestMapping("/batchDelete")
-//    @ResponseBody
     protected Result<Integer> batchDelete(@RequestBody List<T> modelList) throws Exception {
         return Result.success(this.service.batchDelete(modelList));
     }
@@ -64,8 +54,6 @@ public abstract class BaseController<K extends BaseService<T>, T extends BaseMod
     /**
      * 批量保存
      */
-//    @RequestMapping("/batchSave")
-//    @ResponseBody
     protected Result<Boolean> batchSave(@RequestBody List<T> modelList) {
         return Result.success(this.service.saveBatch(modelList));
     }
@@ -73,8 +61,6 @@ public abstract class BaseController<K extends BaseService<T>, T extends BaseMod
     /**
      * 批量保存/更新
      */
-//    @RequestMapping("/batchSaveUpdate")
-//    @ResponseBody
     protected Result<Boolean> batchSaveUpdate(@RequestBody List<T> modelList) {
         return Result.success(this.service.saveOrUpdateBatch(modelList));
     }

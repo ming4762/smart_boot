@@ -37,8 +37,12 @@ public abstract class BaseQueryController<K extends BaseService<T>, T extends Ba
     @Autowired
     protected K service;
 
-//    @RequestMapping("list")
-//    @ResponseBody
+    /**
+     * list查询方法
+     * @author jackson
+     * @param parameter 查询参数
+     * @return 查询结果集
+     */
     protected Result<Object> list(@RequestBody PageQueryParameter<String, Object> parameter) {
         final Page<T> page = this.doPage(parameter);
         final QueryWrapper<T> queryWrapper = CrudUtils.createQueryWrapperFromParameters(parameter, this.getModelType());
@@ -53,8 +57,12 @@ public abstract class BaseQueryController<K extends BaseService<T>, T extends Ba
         return Result.success(data);
     }
 
-//    @RequestMapping("get")
-//    @ResponseBody
+    /**
+     * 获取单一实体方法
+     * @author jackson
+     * @param model 包含主键信息的model
+     * @return 结果
+     */
     private Result<T> get(@RequestBody T model) {
         return Result.success(this.service.get(model));
     }
@@ -70,17 +78,9 @@ public abstract class BaseQueryController<K extends BaseService<T>, T extends Ba
         final Integer limit = parameter.getLimit();
         Integer offset = parameter.getOffset();
         if (limit != null) {
-//            if (!(limit instanceof Integer)) {
-//                log.warn("参数类型无效，limit应为int类型，limit：{}", limit);
-//                return null;
-//            }
             if (ObjectUtils.isEmpty(offset)) {
                 offset = 0;
             }
-//            } else if (!(offset instanceof Integer)) {
-//                log.warn("参数类型无效，offset应为int类型，offset：{}，使用默认值：0", offset);
-//                offset = 0;
-//            }
             // 解析排序字段
             final String orderMessage = this.analysisOrder(parameter);
             if (!StringUtils.isEmpty(orderMessage)) {

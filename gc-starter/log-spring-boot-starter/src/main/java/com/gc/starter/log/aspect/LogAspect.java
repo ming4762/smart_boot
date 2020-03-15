@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.toolkit.IdWorker;
 import com.gc.common.auth.utils.AuthUtils;
 import com.gc.common.base.message.Result;
-import com.gc.common.base.utils.IPUtils;
+import com.gc.common.base.utils.IpUtils;
 import com.gc.starter.log.LogProperties;
 import com.gc.starter.log.annotation.Log;
 import com.gc.starter.log.constants.LogIdentConstant;
@@ -94,7 +94,7 @@ final public class LogAspect {
             // 打印调用 controller 的全路径以及执行方法
             log.info("Class Method   : {}.{}", point.getSignature().getDeclaringTypeName(), point.getSignature().getName());
             // 打印请求的 IP
-            log.info("IP             : {}", IPUtils.getIpAddr());
+            log.info("IP             : {}", IpUtils.getIpAddr());
         }
     }
 
@@ -148,7 +148,7 @@ final public class LogAspect {
                             .operation(logAnnotation.value())
                             .useTime(time)
                             .method(String.format("%s.%s", className, methodName))
-                            .ip(IPUtils.getIpAddr())
+                            .ip(IpUtils.getIpAddr())
                             .params(parameter)
                             .requestPath(((ServletRequestAttributes) Objects.requireNonNull(RequestContextHolder.getRequestAttributes())).getRequest().getServletPath())
                             .statusCode(code)
