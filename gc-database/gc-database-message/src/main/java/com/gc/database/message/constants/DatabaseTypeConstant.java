@@ -8,10 +8,13 @@ import lombok.Getter;
 
 /**
  * 数据库类型
+ * @author jackson
  */
 @Getter
 public enum DatabaseTypeConstant {
-
+    /**
+     * mysql
+     */
     Mysql("com.mysql.cj.jdbc.Driver", MysqlDatabaseExecutor.class),
     SqlServer("com.microsoft.jdbc.SqlServer.SQLServerDriver", SqlServerDatabaseExecutor.class),
     Oracle("Oracle.jdbc.driver.OracleDriver", OracleDatabaseExecutor.class);

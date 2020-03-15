@@ -3,6 +3,7 @@ package com.gc.database.message.pojo.bo;
 import com.gc.database.message.annotation.DatabaseField;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 /**
  * 数据库表实体
@@ -11,7 +12,8 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-public class TableViewBO extends TableBaseBO {
+@ToString
+public class TableViewBO extends AbstractTableBaseBO {
     private static final long serialVersionUID = 763710787360425049L;
 
     @DatabaseField("TABLE_TYPE")

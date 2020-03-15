@@ -3,6 +3,7 @@ package com.gc.database.message.pojo.bo;
 import com.gc.database.message.annotation.DatabaseField;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 /**
  * 索引信息
@@ -11,7 +12,8 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-public class IndexBO extends TableBaseBO {
+@ToString
+public class IndexBO extends AbstractTableBaseBO {
     private static final long serialVersionUID = -6827286891209056960L;
 
     @DatabaseField("NON_UNIQUE")

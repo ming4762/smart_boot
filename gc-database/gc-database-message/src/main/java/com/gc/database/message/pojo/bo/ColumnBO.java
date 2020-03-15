@@ -3,6 +3,7 @@ package com.gc.database.message.pojo.bo;
 import com.gc.database.message.annotation.DatabaseField;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 /**
  * 列业务类
@@ -11,7 +12,8 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-public class ColumnBO extends TableBaseBO {
+@ToString
+public class ColumnBO extends AbstractTableBaseBO {
     private static final long serialVersionUID = 6189047510460416526L;
 
     @DatabaseField("COLUMN_NAME")
@@ -109,24 +111,41 @@ public class ColumnBO extends TableBaseBO {
     private String pkName;
 
     // -------- 外键信息 --------
+    /**
+     * 是否是外键
+     */
     private Boolean importKey = Boolean.FALSE;
 
+    /**
+     * 外键名称
+     */
     private String importPkName;
 
     // -------- 索引信息 ---------
 
-    // 是否是索引
+    /**
+     * 是否是索引
+     */
     private Boolean indexed = Boolean.FALSE;
 
-    // 是否是唯一索引
+    /**
+     * 是否是唯一索引
+     */
     private Boolean unique = Boolean.FALSE;
 
-    // 索引类型
+    /**
+     * 索引类型
+     */
     private Integer indexType;
 
     // ------- 其他信息 -----------
-    // java类型
+    /**
+     * java类型
+     */
     private String javaType;
 
+    /**
+     * java类型简写
+     */
     private String simpleJavaType;
 }

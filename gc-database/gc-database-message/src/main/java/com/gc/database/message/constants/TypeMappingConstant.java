@@ -11,6 +11,9 @@ import java.util.Date;
  */
 @Getter
 public enum TypeMappingConstant {
+    /**
+     * BIT类型
+     */
     BIT(-7, Boolean.class),
 
     TINYINT(-6, Byte.class),

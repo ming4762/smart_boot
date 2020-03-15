@@ -3,6 +3,7 @@ package com.gc.database.message.pojo.bo;
 import com.gc.database.message.annotation.DatabaseField;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 /**
  * 外键信息
@@ -11,7 +12,8 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-public class ImportKeyBO extends DatabaseBaseBO {
+@ToString
+public class ImportKeyBO extends AbstractDatabaseBaseBO {
     private static final long serialVersionUID = 2244980886860996732L;
 
     @DatabaseField("PKTABLE_CAT")

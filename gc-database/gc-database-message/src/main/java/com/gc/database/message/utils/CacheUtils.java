@@ -1,7 +1,7 @@
 package com.gc.database.message.utils;
 
 import com.gc.database.message.constants.TypeMappingConstant;
-import com.gc.database.message.pojo.bo.DatabaseBaseBO;
+import com.gc.database.message.pojo.bo.AbstractDatabaseBaseBO;
 import com.google.common.collect.Maps;
 
 import java.lang.reflect.Field;
@@ -24,7 +24,7 @@ public class CacheUtils {
     /**
      * 数据库字段与Field映射缓存
      */
-    public static ConcurrentMap<Class<? extends DatabaseBaseBO>, Map<String, Field>> DATABASE_FIELD_MAPPING = Maps.newConcurrentMap();
+    public static ConcurrentMap<Class<? extends AbstractDatabaseBaseBO>, Map<String, Field>> DATABASE_FIELD_MAPPING = Maps.newConcurrentMap();
 
     /**
      * 类型映射

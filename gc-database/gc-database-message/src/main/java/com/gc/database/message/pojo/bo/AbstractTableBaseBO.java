@@ -10,7 +10,7 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-public abstract class TableBaseBO extends DatabaseBaseBO {
+public abstract class AbstractTableBaseBO extends AbstractDatabaseBaseBO {
 
     private static final long serialVersionUID = 9010293595189493582L;
     @DatabaseField("TABLE_CAT")

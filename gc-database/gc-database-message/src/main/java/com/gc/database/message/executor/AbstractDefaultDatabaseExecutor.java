@@ -27,11 +27,11 @@ import java.util.stream.Collectors;
  * @author shizhongming
  * 2020/1/18 9:02 下午
  */
-public abstract class DefaultDatabaseExecutor implements DatabaseExecutor {
+public abstract class AbstractDefaultDatabaseExecutor implements DatabaseExecutor {
 
     static {
-        DefaultDatabaseExecutor.mappingDatabaseFieldToCache();
-        DefaultDatabaseExecutor.initTypeMappingCache();
+        AbstractDefaultDatabaseExecutor.mappingDatabaseFieldToCache();
+        AbstractDefaultDatabaseExecutor.initTypeMappingCache();
     }
 
     /**
@@ -282,7 +282,7 @@ public abstract class DefaultDatabaseExecutor implements DatabaseExecutor {
      * @param clazz
      * @return
      */
-    private static Map<String, Field> mappingDatabaseField(Class<? extends DatabaseBaseBO> clazz) {
+    private static Map<String, Field> mappingDatabaseField(Class<? extends AbstractDatabaseBaseBO> clazz) {
         final Map<String, Field> mapping = Maps.newHashMap();
         Arrays.asList(clazz.getDeclaredFields())
                 .forEach(field -> {

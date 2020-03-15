@@ -4,10 +4,14 @@ import lombok.Getter;
 
 /**
  * 异常信息
+ * @author jackson
  */
 @Getter
 public enum ExceptionConstant {
 
+    /**
+     * 未找到驱动类
+     */
     DIRVER_CLASS_NOT_FOUND("未找到驱动类，请检查是否引入驱动类：%s"),
 
     DIRVER_CLASS_INSTANCE("创建驱动类实体失败，驱动类：%s"),

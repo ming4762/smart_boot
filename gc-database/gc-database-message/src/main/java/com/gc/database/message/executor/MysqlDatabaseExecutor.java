@@ -5,5 +5,5 @@ package com.gc.database.message.executor;
  * @author shizhongming
  * 2020/1/19 8:17 下午
  */
-public class MysqlDatabaseExecutor extends DefaultDatabaseExecutor implements DatabaseExecutor {
+public class MysqlDatabaseExecutor extends AbstractDefaultDatabaseExecutor implements DatabaseExecutor {
 }
