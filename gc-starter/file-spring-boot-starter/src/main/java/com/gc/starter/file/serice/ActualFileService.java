@@ -1,7 +1,6 @@
 package com.gc.starter.file.serice;
 
 import org.jetbrains.annotations.NotNull;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.io.*;
 import java.util.List;
@@ -16,10 +15,10 @@ public interface ActualFileService {
      * 保存文件
      * @param file 文件
      * @param filename 文件名
+     * @throws IOException 文件写入失败抛出异常
      * @return 文件id
      */
     @NotNull
-    @Transactional
     String save(@NotNull File file, String filename) throws IOException;
 
     /**

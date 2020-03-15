@@ -20,8 +20,6 @@ public class DatabaseConnectionController extends BaseController<DatabaseConnect
 
     @RequestMapping("list")
     @PreAuthorize("hasRole('1')")
-//    @PreAuthorize("hasPermission('abc', '123') or hasPermission('user', '123')")
-//    @PreAuthorize("hasPermission('abc', '123')")
     @Override
     protected Result<Object> list(PageQueryParameter<String, Object> parameter) {
         return super.list(parameter);

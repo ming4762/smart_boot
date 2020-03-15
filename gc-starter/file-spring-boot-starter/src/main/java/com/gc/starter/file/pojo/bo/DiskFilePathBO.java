@@ -22,6 +22,8 @@ public class DiskFilePathBO {
 
     public static final String ID_CUT = "_";
 
+    private static final int IDS_LENGTH = 2;
+
     /**
      * 时间格式化工具
      */
@@ -88,7 +90,7 @@ public class DiskFilePathBO {
         diskFilePath.basePath = basePath;
         diskFilePath.datePath = ids[0];
         diskFilePath.md5 = ids[1];
-        if (ids.length > 2) {
+        if (ids.length > IDS_LENGTH) {
             diskFilePath.filename = ids[2];
         }
         return diskFilePath;

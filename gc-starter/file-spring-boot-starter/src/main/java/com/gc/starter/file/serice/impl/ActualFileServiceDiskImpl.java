@@ -2,7 +2,7 @@ package com.gc.starter.file.serice.impl;
 
 import com.gc.starter.file.pojo.bo.DiskFilePathBO;
 import com.gc.starter.file.serice.ActualFileService;
-import com.gc.common.base.utils.security.MD5Utils;
+import com.gc.common.base.utils.security.Md5Utils;
 import org.apache.commons.io.IOUtils;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.util.StringUtils;
@@ -47,7 +47,7 @@ public class ActualFileServiceDiskImpl implements ActualFileService {
         try (final ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
             IOUtils.copy(inputStream, outputStream);
             // 计算md5
-            final String md5 = MD5Utils.md5(new ByteArrayInputStream(outputStream.toByteArray()));
+            final String md5 = Md5Utils.md5(new ByteArrayInputStream(outputStream.toByteArray()));
             final DiskFilePathBO diskFilePath = new DiskFilePathBO(this.basePath, md5, filename);
             // 获取文件路径
             final String folderPath = diskFilePath.getFolderPath();
