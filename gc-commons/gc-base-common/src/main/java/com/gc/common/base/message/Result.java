@@ -174,7 +174,7 @@ public class Result<T> {
     }
 
     public static <T> Result<T> ofStatus(IHttpStatus status,T data) {
-        if (Objects.equals(status.getCode(), 200)) {
+        if (Objects.equals(status.getCode(), HttpStatus.OK.getCode())) {
             return success(status.getCode(), status.getMessage(), data);
         } else {
             return failure(status.getCode(), status.getMessage(), data);

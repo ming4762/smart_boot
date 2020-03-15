@@ -39,17 +39,6 @@ public class Swagger2Config {
                 .apis(RequestHandlerSelectors.basePackage(this.properties.getBasePackage()))
                 .paths(PathSelectors.any())
                 .build();
-//                .pathProvider(new RelativePathProvider(servletContext) {
-//                    @Override
-//                    public String getApplicationBasePath() {
-//                        return "public";
-//                    }
-//
-//                    @Override
-//                    protected String getDocumentationPath() {
-//                        return "public";
-//                    }
-//                });
     }
 
 

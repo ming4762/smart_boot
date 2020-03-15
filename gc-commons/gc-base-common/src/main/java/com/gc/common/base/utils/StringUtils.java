@@ -12,6 +12,8 @@ import java.util.regex.Pattern;
  */
 public final class StringUtils {
 
+    private static final Pattern PATTERN = Pattern.compile("[A-Z]");
+
     /**
      * 下划线改为驼峰表示
      * @param camelCaseName
@@ -19,8 +21,7 @@ public final class StringUtils {
      */
     @NotNull
     public static String underscoreName(@NotNull String camelCaseName) {
-        final Pattern pattern = Pattern.compile("[A-Z]");
-        final Matcher matcher = pattern.matcher(camelCaseName);
+        final Matcher matcher = PATTERN.matcher(camelCaseName);
         StringBuffer stringBuffer = new StringBuffer(camelCaseName);
         if (matcher.find()) {
             stringBuffer = new StringBuffer();

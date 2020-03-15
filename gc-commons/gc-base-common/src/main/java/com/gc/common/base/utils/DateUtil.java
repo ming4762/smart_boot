@@ -23,6 +23,26 @@ import java.util.stream.Collectors;
  */
 public final class DateUtil {
 
+    private static final String CST_DATE_STR = "CST";
+
+    private static final Pattern YYYY_MM_DD = Pattern.compile("^[0-9]{4}-[0-9]{2}-[0-9]{2}.*");
+
+    private static final Pattern YYYY_M_D = Pattern.compile("^[0-9]{4}-[0-9]{1}-[0-9]+.*||^[0-9]{4}-[0-9]+-[0-9]{1}.*");
+
+    private static final Pattern YY_MM_DD = Pattern.compile("^[0-9]{2}-[0-9]{2}-[0-9]{2}.*");
+
+    private static final Pattern YY_M_D = Pattern.compile("^[0-9]{2}-[0-9]{1}-[0-9]+.*||^[0-9]{2}-[0-9]+-[0-9]{1}.*");
+
+    private static final Pattern HH = Pattern.compile("^[0-9]{4}-[0-9]{2}-[0-9]{2}.*");
+
+    private static final Pattern HH_MM = Pattern.compile(".*[ ][0-9]{2}:[0-9]{2}");
+
+    private static final Pattern HH_MM_SS = Pattern.compile(".*[ ][0-9]{2}:[0-9]{2}:[0-9]{2}");
+
+    private static final Pattern HH_MM_SS_SSS = Pattern.compile(".*[ ][0-9]{2}:[0-9]{2}:[0-9]{2}:[0-9]{0,3}");
+
+    private static final Pattern YYYY_MM_DD_HH_MM_SS_SSS_Z = Pattern.compile("[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}.[0-9]{0,3}Z");
+
     /**
      * 解析字符串日期为Date
      *
@@ -73,44 +93,46 @@ public final class DateUtil {
      */
     @Nullable
     public static Date convertDate(String dateStr) throws ParseException {
-        boolean isUTC = false;
-        if (org.springframework.util.StringUtils.isEmpty(dateStr)) return null;
-        if (dateStr.contains("CST")) {
+        boolean isUtc = false;
+        if (org.springframework.util.StringUtils.isEmpty(dateStr)) {
+            return null;
+        };
+        if (dateStr.contains(CST_DATE_STR)) {
             return new SimpleDateFormat().parse(dateStr);
         }
         String dateDealStr = dateStr.replace("年", "-").replace("月", "-").replace("日", "")
                 .replace("/", "-").replace("\\.", "-").trim();
         String dateFormatStr = "";
         // 确定日期个税
-        if (Pattern.compile("^[0-9]{4}-[0-9]{2}-[0-9]{2}.*").matcher(dateDealStr).matches()) {
+        if (YYYY_MM_DD.matcher(dateDealStr).matches()) {
             dateFormatStr = "yyyy-MM-dd";
-        } else if (Pattern.compile("^[0-9]{4}-[0-9]{1}-[0-9]+.*||^[0-9]{4}-[0-9]+-[0-9]{1}.*").matcher(dateDealStr).matches()) {
+        } else if (YYYY_M_D.matcher(dateDealStr).matches()) {
             dateFormatStr = "yyyy-M-d";
-        } else if (Pattern.compile("^[0-9]{2}-[0-9]{2}-[0-9]{2}.*").matcher(dateDealStr).matches()) {
+        } else if (YY_MM_DD.matcher(dateDealStr).matches()) {
             dateFormatStr = "yy-MM-dd";
-        } else if (Pattern.compile("^[0-9]{2}-[0-9]{1}-[0-9]+.*||^[0-9]{2}-[0-9]+-[0-9]{1}.*").matcher(dateDealStr).matches()) {
+        } else if (YY_M_D.matcher(dateDealStr).matches()) {
             dateFormatStr = "yy-M-d";
         }
 
         //确定时间格式
-        if(Pattern.compile(".*[ ][0-9]{2}").matcher(dateDealStr).matches()){
+        if(HH.matcher(dateDealStr).matches()){
             dateFormatStr += " HH";
-        }else if(Pattern.compile(".*[ ][0-9]{2}:[0-9]{2}").matcher(dateDealStr).matches()){
+        }else if(HH_MM.matcher(dateDealStr).matches()){
             dateFormatStr += " HH:mm";
-        }else if(Pattern.compile(".*[ ][0-9]{2}:[0-9]{2}:[0-9]{2}").matcher(dateDealStr).matches()){
+        }else if(HH_MM_SS.matcher(dateDealStr).matches()){
             dateFormatStr += " HH:mm:ss";
-        }else if(Pattern.compile(".*[ ][0-9]{2}:[0-9]{2}:[0-9]{2}:[0-9]{0,3}").matcher(dateDealStr).matches()){
+        }else if(HH_MM_SS_SSS.matcher(dateDealStr).matches()){
             dateFormatStr += " HH:mm:ss:sss";
         }
 
-        if (Pattern.compile("[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}.[0-9]{0,3}Z").matcher(dateDealStr).matches()) {
+        if (YYYY_MM_DD_HH_MM_SS_SSS_Z.matcher(dateDealStr).matches()) {
             dateDealStr = dateDealStr.replace("Z", " UTC");
             dateFormatStr = "yyyy-MM-dd'T'HH:mm:ss.SSS Z";
-            isUTC = true;
+            isUtc = true;
         }
         if (!org.springframework.util.StringUtils.isEmpty(dateFormatStr)) {
             final SimpleDateFormat format = new SimpleDateFormat(dateFormatStr);
-            if (isUTC) {
+            if (isUtc) {
                 format.setTimeZone(TimeZone.getTimeZone("UTC"));
             }
             return format.parse(dateDealStr);

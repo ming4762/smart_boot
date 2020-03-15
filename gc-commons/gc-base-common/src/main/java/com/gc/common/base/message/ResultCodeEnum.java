@@ -2,6 +2,10 @@ package com.gc.common.base.message;
 
 import lombok.Getter;
 
+/**
+ * 返回结果状态
+ * @author jackson
+ */
 @Getter
 public enum ResultCodeEnum {
 

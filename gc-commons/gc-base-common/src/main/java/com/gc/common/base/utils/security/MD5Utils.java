@@ -12,7 +12,7 @@ import java.io.InputStream;
  * @author shizhongming
  * 2020/1/8 8:49 下午
  */
-public final class MD5Utils {
+public final class Md5Utils {
 
     /**
      * MD5加密

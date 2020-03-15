@@ -10,10 +10,12 @@ import javax.servlet.http.HttpServletRequest;
 
 /**
  * IP地址
- *
+ * @author jackson
  */
-public class IPUtils {
-	private static Logger logger = LoggerFactory.getLogger(IPUtils.class);
+public class IpUtils {
+	private static Logger logger = LoggerFactory.getLogger(IpUtils.class);
+
+	private static final String UNKNOWN = "unknown";
 
 	/**
 	 * 获取IP地址
@@ -30,19 +32,19 @@ public class IPUtils {
 		String ip = null;
 		try {
 			ip = request.getHeader("x-forwarded-for");
-			if (org.apache.commons.lang3.StringUtils.isEmpty(ip) || "unknown".equalsIgnoreCase(ip)) {
+			if (org.apache.commons.lang3.StringUtils.isEmpty(ip) || UNKNOWN.equalsIgnoreCase(ip)) {
 				ip = request.getHeader("Proxy-Client-IP");
 			}
-			if (org.apache.commons.lang3.StringUtils.isEmpty(ip) || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+			if (org.apache.commons.lang3.StringUtils.isEmpty(ip) || ip.length() == 0 || UNKNOWN.equalsIgnoreCase(ip)) {
 				ip = request.getHeader("WL-Proxy-Client-IP");
 			}
-			if (org.apache.commons.lang3.StringUtils.isEmpty(ip) || "unknown".equalsIgnoreCase(ip)) {
+			if (org.apache.commons.lang3.StringUtils.isEmpty(ip) || UNKNOWN.equalsIgnoreCase(ip)) {
 				ip = request.getHeader("HTTP_CLIENT_IP");
 			}
-			if (org.apache.commons.lang3.StringUtils.isEmpty(ip) || "unknown".equalsIgnoreCase(ip)) {
+			if (org.apache.commons.lang3.StringUtils.isEmpty(ip) || UNKNOWN.equalsIgnoreCase(ip)) {
 				ip = request.getHeader("HTTP_X_FORWARDED_FOR");
 			}
-			if (org.apache.commons.lang3.StringUtils.isEmpty(ip) || "unknown".equalsIgnoreCase(ip)) {
+			if (org.apache.commons.lang3.StringUtils.isEmpty(ip) || UNKNOWN.equalsIgnoreCase(ip)) {
 				ip = request.getRemoteAddr();
 			}
 		} catch (Exception e) {
