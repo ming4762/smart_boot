@@ -30,6 +30,9 @@ import java.util.*;
 @Slf4j
 public class JwtUtil {
 
+    private JwtUtil() {
+        throw new IllegalStateException("Utility class");
+    }
 
     private static final String USER_KEY = "user";
 

@@ -4,21 +4,22 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.gc.common.base.utils.ExceptionUtils;
+import com.gc.common.base.utils.StringUtils;
 import com.gc.starter.crud.model.BaseModel;
 import com.gc.starter.crud.model.Sort;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.gc.common.base.utils.ExceptionUtils;
-import com.gc.common.base.utils.StringUtils;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.springframework.lang.NonNull;
+import org.springframework.lang.Nullable;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.util.*;
@@ -30,6 +31,10 @@ import java.util.*;
  */
 @Slf4j
 public final class CrudUtils {
+
+    private CrudUtils() {
+        throw new IllegalStateException("Utility class");
+    }
 
     private static final ImmutableMap<String, SymbolParameterType> WRAPPER_METHOD_PARAMETER_MAP= ImmutableMap.<String, SymbolParameterType>builder()
             .put("=", new SymbolParameterType("eq", new Class[]{Object.class, Object.class}))
@@ -69,8 +74,8 @@ public final class CrudUtils {
     /**
      * 通过Class获取实体类的key
      */
-    @NotNull
-    public static List<Field> getModelKeysByClass(@NotNull Class<? extends BaseModel> clazz) {
+    @NonNull
+    public static List<Field> getModelKeysByClass(@NonNull Class<? extends BaseModel> clazz) {
         if (CLASS_KEY_CACHE.containsKey(clazz)) {
             return CLASS_KEY_CACHE.get(clazz);
         }
@@ -87,11 +92,11 @@ public final class CrudUtils {
 
     /**
      * 通过类型获取实体类key属性
-     * @param type
-     * @return
+     * @param type 类型
+     * @return 实体类key class
      */
-    @NotNull
-    public static List<Field> getModelKeysByType(@NotNull Type type) {
+    @NonNull
+    public static List<Field> getModelKeysByType(@NonNull Type type) {
         Class<? extends BaseModel> clazz = getModelClassByType(type);
         if (clazz == null) {
             return Lists.newArrayList();
@@ -101,12 +106,12 @@ public final class CrudUtils {
 
     /**
      * 通过类型获取实体类Class
-     * @param type
-     * @return
+     * @param type 实体类type
+     * @return 实体类calss
      */
     @SuppressWarnings({"rawtypes", "unchecked"})
     @Nullable
-    public static Class<? extends BaseModel> getModelClassByType(@NotNull Type type) {
+    public static Class<? extends BaseModel> getModelClassByType(@NonNull Type type) {
         if (TYPE_CLASS_CACHE.containsKey(type)) {
             return TYPE_CLASS_CACHE.get(type);
         }
@@ -128,13 +133,13 @@ public final class CrudUtils {
      * @param sortName 以逗号分隔的实体类属性名称
      * @param sortOrder 以逗号分隔的排序方法
      * @param clazz 实体类类型
-     * @return
+     * @return 排序信息
      */
-    @NotNull
-    public static List<Sort> analysisOrder(@NotNull String sortName, @Nullable String sortOrder, Class<? extends BaseModel> clazz) {
+    @NonNull
+    public static List<Sort> analysisOrder(@NonNull String sortName, @Nullable String sortOrder, Class<? extends BaseModel> clazz) {
         final String[] sortNameList = sortName.split(",");
-        final List<String> sortOrderList = sortOrder == null ? new ArrayList<String>() : Arrays.asList(sortOrder.split(","));
-        final List<Sort> sortList = new LinkedList<Sort>();
+        final List<String> sortOrderList = sortOrder == null ? new ArrayList<>() : Arrays.asList(sortOrder.split(","));
+        final List<Sort> sortList = Lists.newLinkedList();
         for (int i=0; i<sortNameList.length; i++) {
             final String name = sortNameList[i].trim();
             final String order = sortOrderList.size() > i ? sortOrderList.get(i).trim() : "asc";
@@ -156,7 +161,7 @@ public final class CrudUtils {
      * @return 数据库字段名
      */
     @Nullable
-    public static String getDbField(@NotNull Class<? extends BaseModel> clazz, @NotNull String fieldName) {
+    public static String getDbField(@NonNull Class<? extends BaseModel> clazz, @NonNull String fieldName) {
         Field field = null;
         try {
             field = clazz.getDeclaredField(fieldName);
@@ -174,8 +179,8 @@ public final class CrudUtils {
      * 1、优先从注解获取
      * 2、如果没有注解，属性名去除驼峰表示作为数据库字段
      */
-    @NotNull
-    public static String getDbField(@NotNull Field field) {
+    @NonNull
+    public static String getDbField(@NonNull Field field) {
         String dbField = FIELD_DBFIELD_CACHE.get(field);
         if (dbField == null) {
             TableId tableIdField = field.getAnnotation(TableId.class);
@@ -199,47 +204,47 @@ public final class CrudUtils {
 
     /**
      * 获取默认的数据库字段
-     * @param fieldName
-     * @return
+     * @param fieldName 字段名
+     * @return 数据库字段名
      */
-    @NotNull
-    public static String getDefaultDbField(@NotNull String fieldName) {
+    @NonNull
+    public static String getDefaultDbField(@NonNull String fieldName) {
         return StringUtils.underscoreName(fieldName);
     }
 
     /**
      * 从参数创建QueryWrapper
-     * @param parameter
-     * @param type
-     * @param <T>
-     * @return
+     * @param parameter 参数
+     * @param type 类型
+     * @param <T> 实体类类型
+     * @return 查询参数
      */
-    @NotNull
-    public static <T extends BaseModel> QueryWrapper<T> createQueryWrapperFromParameters(@NotNull Map<String, Object> parameter, @NotNull Type type) {
+    @NonNull
+    public static <T extends BaseModel> QueryWrapper<T> createQueryWrapperFromParameters(@NonNull Map<String, Object> parameter, @NonNull Type type) {
         final Class<? extends BaseModel> clazz = getModelClassByType(type);
         if (clazz != null) {
             return createQueryWrapperFromParameters(parameter, clazz);
         } else {
             log.warn("未找到实体类类型");
         }
-        return new QueryWrapper<T>();
+        return new QueryWrapper<>();
     }
 
     /**
      * 从参数创建QueryWrapper
-     * @param parameter
-     * @param clazz
-     * @param <T>
-     * @return
+     * @param parameter 参数
+     * @param clazz 实体类class
+     * @param <T> 实体类泛型
+     * @return 查询参数
      */
-    @NotNull
-    public static <T extends BaseModel> QueryWrapper<T> createQueryWrapperFromParameters(@NotNull Map<String, Object> parameter, @NotNull Class<? extends BaseModel> clazz) {
-        final QueryWrapper<T> queryWrapper = new QueryWrapper<T>();
+    @NonNull
+    public static <T extends BaseModel> QueryWrapper<T> createQueryWrapperFromParameters(@NonNull Map<String, Object> parameter, @NonNull Class<? extends BaseModel> clazz) {
+        final QueryWrapper<T> queryWrapper = new QueryWrapper<>();
         createBaseQueryWrapperFromParameters(parameter, clazz, queryWrapper);
         return queryWrapper;
     }
 
-    private static <T extends BaseModel> void createBaseQueryWrapperFromParameters(@NotNull Map<String, Object> parameter, @NotNull Class<? extends BaseModel> clazz, @NotNull Wrapper<T> queryWrapper) {
+    private static <T extends BaseModel> void createBaseQueryWrapperFromParameters(@NonNull Map<String, Object> parameter, @NonNull Class<? extends BaseModel> clazz, @NonNull Wrapper<T> queryWrapper) {
         final String symbolSplit = "@";
         parameter.forEach((key, value) -> {
             if (key.contains(symbolSplit)) {
@@ -249,36 +254,14 @@ public final class CrudUtils {
                 if (org.springframework.util.StringUtils.isEmpty(symbol)) {
                     log.warn("参数无效，为找到符号，key:{}", key);
                 } else {
-                    final String fieldName = getDbField(clazz, keySplit[0]);
-                    if (fieldName == null) {
+                    final String dbFieldName = getDbField(clazz, keySplit[0]);
+                    if (dbFieldName == null) {
                         log.warn("参数无效，未找到实体类对应属性：{}", keySplit[0]);
                     } else {
-                        final String dbFieldName = getDbField(clazz, fieldName);
-                        if (value != null) {
-                            // 值不为null处理
-                            if (org.apache.commons.lang3.StringUtils.isNotEmpty(value.toString())) {
-                                final Method method = getWrapperMethod(queryWrapper.getClass(), symbol);
-                                if (method == null) {
-                                    log.warn("参数无效，未找到符号对应执行方法：{}", symbol);
-                                } else {
-                                    try {
-                                        method.invoke(queryWrapper, dbFieldName, value);
-                                    } catch (Exception e) {
-                                        ExceptionUtils.doThrow(e);
-                                    }
-                                }
-                            } else {
-                                log.warn("参数无效，忽略参数值：{}", value);
-                            }
-                        } else {
-                            // null 处理
-                            if (org.apache.commons.lang3.StringUtils.equals(SYMBOL_EQUAL, symbol)) {
-                                ((QueryWrapper<T>) queryWrapper).isNull(dbFieldName);
-                            } else if (org.apache.commons.lang3.StringUtils.equals(symbol, SYMBOL_NOT_EQUAL)) {
-                                ((QueryWrapper<T>) queryWrapper).isNotNull(dbFieldName);
-                            } else {
-                                log.warn("null值参数只能使用'='或'<>'");
-                            }
+                        try {
+                            CrudUtils.dealValue(value, queryWrapper, symbol, dbFieldName);
+                        } catch (InvocationTargetException | IllegalAccessException e) {
+                            ExceptionUtils.doThrow(e);
                         }
                     }
                 }
@@ -286,13 +269,39 @@ public final class CrudUtils {
         });
     }
 
+    private static <T> void dealValue(@Nullable Object value, @NonNull Wrapper<T> queryWrapper, @Nullable String symbol, @Nullable String dbFieldName) throws InvocationTargetException, IllegalAccessException {
+        if (!Objects.isNull(value)) {
+            // 值不为null处理
+            if (org.apache.commons.lang3.StringUtils.isNotEmpty(value.toString())) {
+                final Method method = getWrapperMethod(queryWrapper.getClass(), symbol);
+                if (method == null) {
+                    log.warn("参数无效，未找到符号对应执行方法：{}", symbol);
+                } else {
+                    method.invoke(queryWrapper, dbFieldName, value);
+                }
+            } else {
+                log.warn("参数无效，忽略参数值：{}", value);
+            }
+        } else {
+            // null 处理
+            if (org.apache.commons.lang3.StringUtils.equals(SYMBOL_EQUAL, symbol)) {
+                ((QueryWrapper<T>) queryWrapper).isNull(dbFieldName);
+            } else if (org.apache.commons.lang3.StringUtils.equals(symbol, SYMBOL_NOT_EQUAL)) {
+                ((QueryWrapper<T>) queryWrapper).isNotNull(dbFieldName);
+            } else {
+                log.warn("null值参数只能使用'='或'<>'");
+            }
+        }
+    }
+
     /**
      * 获取wrapper执行方法
-     * @param clazz
-     * @param symbol
-     * @return
+     * @param clazz Wrapper类型
+     * @param symbol 符号
+     * @return 查询方法
      */
-    private static Method getWrapperMethod(Class clazz, String symbol) {
+    @SuppressWarnings("rawtypes")
+    private static Method getWrapperMethod(Class<? extends Wrapper> clazz, String symbol) {
         Method method = null;
         final SymbolParameterType symbolParameterType = WRAPPER_METHOD_PARAMETER_MAP.get(symbol);
         if (symbolParameterType != null) {
@@ -312,6 +321,7 @@ public final class CrudUtils {
     static class SymbolParameterType {
         private String symbol;
 
+        @SuppressWarnings("rawtypes")
         private Class[] parameterTypes;
     }
 

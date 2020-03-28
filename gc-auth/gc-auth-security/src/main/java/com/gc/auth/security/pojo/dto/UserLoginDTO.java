@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -18,16 +19,17 @@ import java.util.Objects;
 public class UserLoginDTO implements Serializable {
     private static final long serialVersionUID = -5567960808566060208L;
 
-
+    @NotNull(message = "用户名不能为空")
     private String username;
 
+    @NotNull(message = "密码不能为空")
     private String password;
 
     private Boolean remember;
 
-    public Boolean getRemember() {
+    public boolean getRemember() {
         if (Objects.isNull(remember)) {
-            remember = Boolean.FALSE;
+            remember = false;
         }
         return remember;
     }

@@ -21,7 +21,7 @@ public class SysRoleController extends BaseController<SysRoleService, SysRolePO>
 
     @Override
     @PostMapping("save")
-    protected Result<Boolean> save(@RequestBody SysRolePO model) throws Exception {
+    public Result<Boolean> save(@RequestBody SysRolePO model) {
         return Result.success(this.service.saveWithUser(model, AuthUtils.getCurrentUserId()));
     }
 }

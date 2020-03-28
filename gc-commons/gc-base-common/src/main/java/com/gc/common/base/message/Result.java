@@ -155,7 +155,7 @@ public class Result<T> {
      * @param e
      * @return
      */
-    public static Result<Object> failure(@NotNull BaseException e) {
+    public static Result<String> failure(@NotNull BaseException e) {
         return failure(e.getCode(), e.getMessage());
     }
 

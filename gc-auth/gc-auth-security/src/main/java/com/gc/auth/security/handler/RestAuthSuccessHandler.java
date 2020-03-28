@@ -47,7 +47,6 @@ public class RestAuthSuccessHandler implements AuthenticationSuccessHandler {
      * @return
      */
     private Result<Map<String, Object>> successData(Authentication authentication, HttpServletRequest httpServletRequest) {
-        final String roleStart = "ROLE_";
         final RestUserDetails userDetails = (RestUserDetails) authentication.getPrincipal();
         // 处理用户权限信息
         final ImmutableMap<String, Object> result = ImmutableMap.of(

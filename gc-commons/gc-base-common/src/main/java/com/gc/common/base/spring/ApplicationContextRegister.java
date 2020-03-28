@@ -3,7 +3,6 @@ package com.gc.common.base.spring;
 import lombok.extern.log4j.Log4j2;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
@@ -60,7 +59,7 @@ public class ApplicationContextRegister implements ApplicationContextAware {
 
 
     @Override
-    public void setApplicationContext(@NotNull ApplicationContext applicationContext) throws BeansException {
+    public void setApplicationContext(@NotNull ApplicationContext applicationContext) {
         log.debug("ApplicationContext registed-->{}", applicationContext);
         ApplicationContextRegister.applicationContext = applicationContext;
     }

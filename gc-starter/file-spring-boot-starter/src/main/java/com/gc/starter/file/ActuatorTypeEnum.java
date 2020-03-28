@@ -8,9 +8,9 @@ public enum ActuatorTypeEnum {
     /**
      * mongoDB
      */
-    mongoDB,
+    MONGO_DB,
     /**
      * 本地存储
      */
-    local
+    LOCAL
 }

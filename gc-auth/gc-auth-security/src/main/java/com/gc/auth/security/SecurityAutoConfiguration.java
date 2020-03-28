@@ -5,6 +5,7 @@ import com.gc.auth.security.filter.JwtAuthenticationFilter;
 import com.gc.auth.security.handler.*;
 import com.gc.common.auth.properties.AuthProperties;
 import com.google.common.collect.ImmutableList;
+import org.apache.commons.lang3.BooleanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -169,7 +170,7 @@ public class SecurityAutoConfiguration extends WebSecurityConfigurerAdapter {
                     .logoutSuccessHandler(restLogoutSuccessHandler);
         }
 
-        if (this.authProperties.getDevelopment()) {
+        if (BooleanUtils.isTrue(this.authProperties.getDevelopment())) {
             http.cors().and().authorizeRequests().anyRequest().permitAll();
         } else {
             http.authorizeRequests()

@@ -9,6 +9,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Serializable;
+
 /**
  * 日志实体类
  * @author jackson
@@ -47,7 +49,7 @@ public class SysLogPO extends BaseModelCreateUserTime {
     /**
      * 参数
      */
-    private Object params;
+    private Serializable params;
 
     /**
      * IP

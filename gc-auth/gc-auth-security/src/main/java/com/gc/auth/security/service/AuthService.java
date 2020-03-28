@@ -42,7 +42,7 @@ public class AuthService {
      * @param loginType
      * @return
      */
-    public String doLogin(Authentication authentication, Boolean remeber, LoginTypeConstants loginType) {
+    public String doLogin(Authentication authentication, boolean remeber, LoginTypeConstants loginType) {
         final RestUserDetails userDetails = (RestUserDetails) authentication.getPrincipal();
         // 创建jwt
         final String jwt = JwtUtil.createJwt(authentication, this.authProperties.getJwtKey());

@@ -16,11 +16,13 @@ import java.util.regex.Pattern;
  */
 public class IdGenerator {
 
+    private IdGenerator() {
+        throw new IllegalStateException("Utility class");
+    }
+
     private static final int MAX_SERVER_ID = 8;
 
     private static final Logger logger = LoggerFactory.getLogger(IdGenerator.class);
-
-    private static final Pattern PATTERN_LONG_ID = Pattern.compile("^([0-9]{15})([0-9a-f]{32})([0-9a-f]{3})$");
 
     private static final Pattern PATTERN_HOSTNAME = Pattern.compile("^.*\\D+([0-9]+)$");
 
@@ -30,7 +32,7 @@ public class IdGenerator {
 
     private static final long SHARD_ID = getServerIdAsLong();
 
-    private static long offset = 0;
+    private static long offsetChange = 0;
 
     private static long lastEpoch = 0;
 
@@ -41,24 +43,24 @@ public class IdGenerator {
     private static synchronized long nextId(long epochSecond) {
         if (epochSecond < lastEpoch) {
             // warning: clock is turn back:
-            logger.warn("clock is back: " + epochSecond + " from previous:" + lastEpoch);
+            logger.warn("clock is back: {} from previous:{}", epochSecond, lastEpoch);
             epochSecond = lastEpoch;
         }
         if (lastEpoch != epochSecond) {
             lastEpoch = epochSecond;
             reset();
         }
-        offset++;
-        long next = offset & MAX_NEXT;
+        offsetChange++;
+        long next = offsetChange & MAX_NEXT;
         if (next == 0) {
-            logger.warn("maximum id reached in 1 second in epoch: " + epochSecond);
+            logger.warn("maximum id reached in 1 second in epoch: {}", epochSecond);
             return nextId(epochSecond + 1);
         }
         return generateId(epochSecond, next, SHARD_ID);
     }
 
     private static void reset() {
-        offset = 0;
+        offsetChange = 0;
     }
 
     private static long generateId(long epochSecond, long next, long shardId) {

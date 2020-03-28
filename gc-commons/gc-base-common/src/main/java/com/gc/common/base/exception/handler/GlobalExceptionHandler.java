@@ -31,7 +31,7 @@ public class GlobalExceptionHandler {
 
     @ResponseBody
     @ExceptionHandler(value = Exception.class)
-    public Result<?> handlerException(Exception e) throws Exception {
+    public Result<String> handlerException(Exception e) {
         if (e instanceof NoHandlerFoundException) {
             log.error("NoHandlerFoundException: 请求方法 {}, 请求路径 {}", ((NoHandlerFoundException) e).getRequestURL(), ((NoHandlerFoundException) e).getHttpMethod());
             return Result.ofStatus(HttpStatus.NOT_FOUND);
@@ -57,7 +57,7 @@ public class GlobalExceptionHandler {
             return Result.failure((BaseException)e);
         } else if (e instanceof AccessDeniedException) {
             // security 认证错误不拦截，交给security过滤器处理
-            throw e;
+            throw (AccessDeniedException)e;
         } else if (e instanceof InternalAuthenticationServiceException) {
             log.error("登录异常");
             return Result.failure(HttpStatus.UNAUTHORIZED.getCode(), e.getMessage());

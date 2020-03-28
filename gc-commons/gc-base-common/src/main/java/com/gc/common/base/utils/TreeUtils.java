@@ -15,8 +15,12 @@ import java.util.List;
  */
 public final class TreeUtils {
 
+    private TreeUtils() {
+        throw new IllegalStateException("Utility class");
+    }
+
     @Nullable
-    public static <T> Tree<T> build(@Nullable List<Tree<T>> nodes) {
+    public static <T extends Serializable> Tree<T> build(@Nullable List<Tree<T>> nodes) {
         if (nodes == null) {
             return null;
         }
@@ -36,7 +40,7 @@ public final class TreeUtils {
                 }
             }
         }
-        Tree<T> root = new Tree<T>();
+        Tree<T> root = new Tree<>();
         if (topNodes.size() == 1) {
             root = topNodes.get(0);
         } else {
@@ -58,7 +62,7 @@ public final class TreeUtils {
      * @return
      */
     @NotNull
-    public static <T> List<Tree<T>>  buildList(@Nullable List<Tree<T>> nodes, @NotNull Serializable idParam) {
+    public static <T extends Serializable> List<Tree<T>>  buildList(@Nullable List<Tree<T>> nodes, @NotNull Serializable idParam) {
         if (nodes == null) {
             return Lists.newArrayList();
         }

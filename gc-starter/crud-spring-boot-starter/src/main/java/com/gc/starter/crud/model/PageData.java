@@ -15,7 +15,7 @@ import java.util.List;
 @AllArgsConstructor
 @Getter
 @Setter
-public final class PageData<T> implements Serializable {
+public final class PageData<T extends Serializable> implements Serializable {
 
     private static final long serialVersionUID = 3546130315339330080L;
 

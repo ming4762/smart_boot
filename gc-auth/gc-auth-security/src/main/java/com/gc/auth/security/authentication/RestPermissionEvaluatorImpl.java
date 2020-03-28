@@ -2,6 +2,7 @@ package com.gc.auth.security.authentication;
 
 import com.gc.common.auth.model.RestUserDetails;
 import com.gc.common.auth.properties.AuthProperties;
+import org.apache.commons.lang3.BooleanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.PermissionEvaluator;
 import org.springframework.security.core.Authentication;
@@ -25,7 +26,7 @@ public class RestPermissionEvaluatorImpl implements PermissionEvaluator {
     @Override
     public boolean hasPermission(Authentication authentication, Object targetDomainObject, Object permission) {
         // 开发模式不拦截
-        if (this.authProperties.getDevelopment()) {
+        if (BooleanUtils.isTrue(this.authProperties.getDevelopment())) {
             return true;
         }
         // 验证角色，超级管理员角色不拦截

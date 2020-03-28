@@ -2,6 +2,7 @@ package com.gc.starter.file.serice.impl;
 
 import com.gc.starter.file.serice.ActualFileService;
 import com.mongodb.client.gridfs.GridFSBuckets;
+import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.bson.types.ObjectId;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,27 +52,23 @@ public class ActualFileServiceMongoImpl implements ActualFileService {
     /**
      * 删除文件
      * @param id 文件ID
-     * @return 是否删除成功
      */
     @Override
-    public @NotNull Boolean delete(@NotNull String id) {
+    public void delete(@NotNull String id) {
         this.gridFsTemplate.delete(
                 Query.query(Criteria.where("_id").is(id))
         );
-        return true;
     }
 
     /**
      * 批量删除文件
      * @param fileIdList 文件ID
-     * @return 是否删除成功
      */
     @Override
-    public @NotNull Boolean batchDelete(@NotNull List<String> fileIdList) {
+    public void batchDelete(@NotNull List<String> fileIdList) {
         this.gridFsTemplate.delete(
                 Query.query(Criteria.where("_id").in(fileIdList))
         );
-        return true;
     }
 
     /**
@@ -84,8 +81,17 @@ public class ActualFileServiceMongoImpl implements ActualFileService {
         return GridFSBuckets.create(dbFactory.getDb()).openDownloadStream(new ObjectId(id));
     }
 
+    /**
+     * 下载文件并写入输出流
+     * 请注意关闭输出流
+     * @param id 文件ID
+     * @param outputStream 输出流
+     * @throws IOException IO异常
+     */
     @Override
     public void download(@NotNull String id, @NotNull OutputStream outputStream) throws IOException {
-
+        try (InputStream inputStream = this.download(id)) {
+            IOUtils.copy(inputStream, outputStream);
+        }
     }
 }

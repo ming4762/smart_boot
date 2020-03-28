@@ -1,15 +1,17 @@
 package com.gc.starter.file.serice.impl;
 
+import com.gc.common.base.utils.security.Md5Utils;
 import com.gc.starter.file.pojo.bo.DiskFilePathBO;
 import com.gc.starter.file.serice.ActualFileService;
-import com.gc.common.base.utils.security.Md5Utils;
 import org.apache.commons.io.IOUtils;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.util.StringUtils;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * 本地磁盘文件执行器
@@ -32,7 +34,9 @@ public class ActualFileServiceDiskImpl implements ActualFileService {
      */
     @Override
     public @NotNull String save(@NotNull File file, String filename) throws IOException {
-        return this.save(new FileInputStream(file), StringUtils.isEmpty(filename) ? file.getName() : filename);
+        try (FileInputStream inputStream = new FileInputStream(file)) {
+            return this.save(inputStream, StringUtils.isEmpty(filename) ? file.getName() : filename);
+        }
     }
 
     /**
@@ -41,26 +45,27 @@ public class ActualFileServiceDiskImpl implements ActualFileService {
      * @param filename 文件名
      * @return 文件ID
      */
-    @SuppressWarnings("ResultOfMethodCallIgnored")
     @Override
     public @NotNull String save(@NotNull InputStream inputStream, String filename) throws IOException {
-        try (final ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
+        try (
+                final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+                final ByteArrayInputStream writerInputStream = new ByteArrayInputStream(outputStream.toByteArray())
+                ) {
             IOUtils.copy(inputStream, outputStream);
             // 计算md5
             final String md5 = Md5Utils.md5(new ByteArrayInputStream(outputStream.toByteArray()));
             final DiskFilePathBO diskFilePath = new DiskFilePathBO(this.basePath, md5, filename);
             // 获取文件路径
-            final String folderPath = diskFilePath.getFolderPath();
-            final File folder = new File(folderPath);
-            if (!folder.exists()) {
-                folder.mkdirs();
+            final Path folderPath = Paths.get(diskFilePath.getFolderPath());
+            if (Files.notExists(folderPath)) {
+                Files.createDirectories(folderPath);
             }
             final String filePath = diskFilePath.getFilePath();
-            final File uploadFile = new File(filePath);
-            if (!uploadFile.exists()) {
-                uploadFile.createNewFile();
+            final Path inPath = Paths.get(filePath);
+            if (!Files.exists(inPath)) {
+                Files.createFile(inPath);
             }
-            IOUtils.copy(new ByteArrayInputStream(outputStream.toByteArray()), new FileOutputStream(uploadFile));
+            Files.copy(writerInputStream, inPath);
             return diskFilePath.getFileId();
         }
     }
@@ -68,31 +73,25 @@ public class ActualFileServiceDiskImpl implements ActualFileService {
     /**
      * 删除文件
      * @param id 文件ID
-     * @return 是否删除成功
      */
     @Override
-    public @NotNull Boolean delete(@NotNull String id) {
+    public void delete(@NotNull String id) throws IOException {
         final String filePath = DiskFilePathBO.createById(id, this.basePath).getFilePath();
-        final File file = new File(filePath);
-        if (file.exists()) {
-            return file.delete();
+        final Path path = Paths.get(filePath);
+        if (Files.exists(path)) {
+            Files.delete(path);
         }
-        return Boolean.FALSE;
     }
 
     /**
      * 批量删除文件
      * @param fileIdList 文件ID
-     * @return 是否删除成功
      */
     @Override
-    public @NotNull Boolean batchDelete(@NotNull List<String> fileIdList) {
-        final List<Boolean> result= fileIdList
-                .stream()
-                .map(this::delete)
-                .filter(item -> !item)
-                .collect(Collectors.toList());
-        return result.isEmpty();
+    public void batchDelete(@NotNull List<String> fileIdList) throws IOException {
+        for (String fileId : fileIdList) {
+            this.delete(fileId);
+        }
     }
 
     /**
@@ -109,13 +108,15 @@ public class ActualFileServiceDiskImpl implements ActualFileService {
 
     /**
      * 下载文件
-     * @param id
-     * @param outputStream
+     * @param id 文件ID
+     * @param outputStream 输出流，文件信息会写入输出流
      */
     @Override
     public void download(@NotNull String id, @NotNull OutputStream outputStream) throws IOException {
         final String filePath = DiskFilePathBO.createById(id, this.basePath).getFilePath();
         final File file = new File(filePath);
-        IOUtils.copy(new FileInputStream(file), outputStream);
+        try (FileInputStream inputStream = new FileInputStream(file)) {
+            IOUtils.copy(inputStream, outputStream);
+        }
     }
 }

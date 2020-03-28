@@ -48,7 +48,7 @@ public class SysFileServiceImpl extends BaseServiceImpl<SysFileMapper, SysFilePO
      */
     @Override
     @Transactional(value = FileDatabaseConstants.TRANSACTION_MANAGER, rollbackFor = Exception.class)
-    public @NotNull SysFilePO saveFile(@NotNull MultipartFile multipartFile, @NotNull SaveFileDTO saveFileDto) throws Exception {
+    public @NotNull SysFilePO saveFile(@NotNull MultipartFile multipartFile, @NotNull SaveFileDTO saveFileDto) throws IOException {
         return this.saveFile(new SysFileBO(multipartFile, saveFileDto.getFilename(), saveFileDto.getType()));
     }
 
@@ -59,7 +59,7 @@ public class SysFileServiceImpl extends BaseServiceImpl<SysFileMapper, SysFilePO
      */
     @Override
     @Transactional(value = FileDatabaseConstants.TRANSACTION_MANAGER, rollbackFor = Exception.class)
-    public @NotNull SysFilePO saveFile(@NotNull SysFileBO file) throws Exception {
+    public @NotNull SysFilePO saveFile(@NotNull SysFileBO file) throws IOException {
         // 根据md5判断文件是否存在
         final List<SysFilePO> md5FileList = this.list(
                 new QueryWrapper<SysFilePO>().lambda().eq(SysFilePO :: getMd5, file.getFile().getMd5())
@@ -76,7 +76,7 @@ public class SysFileServiceImpl extends BaseServiceImpl<SysFileMapper, SysFilePO
             } catch (Exception e) {
                 log.error("保存文件信息到数据库发生错误，删除保存的文件");
                 this.actualFileService.delete(file.getFile().getDbId());
-                throw e;
+                throw new BaseException(e);
             }
         } else {
             return md5FileList.iterator().next();
@@ -92,7 +92,7 @@ public class SysFileServiceImpl extends BaseServiceImpl<SysFileMapper, SysFilePO
      */
     @Override
     @Transactional(value = FileDatabaseConstants.TRANSACTION_MANAGER, rollbackFor = Exception.class)
-    public SysFilePO saveFile(@NotNull MultipartFile multipartFile, String type) throws RuntimeException {
+    public SysFilePO saveFile(@NotNull MultipartFile multipartFile, String type) {
         final SysFilePO file = new SysFilePO();
         file.setType(type);
         try {
@@ -108,7 +108,7 @@ public class SysFileServiceImpl extends BaseServiceImpl<SysFileMapper, SysFilePO
      * @return 文件信息
      */
     @Override
-    public @Nullable SysFilePO deleteFile(@NotNull Long fileId) {
+    public @Nullable SysFilePO deleteFile(@NotNull Long fileId) throws IOException {
         final SysFilePO file = this.getById(fileId);
         if (ObjectUtils.isNotEmpty(file)) {
             // 删除文件信息
@@ -128,8 +128,7 @@ public class SysFileServiceImpl extends BaseServiceImpl<SysFileMapper, SysFilePO
      * @return 删除是否成功
      */
     @Override
-    @NotNull
-    public Boolean batchDeleteFile(@NotNull Collection<Long> fileIds) {
+    public boolean batchDeleteFile(@NotNull Collection<Long> fileIds) throws IOException {
         if (!fileIds.isEmpty()) {
             final List<SysFilePO> fileList = this.listByIds(fileIds);
             this.removeByIds(fileIds);
@@ -139,9 +138,9 @@ public class SysFileServiceImpl extends BaseServiceImpl<SysFileMapper, SysFilePO
                     .filter(StringUtils :: isNotEmpty)
                     .collect(Collectors.toList());
             this.actualFileService.batchDelete(dbIdList);
-            return Boolean.TRUE;
+            return true;
         }
-        return Boolean.FALSE;
+        return false;
     }
 
     /**
@@ -151,7 +150,7 @@ public class SysFileServiceImpl extends BaseServiceImpl<SysFileMapper, SysFilePO
      */
     @Override
     @Nullable
-    public SysFileBO downLoad(@NotNull Long fileId) {
+    public SysFileBO download(@NotNull Long fileId) {
         final SysFilePO file = this.getById(fileId);
         if (ObjectUtils.isNotEmpty(file)) {
             return this.download(file);

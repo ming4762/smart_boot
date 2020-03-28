@@ -34,19 +34,17 @@ public interface ActualFileService {
     /**
      * 删除文件
      * @param id 文件ID
-     * @return 是否删除成功
+     * @throws IOException IOException
      */
-    @NotNull
-    Boolean delete(@NotNull String id);
+    void delete(@NotNull String id) throws IOException;
 
 
     /**
      * 批量删除文件
      * @param fileIdList 文件ID
-     * @return 是否删除成功
+     * @throws IOException IOException
      */
-    @NotNull
-    Boolean batchDelete(@NotNull List<String> fileIdList);
+    void batchDelete(@NotNull List<String> fileIdList) throws IOException;
 
     /**
      * 下载文件

@@ -6,6 +6,7 @@ import com.gc.module.code.service.DatabaseConnectionService;
 import com.gc.starter.crud.controller.BaseController;
 import com.gc.starter.crud.query.PageQueryParameter;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -18,10 +19,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("db/connect")
 public class DatabaseConnectionController extends BaseController<DatabaseConnectionService, DatabaseConnectionPO> {
 
-    @RequestMapping("list")
+    @PostMapping("list")
     @PreAuthorize("hasRole('1')")
     @Override
-    protected Result<Object> list(PageQueryParameter<String, Object> parameter) {
+    public Result<Object> list(PageQueryParameter<String, Object> parameter) {
         return super.list(parameter);
     }
 }

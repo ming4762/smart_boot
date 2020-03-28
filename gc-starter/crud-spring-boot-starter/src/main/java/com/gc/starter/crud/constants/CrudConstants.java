@@ -8,9 +8,9 @@ public enum CrudConstants {
     /**
      * 排序字段
      */
-    sortName,
-    sortOrder,
-    limit,
-    offset,
-    keyword
+    SORT_NAME,
+    SORT_ORDER,
+    LIMIT,
+    OFFSET,
+    KEYWORD
 }

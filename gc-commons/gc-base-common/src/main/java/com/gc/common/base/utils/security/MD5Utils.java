@@ -14,6 +14,10 @@ import java.io.InputStream;
  */
 public final class Md5Utils {
 
+    private Md5Utils() {
+        throw new IllegalStateException("Utility class");
+    }
+
     /**
      * MD5加密
      * @param value 加密前的字符串

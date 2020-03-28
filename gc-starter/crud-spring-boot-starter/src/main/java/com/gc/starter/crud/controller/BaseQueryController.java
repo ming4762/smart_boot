@@ -46,7 +46,7 @@ public abstract class BaseQueryController<K extends BaseService<T>, T extends Ba
     protected Result<Object> list(@RequestBody PageQueryParameter<String, Object> parameter) {
         final Page<T> page = this.doPage(parameter);
         final QueryWrapper<T> queryWrapper = CrudUtils.createQueryWrapperFromParameters(parameter, this.getModelType());
-        final Object keyword = parameter.get(CrudConstants.keyword.name());
+        final Object keyword = parameter.get(CrudConstants.KEYWORD.name());
         if (keyword instanceof String) {
             this.addKeyword(queryWrapper, (String) keyword);
         }
@@ -63,7 +63,7 @@ public abstract class BaseQueryController<K extends BaseService<T>, T extends Ba
      * @param model 包含主键信息的model
      * @return 结果
      */
-    private Result<T> get(@RequestBody T model) {
+    public Result<T> get(@RequestBody T model) {
         return Result.success(this.service.get(model));
     }
 
@@ -133,12 +133,8 @@ public abstract class BaseQueryController<K extends BaseService<T>, T extends Ba
         if (clazz != null) {
             final Field[] fieldList = clazz.getDeclaredFields();
             if (fieldList.length > 0) {
-                queryWrapper.and(wrapper -> {
-                    Arrays.asList(fieldList)
-                            .forEach(field -> {
-                                wrapper.or().like(CrudUtils.getDbField(field), keyword);
-                            });
-                });
+                queryWrapper.and(wrapper -> Arrays.asList(fieldList)
+                        .forEach(field -> wrapper.or().like(CrudUtils.getDbField(field), keyword)));
             }
         }
     }

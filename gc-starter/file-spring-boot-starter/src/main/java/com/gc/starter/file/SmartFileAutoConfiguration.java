@@ -1,9 +1,9 @@
 package com.gc.starter.file;
 
+import com.gc.common.base.exception.BaseException;
 import com.gc.starter.file.serice.ActualFileService;
 import com.gc.starter.file.serice.impl.ActualFileServiceDiskImpl;
 import com.gc.starter.file.serice.impl.ActualFileServiceMongoImpl;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -19,8 +19,6 @@ import org.springframework.util.StringUtils;
 @EnableConfigurationProperties(SmartFileProperties.class)
 public class SmartFileAutoConfiguration {
 
-    @Autowired
-    private SmartFileProperties properties;
 
     /**
      * 创建文件执行器
@@ -28,15 +26,15 @@ public class SmartFileAutoConfiguration {
      */
     @Bean
     @ConditionalOnMissingBean(ActualFileService.class)
-    public ActualFileService actualFileService() throws Exception {
-        String type = this.properties.getActuatorType();
-        if (ActuatorTypeEnum.mongoDB.name().equals(type)) {
+    public ActualFileService actualFileService(SmartFileProperties properties) {
+        String type = properties.getActuatorType();
+        if (ActuatorTypeEnum.MONGO_DB.name().equals(type)) {
             return new ActualFileServiceMongoImpl();
         } else {
-            if (StringUtils.isEmpty(this.properties.getBasePath())) {
-                throw new Exception("使用本地文件系统必须设置基础路径:smart.file.base-path");
+            if (StringUtils.isEmpty(properties.getBasePath())) {
+                throw new BaseException("使用本地文件系统必须设置基础路径:smart.file.base-path");
             }
-            return new ActualFileServiceDiskImpl(this.properties.getBasePath());
+            return new ActualFileServiceDiskImpl(properties.getBasePath());
         }
     }
 }

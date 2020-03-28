@@ -8,5 +8,9 @@ import com.gc.common.base.constants.TransactionManagerConstants;
  */
 public final class FileDatabaseConstants {
 
+    private FileDatabaseConstants() {
+        throw new IllegalStateException("Utility class");
+    }
+
     public static final String TRANSACTION_MANAGER = TransactionManagerConstants.SYSTEM_MANAGER;
 }

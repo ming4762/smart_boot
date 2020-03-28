@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.lang.NonNull;
 
 import java.util.List;
 
@@ -28,6 +29,7 @@ public class AuthProperties {
     /**
      * 是否是开发模式
      */
+    @NonNull
     private Boolean development = Boolean.FALSE;
 
     @Getter

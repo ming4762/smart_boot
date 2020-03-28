@@ -15,6 +15,12 @@ public final class JsonUtils {
 
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
+    private static final String JSONERROR = "json转换发生异常";
+
+    private JsonUtils() {
+        throw new IllegalStateException("Utility class");
+    }
+
     /**
      * 对象转为json
      * @param object
@@ -24,7 +30,7 @@ public final class JsonUtils {
         try {
             return OBJECT_MAPPER.writeValueAsString(object);
         } catch (JsonProcessingException e) {
-            throw new BaseException("json转换发生异常", e);
+            throw new BaseException(JSONERROR, e);
         }
     }
 
@@ -37,7 +43,7 @@ public final class JsonUtils {
         try {
             return OBJECT_MAPPER.readValue(json, Object.class);
         } catch (JsonProcessingException e) {
-            throw new BaseException("json转换发生异常", e);
+            throw new BaseException(JSONERROR, e);
         }
     }
 
@@ -50,7 +56,7 @@ public final class JsonUtils {
         try {
             return OBJECT_MAPPER.readValue(json, clazz);
         } catch (JsonProcessingException e) {
-            throw new BaseException("json转换发生异常", e);
+            throw new BaseException(JSONERROR, e);
         }
     }
 }

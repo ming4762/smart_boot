@@ -9,9 +9,9 @@ import org.springframework.http.HttpStatus;
  * @author jackson
  * 2020/1/28 3:15 下午
  */
-@AllArgsConstructor
 @Getter
 @NoArgsConstructor
+@AllArgsConstructor
 public class BaseException extends RuntimeException {
     private static final long serialVersionUID = 5741320275497601133L;
 

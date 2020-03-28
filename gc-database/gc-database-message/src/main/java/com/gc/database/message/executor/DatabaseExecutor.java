@@ -29,8 +29,7 @@ public interface DatabaseExecutor {
      * @throws SQLException 连接失败错误
      * @return 是否连接成功
      */
-    @NotNull
-    Boolean testConnection(Connection connection) throws SQLException;
+    boolean testConnection(Connection connection) throws SQLException;
 
     /**
      * 测试数据库连接
@@ -44,58 +43,43 @@ public interface DatabaseExecutor {
     /**
      * 获取数据库表格
      * @param databaseConnection 数据库连接信息
-     * @throws IllegalAccessException  IllegalAccessException
-     * @throws SQLException  SQLException
-     * @throws InstantiationException  InstantiationException
      * @return 表列表
      */
     @NotNull
-    List<TableViewBO> listTable(@NotNull DatabaseConnectionBO databaseConnection) throws IllegalAccessException, SQLException, InstantiationException;
+    List<TableViewBO> listTable(@NotNull DatabaseConnectionBO databaseConnection);
 
     /**
      * 获取数据库实体
      * @param databaseConnection 数据库连接信息
-     * @throws IllegalAccessException  IllegalAccessException
-     * @throws SQLException  SQLException
-     * @throws InstantiationException  InstantiationException
      * @return 表列表
      */
     @NotNull
-    List<TableViewBO> listView(@NotNull DatabaseConnectionBO databaseConnection) throws IllegalAccessException, SQLException, InstantiationException;
+    List<TableViewBO> listView(@NotNull DatabaseConnectionBO databaseConnection);
 
     /**
      * 获取数据库表格
      * @param databaseConnection 数据库连接信息
      * @param types 视图/表格
-     * @throws IllegalAccessException  IllegalAccessException
-     * @throws SQLException  SQLException
-     * @throws InstantiationException  InstantiationException
      * @return 表列表
      */
     @NotNull
-    List<TableViewBO> listTable(@NotNull DatabaseConnectionBO databaseConnection, String... types) throws SQLException, InstantiationException, IllegalAccessException;
+    List<TableViewBO> listTable(@NotNull DatabaseConnectionBO databaseConnection, String... types);
 
     /**
      * 查询主键信息
      * @param databaseConnection 数据库连接信息
      * @param tableName 表名
-     * @throws IllegalAccessException  IllegalAccessException
-     * @throws SQLException  SQLException
-     * @throws InstantiationException  InstantiationException
      * @return 主键列表
      */
-    List<PrimaryKeyBO> listPrimaryKey(@NotNull DatabaseConnectionBO databaseConnection, String tableName) throws SQLException, InstantiationException, IllegalAccessException;
+    List<PrimaryKeyBO> listPrimaryKey(@NotNull DatabaseConnectionBO databaseConnection, String tableName);
 
     /**
      * 查询外键信息
      * @param databaseConnection 数据库连接信息
      * @param tableName 表名
-     * @throws IllegalAccessException  IllegalAccessException
-     * @throws SQLException  SQLException
-     * @throws InstantiationException  InstantiationException
      * @return 外键列表
      */
-    List<ImportKeyBO> listImportedKeys(@NotNull DatabaseConnectionBO databaseConnection, String tableName) throws SQLException, InstantiationException, IllegalAccessException;
+    List<ImportKeyBO> listImportedKeys(@NotNull DatabaseConnectionBO databaseConnection, String tableName);
 
     /**
      * 查询主键信息
@@ -104,32 +88,23 @@ public interface DatabaseExecutor {
      * @param unique 是否查询唯一索引
      * @param approximate
      * @return
-     * @throws IllegalAccessException  IllegalAccessException
-     * @throws SQLException  SQLException
-     * @throws InstantiationException  InstantiationException
      */
-    List<IndexBO> listIndex(@NotNull DatabaseConnectionBO databaseConnection, String tableName, Boolean unique, Boolean approximate) throws SQLException, InstantiationException, IllegalAccessException;
+    List<IndexBO> listIndex(@NotNull DatabaseConnectionBO databaseConnection, String tableName, Boolean unique, Boolean approximate);
 
     /**
      * 查询唯一索引
      * @param databaseConnection 数据库连接信息
      * @param tableName 表名
      * @return 唯一索引列表
-     * @throws IllegalAccessException  IllegalAccessException
-     * @throws SQLException  SQLException
-     * @throws InstantiationException  InstantiationException
      */
-    List<IndexBO> listUniqueIndex(@NotNull DatabaseConnectionBO databaseConnection, String tableName) throws IllegalAccessException, SQLException, InstantiationException;
+    List<IndexBO> listUniqueIndex(@NotNull DatabaseConnectionBO databaseConnection, String tableName);
 
     /**
      * 查询列信息
      * @param databaseConnection 数据库连接信息
      * @param tableName 表名
      * @return 列信息
-     * @throws IllegalAccessException  IllegalAccessException
-     * @throws SQLException  SQLException
-     * @throws InstantiationException  InstantiationException
      */
-    List<ColumnBO> listColumn(@NotNull DatabaseConnectionBO databaseConnection, String tableName) throws SQLException, InstantiationException, IllegalAccessException;
+    List<ColumnBO> listColumn(@NotNull DatabaseConnectionBO databaseConnection, String tableName);
 
 }

@@ -12,6 +12,10 @@ import java.util.regex.Pattern;
  */
 public final class StringUtils {
 
+    private StringUtils() {
+        throw new IllegalStateException("Utility class");
+    }
+
     private static final Pattern PATTERN = Pattern.compile("[A-Z]");
 
     /**

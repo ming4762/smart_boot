@@ -24,21 +24,21 @@ public abstract class BaseController<K extends BaseService<T>, T extends BaseMod
     /**
      * 添加更新
      */
-    protected Result<Boolean> saveUpdate(@RequestBody T model) throws Exception {
+    protected Result<Boolean> saveUpdate(@RequestBody T model) {
         return Result.success(this.service.saveOrUpdate(model));
     }
 
     /**
      * 保存
      */
-    protected Result<Boolean> save(@RequestBody T model) throws Exception {
+    protected Result<Boolean> save(@RequestBody T model) {
         return Result.success(this.service.save(model));
     }
 
     /**
      * 更新
      */
-    protected Result<Boolean> update(@RequestBody T model) throws Exception {
+    protected Result<Boolean> update(@RequestBody T model) {
         return Result.success(this.service.updateById(model));
     }
 
@@ -47,7 +47,7 @@ public abstract class BaseController<K extends BaseService<T>, T extends BaseMod
      * @param modelList
      * @return
      */
-    protected Result<Integer> batchDelete(@RequestBody List<T> modelList) throws Exception {
+    protected Result<Integer> batchDelete(@RequestBody List<T> modelList) {
         return Result.success(this.service.batchDelete(modelList));
     }
 

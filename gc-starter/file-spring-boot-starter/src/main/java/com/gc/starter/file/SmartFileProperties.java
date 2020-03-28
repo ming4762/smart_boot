@@ -13,7 +13,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @Setter
 public class SmartFileProperties {
 
-    private String actuatorType = ActuatorTypeEnum.mongoDB.name();
+    private String actuatorType = ActuatorTypeEnum.MONGO_DB.name();
 
     private String basePath;
 }

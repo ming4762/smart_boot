@@ -35,11 +35,11 @@ public class PermissionGrantedAuthority implements GcGrantedAuthority {
 
     @Override
     public String getAuthorityValue() {
-        return permission;
+        return this.getPermission();
     }
 
     @Override
     public String getAuthority() {
-        return permission;
+        return this.getPermission();
     }
 }

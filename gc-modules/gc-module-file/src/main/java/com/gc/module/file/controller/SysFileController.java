@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.net.URLEncoder;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -98,8 +99,8 @@ public class SysFileController extends BaseController<SysFileService, SysFilePO>
      */
     @GetMapping("download/{id}")
     @ApiOperation(value = "下载文件")
-    public void download(@PathVariable("id") Long id, HttpServletResponse response) throws Exception {
-        final SysFileBO file = this.service.downLoad(id);
+    public void download(@PathVariable("id") Long id, HttpServletResponse response) throws IOException {
+        final SysFileBO file = this.service.download(id);
         if (file != null) {
             //设置文件名并转码
             response.setHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode(file.getFile().getFileName(), "UTF-8"));
@@ -115,7 +116,7 @@ public class SysFileController extends BaseController<SysFileService, SysFilePO>
      */
     @PostMapping("batchDeleteById")
     @ApiOperation("批量删除文件")
-    public Result<Boolean> batchDeleteById(@RequestBody List<Long> ids) {
+    public Result<Boolean> batchDeleteById(@RequestBody List<Long> ids) throws IOException {
         return Result.success(this.service.batchDeleteFile(ids));
     }
 

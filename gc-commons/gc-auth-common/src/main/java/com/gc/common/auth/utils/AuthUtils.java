@@ -19,6 +19,10 @@ public final class AuthUtils {
 
     private static final String NOT_LOGIN_USER = "anonymousUser";
 
+    private AuthUtils () {
+        throw new IllegalStateException("Utility class");
+    }
+
     /**
      * 获取当前用户
      * @return 当前用户

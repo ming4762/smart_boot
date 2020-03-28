@@ -14,7 +14,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.Serializable;
 
 /**
  * @author jackson
@@ -24,9 +23,7 @@ import java.io.Serializable;
 @Setter
 @AllArgsConstructor
 @ToString
-public class SysFileBO implements Serializable {
-    private static final long serialVersionUID = 2372042784266937433L;
-
+public class SysFileBO {
     private SysFilePO file;
 
     private InputStream inputStream;
@@ -41,7 +38,6 @@ public class SysFileBO implements Serializable {
                 .size(multipartFile.getSize())
                 .build();
         this.inputStream = multipartFile.getInputStream();
-        throw new IOException("abc");
     }
 
 }

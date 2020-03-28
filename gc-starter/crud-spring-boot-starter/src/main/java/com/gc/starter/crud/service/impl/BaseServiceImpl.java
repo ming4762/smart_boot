@@ -9,8 +9,11 @@ import com.baomidou.mybatisplus.core.toolkit.ReflectionKit;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.gc.common.base.exception.BaseException;
+import com.gc.common.base.exception.IllegalAccessRuntimeException;
+import com.gc.common.base.exception.InvocationTargetRuntimeException;
+import com.gc.common.base.exception.NoSuchMethodRuntimeException;
 import com.gc.common.base.utils.ReflectUtil;
-import com.gc.starter.crud.mapper.BaseMapper;
+import com.gc.starter.crud.mapper.CrudBaseMapper;
 import com.gc.starter.crud.model.BaseModel;
 import com.gc.starter.crud.model.Sort;
 import com.gc.starter.crud.query.PageQueryParameter;
@@ -18,6 +21,7 @@ import com.gc.starter.crud.service.BaseService;
 import com.gc.starter.crud.utils.CrudUtils;
 import com.gc.starter.crud.utils.IdGenerator;
 import com.google.common.collect.Lists;
+import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -33,9 +37,11 @@ import java.util.stream.Collectors;
  * @author shizhongming
  * 2020/1/10 9:51 下午
  */
-public abstract class BaseServiceImpl<K extends BaseMapper<T>, T extends BaseModel> extends ServiceImpl<K, T> implements BaseService<T> {
+public abstract class BaseServiceImpl<K extends CrudBaseMapper<T>, T extends BaseModel> extends ServiceImpl<K, T> implements BaseService<T> {
 
     private static final String SORT_ASC = "ASC";
+
+    private static final String KEY_PROPERTY_NULL_ERROR = "error: can not execute. because can not find column for id from entity!";
 
     /**
      * 通过实体删除
@@ -57,7 +63,7 @@ public abstract class BaseServiceImpl<K extends BaseMapper<T>, T extends BaseMod
         if (clazz == null) {
             return 0;
         }
-        final QueryWrapper<T> queryWrapper = new QueryWrapper<T>();
+        final QueryWrapper<T> queryWrapper = new QueryWrapper<>();
         keyList.forEach(key -> queryWrapper.eq(CrudUtils.getDbField(clazz, key), ReflectUtil.getFieldValue(model, key)));
         return this.baseMapper.delete(queryWrapper);
     }
@@ -123,7 +129,7 @@ public abstract class BaseServiceImpl<K extends BaseMapper<T>, T extends BaseMod
             if (clazz == null) {
                 return null;
             }
-            final QueryWrapper<T> queryWrapper = new QueryWrapper<T>();
+            final QueryWrapper<T> queryWrapper = new QueryWrapper<>();
             keyList.forEach(key -> queryWrapper.eq(CrudUtils.getDbField(clazz, key), ReflectUtil.getFieldValue(model, key)));
             return this.getOne(queryWrapper);
         }
@@ -141,7 +147,7 @@ public abstract class BaseServiceImpl<K extends BaseMapper<T>, T extends BaseMod
         // 获取key
         final TableInfo tableInfo = this.getTableInfo();
         String keyProperty = tableInfo.getKeyProperty();
-        Assert.notEmpty(keyProperty, "error: can not execute. because can not find column for id from entity!");
+        Assert.notEmpty(keyProperty, KEY_PROPERTY_NULL_ERROR);
         Object idVal = ReflectionKit.getMethodValue(cls, entity, tableInfo.getKeyProperty());
         if (StringUtils.checkValNull(idVal)) {
             // 如果ID为null 手动设置ID
@@ -165,7 +171,7 @@ public abstract class BaseServiceImpl<K extends BaseMapper<T>, T extends BaseMod
         final TableInfo tableInfo = this.getTableInfo();
         Class<? extends BaseModel> clazz = this.getModelClass();
         String keyProperty = tableInfo.getKeyProperty();
-        Assert.notEmpty(keyProperty, "error: can not execute. because can not find column for id from entity!");
+        Assert.notEmpty(keyProperty, KEY_PROPERTY_NULL_ERROR);
         // 遍历实体类设置主键
         entityList.forEach(entity -> {
             Object idVal = ReflectionKit.getMethodValue(clazz, entity, keyProperty);
@@ -210,8 +216,8 @@ public abstract class BaseServiceImpl<K extends BaseMapper<T>, T extends BaseMod
     /**
      * 重写方法
      * 防止idList为空时发生错误
-     * @param idList
-     * @return
+     * @param idList 实体类ID列表
+     * @return 实体类集合
      */
     @Override
     public List<T> listByIds(Collection<? extends Serializable> idList) {
@@ -228,10 +234,10 @@ public abstract class BaseServiceImpl<K extends BaseMapper<T>, T extends BaseMod
 
     /**
      * 查询实体函数
-     * @param queryWrapper
-     * @param parameter
-     * @param paging
-     * @return
+     * @param queryWrapper 查询对象
+     * @param parameter 参数
+     * @param paging 是否分页
+     * @return 查询结果
      */
     @Override
     public @NotNull List<T> list(@NotNull QueryWrapper<T> queryWrapper, @NotNull PageQueryParameter<String, Object> parameter, @NotNull Boolean paging) {
@@ -245,7 +251,7 @@ public abstract class BaseServiceImpl<K extends BaseMapper<T>, T extends BaseMod
      * @return 是否成功
      */
     @Override
-    public boolean saveOrUpdateWithCreateUser(@NotNull T model, Long userId) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+    public boolean saveOrUpdateWithCreateUser(@NotNull T model, Long userId) {
         boolean isAdd = this.isAdd(model);
         if (isAdd) {
             return this.saveWithUser(model, userId);
@@ -261,7 +267,7 @@ public abstract class BaseServiceImpl<K extends BaseMapper<T>, T extends BaseMod
      * @return 是否成功
      */
     @Override
-    public boolean saveOrUpdateWithUpdateUser(@NotNull T model, Long userId) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+    public boolean saveOrUpdateWithUpdateUser(@NotNull T model, Long userId) {
         boolean isAdd = this.isAdd(model);
         if (isAdd) {
             return this.save(model);
@@ -277,7 +283,7 @@ public abstract class BaseServiceImpl<K extends BaseMapper<T>, T extends BaseMod
      * @return 是否成功
      */
     @Override
-    public boolean saveOrUpdateWithAllUser(@NotNull T model, Long userId) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+    public boolean saveOrUpdateWithAllUser(@NotNull T model, Long userId) {
         boolean isAdd = this.isAdd(model);
         if (isAdd) {
             return this.saveWithUser(model, userId);
@@ -291,12 +297,9 @@ public abstract class BaseServiceImpl<K extends BaseMapper<T>, T extends BaseMod
      * @param model 实体类
      * @param userId 用户ID
      * @return 是否保存成功
-     * @throws NoSuchMethodException 未找到设置创建人员ID异常
-     * @throws IllegalAccessException IllegalAccessException
-     * @throws InvocationTargetException InvocationTargetException
      */
     @Override
-    public boolean saveWithUser(@NotNull T model, Long userId) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+    public boolean saveWithUser(@NotNull T model, Long userId) {
         this.setCreateUserId(model, userId);
         this.setCreateTime(model);
         return this.save(model);
@@ -305,7 +308,7 @@ public abstract class BaseServiceImpl<K extends BaseMapper<T>, T extends BaseMod
 
 
     @Override
-    public boolean updateWithUserById(@NotNull T model, Long userId) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+    public boolean updateWithUserById(@NotNull T model, Long userId) {
         this.setUpdateTime(model);
         this.setUpdateUserId(model, userId);
         return updateById(model);
@@ -317,7 +320,7 @@ public abstract class BaseServiceImpl<K extends BaseMapper<T>, T extends BaseMod
      * @param parameter 参数
      * @param paging 是否分页
      */
-    public void analysisOrder(@NotNull QueryWrapper<T> queryWrapper, @NotNull PageQueryParameter<String, Object> parameter, @NotNull Boolean paging) {
+    public void analysisOrder(@NotNull QueryWrapper<T> queryWrapper, @NotNull PageQueryParameter<String, Object> parameter, boolean paging) {
         final String sortName = parameter.getSortName();
         // 如果灭有分页且存在排序字段手动进行排序
         if (!paging && sortName != null) {
@@ -326,7 +329,7 @@ public abstract class BaseServiceImpl<K extends BaseMapper<T>, T extends BaseMod
             final List<Sort> sortList = CrudUtils.analysisOrder(sortName, sortOrder, clazz);
             if (!sortList.isEmpty()) {
                 sortList.forEach(sort -> {
-                    if (SORT_ASC.equals(sort.getOrder().toUpperCase())) {
+                    if (SORT_ASC.equalsIgnoreCase(sort.getOrder())) {
                         queryWrapper.orderByAsc(sort.getDbName());
                     } else {
                         queryWrapper.orderByDesc(sort.getDbName());
@@ -342,7 +345,7 @@ public abstract class BaseServiceImpl<K extends BaseMapper<T>, T extends BaseMod
      */
     @NonNull
     private Type getModelType() {
-        return ((ParameterizedType)this.getClass().getGenericSuperclass()).getActualTypeArguments()[0];
+        return ((ParameterizedType)this.getClass().getGenericSuperclass()).getActualTypeArguments()[1];
     }
 
     /**
@@ -378,50 +381,72 @@ public abstract class BaseServiceImpl<K extends BaseMapper<T>, T extends BaseMod
 
     /**
      * 设置创建用户ID
-     * @param model
-     * @param userId
-     * @throws NoSuchMethodException
-     * @throws InvocationTargetException
-     * @throws IllegalAccessException
+     * @param model 实体类
+     * @param userId 用户ID
      */
-    private void setCreateUserId(T model, Long userId) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
-        final Method method = model.getClass().getMethod("setCreateUserId", Long.class);
-        method.invoke(model, userId);
+    private void setCreateUserId(T model, Long userId) {
+        try {
+            PropertyUtils.setProperty(model, "createUserId", userId);
+        } catch (IllegalAccessException e) {
+            throw new IllegalAccessRuntimeException(e);
+        } catch (InvocationTargetException e) {
+            throw new InvocationTargetRuntimeException(e);
+        } catch (NoSuchMethodException e) {
+            throw new NoSuchMethodRuntimeException(e);
+        }
     }
 
     /**
      * 设置创建时间
-     * @param model
-     * @throws NoSuchMethodException
-     * @throws InvocationTargetException
-     * @throws IllegalAccessException
+     * @param model 实体类
      */
-    private void setCreateTime(T model) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
-        final Method method = model.getClass().getMethod("setCreateTime", Date.class);
-        method.invoke(model, new Date());
+    private void setCreateTime(T model) {
+        try {
+            PropertyUtils.setProperty(model, "setCreateTime", new Date());
+        } catch (IllegalAccessException e) {
+            throw new IllegalAccessRuntimeException(e);
+        } catch (InvocationTargetException e) {
+            throw new InvocationTargetRuntimeException(e);
+        } catch (NoSuchMethodException e) {
+            throw new NoSuchMethodRuntimeException(e);
+        }
     }
 
-    private void setUpdateUserId(T model, Long userId) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
-        final Method method = model.getClass().getMethod("setUpdateUserId", Long.class);
-        method.invoke(model, userId);
+    private void setUpdateUserId(T model, Long userId) {
+        try {
+            PropertyUtils.setProperty(model, "setUpdateUserId", userId);
+        } catch (IllegalAccessException e) {
+            throw new IllegalAccessRuntimeException(e);
+        } catch (InvocationTargetException e) {
+            throw new InvocationTargetRuntimeException(e);
+        } catch (NoSuchMethodException e) {
+            throw new NoSuchMethodRuntimeException(e);
+        }
     }
 
-    private void setUpdateTime(T model) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
-        final Method method = model.getClass().getMethod("setUpdateTime", Date.class);
-        method.invoke(model, new Date());
+    private void setUpdateTime(T model) {
+        try {
+            PropertyUtils.setProperty(model, "setUpdateTime", new Date());
+        } catch (IllegalAccessException e) {
+            throw new IllegalAccessRuntimeException(e);
+        } catch (InvocationTargetException e) {
+            throw new InvocationTargetRuntimeException(e);
+        } catch (NoSuchMethodException e) {
+            throw new NoSuchMethodRuntimeException(e);
+        }
     }
 
     /**
      * 获取主键的值
-     * @param entity
-     * @return
+     * @param entity 实体类
+     * @return key
      */
     private Serializable getKeyValue(@NotNull T entity) {
         Class<?> cls = entity.getClass();
         TableInfo tableInfo = TableInfoHelper.getTableInfo(cls);
         Assert.notNull(tableInfo, "error: can not execute. because can not find cache of TableInfo for entity!");
         String keyProperty = tableInfo.getKeyProperty();
-        Assert.notEmpty(keyProperty, "error: can not execute. because can not find column for id from entity!");
+        Assert.notEmpty(keyProperty, KEY_PROPERTY_NULL_ERROR);
         return (Serializable) ReflectionKit.getMethodValue(cls, entity, tableInfo.getKeyProperty());
     }
 }

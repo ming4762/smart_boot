@@ -43,6 +43,10 @@ public final class DateUtil {
 
     private static final Pattern YYYY_MM_DD_HH_MM_SS_SSS_Z = Pattern.compile("[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}.[0-9]{0,3}Z");
 
+    private DateUtil() {
+        throw new IllegalStateException("Utility class");
+    }
+
     /**
      * 解析字符串日期为Date
      *
@@ -96,7 +100,7 @@ public final class DateUtil {
         boolean isUtc = false;
         if (org.springframework.util.StringUtils.isEmpty(dateStr)) {
             return null;
-        };
+        }
         if (dateStr.contains(CST_DATE_STR)) {
             return new SimpleDateFormat().parse(dateStr);
         }
@@ -145,6 +149,6 @@ public final class DateUtil {
      * @return
      */
     public static List<Date> createHourInterval() {
-        return null;
+        return Lists.newArrayList();
     }
 }

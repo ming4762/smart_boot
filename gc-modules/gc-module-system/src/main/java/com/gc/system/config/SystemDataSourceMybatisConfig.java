@@ -2,6 +2,7 @@ package com.gc.system.config;
 
 import com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceBuilder;
 import com.baomidou.mybatisplus.extension.spring.MybatisSqlSessionFactoryBean;
+import com.gc.common.base.constants.TransactionManagerConstants;
 import com.github.pagehelper.PageInterceptor;
 import org.apache.ibatis.plugin.Interceptor;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -48,7 +49,7 @@ public class SystemDataSourceMybatisConfig {
         return new SqlSessionTemplate(sqlSessionFactory);
     }
 
-    @Bean(name = "systemTransactionManager")
+    @Bean(name = TransactionManagerConstants.SYSTEM_MANAGER)
     public DataSourceTransactionManager systemTransactionManager(@Qualifier("systemDataSource") DataSource dataSource) {
         return new DataSourceTransactionManager(dataSource);
     }

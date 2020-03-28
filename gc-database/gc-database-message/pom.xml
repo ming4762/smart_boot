@@ -26,6 +26,11 @@
             <artifactId>mysql-connector-java</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>com.gc</groupId>
+            <artifactId>gc-base-common</artifactId>
+        </dependency>
+
     </dependencies>
 
 </project>

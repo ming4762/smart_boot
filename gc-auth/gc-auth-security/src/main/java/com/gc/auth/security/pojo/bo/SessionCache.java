@@ -1,11 +1,9 @@
 package com.gc.auth.security.pojo.bo;
 
 import com.gc.common.auth.model.RestUserDetails;
-import com.google.common.collect.Maps;
 import lombok.Getter;
 
 import java.io.Serializable;
-import java.util.Map;
 
 /**
  * @author jackson
@@ -16,8 +14,6 @@ public class SessionCache implements Serializable {
 
     @Getter
     private RestUserDetails user;
-
-    private Map<Object, Object> attribute = Maps.newConcurrentMap();
 
     public SessionCache(RestUserDetails user) {
         this.user = user;

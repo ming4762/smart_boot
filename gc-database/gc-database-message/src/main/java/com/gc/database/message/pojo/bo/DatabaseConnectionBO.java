@@ -8,6 +8,7 @@ import lombok.ToString;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.util.Assert;
 
+import java.lang.reflect.InvocationTargetException;
 import java.sql.Connection;
 import java.sql.Driver;
 import java.sql.SQLException;
@@ -51,14 +52,14 @@ public class DatabaseConnectionBO extends AbstractDatabaseConnectionBaseBO {
         return driver.connect(url, properties);
     }
 
-    public Driver doGetDriver() throws SmartDatabaseException {
+    public Driver doGetDriver() {
         final String driverClass = this.doGetDriverClass();
         try {
             final Class clazz = Class.forName(driverClass);
-            return (Driver) clazz.newInstance();
+            return (Driver) clazz.getDeclaredConstructor().newInstance();
         } catch (ClassNotFoundException e) {
             throw new SmartDatabaseException(ExceptionConstant.DIRVER_CLASS_NOT_FOUND, driverClass);
-        } catch (IllegalAccessException | InstantiationException e) {
+        } catch (IllegalAccessException | InstantiationException | NoSuchMethodException | InvocationTargetException e) {
             throw new SmartDatabaseException(ExceptionConstant.DIRVER_CLASS_INSTANCE, driverClass);
         }
     }

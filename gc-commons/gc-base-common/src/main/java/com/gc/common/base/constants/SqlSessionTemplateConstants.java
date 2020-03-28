@@ -5,7 +5,11 @@ package com.gc.common.base.constants;
  * @author jackson
  * 2020/1/22 6:51 下午
  */
-public interface SqlSessionTemplateConstants {
+public final class SqlSessionTemplateConstants {
+
+    private SqlSessionTemplateConstants() {
+        throw new IllegalStateException("Utility class");
+    }
 
     /**
      * 系统模块template

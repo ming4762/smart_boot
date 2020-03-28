@@ -1,8 +1,7 @@
 package com.gc.starter.crud.model;
 
 import lombok.Getter;
-import lombok.Setter;
-import org.jetbrains.annotations.NotNull;
+import org.springframework.lang.NonNull;
 
 /**
  * 排序字段
@@ -11,19 +10,19 @@ import org.jetbrains.annotations.NotNull;
  */
 @Getter
 public final class Sort {
-    @NotNull
+    @NonNull
     private String name;
 
-    @NotNull
+    @NonNull
     private String order;
 
     /**
      * 对应的数据库字段
      */
-    @NotNull
+    @NonNull
     private String dbName;
 
-    public Sort(@NotNull String name, @NotNull String order, @NotNull String dbName) {
+    public Sort(@NonNull String name, @NonNull String order, @NonNull String dbName) {
         this.name = name;
         this.order = order;
         this.dbName = dbName;

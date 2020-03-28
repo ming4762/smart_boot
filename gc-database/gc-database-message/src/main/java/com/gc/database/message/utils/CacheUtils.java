@@ -16,18 +16,22 @@ import java.util.concurrent.ConcurrentMap;
  */
 public class CacheUtils {
 
+    private CacheUtils() {
+        throw new IllegalStateException("Utility class");
+    }
+
     /**
      * 数据库连接缓存
      */
-    public static ConcurrentMap<String, Connection> CONNECTION_CACHE = Maps.newConcurrentMap();
+    public static final ConcurrentMap<String, Connection> CONNECTION_CACHE = Maps.newConcurrentMap();
 
     /**
      * 数据库字段与Field映射缓存
      */
-    public static ConcurrentMap<Class<? extends AbstractDatabaseBaseBO>, Map<String, Field>> DATABASE_FIELD_MAPPING = Maps.newConcurrentMap();
+    public static final ConcurrentMap<Class<? extends AbstractDatabaseBaseBO>, Map<String, Field>> DATABASE_FIELD_MAPPING = Maps.newConcurrentMap();
 
     /**
      * 类型映射
      */
-    public static ConcurrentMap<Integer, TypeMappingConstant> TYPE_MAPPING_CACHE = Maps.newConcurrentMap();
+    public static final ConcurrentMap<Integer, TypeMappingConstant> TYPE_MAPPING_CACHE = Maps.newConcurrentMap();
 }

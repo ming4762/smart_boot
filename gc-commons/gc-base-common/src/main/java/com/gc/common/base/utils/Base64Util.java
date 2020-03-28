@@ -22,6 +22,10 @@ public final class Base64Util {
      */
     private static final Base64.Encoder ENCODER = Base64.getEncoder();
 
+    private Base64Util() {
+        throw new IllegalStateException("Utility class");
+    }
+
     /**
      * base64编码
      * @param str 要编码的字符串

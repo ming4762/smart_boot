@@ -8,6 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.Collection;
 
 /**
@@ -21,19 +22,19 @@ public interface SysFileService extends BaseService<SysFilePO> {
      * @param multipartFile 文件信息
      * @param saveFileDTO 文件信息
      * @return 文件实体
-     * @throws Exception 异常信息
+     * @throws IOException 异常信息
      */
     @NotNull
-    SysFilePO saveFile(@NotNull MultipartFile multipartFile, @NotNull SaveFileDTO saveFileDTO) throws Exception;
+    SysFilePO saveFile(@NotNull MultipartFile multipartFile, @NotNull SaveFileDTO saveFileDTO) throws IOException;
 
     /**
      * 保存文件
      * @param file 文件信息
      * @return 文件信息
-     * @throws Exception 异常信息
+     * @throws IOException 异常信息
      */
     @NotNull
-    SysFilePO saveFile(@NotNull SysFileBO file)  throws Exception;
+    SysFilePO saveFile(@NotNull SysFileBO file)  throws IOException;
 
     /**
      * 保存文件
@@ -46,25 +47,26 @@ public interface SysFileService extends BaseService<SysFilePO> {
     /**
      * 删除文件
      * @param fileId 文件ID
+     * @throws IOException IOException
      * @return 文件信息
      */
     @Nullable
-    SysFilePO deleteFile(@NotNull Long fileId);
+    SysFilePO deleteFile(@NotNull Long fileId) throws IOException;
 
     /**
      * 批量删除文件
      * @param fileIds 文件id列表
+     * @throws IOException IOException
      * @return 删除是否成功
      */
-    @NotNull
-    Boolean batchDeleteFile(@NotNull Collection<Long> fileIds);
+    boolean batchDeleteFile(@NotNull Collection<Long> fileIds) throws IOException;
 
     /**
      * 下载文件
      * @param fileId 文件ID
      * @return 文件信息
      */
-    SysFileBO downLoad(@NotNull Long fileId);
+    SysFileBO download(@NotNull Long fileId);
 
     /**
      * 下载文件

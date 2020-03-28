@@ -1,5 +1,6 @@
 package com.gc.starter.crud.query;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -12,6 +13,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
+@EqualsAndHashCode
 public class PageQueryParameter<K, V> extends SortQueryParameter<K, V> {
     private static final long serialVersionUID = -2738378597906345854L;
 

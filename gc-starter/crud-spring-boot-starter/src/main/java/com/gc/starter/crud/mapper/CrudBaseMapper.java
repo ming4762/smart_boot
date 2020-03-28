@@ -8,5 +8,5 @@ import com.gc.starter.crud.model.BaseModel;
  * @author jackson
  * @param <T>
  */
-public interface BaseMapper<T extends BaseModel> extends com.baomidou.mybatisplus.core.mapper.BaseMapper<T> {
+public interface CrudBaseMapper<T extends BaseModel> extends com.baomidou.mybatisplus.core.mapper.BaseMapper<T> {
 }

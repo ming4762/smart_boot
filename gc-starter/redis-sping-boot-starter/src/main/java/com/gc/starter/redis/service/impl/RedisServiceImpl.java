@@ -30,7 +30,7 @@ public class RedisServiceImpl implements RedisService {
 
     @Override
     public void matchDelete(Object prefixKey) {
-
+        // todo: 待开发
     }
 
     @Override
@@ -60,9 +60,7 @@ public class RedisServiceImpl implements RedisService {
         this.redisTemplate.executePipelined((RedisCallback<Object>) connection -> {
             RedisSerializer keySerializer = this.redisTemplate.getKeySerializer();
             RedisSerializer valueSerializer = this.redisTemplate.getValueSerializer();
-            keyValues.forEach((key, value) -> {
-                connection.set(keySerializer.serialize(key), valueSerializer.serialize(value), Expiration.seconds(timeout),  RedisStringCommands.SetOption.UPSERT);
-            });
+            keyValues.forEach((key, value) -> connection.set(keySerializer.serialize(key), valueSerializer.serialize(value), Expiration.seconds(timeout),  RedisStringCommands.SetOption.UPSERT));
             return null;
         });
     }
@@ -92,9 +90,7 @@ public class RedisServiceImpl implements RedisService {
         this.redisTemplate.executePipelined((RedisCallback<Object>) connection -> {
             RedisSerializer keySerializer = this.redisTemplate.getKeySerializer();
             RedisSerializer valueSerializer = this.redisTemplate.getValueSerializer();
-            keyValues.forEach((key, value) -> {
-                connection.set(keySerializer.serialize(key), valueSerializer.serialize(value), Expiration.milliseconds(expireTime.getTime() - System.currentTimeMillis()),  RedisStringCommands.SetOption.UPSERT);
-            });
+            keyValues.forEach((key, value) -> connection.set(keySerializer.serialize(key), valueSerializer.serialize(value), Expiration.milliseconds(expireTime.getTime() - System.currentTimeMillis()),  RedisStringCommands.SetOption.UPSERT));
             return null;
         });
     }

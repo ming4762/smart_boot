@@ -36,7 +36,7 @@ public class SysUserGroupController extends BaseController<SysUserGroupService, 
     @ApiOperation(value = "添加修改用户组")
     @PostMapping("saveUpdate")
     @PreAuthorize("hasPermission('sys:userGroup', 'save') or hasPermission('sys:userGroup', 'update')")
-    protected Result<Boolean> saveUpdate(@RequestBody @Valid SysUserGroupPO model) throws Exception {
+    public Result<Boolean> saveUpdate(@RequestBody @Valid SysUserGroupPO model) {
         return Result.success(this.service.saveOrUpdateWithAllUser(model, AuthUtils.getCurrentUserId()));
     }
 
@@ -56,7 +56,7 @@ public class SysUserGroupController extends BaseController<SysUserGroupService, 
     @PostMapping("list")
     @ApiOperation(value = "查询用户组列表（支持分页、实体类属性查询）")
     @PreAuthorize("hasPermission('sys:userGroup', 'query')")
-    protected Result<Object> list(@RequestBody PageQueryParameter<String, Object> parameter) {
+    public Result<Object> list(@RequestBody PageQueryParameter<String, Object> parameter) {
         return super.list(parameter);
     }
 
@@ -65,7 +65,7 @@ public class SysUserGroupController extends BaseController<SysUserGroupService, 
      * @param id
      * @return
      */
-    @RequestMapping("listUserById")
+    @PostMapping("listUserById")
     @ApiOperation(value = "通过用户组ID查询用户列表", httpMethod = "POST")
     @PreAuthorize("hasPermission('sys:userGroup', 'query')")
     public Result<List<SysUserPO>> listUserById(@RequestBody Long id) {

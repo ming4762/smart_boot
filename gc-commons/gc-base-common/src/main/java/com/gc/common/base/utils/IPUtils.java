@@ -17,6 +17,10 @@ public class IpUtils {
 
 	private static final String UNKNOWN = "unknown";
 
+	private IpUtils() {
+		throw new IllegalStateException("Utility class");
+	}
+
 	/**
 	 * 获取IP地址
 	 * <p>

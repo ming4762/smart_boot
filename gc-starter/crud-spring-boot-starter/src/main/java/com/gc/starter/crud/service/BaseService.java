@@ -7,7 +7,6 @@ import com.gc.starter.crud.query.PageQueryParameter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 /**
@@ -45,56 +44,41 @@ public interface BaseService<T extends BaseModel> extends IService<T> {
      * 插入更新带有创建用户
      * @param model 实体
      * @param userId 用户ID
-     * @throws NoSuchMethodException NoSuchMethodException
-     * @throws IllegalAccessException NoSuchMethodException
-     * @throws InvocationTargetException NoSuchMethodException
      * @return 是否成功
      */
-    boolean saveOrUpdateWithCreateUser(@NotNull T model, Long userId) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException;
+    boolean saveOrUpdateWithCreateUser(@NotNull T model, Long userId);
 
     /**
      * 插入更新带有更新人员
      * @param model 实体类
      * @param userId 用户ID
-     * @throws NoSuchMethodException NoSuchMethodException
-     * @throws IllegalAccessException NoSuchMethodException
-     * @throws InvocationTargetException NoSuchMethodException
      * @return 是否成功
      */
-    boolean saveOrUpdateWithUpdateUser(@NotNull T model, Long userId) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException;
+    boolean saveOrUpdateWithUpdateUser(@NotNull T model, Long userId);
 
     /**
      * 插入更新带有所有人员
      * @param model 实体类
      * @param userId 用户ID
-     * @throws NoSuchMethodException NoSuchMethodException
-     * @throws IllegalAccessException NoSuchMethodException
-     * @throws InvocationTargetException NoSuchMethodException
      * @return 是否成功
      */
-    boolean saveOrUpdateWithAllUser(@NotNull T model, Long userId) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException;
+    boolean saveOrUpdateWithAllUser(@NotNull T model, Long userId);
 
     /**
      * 保存带有创建人员信息
      * @param model 实体类
      * @param userId 用户ID
      * @return 是否保存成功
-     * @throws NoSuchMethodException 未找到设置创建人员ID异常
-     * @throws IllegalAccessException IllegalAccessException
-     * @throws InvocationTargetException InvocationTargetException
      */
-    boolean saveWithUser(@NotNull T model, Long userId) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException;
+    boolean saveWithUser(@NotNull T model, Long userId);
 
     /**
      * 更新带有更新人员
      * @param model 实体类
      * @param userId 人员信息
      * @return 是否更新成功
-     * @throws NoSuchMethodException NoSuchMethodException
-     * @throws IllegalAccessException IllegalAccessException
-     * @throws InvocationTargetException InvocationTargetException
      */
-    boolean updateWithUserById(@NotNull T model, Long userId) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException;
+    boolean updateWithUserById(@NotNull T model, Long userId);
 
     /**
      * 查询函数

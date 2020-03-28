@@ -19,14 +19,14 @@ import java.util.List;
 @AllArgsConstructor
 @Getter
 @Setter
-public class Tree<T> implements Serializable {
+public class Tree<T extends Serializable> implements Serializable {
     private static final long serialVersionUID = -4056107665873673992L;
 
     private Serializable id = null;
 
     private String text = null;
 
-    private T object = null;
+    private T data = null;
 
     private List<Tree<T>> children = Lists.newArrayList();
 

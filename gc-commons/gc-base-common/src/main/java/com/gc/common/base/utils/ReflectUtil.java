@@ -14,6 +14,10 @@ import java.lang.reflect.Field;
 @Slf4j
 public final class ReflectUtil {
 
+    private ReflectUtil() {
+        throw new IllegalStateException("Utility class");
+    }
+
     /**
      * 通过对象属性名获取属性值
      * @param value 对象
