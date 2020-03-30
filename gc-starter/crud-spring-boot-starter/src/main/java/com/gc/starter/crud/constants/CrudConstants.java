@@ -12,5 +12,6 @@ public enum CrudConstants {
     SORT_ORDER,
     LIMIT,
     OFFSET,
-    KEYWORD
+    KEYWORD,
+    WITH_ALL
 }

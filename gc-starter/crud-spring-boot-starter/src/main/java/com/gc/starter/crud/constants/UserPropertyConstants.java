@@ -7,7 +7,7 @@ import lombok.Getter;
  * @author shizhongming
  * 2020/3/30 7:00 下午
  */
-public enum  UserPropertyConstants {
+public enum UserPropertyConstants {
 
     /**
      * 创建人员ID
@@ -18,7 +18,9 @@ public enum  UserPropertyConstants {
     // 更新人员ID
     UPDATE_USER_ID("updateUserId"),
     // 更新时间
-    UPDATE_TIME("updateTime");
+    UPDATE_TIME("updateTime"),
+    CREATE_USER("createUser"),
+    UPDATE_USER("updateUser");
 
 
     @Getter

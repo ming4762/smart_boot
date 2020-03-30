@@ -3,10 +3,14 @@ package com.gc.system.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.gc.common.auth.model.SysUserPO;
 import com.gc.common.base.constants.TransactionManagerConstants;
+import com.gc.common.base.utils.BeanUtils;
+import com.gc.starter.crud.constants.CrudConstants;
+import com.gc.starter.crud.query.PageQueryParameter;
 import com.gc.starter.crud.service.impl.BaseServiceImpl;
 import com.gc.system.mapper.SysUserGroupMapper;
 import com.gc.system.model.SysUserGroupPO;
 import com.gc.system.model.SysUserGroupUserPO;
+import com.gc.system.pojo.bo.SysUserGroupBO;
 import com.gc.system.pojo.dto.UserGroupUserSaveDTO;
 import com.gc.system.pojo.dto.UserUserGroupSaveDTO;
 import com.gc.system.service.SysUserGroupService;
@@ -20,10 +24,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -63,6 +64,27 @@ public class SysUserGroupServiceImpl extends BaseServiceImpl<SysUserGroupMapper,
         return Maps.newHashMap();
     }
 
+    /**
+     * 重写查询方法
+     * @param queryWrapper 查询参数
+     * @param parameter 参数
+     * @param paging 是否分页
+     * @return
+     */
+    @Override
+    public @NotNull List<SysUserGroupPO> list(@NotNull QueryWrapper<SysUserGroupPO> queryWrapper, @NotNull PageQueryParameter<String, Object> parameter, @NotNull Boolean paging) {
+        List<SysUserGroupPO> list =  super.list(queryWrapper, parameter, paging);
+        if (list.isEmpty()) {
+            return list;
+        }
+        Object withAll = parameter.get(CrudConstants.WITH_ALL.name());
+        if (Objects.equals(withAll, Boolean.TRUE)) {
+            List boList = BeanUtils.copyCollection(list, SysUserGroupBO.class);
+            this.sysUserService.setWithUser(boList);
+            return boList;
+        }
+        return list;
+    }
 
     /**
      * 查询用户组ID包含的用户集合
@@ -71,7 +93,6 @@ public class SysUserGroupServiceImpl extends BaseServiceImpl<SysUserGroupMapper,
      */
     @Override
     @NotNull
-    @Transactional(value = TransactionManagerConstants.SYSTEM_MANAGER, rollbackFor = Exception.class)
     public Map<Long, List<SysUserPO>> listUserByIds(@NotNull Collection<Long> groupIds) {
         // 查询用户ID信息
         final Map<Long, List<Long>> idResult = this.listUserIdByIds(groupIds);
@@ -105,7 +126,7 @@ public class SysUserGroupServiceImpl extends BaseServiceImpl<SysUserGroupMapper,
      * @return
      */
     @Override
-    @Transactional(value = TransactionManagerConstants.SYSTEM_MANAGER, rollbackFor = Exception.class)
+    @Transactional(value = TransactionManagerConstants.SYSTEM_MANAGER, rollbackFor = Exception.class, readOnly = true)
     public boolean saveUserGroupByGroupId(@NotNull UserGroupUserSaveDTO parameter) {
         // 删除用户组用户信息信息
         this.sysUserGroupUserService.remove(
@@ -130,6 +151,7 @@ public class SysUserGroupServiceImpl extends BaseServiceImpl<SysUserGroupMapper,
      * @return
      */
     @Override
+    @Transactional(value = TransactionManagerConstants.SYSTEM_MANAGER, rollbackFor = Exception.class)
     public boolean saveUserGroupByUserId(@NotNull UserUserGroupSaveDTO parameter) {
         // 删除用户组用户信息信息
         this.sysUserGroupUserService.remove(
