@@ -13,6 +13,7 @@ import com.gc.common.base.exception.IllegalAccessRuntimeException;
 import com.gc.common.base.exception.InvocationTargetRuntimeException;
 import com.gc.common.base.exception.NoSuchMethodRuntimeException;
 import com.gc.common.base.utils.ReflectUtil;
+import com.gc.starter.crud.constants.UserPropertyConstants;
 import com.gc.starter.crud.mapper.CrudBaseMapper;
 import com.gc.starter.crud.model.BaseModel;
 import com.gc.starter.crud.model.Sort;
@@ -386,7 +387,7 @@ public abstract class BaseServiceImpl<K extends CrudBaseMapper<T>, T extends Bas
      */
     private void setCreateUserId(T model, Long userId) {
         try {
-            PropertyUtils.setProperty(model, "createUserId", userId);
+            PropertyUtils.setProperty(model, UserPropertyConstants.CREATE_USER_ID.getName(), userId);
         } catch (IllegalAccessException e) {
             throw new IllegalAccessRuntimeException(e);
         } catch (InvocationTargetException e) {
@@ -402,7 +403,7 @@ public abstract class BaseServiceImpl<K extends CrudBaseMapper<T>, T extends Bas
      */
     private void setCreateTime(T model) {
         try {
-            PropertyUtils.setProperty(model, "setCreateTime", new Date());
+            PropertyUtils.setProperty(model, UserPropertyConstants.CREATE_TIME.getName(), new Date());
         } catch (IllegalAccessException e) {
             throw new IllegalAccessRuntimeException(e);
         } catch (InvocationTargetException e) {
@@ -414,7 +415,7 @@ public abstract class BaseServiceImpl<K extends CrudBaseMapper<T>, T extends Bas
 
     private void setUpdateUserId(T model, Long userId) {
         try {
-            PropertyUtils.setProperty(model, "setUpdateUserId", userId);
+            PropertyUtils.setProperty(model, UserPropertyConstants.UPDATE_USER_ID.getName(), userId);
         } catch (IllegalAccessException e) {
             throw new IllegalAccessRuntimeException(e);
         } catch (InvocationTargetException e) {
@@ -426,7 +427,7 @@ public abstract class BaseServiceImpl<K extends CrudBaseMapper<T>, T extends Bas
 
     private void setUpdateTime(T model) {
         try {
-            PropertyUtils.setProperty(model, "setUpdateTime", new Date());
+            PropertyUtils.setProperty(model, UserPropertyConstants.UPDATE_TIME.getName(), new Date());
         } catch (IllegalAccessException e) {
             throw new IllegalAccessRuntimeException(e);
         } catch (InvocationTargetException e) {
