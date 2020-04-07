@@ -159,7 +159,6 @@ public abstract class BaseServiceImpl<K extends CrudBaseMapper<T>, T extends Bas
 
     /**
      * 重写批量save方法，修改ID的生成策略
-     * TODO:未测试功能
      * @author jackson
      * @return 是否保存成功
      */
@@ -206,6 +205,7 @@ public abstract class BaseServiceImpl<K extends CrudBaseMapper<T>, T extends Bas
         final IdType idType = tableInfo.getIdType();
         if (idType.getKey() == IdType.ASSIGN_ID.getKey() && Number.class.isAssignableFrom(tableInfo.getKeyType())) {
             try {
+                // todo: 待完善
                 PropertyDescriptor propertyDescriptor = new PropertyDescriptor(tableInfo.getKeyProperty(), entity.getClass());
                 propertyDescriptor.getWriteMethod().invoke(entity, IdGenerator.nextId());
             } catch (Exception e) {

@@ -1,13 +1,12 @@
 package com.gc.starter.crud.advice;
 
 import com.gc.common.base.exception.IllegalAccessRuntimeException;
+import com.gc.common.base.exception.IntrospectionRuntimeException;
 import com.gc.common.base.exception.InvocationTargetRuntimeException;
-import com.gc.common.base.exception.NoSuchMethodRuntimeException;
 import com.gc.starter.crud.query.PageQueryParameter;
 import com.gc.starter.crud.query.QueryParameter;
 import com.gc.starter.crud.query.SortQueryParameter;
 import lombok.SneakyThrows;
-import org.apache.commons.beanutils.PropertyUtils;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.HttpInputMessage;
@@ -15,6 +14,8 @@ import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.RequestBodyAdvice;
 
+import java.beans.IntrospectionException;
+import java.beans.PropertyDescriptor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
@@ -83,7 +84,8 @@ public class ParameterConvertRequestBodyAdvice implements RequestBodyAdvice {
                     if (parameter.containsKey(name)) {
                         Object value = parameter.get(name);
                         parameter.remove(name);
-                        PropertyUtils.setProperty(parameter, name, value);
+                        PropertyDescriptor propertyDescriptor = new PropertyDescriptor(name, clazz);
+                        propertyDescriptor.getWriteMethod().invoke(parameter, value);
                     }
                 }
             }
@@ -91,8 +93,8 @@ public class ParameterConvertRequestBodyAdvice implements RequestBodyAdvice {
            throw new IllegalAccessRuntimeException(e);
         } catch (InvocationTargetException e) {
             throw new InvocationTargetRuntimeException(e);
-        } catch (NoSuchMethodException e) {
-            throw new NoSuchMethodRuntimeException(e);
+        } catch (IntrospectionException e) {
+            throw new IntrospectionRuntimeException(e);
         }
     }
 
