@@ -5,6 +5,7 @@ import com.gc.common.base.http.HttpStatus;
 import com.gc.common.base.message.Result;
 import com.gc.common.base.utils.JsonUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
@@ -61,6 +62,9 @@ public class GlobalExceptionHandler {
         } else if (e instanceof InternalAuthenticationServiceException) {
             log.error("登录异常");
             return Result.failure(HttpStatus.UNAUTHORIZED.getCode(), e.getMessage());
+        } else if (e instanceof DuplicateKeyException) {
+            log.error("key冲突异常", e);
+            return Result.failure("key冲突错误", e.getMessage());
         }
         log.error("系统发生未知异常", e);
         return Result.ofStatus(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
