@@ -15,4 +15,6 @@ public class TransactionManagerConstants {
      * 系统模块的日志管理器
      */
     public static final String SYSTEM_MANAGER = "systemTransactionManager";
+
+    public static final String FAQ_MANAGER = "faqTransactionManager";
 }

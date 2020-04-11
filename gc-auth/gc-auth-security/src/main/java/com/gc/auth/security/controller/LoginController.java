@@ -82,7 +82,7 @@ public class LoginController {
                 .setAuthentication(authentication);
         final String jwt = this.authService.doLogin(authentication, parameter.getRemember(), type);
         return LoginResult.builder()
-                .user(userDetails.getUser())
+                .user(userDetails)
                 .token(jwt)
                 .roles(userDetails.getRoles())
                 .permissions(userDetails.getPermissions())

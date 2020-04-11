@@ -18,7 +18,7 @@ import java.util.Set;
 public class LoginResult implements Serializable {
     private static final long serialVersionUID = -5416368660527838625L;
 
-    private SysUserPO user;
+    private RestUserDetails user;
 
     private String token;
 

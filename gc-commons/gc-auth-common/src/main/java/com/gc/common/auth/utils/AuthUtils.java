@@ -1,9 +1,11 @@
 package com.gc.common.auth.utils;
 
+import com.gc.common.auth.exception.AuthException;
 import com.gc.common.auth.model.RestUserDetails;
-import com.gc.common.auth.model.SysUserPO;
+import com.gc.common.base.http.HttpStatus;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 import org.springframework.security.core.context.SecurityContextHolder;
 
@@ -27,14 +29,36 @@ public final class AuthUtils {
      * 获取当前用户
      * @return 当前用户
      */
-    @org.springframework.lang.Nullable
-    public static SysUserPO getCurrentUser() {
+    @Nullable
+    public static RestUserDetails getCurrentUser() {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (Objects.isNull(principal) || StringUtils.equals(principal.toString(), NOT_LOGIN_USER)) {
             log.warn("用户未登录");
             return null;
         }
-        return ((RestUserDetails)principal).getUser();
+        return (RestUserDetails)principal;
+    }
+
+    /**
+     * 获取当前登录用户（不能为null）
+     * @return 当前登录用户
+     */
+    @NonNull
+    public static RestUserDetails getNonNullCurrentUser() {
+        RestUserDetails userDetails = getCurrentUser();
+        if (Objects.isNull(userDetails)) {
+            throw new AuthException(HttpStatus.UNAUTHORIZED);
+        }
+        return userDetails;
+    }
+
+    /**
+     * 获取当前登录用户ID（不能为null）
+     * @return 当前登录用户ID
+     */
+    @NonNull
+    public static Long getNonNullCurrentUserId() {
+        return getNonNullCurrentUser().getUserId();
     }
 
     /**
@@ -43,7 +67,7 @@ public final class AuthUtils {
      */
     @Nullable
     public static Long getCurrentUserId() {
-        SysUserPO user = getCurrentUser();
+        RestUserDetails user = getCurrentUser();
         if (user == null) {
             return null;
         }

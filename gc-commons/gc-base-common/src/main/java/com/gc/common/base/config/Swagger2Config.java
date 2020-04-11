@@ -1,6 +1,5 @@
 package com.gc.common.base.config;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,8 +12,6 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
-import javax.servlet.ServletContext;
-
 /**
  * swagger2配置
  * @author jackson
@@ -25,11 +22,11 @@ import javax.servlet.ServletContext;
 @EnableConfigurationProperties(Swagger2Properties.class)
 public class Swagger2Config {
 
-    @Autowired
-    private ServletContext servletContext;
+    private final Swagger2Properties properties;
 
-    @Autowired
-    private Swagger2Properties properties;
+    public Swagger2Config(Swagger2Properties properties) {
+        this.properties = properties;
+    }
 
     @Bean
     public Docket createRestApi() {

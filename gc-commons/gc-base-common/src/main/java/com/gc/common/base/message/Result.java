@@ -8,6 +8,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.validation.BindingResult;
@@ -169,15 +170,20 @@ public class Result<T> {
         return ofStatus(status, null);
     }
 
+    public static <T> Result<T> ofStatus(IHttpStatus status, String message) {
+        return ofStatus(status, message, null);
+    }
+
     public static Result<String> ofExceptionStatus(IHttpStatus status, Exception e) {
         return ofStatus(status, e.getMessage());
     }
 
-    public static <T> Result<T> ofStatus(IHttpStatus status,T data) {
+    public static <T> Result<T> ofStatus(IHttpStatus status, String message, T data) {
+        String returnMessage = StringUtils.isEmpty(message) ? status.getMessage() : message;
         if (Objects.equals(status.getCode(), HttpStatus.OK.getCode())) {
-            return success(status.getCode(), status.getMessage(), data);
+            return success(status.getCode(), returnMessage, data);
         } else {
-            return failure(status.getCode(), status.getMessage(), data);
+            return failure(status.getCode(), returnMessage, data);
         }
     }
 }

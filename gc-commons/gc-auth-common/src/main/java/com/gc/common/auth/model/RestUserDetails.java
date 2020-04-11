@@ -5,7 +5,6 @@ import com.gc.common.auth.core.GcGrantedAuthority;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.io.Serializable;
@@ -31,7 +30,7 @@ public class RestUserDetails implements UserDetails, Serializable {
     private String password;
 
     @Getter
-    private SysUserPO user;
+    private String realname;
 
     private Set<GcGrantedAuthority> authorities;
 
@@ -92,13 +91,4 @@ public class RestUserDetails implements UserDetails, Serializable {
         return true;
     }
 
-    @NotNull
-    public static RestUserDetails createByUser(@NotNull SysUserPO user) {
-        final RestUserDetails restUserDetails = new RestUserDetails();
-        restUserDetails.setUserId(user.getUserId());
-        restUserDetails.setUser(user);
-        restUserDetails.setUsername(user.getUsername());
-        restUserDetails.setPassword(user.getPassword());
-        return restUserDetails;
-    }
 }

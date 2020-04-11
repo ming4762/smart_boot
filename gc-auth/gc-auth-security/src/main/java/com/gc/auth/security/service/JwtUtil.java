@@ -5,7 +5,6 @@ import com.gc.common.auth.core.PermissionGrantedAuthority;
 import com.gc.common.auth.core.RoleGrantedAuthority;
 import com.gc.common.auth.exception.AuthException;
 import com.gc.common.auth.model.RestUserDetails;
-import com.gc.common.auth.model.SysUserPO;
 import com.gc.common.base.http.HttpStatus;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtBuilder;
@@ -59,7 +58,7 @@ public class JwtUtil {
                 .signWith(SignatureAlgorithm.HS256, key)
                 .claim(ROLE_KEY, userDetails.getRoles())
                 .claim(PERMISSION_KEY, userDetails.getPermissions())
-                .claim(USER_KEY, userDetails.getUser());
+                .claim(USER_KEY, userDetails);
         return builder.compact();
     }
 
@@ -97,9 +96,8 @@ public class JwtUtil {
     public static RestUserDetails getUser(String jwt, String key) {
         try {
             final Claims claims = parseJwt(jwt, key);
-            final SysUserPO user = new SysUserPO();
-            BeanUtils.populate(user, claims.get(USER_KEY, Map.class));
-            final RestUserDetails restUserDetails = RestUserDetails.createByUser(user);
+            final RestUserDetails restUserDetails = new RestUserDetails();
+            BeanUtils.populate(restUserDetails, claims.get(USER_KEY, Map.class));
             // 设置权限
             final List<String> permissions = claims.get(PERMISSION_KEY, List.class);
             // 设置角色

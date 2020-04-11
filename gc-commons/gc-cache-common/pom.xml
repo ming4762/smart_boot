@@ -6,7 +6,6 @@
 		<groupId>com.gc</groupId>
 		<artifactId>gc-commons</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
-		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<artifactId>gc-cache-common</artifactId>
 	<version>0.0.1-SNAPSHOT</version>

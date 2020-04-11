@@ -9,10 +9,9 @@ import com.gc.common.auth.model.SysUserPO;
 import com.gc.common.auth.service.AuthUserService;
 import com.google.common.collect.Sets;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.stereotype.Component;
 
 import java.util.Objects;
 import java.util.Set;
@@ -21,11 +20,13 @@ import java.util.Set;
  * @author jackson
  * 2020/1/23 7:34 下午
  */
-@Component
 public class RestUserDetailsServiceImpl implements UserDetailsService{
 
-    @Autowired
-    private AuthUserService userService;
+    private final AuthUserService userService;
+
+    public RestUserDetailsServiceImpl(AuthUserService userService) {
+        this.userService = userService;
+    }
 
     @Override
     public UserDetails loadUserByUsername(String username) {
@@ -46,8 +47,17 @@ public class RestUserDetailsServiceImpl implements UserDetailsService{
           new PermissionGrantedAuthority("123")
         );
         // 查询用户角色信息
-        final RestUserDetails restUserDetails = RestUserDetails.createByUser(user);
+        final RestUserDetails restUserDetails = createByUser(user);
         restUserDetails.setAuthorities(grantedAuthoritySet);
+        return restUserDetails;
+    }
+
+    @NotNull
+    private static RestUserDetails createByUser(@NotNull SysUserPO user) {
+        final RestUserDetails restUserDetails = new RestUserDetails();
+        restUserDetails.setUserId(user.getUserId());
+        restUserDetails.setUsername(user.getUsername());
+        restUserDetails.setPassword(user.getPassword());
         return restUserDetails;
     }
 }

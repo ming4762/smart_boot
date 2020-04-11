@@ -3,10 +3,12 @@ package com.gc.auth.security;
 import com.gc.auth.security.authentication.RestAuthenticationProvider;
 import com.gc.auth.security.filter.JwtAuthenticationFilter;
 import com.gc.auth.security.handler.*;
+import com.gc.auth.security.service.RestUserDetailsServiceImpl;
 import com.gc.common.auth.properties.AuthProperties;
+import com.gc.common.auth.service.AuthUserService;
 import com.google.common.collect.ImmutableList;
 import org.apache.commons.lang3.BooleanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -20,6 +22,7 @@ import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.session.web.http.HeaderHttpSessionIdResolver;
 import org.springframework.web.cors.CorsConfiguration;
@@ -36,30 +39,38 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @EnableConfigurationProperties(AuthProperties.class)
 public class SecurityAutoConfiguration extends WebSecurityConfigurerAdapter {
 
-    @Autowired
-    private AuthProperties authProperties;
+    private final AuthProperties authProperties;
 
-    @Autowired
-    private RestAuthenticationEntryPoint restAuthenticationEntryPoint;
+    private final RestAuthenticationEntryPoint restAuthenticationEntryPoint;
 
-    @Autowired
-    private RestAuthAccessDeniedHandler restAuthAccessDeniedHandler;
+    private final RestAuthAccessDeniedHandler restAuthAccessDeniedHandler;
 
-    @Autowired
-    private RestAuthSuccessHandler restAuthSuccessHandler;
+    private final RestAuthSuccessHandler restAuthSuccessHandler;
 
-    @Autowired
-    private RestLogoutSuccessHandler restLogoutSuccessHandler;
+    private final RestLogoutSuccessHandler restLogoutSuccessHandler;
 
-    @Autowired
-    private RestAuthenticationFailureHandler restAuthenticationFailureHandler;
+    private final RestAuthenticationFailureHandler restAuthenticationFailureHandler;
 
-    @Autowired
-    private RestAuthenticationProvider provider;
+    private final RestAuthenticationProvider provider;
 
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
-    @Autowired
-    private JwtAuthenticationFilter jwtAuthenticationFilter;
+    public SecurityAutoConfiguration(AuthProperties authProperties, RestAuthenticationEntryPoint restAuthenticationEntryPoint, RestAuthAccessDeniedHandler restAuthAccessDeniedHandler, RestAuthSuccessHandler restAuthSuccessHandler, RestLogoutSuccessHandler restLogoutSuccessHandler, RestAuthenticationFailureHandler restAuthenticationFailureHandler, RestAuthenticationProvider provider, JwtAuthenticationFilter jwtAuthenticationFilter) {
+        this.authProperties = authProperties;
+        this.restAuthenticationEntryPoint = restAuthenticationEntryPoint;
+        this.restAuthAccessDeniedHandler = restAuthAccessDeniedHandler;
+        this.restAuthSuccessHandler = restAuthSuccessHandler;
+        this.restLogoutSuccessHandler = restLogoutSuccessHandler;
+        this.restAuthenticationFailureHandler = restAuthenticationFailureHandler;
+        this.provider = provider;
+        this.jwtAuthenticationFilter = jwtAuthenticationFilter;
+    }
+
+    @Bean
+    @ConditionalOnMissingBean(UserDetailsService.class)
+    public UserDetailsService createUserDetailsService(AuthUserService userService) {
+        return new RestUserDetailsServiceImpl(userService);
+    }
 
     /**
      * 创建session id 读取类

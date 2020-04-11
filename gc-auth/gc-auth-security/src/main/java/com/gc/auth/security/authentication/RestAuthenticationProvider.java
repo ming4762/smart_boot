@@ -1,6 +1,5 @@
 package com.gc.auth.security.authentication;
 
-import com.gc.auth.security.service.RestUserDetailsServiceImpl;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +7,7 @@ import org.springframework.security.authentication.InternalAuthenticationService
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.authentication.dao.AbstractUserDetailsAuthenticationProvider;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 
 /**
@@ -25,7 +25,7 @@ public class RestAuthenticationProvider extends AbstractUserDetailsAuthenticatio
     private static final String NONE_PROVIDED = "NONE_PROVIDED";
 
     @Autowired
-    private RestUserDetailsServiceImpl restUserDetailsService;
+    private UserDetailsService restUserDetailsService;
 
     @Override
     protected void additionalAuthenticationChecks(UserDetails userDetails, UsernamePasswordAuthenticationToken authentication) {
