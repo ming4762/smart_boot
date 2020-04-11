@@ -17,6 +17,7 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
+import org.springframework.util.ReflectionUtils;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -162,12 +163,8 @@ public final class CrudUtils {
      */
     @Nullable
     public static String getDbField(@NonNull Class<? extends BaseModel> clazz, @NonNull String fieldName) {
-        Field field = null;
-        try {
-            field = clazz.getDeclaredField(fieldName);
-        } catch (NoSuchFieldException e) {
-            log.error(e.getMessage(), e);
-        }
+        Field field = ReflectionUtils.findField(clazz, fieldName);
+        ReflectionUtils.findField(clazz, fieldName);
         if (field != null) {
             return getDbField(field);
         }

@@ -16,7 +16,7 @@ import java.util.Date;
 public abstract class BaseModelCreateUserTime extends BaseModel {
 
     private static final long serialVersionUID = 5157863351256809974L;
-    private Long createUserId;
+    protected Long createUserId;
 
-    private Date createTime;
+    protected Date createTime;
 }

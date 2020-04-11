@@ -13,7 +13,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper = true)
 public class SortQueryParameter<K, V> extends QueryParameter<K, V> {
 
     private static final long serialVersionUID = -8278647627006548908L;
