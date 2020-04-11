@@ -19,6 +19,7 @@
 
     <modules>
         <module>gc-module-code</module>
+        <module>gc-module-faq</module>
         <module>gc-module-file</module>
         <module>gc-module-system</module>
     </modules>
