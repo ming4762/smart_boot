@@ -4,7 +4,6 @@ import com.gc.cache.service.CacheService;
 import com.gc.common.auth.constants.LoginTypeConstants;
 import com.gc.common.auth.exception.AuthException;
 import com.gc.common.auth.model.RestUserDetails;
-import com.gc.common.auth.model.SysUserPO;
 import com.gc.common.auth.properties.AuthProperties;
 import com.gc.common.auth.utils.AuthUtils;
 import com.gc.common.base.http.HttpStatus;
@@ -83,8 +82,8 @@ public class AuthService {
 
     /**
      * 获取token的key
-     * @param username
-     * @return
+     * @param username 用户名
+     * @return jst
      */
     @NotNull
     private String getTokenKey(@NotNull String username, @NotNull String jwt) {
@@ -97,11 +96,11 @@ public class AuthService {
 
     /**
      * 登出操作
-     * @param request
+     * @param request 请求体
      */
     public void logout(@NotNull HttpServletRequest request) {
         String jwt = JwtUtil.getJwt(request);
-        SysUserPO user = AuthUtils.getCurrentUser();
+        RestUserDetails user = AuthUtils.getCurrentUser();
         Assert.notNull(user, "系统发生未知异常：未找到当前用户");
         Assert.notNull(jwt, "系统发生未知异常，未找到token");
         this.cacheService.batchDelete(ImmutableList.of(this.getTokenKey(user.getUsername(), jwt), this.getAttributeKey(jwt)));

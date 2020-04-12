@@ -50,7 +50,7 @@ public class RestAuthSuccessHandler implements AuthenticationSuccessHandler {
         final RestUserDetails userDetails = (RestUserDetails) authentication.getPrincipal();
         // 处理用户权限信息
         final ImmutableMap<String, Object> result = ImmutableMap.of(
-                "user", userDetails.getUser(),
+                "user", userDetails,
                 "token", httpServletRequest.getSession().getId(),
                 "roles", userDetails.getRoles(),
                 "permissions", userDetails.getPermissions()
