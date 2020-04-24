@@ -3,8 +3,9 @@ package com.gc.auth.security.controller;
 import com.gc.auth.security.pojo.dto.UserLoginDTO;
 import com.gc.auth.security.service.AuthService;
 import com.gc.common.auth.constants.LoginTypeConstants;
+import com.gc.common.auth.core.RestUserDetails;
 import com.gc.common.auth.model.LoginResult;
-import com.gc.common.auth.model.RestUserDetails;
+import com.gc.common.auth.model.RestUserDetailsImpl;
 import com.gc.common.base.message.Result;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -23,7 +24,7 @@ import javax.validation.Valid;
  * @author jackson
  * 2020/2/14 10:22 下午
  */
-@RequestMapping("public/auth")
+@RequestMapping
 @ResponseBody
 public class LoginController {
 
@@ -43,7 +44,7 @@ public class LoginController {
      * @param parameter 登录参数
      * @return
      */
-    @PostMapping("login")
+    @PostMapping("public/auth/login")
     public Result<LoginResult> login(@RequestBody @Valid UserLoginDTO parameter) {
         return Result.success(this.doLogin(parameter, LoginTypeConstants.WEB));
     }
@@ -53,7 +54,7 @@ public class LoginController {
      * @param parameter 登录参数
      * @return
      */
-    @PostMapping("mobileLogin")
+    @PostMapping("public/auth/mobileLogin")
     public Result<LoginResult> mobileLogin(@RequestBody @Valid UserLoginDTO parameter) {
         return Result.success(this.doLogin(parameter, LoginTypeConstants.MOBILE));
     }
@@ -62,7 +63,7 @@ public class LoginController {
      * 登出接口
      * @return
      */
-    @PostMapping("logout")
+    @PostMapping("auth/logout")
     public Result<Object> logout(HttpServletRequest request) {
         this.authService.logout(request);
         return Result.success(null, "登出成功");
@@ -77,7 +78,7 @@ public class LoginController {
     private LoginResult doLogin(UserLoginDTO parameter, LoginTypeConstants type) {
         final Authentication authentication = this.authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(parameter.getUsername(), parameter.getPassword()));
 
-        final RestUserDetails userDetails = (RestUserDetails) authentication.getPrincipal();
+        final RestUserDetails userDetails = (RestUserDetailsImpl) authentication.getPrincipal();
         SecurityContextHolder.getContext()
                 .setAuthentication(authentication);
         final String jwt = this.authService.doLogin(authentication, parameter.getRemember(), type);

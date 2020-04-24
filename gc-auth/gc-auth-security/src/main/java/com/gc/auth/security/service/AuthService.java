@@ -2,8 +2,9 @@ package com.gc.auth.security.service;
 
 import com.gc.cache.service.CacheService;
 import com.gc.common.auth.constants.LoginTypeConstants;
+import com.gc.common.auth.core.RestUserDetails;
 import com.gc.common.auth.exception.AuthException;
-import com.gc.common.auth.model.RestUserDetails;
+import com.gc.common.auth.model.RestUserDetailsImpl;
 import com.gc.common.auth.properties.AuthProperties;
 import com.gc.common.auth.utils.AuthUtils;
 import com.gc.common.base.http.HttpStatus;
@@ -61,9 +62,9 @@ public class AuthService {
      * 刷新jwt
      * @param jwt
      */
-    public RestUserDetails refreshJwt(String jwt) {
+    public RestUserDetailsImpl refreshJwt(String jwt) {
         // 解析jwt
-        RestUserDetails user = JwtUtil.getUser(jwt, this.authProperties.getJwtKey());
+        RestUserDetailsImpl user = JwtUtil.getUser(jwt, this.authProperties.getJwtKey());
 
         String jwtKey = this.getTokenKey(user.getUsername(), jwt);
 
@@ -100,7 +101,7 @@ public class AuthService {
      */
     public void logout(@NotNull HttpServletRequest request) {
         String jwt = JwtUtil.getJwt(request);
-        RestUserDetails user = AuthUtils.getCurrentUser();
+        RestUserDetailsImpl user = AuthUtils.getCurrentUser();
         Assert.notNull(user, "系统发生未知异常：未找到当前用户");
         Assert.notNull(jwt, "系统发生未知异常，未找到token");
         this.cacheService.batchDelete(ImmutableList.of(this.getTokenKey(user.getUsername(), jwt), this.getAttributeKey(jwt)));

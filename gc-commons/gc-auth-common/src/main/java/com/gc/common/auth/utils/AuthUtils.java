@@ -1,15 +1,18 @@
 package com.gc.common.auth.utils;
 
 import com.gc.common.auth.exception.AuthException;
-import com.gc.common.auth.model.RestUserDetails;
+import com.gc.common.auth.model.RestUserDetailsImpl;
 import com.gc.common.base.http.HttpStatus;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.util.Objects;
+import java.util.Optional;
 
 /**
  * 认证工具类
@@ -30,13 +33,16 @@ public final class AuthUtils {
      * @return 当前用户
      */
     @Nullable
-    public static RestUserDetails getCurrentUser() {
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    public static RestUserDetailsImpl getCurrentUser() {
+        Object principal = Optional.of(SecurityContextHolder.getContext())
+                .map(SecurityContext :: getAuthentication)
+                .map(Authentication :: getPrincipal)
+                .orElse(null);
         if (Objects.isNull(principal) || StringUtils.equals(principal.toString(), NOT_LOGIN_USER)) {
             log.warn("用户未登录");
             return null;
         }
-        return (RestUserDetails)principal;
+        return (RestUserDetailsImpl)principal;
     }
 
     /**
@@ -44,8 +50,8 @@ public final class AuthUtils {
      * @return 当前登录用户
      */
     @NonNull
-    public static RestUserDetails getNonNullCurrentUser() {
-        RestUserDetails userDetails = getCurrentUser();
+    public static RestUserDetailsImpl getNonNullCurrentUser() {
+        RestUserDetailsImpl userDetails = getCurrentUser();
         if (Objects.isNull(userDetails)) {
             throw new AuthException(HttpStatus.UNAUTHORIZED);
         }
@@ -67,7 +73,7 @@ public final class AuthUtils {
      */
     @Nullable
     public static Long getCurrentUserId() {
-        RestUserDetails user = getCurrentUser();
+        RestUserDetailsImpl user = getCurrentUser();
         if (user == null) {
             return null;
         }

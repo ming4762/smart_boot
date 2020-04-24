@@ -1,4 +1,4 @@
-package com.gc.auth.security.service;
+package com.gc.auth.security;
 
 import com.gc.auth.security.authentication.RestAuthenticationProvider;
 import com.gc.auth.security.filter.JwtAuthenticationFilter;

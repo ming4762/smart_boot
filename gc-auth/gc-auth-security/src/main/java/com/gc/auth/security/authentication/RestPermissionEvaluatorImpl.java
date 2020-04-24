@@ -1,6 +1,6 @@
 package com.gc.auth.security.authentication;
 
-import com.gc.common.auth.model.RestUserDetails;
+import com.gc.common.auth.model.RestUserDetailsImpl;
 import com.gc.common.auth.properties.AuthProperties;
 import org.apache.commons.lang3.BooleanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +30,7 @@ public class RestPermissionEvaluatorImpl implements PermissionEvaluator {
             return true;
         }
         // 验证角色，超级管理员角色不拦截
-        final RestUserDetails user = (RestUserDetails) authentication.getPrincipal();
+        final RestUserDetailsImpl user = (RestUserDetailsImpl) authentication.getPrincipal();
         if (user.getRoles().contains(ROLE_SUPERADMIN)) {
             return true;
         }

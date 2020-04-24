@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.gc.common.auth.core.GcGrantedAuthority;
 import com.gc.common.auth.core.PermissionGrantedAuthority;
 import com.gc.common.auth.core.RoleGrantedAuthority;
-import com.gc.common.auth.model.RestUserDetails;
+import com.gc.common.auth.model.RestUserDetailsImpl;
 import com.gc.common.auth.model.SysUserPO;
 import com.gc.common.auth.service.AuthUserService;
 import com.google.common.collect.Sets;
@@ -47,15 +47,16 @@ public class RestUserDetailsServiceImpl implements UserDetailsService{
           new PermissionGrantedAuthority("123")
         );
         // 查询用户角色信息
-        final RestUserDetails restUserDetails = createByUser(user);
+        final RestUserDetailsImpl restUserDetails = createByUser(user);
         restUserDetails.setAuthorities(grantedAuthoritySet);
         return restUserDetails;
     }
 
     @NotNull
-    private static RestUserDetails createByUser(@NotNull SysUserPO user) {
-        final RestUserDetails restUserDetails = new RestUserDetails();
+    private static RestUserDetailsImpl createByUser(@NotNull SysUserPO user) {
+        final RestUserDetailsImpl restUserDetails = new RestUserDetailsImpl();
         restUserDetails.setUserId(user.getUserId());
+        restUserDetails.setRealname(user.getRealname());
         restUserDetails.setUsername(user.getUsername());
         restUserDetails.setPassword(user.getPassword());
         return restUserDetails;

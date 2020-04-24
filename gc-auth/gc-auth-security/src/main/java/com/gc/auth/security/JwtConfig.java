@@ -12,6 +12,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 
 /**
+ * jwt配置
  * @author jackson
  * 2020/2/15 1:36 下午
  */
@@ -19,11 +20,23 @@ import org.springframework.security.authentication.AuthenticationManager;
 @ConditionalOnProperty(prefix = "gc.auth", name = "jwt", havingValue = "true")
 public class JwtConfig {
 
+    /**
+     * 创建jwt拦截器
+     * @param authProperties 认证参数
+     * @param authService 认证服务
+     * @return jwt拦截器
+     */
     @Bean
     public JwtAuthenticationFilter jwtAuthenticationFilter(@Autowired AuthProperties authProperties, @Autowired AuthService authService) {
         return new JwtAuthenticationFilter(authService, authProperties);
     }
 
+    /**
+     * 创建认证服务
+     * @param authProperties 认证参数
+     * @param cacheService 缓存服务
+     * @return 认证服务
+     */
     @Bean
     public AuthService authService(@Autowired AuthProperties authProperties, @Autowired CacheService cacheService) {
         return new AuthService(authProperties, cacheService);

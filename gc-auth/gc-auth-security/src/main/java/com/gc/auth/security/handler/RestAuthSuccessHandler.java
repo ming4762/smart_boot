@@ -1,6 +1,6 @@
 package com.gc.auth.security.handler;
 
-import com.gc.common.auth.model.RestUserDetails;
+import com.gc.common.auth.model.RestUserDetailsImpl;
 import com.gc.common.auth.properties.AuthProperties;
 import com.gc.common.base.message.Result;
 import com.google.common.collect.ImmutableMap;
@@ -47,7 +47,7 @@ public class RestAuthSuccessHandler implements AuthenticationSuccessHandler {
      * @return
      */
     private Result<Map<String, Object>> successData(Authentication authentication, HttpServletRequest httpServletRequest) {
-        final RestUserDetails userDetails = (RestUserDetails) authentication.getPrincipal();
+        final RestUserDetailsImpl userDetails = (RestUserDetailsImpl) authentication.getPrincipal();
         // 处理用户权限信息
         final ImmutableMap<String, Object> result = ImmutableMap.of(
                 "user", userDetails,

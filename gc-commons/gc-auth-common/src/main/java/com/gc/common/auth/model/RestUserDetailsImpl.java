@@ -2,13 +2,15 @@ package com.gc.common.auth.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.gc.common.auth.core.GcGrantedAuthority;
+import com.gc.common.auth.core.RestUserDetails;
+import com.google.common.collect.Sets;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -18,7 +20,7 @@ import java.util.stream.Collectors;
  */
 @Setter
 @NoArgsConstructor
-public class RestUserDetails implements UserDetails, Serializable {
+public class RestUserDetailsImpl implements RestUserDetails, Serializable {
     private static final long serialVersionUID = -6184955894751051086L;
 
     @Getter
@@ -32,9 +34,13 @@ public class RestUserDetails implements UserDetails, Serializable {
     @Getter
     private String realname;
 
+//    @Getter
+//    private Serializable user;
+
     private Set<GcGrantedAuthority> authorities;
 
     @Override
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     public Collection<GcGrantedAuthority> getAuthorities() {
         return this.authorities;
     }
@@ -43,7 +49,12 @@ public class RestUserDetails implements UserDetails, Serializable {
      * 获取用户的角色编码
      * @return 用户角色列表
      */
+    @Override
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     public Set<String> getRoles() {
+        if (Objects.isNull(this.authorities)) {
+            return Sets.newHashSet();
+        }
         return this.authorities.stream()
                 .filter(GcGrantedAuthority::isRole)
                 .map(GcGrantedAuthority::getAuthorityValue)
@@ -54,7 +65,12 @@ public class RestUserDetails implements UserDetails, Serializable {
      * 获取用户的权限列表
      * @return 用户权限列表
      */
+    @Override
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     public Set<String> getPermissions() {
+        if (Objects.isNull(this.authorities)) {
+            return Sets.newHashSet();
+        }
         return this.authorities.stream()
                 .filter(GcGrantedAuthority :: isPermission)
                 .map(GcGrantedAuthority :: getAuthorityValue)
@@ -72,21 +88,25 @@ public class RestUserDetails implements UserDetails, Serializable {
     }
 
     @Override
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     public boolean isAccountNonExpired() {
         return true;
     }
 
     @Override
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     public boolean isAccountNonLocked() {
         return true;
     }
 
     @Override
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     public boolean isCredentialsNonExpired() {
         return true;
     }
 
     @Override
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     public boolean isEnabled() {
         return true;
     }

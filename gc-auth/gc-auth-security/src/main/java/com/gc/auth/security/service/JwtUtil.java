@@ -4,7 +4,7 @@ import com.gc.common.auth.core.GcGrantedAuthority;
 import com.gc.common.auth.core.PermissionGrantedAuthority;
 import com.gc.common.auth.core.RoleGrantedAuthority;
 import com.gc.common.auth.exception.AuthException;
-import com.gc.common.auth.model.RestUserDetails;
+import com.gc.common.auth.model.RestUserDetailsImpl;
 import com.gc.common.base.http.HttpStatus;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtBuilder;
@@ -49,7 +49,7 @@ public class JwtUtil {
      * @return jwt
      */
     public static String createJwt(Authentication authentication, String key) {
-        final RestUserDetails userDetails = (RestUserDetails) authentication.getPrincipal();
+        final RestUserDetailsImpl userDetails = (RestUserDetailsImpl) authentication.getPrincipal();
         final Date now = new Date();
         final JwtBuilder builder = Jwts.builder()
                 .setId(userDetails.getUserId().toString())
@@ -93,10 +93,10 @@ public class JwtUtil {
      * @return
      */
     @SuppressWarnings("unchecked")
-    public static RestUserDetails getUser(String jwt, String key) {
+    public static RestUserDetailsImpl getUser(String jwt, String key) {
         try {
             final Claims claims = parseJwt(jwt, key);
-            final RestUserDetails restUserDetails = new RestUserDetails();
+            final RestUserDetailsImpl restUserDetails = new RestUserDetailsImpl();
             BeanUtils.populate(restUserDetails, claims.get(USER_KEY, Map.class));
             // 设置权限
             final List<String> permissions = claims.get(PERMISSION_KEY, List.class);

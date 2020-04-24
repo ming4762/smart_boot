@@ -4,7 +4,7 @@ import com.gc.auth.security.handler.RestJsonWriter;
 import com.gc.auth.security.service.AuthService;
 import com.gc.auth.security.service.JwtUtil;
 import com.gc.common.auth.exception.AuthException;
-import com.gc.common.auth.model.RestUserDetails;
+import com.gc.common.auth.model.RestUserDetailsImpl;
 import com.gc.common.auth.properties.AuthProperties;
 import com.gc.common.base.http.HttpStatus;
 import com.gc.common.base.message.Result;
@@ -55,13 +55,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 String jwt = JwtUtil.getJwt(request);
                 if (StringUtils.isNotEmpty(jwt)) {
                     // 刷新jwt的过期时间
-                    RestUserDetails user = this.authService.refreshJwt(jwt);
+                    RestUserDetailsImpl user = this.authService.refreshJwt(jwt);
                     UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
                     authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                     SecurityContextHolder.getContext()
                             .setAuthentication(authentication);
                     filterChain.doFilter(request, response);
-
                 } else {
                     RestJsonWriter.writeJson(response, Result.failure(HttpStatus.UNAUTHORIZED.getCode(), "未登录"));
                 }

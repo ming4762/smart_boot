@@ -5,6 +5,7 @@ import com.gc.common.base.http.HttpStatus;
 import com.gc.common.base.message.Result;
 import com.gc.common.base.utils.JsonUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.access.AccessDeniedException;
@@ -30,9 +31,14 @@ import java.util.Set;
 @Slf4j
 public class GlobalExceptionHandler {
 
-    @ResponseBody
-    @ExceptionHandler(value = Exception.class)
-    public Result<String> handlerException(Exception e) {
+    private static final String MISMATCH_ERROR_MESSAGE = "argument type mismatch\nController";
+
+    /**
+     * 处理异常
+     * @param e 异常信息
+     * @return 处理后的信息
+     */
+    public static Result<String> doException(Exception e) {
         if (e instanceof NoHandlerFoundException) {
             log.error("NoHandlerFoundException: 请求方法 {}, 请求路径 {}", ((NoHandlerFoundException) e).getRequestURL(), ((NoHandlerFoundException) e).getHttpMethod());
             return Result.ofStatus(HttpStatus.NOT_FOUND);
@@ -65,8 +71,17 @@ public class GlobalExceptionHandler {
         } else if (e instanceof DuplicateKeyException) {
             log.error("key冲突异常", e);
             return Result.failure("key冲突错误", e.getMessage());
+        } else if (e instanceof IllegalStateException && StringUtils.startsWith(e.getMessage(), MISMATCH_ERROR_MESSAGE)) {
+            log.error("参数类型不支持", e);
+            return Result.failure("参数类型不支持", e.getMessage());
         }
         log.error("系统发生未知异常", e);
         return Result.ofStatus(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+    }
+
+    @ResponseBody
+    @ExceptionHandler(value = Exception.class)
+    public Result<String> handlerException(Exception e) {
+        return doException(e);
     }
 }
