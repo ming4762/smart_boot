@@ -7,6 +7,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * 树形工具类
@@ -27,13 +28,13 @@ public final class TreeUtils {
         final List<Tree<T>> topNodes = Lists.newArrayList();
         for (Tree<T> children : nodes) {
             final Serializable pid = children.getParentId();
-            if (pid == null || "0".equals(pid)) {
+            if (Objects.isNull(pid) || "0".equals(pid)) {
                 topNodes.add(children);
                 continue;
             }
             for (Tree<T> parent : nodes) {
                 final Serializable id = parent.getId();
-                if (id != null && id == pid) {
+                if (!Objects.isNull(id) && Objects.equals(id, pid)) {
                     parent.getChildren().add(children);
                     children.setHasParent(true);
                     parent.setHasChildren(true);
@@ -70,13 +71,13 @@ public final class TreeUtils {
         final List<Tree<T>> topNodes = Lists.newArrayList();
         for (Tree<T> children : nodes) {
             final Serializable pid = children.getParentId();
-            if (pid == null || idParam == pid) {
+            if (Objects.isNull(pid) || Objects.equals(idParam, pid)) {
                 topNodes.add(children);
                 continue;
             }
             for (Tree<T> parent : nodes) {
                 Serializable id = parent.getId();
-                if (id != null && id == pid) {
+                if (!Objects.isNull(id) && Objects.equals(id, pid)) {
                     parent.getChildren().add(children);
                     children.setHasParent(true);
                     parent.setHasChildren(true);
