@@ -16,5 +16,4 @@ public class TransactionManagerConstants {
      */
     public static final String SYSTEM_MANAGER = "systemTransactionManager";
 
-    public static final String FAQ_MANAGER = "faqTransactionManager";
 }

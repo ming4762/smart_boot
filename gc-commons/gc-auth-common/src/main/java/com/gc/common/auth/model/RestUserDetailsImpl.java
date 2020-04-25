@@ -34,9 +34,6 @@ public class RestUserDetailsImpl implements RestUserDetails, Serializable {
     @Getter
     private String realname;
 
-//    @Getter
-//    private Serializable user;
-
     private Set<GcGrantedAuthority> authorities;
 
     @Override

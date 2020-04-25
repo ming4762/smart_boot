@@ -7,10 +7,10 @@ import com.gc.starter.crud.query.PageQueryParameter;
 import com.gc.starter.crud.query.QueryParameter;
 import com.gc.starter.crud.query.SortQueryParameter;
 import lombok.SneakyThrows;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.HttpInputMessage;
 import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.lang.NonNull;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.RequestBodyAdvice;
 
@@ -29,20 +29,20 @@ import java.lang.reflect.Type;
 @ControllerAdvice
 public class ParameterConvertRequestBodyAdvice implements RequestBodyAdvice {
     @Override
-    public boolean supports(@NotNull MethodParameter methodParameter, @NotNull Type type, @NotNull Class<? extends HttpMessageConverter<?>> aClass) {
+    public boolean supports(@NonNull MethodParameter methodParameter, @NonNull Type type, @NonNull Class<? extends HttpMessageConverter<?>> aClass) {
         return true;
     }
 
-    @NotNull
+    @NonNull
     @Override
-    public HttpInputMessage beforeBodyRead(@NotNull HttpInputMessage httpInputMessage, @NotNull MethodParameter methodParameter, @NotNull Type type, @NotNull Class<? extends HttpMessageConverter<?>> aClass) {
+    public HttpInputMessage beforeBodyRead(@NonNull HttpInputMessage httpInputMessage, @NonNull MethodParameter methodParameter, @NonNull Type type, @NonNull Class<? extends HttpMessageConverter<?>> aClass) {
         return httpInputMessage;
     }
 
     @SneakyThrows
-    @NotNull
+    @NonNull
     @Override
-    public Object afterBodyRead(@NotNull Object body, @NotNull HttpInputMessage httpInputMessage, @NotNull MethodParameter methodParameter, @NotNull Type type, @NotNull Class<? extends HttpMessageConverter<?>> aClass) {
+    public Object afterBodyRead(@NonNull Object body, @NonNull HttpInputMessage httpInputMessage, @NonNull MethodParameter methodParameter, @NonNull Type type, @NonNull Class<? extends HttpMessageConverter<?>> aClass) {
         if (body instanceof QueryParameter) {
             this.convertParameter((QueryParameter) body);
         }
@@ -50,7 +50,7 @@ public class ParameterConvertRequestBodyAdvice implements RequestBodyAdvice {
     }
 
     @Override
-    public Object handleEmptyBody(Object body, @NotNull HttpInputMessage httpInputMessage, @NotNull MethodParameter methodParameter, @NotNull Type type, @NotNull Class<? extends HttpMessageConverter<?>> aClass) {
+    public Object handleEmptyBody(Object body, @NonNull HttpInputMessage httpInputMessage, @NonNull MethodParameter methodParameter, @NonNull Type type, @NonNull Class<? extends HttpMessageConverter<?>> aClass) {
         return body;
     }
 

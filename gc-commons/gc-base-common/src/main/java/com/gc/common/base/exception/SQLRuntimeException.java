@@ -3,7 +3,7 @@ package com.gc.common.base.exception;
 import java.sql.SQLException;
 
 /**
- * @author jackson
+ * @author shizhongming
  * 2020/3/27 2:45 下午
  */
 public class SQLRuntimeException extends BaseException {

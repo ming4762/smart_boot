@@ -24,13 +24,15 @@ import com.gc.starter.crud.utils.IdGenerator;
 import com.google.common.collect.Lists;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang3.ObjectUtils;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.springframework.lang.NonNull;
+import org.springframework.lang.Nullable;
 
 import java.beans.PropertyDescriptor;
 import java.io.Serializable;
-import java.lang.reflect.*;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -50,8 +52,8 @@ public abstract class BaseServiceImpl<K extends CrudBaseMapper<T>, T extends Bas
      * @return 删除的数量
      */
     @Override
-    @NotNull
-    public Integer delete(@NotNull T model) {
+    @NonNull
+    public Integer delete(@NonNull T model) {
         final List<String> keyList = this.getKeyList();
         if (keyList.isEmpty()) {
             log.warn("未找到主键无法执行删除");
@@ -75,7 +77,7 @@ public abstract class BaseServiceImpl<K extends CrudBaseMapper<T>, T extends Bas
      * @return 删除数量
      */
     @Override
-    public @NotNull Integer batchDelete(@NotNull List<T> modelList) {
+    public @NonNull Integer batchDelete(@NonNull List<T> modelList) {
         int num;
         final List<String> keyList = this.getKeyList();
         if (keyList.isEmpty()) {
@@ -118,7 +120,7 @@ public abstract class BaseServiceImpl<K extends CrudBaseMapper<T>, T extends Bas
      */
     @Nullable
     @Override
-    public T get(@NotNull T model) {
+    public T get(@NonNull T model) {
         final List<String> keyList = this.getKeyList();
         if (keyList.isEmpty()) {
             return null;
@@ -241,7 +243,7 @@ public abstract class BaseServiceImpl<K extends CrudBaseMapper<T>, T extends Bas
      * @return 查询结果
      */
     @Override
-    public @NotNull List<T> list(@NotNull QueryWrapper<T> queryWrapper, @NotNull PageQueryParameter<String, Object> parameter, @NotNull Boolean paging) {
+    public @NonNull List<T> list(@NonNull QueryWrapper<T> queryWrapper, @NonNull PageQueryParameter<String, Object> parameter, @NonNull Boolean paging) {
         this.analysisOrder(queryWrapper, parameter, paging);
         return super.list(queryWrapper);
     }
@@ -252,7 +254,7 @@ public abstract class BaseServiceImpl<K extends CrudBaseMapper<T>, T extends Bas
      * @return 是否成功
      */
     @Override
-    public boolean saveOrUpdateWithCreateUser(@NotNull T model, Long userId) {
+    public boolean saveOrUpdateWithCreateUser(@NonNull T model, Long userId) {
         boolean isAdd = this.isAdd(model);
         if (isAdd) {
             return this.saveWithUser(model, userId);
@@ -268,7 +270,7 @@ public abstract class BaseServiceImpl<K extends CrudBaseMapper<T>, T extends Bas
      * @return 是否成功
      */
     @Override
-    public boolean saveOrUpdateWithUpdateUser(@NotNull T model, Long userId) {
+    public boolean saveOrUpdateWithUpdateUser(@NonNull T model, Long userId) {
         boolean isAdd = this.isAdd(model);
         if (isAdd) {
             return this.save(model);
@@ -284,7 +286,7 @@ public abstract class BaseServiceImpl<K extends CrudBaseMapper<T>, T extends Bas
      * @return 是否成功
      */
     @Override
-    public boolean saveOrUpdateWithAllUser(@NotNull T model, Long userId) {
+    public boolean saveOrUpdateWithAllUser(@NonNull T model, Long userId) {
         boolean isAdd = this.isAdd(model);
         if (isAdd) {
             return this.saveWithUser(model, userId);
@@ -300,7 +302,7 @@ public abstract class BaseServiceImpl<K extends CrudBaseMapper<T>, T extends Bas
      * @return 是否保存成功
      */
     @Override
-    public boolean saveWithUser(@NotNull T model, Long userId) {
+    public boolean saveWithUser(@NonNull T model, Long userId) {
         this.setCreateUserId(model, userId);
         this.setCreateTime(model);
         return this.save(model);
@@ -309,7 +311,7 @@ public abstract class BaseServiceImpl<K extends CrudBaseMapper<T>, T extends Bas
 
 
     @Override
-    public boolean updateWithUserById(@NotNull T model, Long userId) {
+    public boolean updateWithUserById(@NonNull T model, Long userId) {
         this.setUpdateTime(model);
         this.setUpdateUserId(model, userId);
         return updateById(model);
@@ -321,7 +323,7 @@ public abstract class BaseServiceImpl<K extends CrudBaseMapper<T>, T extends Bas
      * @param parameter 参数
      * @param paging 是否分页
      */
-    public void analysisOrder(@NotNull QueryWrapper<T> queryWrapper, @NotNull PageQueryParameter<String, Object> parameter, boolean paging) {
+    public void analysisOrder(@NonNull QueryWrapper<T> queryWrapper, @NonNull PageQueryParameter<String, Object> parameter, boolean paging) {
         final String sortName = parameter.getSortName();
         // 如果灭有分页且存在排序字段手动进行排序
         if (!paging && sortName != null) {
@@ -375,7 +377,7 @@ public abstract class BaseServiceImpl<K extends CrudBaseMapper<T>, T extends Bas
      * @param entity
      * @return
      */
-    protected boolean isAdd(@NotNull T entity) {
+    protected boolean isAdd(@NonNull T entity) {
         Serializable key = this.getKeyValue(entity);
         return StringUtils.checkValNull(key) || Objects.isNull(this.getById(key));
     }
@@ -442,7 +444,7 @@ public abstract class BaseServiceImpl<K extends CrudBaseMapper<T>, T extends Bas
      * @param entity 实体类
      * @return key
      */
-    private Serializable getKeyValue(@NotNull T entity) {
+    private Serializable getKeyValue(@NonNull T entity) {
         Class<?> cls = entity.getClass();
         TableInfo tableInfo = TableInfoHelper.getTableInfo(cls);
         Assert.notNull(tableInfo, "error: can not execute. because can not find cache of TableInfo for entity!");

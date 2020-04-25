@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.core.RedisTemplate;
 
 /**
+ * redis配置类
  * @author shizhongming
  * 2020/1/17 8:45 下午
  */

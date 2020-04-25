@@ -1,7 +1,7 @@
 package com.gc.cache.service;
 
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.springframework.lang.NonNull;
 
 import java.util.Collection;
 import java.util.Date;
@@ -19,7 +19,7 @@ public interface CacheService {
      * @param key 缓存的key
      * @param value 缓存的value
      */
-    void put(@NotNull Object key, @NotNull Object value);
+    void put(@NonNull Object key, @NonNull Object value);
 
     /**
      * 写入缓存，并设置有效时间
@@ -27,7 +27,7 @@ public interface CacheService {
      * @param value 缓存的value
      * @param timeout 缓存的有效时间（单位：秒）
      */
-    void put(@NotNull Object key, @NotNull Object value, long timeout);
+    void put(@NonNull Object key, @NonNull Object value, long timeout);
 
     /**
      * 写入缓存，并设置过期时间
@@ -35,41 +35,41 @@ public interface CacheService {
      * @param value 缓存的value
      * @param expireTime 缓存过期时间
      */
-    void put(@NotNull Object key, @NotNull Object value, @NotNull Date expireTime);
+    void put(@NonNull Object key, @NonNull Object value, @NonNull Date expireTime);
 
     /**
      * 批量写入缓存
      * @param keyValues 缓存键值对
      */
-    void batchPut(@NotNull Map<Object, Object> keyValues);
+    void batchPut(@NonNull Map<Object, Object> keyValues);
 
     /**
      * 批量写入缓存,并设置有效时间
      * @param keyValues 缓存键值对
      * @param timeout 缓存有效时间（单位：秒）
      */
-    void batchPut(@NotNull Map<Object, Object> keyValues, long timeout);
+    void batchPut(@NonNull Map<Object, Object> keyValues, long timeout);
 
     /**
      * 设置key的过期时间
      * @param key key
      * @param timeout 过期时间
      */
-    void expire(@NotNull Object key, long timeout);
+    void expire(@NonNull Object key, long timeout);
 
     /**
      * 批量设置key的过期时间
      * @param keys key
      * @param timeout 过期时间
      */
-    void batchExpire(@NotNull Collection<Object> keys, long timeout);
+    void batchExpire(@NonNull Collection<Object> keys, long timeout);
 
     /**
      * 批量写入缓存,并设置过期时间
      * @param keyValues 缓存键值对
      * @param expireTime 缓存过期时间
      */
-    void batchPut(@NotNull Map<Object, Object> keyValues, @NotNull Date expireTime);
+    void batchPut(@NonNull Map<Object, Object> keyValues, @NonNull Date expireTime);
 
     /**
      * 读取缓存
@@ -77,7 +77,7 @@ public interface CacheService {
      * @return 值
      */
     @Nullable
-    Object get(@NotNull Object key);
+    Object get(@NonNull Object key);
 
     /**
      * 读取缓存
@@ -87,7 +87,7 @@ public interface CacheService {
      * @return 值
     </T> */
     @Nullable
-    <T> T get(@NotNull Object key, @NotNull Class<T> clazz);
+    <T> T get(@NonNull Object key, @NonNull Class<T> clazz);
 
     /**
      * 批量读取缓存
@@ -95,7 +95,7 @@ public interface CacheService {
      * @return 值集合
      */
     @Nullable
-    List<Object> batchGet(@NotNull Collection<Object> keys);
+    List<Object> batchGet(@NonNull Collection<Object> keys);
 
     /**
      * 批量量读取缓存
@@ -105,17 +105,17 @@ public interface CacheService {
      * @return 值
     </T> */
     @Nullable
-    <T> List<T> batchGet(@NotNull Collection<Object> keys, @NotNull Class<T> clazz);
+    <T> List<T> batchGet(@NonNull Collection<Object> keys, @NonNull Class<T> clazz);
 
     /**
      * 删除缓存
      * @param key 键
      */
-    void delete(@NotNull Object key);
+    void delete(@NonNull Object key);
 
     /**
      * 批量删除
      * @param keys 键集合
      */
-    void batchDelete(@NotNull List<Object> keys);
+    void batchDelete(@NonNull List<Object> keys);
 }

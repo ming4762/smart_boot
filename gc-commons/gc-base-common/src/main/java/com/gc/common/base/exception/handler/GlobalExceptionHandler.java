@@ -24,7 +24,7 @@ import java.util.Set;
 
 /**
  * 全局异常管理
- * @author jackson
+ * @author shizhongming
  * 2020/2/15 7:12 下午
  */
 @ControllerAdvice

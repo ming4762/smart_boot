@@ -1,13 +1,13 @@
 package com.gc.starter.redis.service.impl;
 
 import com.gc.starter.redis.service.RedisService;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.springframework.data.redis.connection.RedisStringCommands;
 import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.types.Expiration;
 import org.springframework.data.redis.serializer.RedisSerializer;
+import org.springframework.lang.NonNull;
 
 import java.util.Collection;
 import java.util.Date;
@@ -29,34 +29,34 @@ public class RedisServiceImpl implements RedisService {
     }
 
     @Override
-    public void matchDelete(Object prefixKey) {
+    public void matchDelete(@NonNull Object prefixKey) {
         // todo: 待开发
     }
 
     @Override
-    public void put(@NotNull Object key, @NotNull Object value) {
+    public void put(@NonNull Object key, @NonNull Object value) {
         redisTemplate.opsForValue().set(key, value);
 
     }
 
     @Override
-    public void put(@NotNull Object key, @NotNull Object value, long timeout) {
+    public void put(@NonNull Object key, @NonNull Object value, long timeout) {
         redisTemplate.opsForValue().set(key, value, timeout, TimeUnit.SECONDS);
     }
 
     @Override
-    public void put(@NotNull Object key, @NotNull Object value, @NotNull Date expireTime) {
+    public void put(@NonNull Object key, @NonNull Object value, @NonNull Date expireTime) {
         this.put(key, value);
         redisTemplate.expireAt(key, expireTime);
     }
 
     @Override
-    public void batchPut(@NotNull Map<Object, Object> keyValues) {
+    public void batchPut(@NonNull Map<Object, Object> keyValues) {
         this.redisTemplate.opsForValue().multiSet(keyValues);
     }
 
     @Override
-    public void batchPut(@NotNull Map<Object, Object> keyValues, long timeout) {
+    public void batchPut(@NonNull Map<Object, Object> keyValues, long timeout) {
         this.redisTemplate.executePipelined((RedisCallback<Object>) connection -> {
             RedisSerializer keySerializer = this.redisTemplate.getKeySerializer();
             RedisSerializer valueSerializer = this.redisTemplate.getValueSerializer();
@@ -71,7 +71,7 @@ public class RedisServiceImpl implements RedisService {
      * @param timeout 过期时间
      */
     @Override
-    public void expire(@NotNull Object key, long timeout) {
+    public void expire(@NonNull Object key, long timeout) {
         this.redisTemplate.expire(key, timeout, TimeUnit.SECONDS);
     }
 
@@ -81,12 +81,12 @@ public class RedisServiceImpl implements RedisService {
      * @param timeout 过期时间
      */
     @Override
-    public void batchExpire(@NotNull Collection<Object> keys, long timeout) {
+    public void batchExpire(@NonNull Collection<Object> keys, long timeout) {
         keys.forEach(key -> this.expire(key, timeout));
     }
 
     @Override
-    public void batchPut(@NotNull Map<Object, Object> keyValues, @NotNull Date expireTime) {
+    public void batchPut(@NonNull Map<Object, Object> keyValues, @NonNull Date expireTime) {
         this.redisTemplate.executePipelined((RedisCallback<Object>) connection -> {
             RedisSerializer keySerializer = this.redisTemplate.getKeySerializer();
             RedisSerializer valueSerializer = this.redisTemplate.getValueSerializer();
@@ -96,32 +96,32 @@ public class RedisServiceImpl implements RedisService {
     }
 
     @Override
-    public @Nullable Object get(@NotNull Object key) {
+    public @Nullable Object get(@NonNull Object key) {
         return this.redisTemplate.opsForValue().get(key);
     }
 
     @Override
-    public <T> @Nullable T get(@NotNull Object key, @NotNull Class<T> clazz) {
+    public <T> @Nullable T get(@NonNull Object key, @NonNull Class<T> clazz) {
         return (T) this.get(key);
     }
 
     @Override
-    public @Nullable List<Object> batchGet(@NotNull Collection<Object> keys) {
+    public @Nullable List<Object> batchGet(@NonNull Collection<Object> keys) {
         return this.redisTemplate.opsForValue().multiGet(keys);
     }
 
     @Override
-    public @Nullable <T> List<T> batchGet(@NotNull Collection<Object> keys, @NotNull Class<T> clazz) {
+    public @Nullable <T> List<T> batchGet(@NonNull Collection<Object> keys, @NonNull Class<T> clazz) {
         return (List<T>) this.redisTemplate.opsForValue().multiGet(keys);
     }
 
     @Override
-    public void delete(@NotNull Object key) {
+    public void delete(@NonNull Object key) {
         this.redisTemplate.delete(key);
     }
 
     @Override
-    public void batchDelete(@NotNull List<Object> keys) {
+    public void batchDelete(@NonNull List<Object> keys) {
         this.redisTemplate.delete(keys);
     }
 }
