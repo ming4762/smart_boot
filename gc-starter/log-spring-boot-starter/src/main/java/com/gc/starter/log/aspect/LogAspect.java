@@ -3,6 +3,7 @@ package com.gc.starter.log.aspect;
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.toolkit.IdWorker;
 import com.gc.common.auth.utils.AuthUtils;
+import com.gc.common.base.exception.handler.GlobalExceptionHandler;
 import com.gc.common.base.message.Result;
 import com.gc.common.base.utils.IpUtils;
 import com.gc.starter.log.LogProperties;
@@ -13,6 +14,7 @@ import com.gc.starter.log.service.SysLogService;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.BooleanUtils;
+import org.apache.commons.lang3.ObjectUtils;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.Signature;
@@ -33,7 +35,7 @@ import java.util.stream.Collectors;
 
 /**
  * 日志切面
- * @author jackson
+ * @author shizhongming
  * 2020/1/22 1:54 下午
  */
 @Aspect
@@ -81,13 +83,22 @@ public final class LogAspect {
     @Around("logPointCut()")
     public Object around(ProceedingJoinPoint point) throws Throwable {
         long beginTime = System.currentTimeMillis();
-        // 执行方法
-        Object result = point.proceed();
+        Exception exception = null;
+        Object result = null;
+        try {
+            // 执行方法
+            result = point.proceed();
+        } catch (Exception e) {
+            exception = e;
+        }
         // 用时（毫秒）
         long time = System.currentTimeMillis() - beginTime;
         if (BooleanUtils.isTrue(this.logProperties.getConsole())) {
             // 执行耗时
             log.info("Time-Consuming : {} ms", time);
+        }
+        if (ObjectUtils.isNotEmpty(exception)) {
+            result = GlobalExceptionHandler.doException(exception);
         }
         this.saveLog(point, time, result);
         // 保存日志
