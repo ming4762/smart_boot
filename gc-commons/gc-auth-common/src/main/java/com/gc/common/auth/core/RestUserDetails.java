@@ -1,5 +1,7 @@
 package com.gc.common.auth.core;
 
+import com.gc.common.auth.model.Permission;
+import lombok.NonNull;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.io.Serializable;
@@ -17,12 +19,6 @@ public interface RestUserDetails extends UserDetails {
      */
     Serializable getUserId();
 
-//    /**
-//     * 获取用户信息
-//     * @return
-//     */
-//    Serializable getUser();
-
     /**
      * 获取用户姓名
      * @return 姓名
@@ -33,11 +29,13 @@ public interface RestUserDetails extends UserDetails {
      * 获取角色
      * @return 角色编码列表
      */
+    @NonNull
     Set<String> getRoles();
 
     /**
      * 获取权限
      * @return 权限编码列表
      */
-    Set<String> getPermissions();
+    @NonNull
+    Set<Permission> getPermissions();
 }

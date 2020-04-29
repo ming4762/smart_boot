@@ -5,8 +5,9 @@ import com.gc.auth.security.service.AuthService;
 import com.gc.common.auth.constants.LoginTypeConstants;
 import com.gc.common.auth.core.RestUserDetails;
 import com.gc.common.auth.model.LoginResult;
-import com.gc.common.auth.model.RestUserDetailsImpl;
+import com.gc.common.auth.model.Permission;
 import com.gc.common.base.message.Result;
+import com.google.common.collect.Sets;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -18,6 +19,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * jwt登陆
@@ -29,9 +32,9 @@ import javax.validation.Valid;
 public class LoginController {
 
 
-    private AuthenticationManager authenticationManager;
+    private final AuthenticationManager authenticationManager;
 
-    private AuthService authService;
+    private final AuthService authService;
 
 
     public LoginController(AuthenticationManager authenticationManager, AuthService authService) {
@@ -78,7 +81,7 @@ public class LoginController {
     private LoginResult doLogin(UserLoginDTO parameter, LoginTypeConstants type) {
         final Authentication authentication = this.authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(parameter.getUsername(), parameter.getPassword()));
 
-        final RestUserDetails userDetails = (RestUserDetailsImpl) authentication.getPrincipal();
+        final RestUserDetails userDetails = (RestUserDetails) authentication.getPrincipal();
         SecurityContextHolder.getContext()
                 .setAuthentication(authentication);
         final String jwt = this.authService.doLogin(authentication, parameter.getRemember(), type);
@@ -86,7 +89,11 @@ public class LoginController {
                 .user(userDetails)
                 .token(jwt)
                 .roles(userDetails.getRoles())
-                .permissions(userDetails.getPermissions())
+                .permissions(
+                        Optional.ofNullable(userDetails.getPermissions())
+                        .map(item -> item.stream().map(Permission :: getPermission).collect(Collectors.toSet()))
+                        .orElse(Sets.newHashSet())
+                )
                 .build();
     }
 

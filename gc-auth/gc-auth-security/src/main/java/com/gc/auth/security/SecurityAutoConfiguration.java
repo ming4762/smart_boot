@@ -1,10 +1,12 @@
 package com.gc.auth.security;
 
+import com.gc.auth.security.authentication.DynamicUrlCheckProvider;
 import com.gc.auth.security.service.RestUserDetailsServiceImpl;
 import com.gc.common.auth.properties.AuthProperties;
 import com.gc.common.auth.service.AuthUserService;
 import com.google.common.collect.ImmutableList;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -15,6 +17,7 @@ import org.springframework.session.web.http.HeaderHttpSessionIdResolver;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
 /**
  * 认证模块自动配置类
@@ -56,9 +59,15 @@ public class SecurityAutoConfiguration {
         return source;
     }
 
-
-
-
-
+    /**
+     * 创建URL校验器
+     * @param mapping
+     * @return
+     */
+    @Bean
+    @ConditionalOnProperty(prefix = "gc.auth", name = "urlCheck", havingValue = "true")
+    public DynamicUrlCheckProvider dynamicUrlCheckProvider(RequestMappingHandlerMapping mapping) {
+        return new DynamicUrlCheckProvider(mapping);
+    }
 
 }

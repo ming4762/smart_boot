@@ -1,6 +1,7 @@
 package com.gc.common.auth.core;
 
 import com.gc.common.auth.constants.GrantedAuthorityType;
+import com.gc.common.auth.model.Permission;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,7 +17,7 @@ public class PermissionGrantedAuthority implements GcGrantedAuthority {
 
     private static final long serialVersionUID = -8344886266135685662L;
 
-    private String permission;
+    private Permission permission;
 
     @Override
     public boolean isRole() {
@@ -35,11 +36,11 @@ public class PermissionGrantedAuthority implements GcGrantedAuthority {
 
     @Override
     public String getAuthorityValue() {
-        return this.getPermission();
+        return this.permission.getPermission();
     }
 
     @Override
     public String getAuthority() {
-        return this.getPermission();
+        return this.permission.getPermission();
     }
 }

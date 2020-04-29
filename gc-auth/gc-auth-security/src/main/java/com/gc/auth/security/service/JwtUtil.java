@@ -4,7 +4,10 @@ import com.gc.common.auth.core.GcGrantedAuthority;
 import com.gc.common.auth.core.PermissionGrantedAuthority;
 import com.gc.common.auth.core.RoleGrantedAuthority;
 import com.gc.common.auth.exception.AuthException;
+import com.gc.common.auth.model.Permission;
 import com.gc.common.auth.model.RestUserDetailsImpl;
+import com.gc.common.base.exception.IllegalAccessRuntimeException;
+import com.gc.common.base.exception.InvocationTargetRuntimeException;
 import com.gc.common.base.http.HttpStatus;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtBuilder;
@@ -19,7 +22,9 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.security.core.Authentication;
 
 import javax.servlet.http.HttpServletRequest;
+import java.lang.reflect.InvocationTargetException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * jwt工具类
@@ -99,7 +104,19 @@ public class JwtUtil {
             final RestUserDetailsImpl restUserDetails = new RestUserDetailsImpl();
             BeanUtils.populate(restUserDetails, claims.get(USER_KEY, Map.class));
             // 设置权限
-            final List<String> permissions = claims.get(PERMISSION_KEY, List.class);
+            final List<Map<String, String>> permissionMap = claims.get(PERMISSION_KEY, List.class);
+            final List<Permission> permissions = permissionMap.stream()
+                    .map(item -> {
+                        try {
+                            Permission permission = new Permission();
+                            BeanUtils.populate(permission, item);
+                            return permission;
+                        } catch (IllegalAccessException e) {
+                            throw new IllegalAccessRuntimeException(e);
+                        } catch (InvocationTargetException e) {
+                            throw new InvocationTargetRuntimeException(e);
+                        }
+                    }).collect(Collectors.toList());
             // 设置角色
             final List<String> roles = claims.get(ROLE_KEY, List.class);
             final Set<GcGrantedAuthority> authorities = new HashSet<>(permissions.size() + roles.size());

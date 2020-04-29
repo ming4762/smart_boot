@@ -2,10 +2,12 @@ package com.gc.common.auth.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.gc.common.auth.core.GcGrantedAuthority;
+import com.gc.common.auth.core.PermissionGrantedAuthority;
 import com.gc.common.auth.core.RestUserDetails;
 import com.google.common.collect.Sets;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 import lombok.Setter;
 
 import java.io.Serializable;
@@ -63,14 +65,15 @@ public class RestUserDetailsImpl implements RestUserDetails, Serializable {
      * @return 用户权限列表
      */
     @Override
+    @NonNull
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    public Set<String> getPermissions() {
+    public Set<Permission> getPermissions() {
         if (Objects.isNull(this.authorities)) {
             return Sets.newHashSet();
         }
         return this.authorities.stream()
                 .filter(GcGrantedAuthority :: isPermission)
-                .map(GcGrantedAuthority :: getAuthorityValue)
+                .map(item -> ((PermissionGrantedAuthority)item).getPermission())
                 .collect(Collectors.toSet());
     }
 

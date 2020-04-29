@@ -37,9 +37,9 @@ import java.util.Set;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
 
-    private AuthService authService;
+    private final AuthService authService;
 
-    private AuthProperties authProperties;
+    private final AuthProperties authProperties;
 
     public JwtAuthenticationFilter(AuthService authService, AuthProperties authProperties) {
         this.authService = authService;
@@ -65,7 +65,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     RestJsonWriter.writeJson(response, Result.failure(HttpStatus.UNAUTHORIZED.getCode(), "未登录"));
                 }
             } catch (AuthException e) {
-                log.error(e.getMessage(), e);
+                log.error(e.getMessage(), e.getE());
                 RestJsonWriter.writeJson(response, Result.failure(e.getCode(), e.getMessage()));
             } catch (InternalAuthenticationServiceException e) {
                 log.error(e.getMessage(), e);

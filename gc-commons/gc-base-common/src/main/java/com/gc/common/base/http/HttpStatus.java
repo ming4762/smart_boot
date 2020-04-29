@@ -64,11 +64,11 @@ public enum HttpStatus implements IHttpStatus {
     /**
      * 状态码
      */
-    private Integer code;
+    private final Integer code;
 
-    private String zhCn;
+    private final String zhCn;
 
-    private String en;
+    private final String en;
 
 
 

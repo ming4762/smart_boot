@@ -1,5 +1,6 @@
 package com.gc.auth.security.authentication;
 
+import com.gc.common.auth.model.Permission;
 import com.gc.common.auth.model.RestUserDetailsImpl;
 import com.gc.common.auth.properties.AuthProperties;
 import org.apache.commons.lang3.BooleanUtils;
@@ -9,6 +10,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
 import java.io.Serializable;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * 自定义的权限认证器
@@ -36,7 +39,10 @@ public class RestPermissionEvaluatorImpl implements PermissionEvaluator {
         }
         // 验证权限
         final String permissionStr = String.join(":", targetDomainObject.toString(), permission.toString());
-        return user.getPermissions().contains(permissionStr);
+        Set<String> permissions = user.getPermissions().stream()
+                .map(Permission::getPermission)
+                .collect(Collectors.toSet());
+        return permissions.contains(permissionStr);
     }
 
     @Override

@@ -22,6 +22,8 @@ public class AuthProperties {
 
     private boolean jwt = true;
 
+    private boolean urlCheck = false;
+
     private Session session = new Session();
 
     private IgnoreConfig ignores = new IgnoreConfig();

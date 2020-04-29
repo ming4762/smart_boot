@@ -140,11 +140,16 @@ public class SpringSecurityConfig  extends WebSecurityConfigurerAdapter {
         if (BooleanUtils.isTrue(this.authProperties.getDevelopment())) {
             http.cors().and().authorizeRequests().anyRequest().permitAll();
         } else {
-            http.authorizeRequests()
-                    .and();
-            http.authorizeRequests()
-                    // 其他请求全部拦截
-                    .anyRequest().authenticated();
+            if (this.authProperties.isUrlCheck()) {
+//                http.authorizeRequests().and();
+                http.authorizeRequests()
+                        .anyRequest()
+                        .access("@dynamicUrlCheckProvider.hasUrlPermission(request, authentication)");
+            } else {
+                http.authorizeRequests()
+                        // 其他请求全部拦截
+                        .anyRequest().authenticated();
+            }
         }
     }
 }
