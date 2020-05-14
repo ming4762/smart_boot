@@ -1,7 +1,6 @@
 package com.gc.common.base.utils;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -12,8 +11,8 @@ import javax.servlet.http.HttpServletRequest;
  * IP地址
  * @author jackson
  */
+@Slf4j
 public class IpUtils {
-	private static Logger logger = LoggerFactory.getLogger(IpUtils.class);
 
 	private static final String UNKNOWN = "unknown";
 
@@ -52,7 +51,7 @@ public class IpUtils {
 				ip = request.getRemoteAddr();
 			}
 		} catch (Exception e) {
-			logger.error("IPUtils ERROR ", e);
+			log.error("IPUtils ERROR ", e);
 		}
 		return ip;
 	}
