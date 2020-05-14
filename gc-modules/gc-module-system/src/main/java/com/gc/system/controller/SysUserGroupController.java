@@ -63,7 +63,6 @@ public class SysUserGroupController extends BaseController<SysUserGroupService, 
     @Override
     @PostMapping("list")
     @ApiOperation(value = "查询用户组列表（支持分页、实体类属性查询）")
-    @PreAuthorize("hasPermission('sys:userGroup', 'query')")
     public Result<Object> list(@RequestBody PageQueryParameter<String, Object> parameter) {
         return super.list(parameter);
     }
