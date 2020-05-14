@@ -44,7 +44,7 @@ public class SysFilePO extends BaseModelCreateUserTime {
     /**
      * 文件大小
      */
-    private Long size;
+    private Long fileSize;
 
     /**
      * 数据库ID

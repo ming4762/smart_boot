@@ -1,9 +1,9 @@
 package com.gc.module.file.pojo.bo;
 
-import com.baomidou.mybatisplus.core.toolkit.IdWorker;
 import com.gc.common.base.utils.security.Md5Utils;
 import com.gc.module.file.constants.FileTypeConstants;
 import com.gc.module.file.model.SysFilePO;
+import com.gc.starter.crud.utils.IdGenerator;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -30,12 +30,12 @@ public class SysFileBO {
 
     public SysFileBO(@NotNull MultipartFile multipartFile, String filename, String type) throws IOException {
         this.file = SysFilePO.builder()
-                .fileId(IdWorker.getId())
+                .fileId(IdGenerator.nextId())
                 .fileName(StringUtils.isEmpty(filename) ? multipartFile.getOriginalFilename() : filename)
                 .type(StringUtils.isEmpty(type) ? FileTypeConstants.TEMP.name() : type)
                 .contentType(multipartFile.getContentType())
                 .md5(Md5Utils.md5(multipartFile.getInputStream()))
-                .size(multipartFile.getSize())
+                .fileSize(multipartFile.getSize())
                 .build();
         this.inputStream = multipartFile.getInputStream();
     }

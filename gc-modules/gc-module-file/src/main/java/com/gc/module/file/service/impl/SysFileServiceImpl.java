@@ -63,6 +63,7 @@ public class SysFileServiceImpl extends BaseServiceImpl<SysFileMapper, SysFilePO
         // 根据md5判断文件是否存在
         final List<SysFilePO> md5FileList = this.list(
                 new QueryWrapper<SysFilePO>().lambda().eq(SysFilePO :: getMd5, file.getFile().getMd5())
+                        .eq(SysFilePO :: getFileSize, file.getFile().getFileSize())
         );
         if (md5FileList.isEmpty()) {
             // 保存文件
