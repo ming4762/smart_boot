@@ -1,6 +1,7 @@
 package com.gc.starter.file.serice;
 
-import org.jetbrains.annotations.NotNull;
+
+import org.springframework.lang.NonNull;
 
 import java.io.*;
 import java.util.List;
@@ -18,8 +19,8 @@ public interface ActualFileService {
      * @throws IOException 文件写入失败抛出异常
      * @return 文件id
      */
-    @NotNull
-    String save(@NotNull File file, String filename) throws IOException;
+    @NonNull
+    String save(@NonNull File file, String filename) throws IOException;
 
     /**
      * 保存文件
@@ -28,15 +29,15 @@ public interface ActualFileService {
      * @throws IOException 保存文件发生IO错误
      * @return 文件ID
      */
-    @NotNull
-    String save(@NotNull InputStream inputStream, String filename)  throws IOException;
+    @NonNull
+    String save(@NonNull InputStream inputStream, String filename)  throws IOException;
 
     /**
      * 删除文件
      * @param id 文件ID
      * @throws IOException IOException
      */
-    void delete(@NotNull String id) throws IOException;
+    void delete(@NonNull String id) throws IOException;
 
 
     /**
@@ -44,7 +45,7 @@ public interface ActualFileService {
      * @param fileIdList 文件ID
      * @throws IOException IOException
      */
-    void batchDelete(@NotNull List<String> fileIdList) throws IOException;
+    void batchDelete(@NonNull List<String> fileIdList) throws IOException;
 
     /**
      * 下载文件
@@ -52,7 +53,7 @@ public interface ActualFileService {
      * @throws FileNotFoundException 未找到下载文件错误
      * @return 文件流
      */
-    InputStream download(@NotNull String id) throws FileNotFoundException;
+    InputStream download(@NonNull String id) throws FileNotFoundException;
 
     /**
      * 下载文件
@@ -60,6 +61,6 @@ public interface ActualFileService {
      * @param outputStream 输出流
      * @throws IOException 下载文件发生IO错误
      */
-    void download(@NotNull String id, @NotNull OutputStream outputStream) throws IOException;
+    void download(@NonNull String id, @NonNull OutputStream outputStream) throws IOException;
 
 }

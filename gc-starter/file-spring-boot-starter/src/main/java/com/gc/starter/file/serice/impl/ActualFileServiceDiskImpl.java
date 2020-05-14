@@ -4,7 +4,7 @@ import com.gc.common.base.utils.security.Md5Utils;
 import com.gc.starter.file.pojo.bo.DiskFilePathBO;
 import com.gc.starter.file.serice.ActualFileService;
 import org.apache.commons.io.IOUtils;
-import org.jetbrains.annotations.NotNull;
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.springframework.util.StringUtils;
 
 import java.io.*;
@@ -20,7 +20,7 @@ import java.util.List;
  */
 public class ActualFileServiceDiskImpl implements ActualFileService {
 
-    private String basePath;
+    private final String basePath;
 
     public ActualFileServiceDiskImpl(String basePath) {
         this.basePath = basePath;
@@ -33,7 +33,7 @@ public class ActualFileServiceDiskImpl implements ActualFileService {
      * @return 文件id
      */
     @Override
-    public @NotNull String save(@NotNull File file, String filename) throws IOException {
+    public @NonNull String save(@NonNull File file, String filename) throws IOException {
         try (FileInputStream inputStream = new FileInputStream(file)) {
             return this.save(inputStream, StringUtils.isEmpty(filename) ? file.getName() : filename);
         }
@@ -46,11 +46,10 @@ public class ActualFileServiceDiskImpl implements ActualFileService {
      * @return 文件ID
      */
     @Override
-    public @NotNull String save(@NotNull InputStream inputStream, String filename) throws IOException {
+    public @NonNull String save(@NonNull InputStream inputStream, String filename) throws IOException {
         try (
                 final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-                final ByteArrayInputStream writerInputStream = new ByteArrayInputStream(outputStream.toByteArray())
-                ) {
+        ) {
             IOUtils.copy(inputStream, outputStream);
             // 计算md5
             final String md5 = Md5Utils.md5(new ByteArrayInputStream(outputStream.toByteArray()));
@@ -62,10 +61,7 @@ public class ActualFileServiceDiskImpl implements ActualFileService {
             }
             final String filePath = diskFilePath.getFilePath();
             final Path inPath = Paths.get(filePath);
-            if (!Files.exists(inPath)) {
-                Files.createFile(inPath);
-            }
-            Files.copy(writerInputStream, inPath);
+            Files.copy(new ByteArrayInputStream(outputStream.toByteArray()), inPath);
             return diskFilePath.getFileId();
         }
     }
@@ -75,7 +71,7 @@ public class ActualFileServiceDiskImpl implements ActualFileService {
      * @param id 文件ID
      */
     @Override
-    public void delete(@NotNull String id) throws IOException {
+    public void delete(@NonNull String id) throws IOException {
         final String filePath = DiskFilePathBO.createById(id, this.basePath).getFilePath();
         final Path path = Paths.get(filePath);
         if (Files.exists(path)) {
@@ -88,7 +84,7 @@ public class ActualFileServiceDiskImpl implements ActualFileService {
      * @param fileIdList 文件ID
      */
     @Override
-    public void batchDelete(@NotNull List<String> fileIdList) throws IOException {
+    public void batchDelete(@NonNull List<String> fileIdList) throws IOException {
         for (String fileId : fileIdList) {
             this.delete(fileId);
         }
@@ -100,7 +96,7 @@ public class ActualFileServiceDiskImpl implements ActualFileService {
      * @return 文件流
      */
     @Override
-    public InputStream download(@NotNull String id) throws FileNotFoundException {
+    public InputStream download(@NonNull String id) throws FileNotFoundException {
         final String filePath = DiskFilePathBO.createById(id, this.basePath).getFilePath();
         final File file = new File(filePath);
         return new FileInputStream(file);
@@ -112,7 +108,7 @@ public class ActualFileServiceDiskImpl implements ActualFileService {
      * @param outputStream 输出流，文件信息会写入输出流
      */
     @Override
-    public void download(@NotNull String id, @NotNull OutputStream outputStream) throws IOException {
+    public void download(@NonNull String id, @NonNull OutputStream outputStream) throws IOException {
         final String filePath = DiskFilePathBO.createById(id, this.basePath).getFilePath();
         final File file = new File(filePath);
         try (FileInputStream inputStream = new FileInputStream(file)) {
