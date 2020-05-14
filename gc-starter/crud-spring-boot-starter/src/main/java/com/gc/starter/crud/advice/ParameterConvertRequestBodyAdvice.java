@@ -43,8 +43,14 @@ public class ParameterConvertRequestBodyAdvice implements RequestBodyAdvice {
     @NonNull
     @Override
     public Object afterBodyRead(@NonNull Object body, @NonNull HttpInputMessage httpInputMessage, @NonNull MethodParameter methodParameter, @NonNull Type type, @NonNull Class<? extends HttpMessageConverter<?>> aClass) {
+        final Class clazz;
+        if (type instanceof Class) {
+            clazz = (Class) type;
+        } else {
+            clazz = Class.forName(type.getTypeName());
+        }
         if (body instanceof QueryParameter) {
-            this.convertParameter((QueryParameter) body);
+            this.convertParameter((QueryParameter) body, clazz);
         }
         return body;
     }
@@ -59,14 +65,14 @@ public class ParameterConvertRequestBodyAdvice implements RequestBodyAdvice {
      * @param parameter
      */
     @SuppressWarnings("rawtypes")
-    private void convertParameter(QueryParameter parameter) {
+    private void convertParameter(QueryParameter parameter, Class clazz) {
         // 处理PageQueryParameter
         if (parameter instanceof PageQueryParameter) {
-            this.addParameter(parameter, PageQueryParameter.class);
+            this.addParameter(parameter, clazz);
         }
         // 处理SortQueryParameter
         if (parameter instanceof SortQueryParameter) {
-            this.addParameter(parameter, SortQueryParameter.class);
+            this.addParameter(parameter, clazz);
         }
     }
 

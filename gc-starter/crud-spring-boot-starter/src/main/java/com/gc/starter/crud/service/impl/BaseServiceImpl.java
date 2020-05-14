@@ -207,7 +207,6 @@ public abstract class BaseServiceImpl<K extends CrudBaseMapper<T>, T extends Bas
         final IdType idType = tableInfo.getIdType();
         if (idType.getKey() == IdType.ASSIGN_ID.getKey() && Number.class.isAssignableFrom(tableInfo.getKeyType())) {
             try {
-                // todo: 待完善
                 PropertyDescriptor propertyDescriptor = new PropertyDescriptor(tableInfo.getKeyProperty(), entity.getClass());
                 propertyDescriptor.getWriteMethod().invoke(entity, IdGenerator.nextId());
             } catch (Exception e) {
