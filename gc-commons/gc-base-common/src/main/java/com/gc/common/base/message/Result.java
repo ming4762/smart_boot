@@ -9,8 +9,8 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
+import org.springframework.lang.NonNull;
 import org.springframework.validation.BindingResult;
 
 import java.lang.reflect.Field;
@@ -132,7 +132,7 @@ public class Result<T> {
      * @param <T>
      * @return
      */
-    @org.jetbrains.annotations.NotNull
+    @NonNull
     public static <T> Result<T> failure(String message) {
         return Result.failure(ResultCodeEnum.FAILURE.getCode(), message);
     }
@@ -143,8 +143,8 @@ public class Result<T> {
      * @param <T>
      * @return
      */
-    @org.jetbrains.annotations.NotNull
-    public static <T> Result<T> failure(@NotNull BindingResult bindingResult) {
+    @NonNull
+    public static <T> Result<T> failure(@NonNull BindingResult bindingResult) {
         String errorMessage = Optional.ofNullable(bindingResult.getFieldError())
                 .map(DefaultMessageSourceResolvable::getDefaultMessage)
                 .orElse("参数校验失败");
@@ -156,7 +156,7 @@ public class Result<T> {
      * @param e
      * @return
      */
-    public static Result<String> failure(@NotNull BaseException e) {
+    public static Result<String> failure(@NonNull BaseException e) {
         return failure(e.getCode(), e.getMessage());
     }
 

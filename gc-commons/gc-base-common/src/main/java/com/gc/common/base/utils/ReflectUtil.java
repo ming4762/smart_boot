@@ -1,8 +1,8 @@
 package com.gc.common.base.utils;
 
 import lombok.extern.slf4j.Slf4j;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.springframework.lang.NonNull;
+import org.springframework.lang.Nullable;
 
 import java.lang.reflect.Field;
 
@@ -25,7 +25,7 @@ public final class ReflectUtil {
      * @return 属性值
      */
     @Nullable
-    public static Object getFieldValue(@NotNull Object value, @NotNull String fieldName) {
+    public static Object getFieldValue(@NonNull Object value, @NonNull String fieldName) {
         try {
             final Field field = value.getClass().getDeclaredField(fieldName);
             field.setAccessible(true);

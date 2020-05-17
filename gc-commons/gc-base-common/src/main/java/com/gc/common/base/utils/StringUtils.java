@@ -1,6 +1,6 @@
 package com.gc.common.base.utils;
 
-import org.jetbrains.annotations.NotNull;
+import org.springframework.lang.NonNull;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -23,8 +23,8 @@ public final class StringUtils {
      * @param camelCaseName
      * @return
      */
-    @NotNull
-    public static String underscoreName(@NotNull String camelCaseName) {
+    @NonNull
+    public static String underscoreName(@NonNull String camelCaseName) {
         final Matcher matcher = PATTERN.matcher(camelCaseName);
         StringBuffer stringBuffer = new StringBuffer(camelCaseName);
         if (matcher.find()) {
@@ -36,4 +36,5 @@ public final class StringUtils {
         }
         return underscoreName(stringBuffer.toString());
     }
+
 }

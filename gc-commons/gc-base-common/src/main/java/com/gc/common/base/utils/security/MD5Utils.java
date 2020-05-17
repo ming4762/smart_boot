@@ -2,7 +2,7 @@ package com.gc.common.base.utils.security;
 
 
 import org.apache.commons.codec.digest.DigestUtils;
-import org.jetbrains.annotations.NotNull;
+import org.springframework.lang.NonNull;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -24,8 +24,8 @@ public final class Md5Utils {
      * @param hashIterations 加密次数
      * @return 加密后的字符串
      */
-    @NotNull
-    public static String md5(@NotNull String value, @NotNull Integer hashIterations) {
+    @NonNull
+    public static String md5(@NonNull String value, @NonNull Integer hashIterations) {
         String hash = DigestUtils.md5Hex(value);
         if (hashIterations > 1) {
             for(int i = 1; i<hashIterations; i++) {
@@ -40,8 +40,8 @@ public final class Md5Utils {
      * @param value 加密前的字符串
      * @return 加密后的字符串
      */
-    @NotNull
-    public static String md5(@NotNull String value) {
+    @NonNull
+    public static String md5(@NonNull String value) {
         return md5(value, 1);
     }
 
@@ -50,8 +50,8 @@ public final class Md5Utils {
      * @param inputStream 加密流
      * @return 加密后的字符串
      */
-    @NotNull
-    public static String md5(@NotNull InputStream inputStream) throws IOException {
+    @NonNull
+    public static String md5(@NonNull InputStream inputStream) throws IOException {
         return DigestUtils.md5Hex(inputStream);
     }
 }

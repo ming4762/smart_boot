@@ -1,10 +1,10 @@
 package com.gc.common.base.spring;
 
 import lombok.extern.log4j.Log4j2;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.springframework.lang.NonNull;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 
 /**
@@ -23,7 +23,7 @@ public class ApplicationContextRegister implements ApplicationContextAware {
      * @return
      */
     @Nullable
-    public static Object getBean(@NotNull String name) {
+    public static Object getBean(@NonNull String name) {
         try {
             return applicationContext.getBean(name);
         } catch (Exception e) {
@@ -39,7 +39,7 @@ public class ApplicationContextRegister implements ApplicationContextAware {
      * @return
      */
     @Nullable
-    public static <T> T getBean(@NotNull Class<T> clazz) {
+    public static <T> T getBean(@NonNull Class<T> clazz) {
         try {
             return applicationContext.getBean(clazz);
         } catch (Exception e) {
@@ -52,14 +52,14 @@ public class ApplicationContextRegister implements ApplicationContextAware {
      * 获取spring上下文
      * @return
      */
-    @NotNull
+    @NonNull
     public static ApplicationContext getContext() {
         return applicationContext;
     }
 
 
     @Override
-    public void setApplicationContext(@NotNull ApplicationContext applicationContext) {
+    public void setApplicationContext(@NonNull ApplicationContext applicationContext) {
         log.debug("ApplicationContext registed-->{}", applicationContext);
         ApplicationContextRegister.applicationContext = applicationContext;
     }

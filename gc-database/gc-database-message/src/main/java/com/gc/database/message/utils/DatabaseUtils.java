@@ -2,7 +2,7 @@ package com.gc.database.message.utils;
 
 import com.gc.common.base.exception.*;
 import com.google.common.collect.Lists;
-import org.jetbrains.annotations.NotNull;
+import org.springframework.lang.NonNull;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -32,8 +32,8 @@ public class DatabaseUtils {
      * @param <T>
      * @return
      */
-    @NotNull
-    public static <T> List<T> resultSetToModel(@NotNull ResultSet resultSet, @NotNull Class<T> clazz, @NotNull Map<String, Field> mapping) {
+    @NonNull
+    public static <T> List<T> resultSetToModel(@NonNull ResultSet resultSet, @NonNull Class<T> clazz, @NonNull Map<String, Field> mapping) {
         try {
             final ResultSetMetaData metaData = resultSet.getMetaData();
             final int columnCount = metaData.getColumnCount();

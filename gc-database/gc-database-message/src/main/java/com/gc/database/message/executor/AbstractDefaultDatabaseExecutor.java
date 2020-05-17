@@ -10,9 +10,9 @@ import com.gc.database.message.utils.CacheUtils;
 import com.gc.database.message.utils.DatabaseUtils;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.springframework.core.annotation.AnnotationUtils;
+import org.springframework.lang.NonNull;
+import org.springframework.lang.Nullable;
 import org.springframework.util.StringUtils;
 
 import java.lang.reflect.Field;
@@ -41,7 +41,8 @@ public abstract class AbstractDefaultDatabaseExecutor implements DatabaseExecuto
      * @return 数据库连接
      */
     @Override
-    public @Nullable Connection getConnection(@NotNull DatabaseConnectionBO databaseConnection) throws SQLException {
+    public @Nullable
+    Connection getConnection(@NonNull DatabaseConnectionBO databaseConnection) throws SQLException {
         final String key = databaseConnection.createConnectionKey();
         Connection connection = CacheUtils.CONNECTION_CACHE.get(key);
         if (connection == null || connection.isClosed()) {
@@ -69,7 +70,7 @@ public abstract class AbstractDefaultDatabaseExecutor implements DatabaseExecuto
      * @throws SQLException
      */
     @Override
-    public @NotNull Boolean testConnection(@NotNull DatabaseConnectionBO databaseConnection) throws SQLException {
+    public @NonNull Boolean testConnection(@NonNull DatabaseConnectionBO databaseConnection) throws SQLException {
         final String key = databaseConnection.createConnectionKey();
         if (StringUtils.isEmpty(key)) {
             return Boolean.FALSE;
@@ -86,12 +87,12 @@ public abstract class AbstractDefaultDatabaseExecutor implements DatabaseExecuto
     }
 
     @Override
-    public @NotNull List<TableViewBO> listTable(@NotNull DatabaseConnectionBO databaseConnection) {
+    public @NonNull List<TableViewBO> listTable(@NonNull DatabaseConnectionBO databaseConnection) {
         return this.listTable(databaseConnection, "TABLE");
     }
 
     @Override
-    public @NotNull List<TableViewBO> listView(@NotNull DatabaseConnectionBO databaseConnection) {
+    public @NonNull List<TableViewBO> listView(@NonNull DatabaseConnectionBO databaseConnection) {
         return this.listTable(databaseConnection, "VIEW");
     }
 
@@ -100,7 +101,7 @@ public abstract class AbstractDefaultDatabaseExecutor implements DatabaseExecuto
      * @param types 类型
      */
     @Override
-    public @NotNull List<TableViewBO> listTable(@NotNull DatabaseConnectionBO databaseConnection, String... types) {
+    public @NonNull List<TableViewBO> listTable(@NonNull DatabaseConnectionBO databaseConnection, String... types) {
         try {
             final Connection connection = this.getConnection(databaseConnection);
             if (connection == null) {
@@ -124,7 +125,7 @@ public abstract class AbstractDefaultDatabaseExecutor implements DatabaseExecuto
      * @return 主键列表
      */
     @Override
-    public List<PrimaryKeyBO> listPrimaryKey(@NotNull DatabaseConnectionBO databaseConnection, String tableName)  {
+    public List<PrimaryKeyBO> listPrimaryKey(@NonNull DatabaseConnectionBO databaseConnection, String tableName)  {
         try {
             Connection connection = this.getConnection(databaseConnection);
             if (!this.testConnection(connection)) {
@@ -148,7 +149,7 @@ public abstract class AbstractDefaultDatabaseExecutor implements DatabaseExecuto
      * @return 外键列表
      */
     @Override
-    public List<ImportKeyBO> listImportedKeys(@NotNull DatabaseConnectionBO databaseConnection, String tableName){
+    public List<ImportKeyBO> listImportedKeys(@NonNull DatabaseConnectionBO databaseConnection, String tableName){
         try {
             Connection connection = this.getConnection(databaseConnection);
             if (!this.testConnection(connection)) {
@@ -174,7 +175,7 @@ public abstract class AbstractDefaultDatabaseExecutor implements DatabaseExecuto
      * @return
      */
     @Override
-    public List<IndexBO> listIndex(@NotNull DatabaseConnectionBO databaseConnection, String tableName, Boolean unique, Boolean approximate) {
+    public List<IndexBO> listIndex(@NonNull DatabaseConnectionBO databaseConnection, String tableName, Boolean unique, Boolean approximate) {
         try {
             Connection connection = this.getConnection(databaseConnection);
             if (!this.testConnection(connection)) {
@@ -204,8 +205,8 @@ public abstract class AbstractDefaultDatabaseExecutor implements DatabaseExecuto
      * @return 列信息
      */
     @Override
-    @NotNull
-    public List<ColumnBO> listColumn(@NotNull DatabaseConnectionBO databaseConnection, String tableName) {
+    @NonNull
+    public List<ColumnBO> listColumn(@NonNull DatabaseConnectionBO databaseConnection, String tableName) {
         try {
             Connection connection = this.getConnection(databaseConnection);
             if (!this.testConnection(connection)) {
@@ -271,7 +272,7 @@ public abstract class AbstractDefaultDatabaseExecutor implements DatabaseExecuto
      * @return 唯一索引列表
      */
     @Override
-    public List<IndexBO> listUniqueIndex(@NotNull DatabaseConnectionBO databaseConnection, String tableName) {
+    public List<IndexBO> listUniqueIndex(@NonNull DatabaseConnectionBO databaseConnection, String tableName) {
         return this.listIndex(databaseConnection, tableName, true, true);
     }
 

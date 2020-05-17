@@ -1,6 +1,7 @@
 package com.gc.common.base.utils;
 
-import org.jetbrains.annotations.NotNull;
+
+import org.springframework.lang.NonNull;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
@@ -31,8 +32,8 @@ public final class Base64Util {
      * @param str 要编码的字符串
      * @return 编码后的字符串
      */
-    @NotNull
-    public static String encoder(@NotNull String str) {
+    @NonNull
+    public static String encoder(@NonNull String str) {
         final byte[] textByte = str.getBytes(StandardCharsets.UTF_8);
         return encoder(textByte);
     }
@@ -42,8 +43,8 @@ public final class Base64Util {
      * @param bytes 要编码的字节数组
      * @return 编码后的字符串
      */
-    @NotNull
-    public static String encoder(@NotNull byte[] bytes) {
+    @NonNull
+    public static String encoder(@NonNull byte[] bytes) {
         return ENCODER.encodeToString(bytes);
     }
 
@@ -52,8 +53,8 @@ public final class Base64Util {
      * @param str 要解码的字符串
      * @return 解码后的字符串
      */
-    @NotNull
-    public static String decoder(@NotNull String str) {
+    @NonNull
+    public static String decoder(@NonNull String str) {
         return new String(DECODER.decode(str), StandardCharsets.UTF_8);
     }
 }

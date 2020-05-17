@@ -21,8 +21,8 @@ import com.gc.system.service.SysUserService;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import org.apache.commons.beanutils.PropertyUtils;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -59,7 +59,8 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserMapper, SysUserPO
      */
     @Override
     @Transactional(value = TransactionManagerConstants.SYSTEM_MANAGER, readOnly = true)
-    public @NotNull List<SysRolePO> listRole(@NotNull Long userId) {
+    public @NonNull
+    List<SysRolePO> listRole(@NonNull Long userId) {
         final Set<Long> roleIdSet = Sets.newHashSet();
         // 1、查询用户对应的角色
         final Set<Long> userRoleIdSet = this.sysUserRoleMapper.selectList(
@@ -101,7 +102,7 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserMapper, SysUserPO
      * @return list目标类型
      */
     @Override
-    public <T> void setWithUser(@NotNull List<T> resource) {
+    public <T> void setWithUser(@NonNull List<T> resource) {
         this.setWithUser(resource, true, true);
     }
 
@@ -111,7 +112,7 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserMapper, SysUserPO
      * @param <T> 目标类型
      */
     @Override
-    public <T> void setWithCreateUser(@NotNull List<T> resource) {
+    public <T> void setWithCreateUser(@NonNull List<T> resource) {
         this.setWithUser(resource, true, false);
     }
 
@@ -121,7 +122,7 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserMapper, SysUserPO
      * @param <T> 目标类型
      */
     @Override
-    public <T> void setWithUpdateUser(@NotNull List<T> resource) {
+    public <T> void setWithUpdateUser(@NonNull List<T> resource) {
         this.setWithUser(resource, false, true);
     }
 
@@ -130,7 +131,7 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserMapper, SysUserPO
      * @param resource 原
      * @param <T> 目标类型
      */
-    private <T> void setWithUser(@NotNull List<T> resource, boolean withCreateUser, boolean withUpdateUser) {
+    private <T> void setWithUser(@NonNull List<T> resource, boolean withCreateUser, boolean withUpdateUser) {
         if (!resource.isEmpty()) {
             Set<Long> userIdSet = Sets.newHashSet();
             try {

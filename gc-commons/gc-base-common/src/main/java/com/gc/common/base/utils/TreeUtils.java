@@ -2,8 +2,8 @@ package com.gc.common.base.utils;
 
 import com.gc.common.base.model.Tree;
 import com.google.common.collect.Lists;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.springframework.lang.NonNull;
+import org.springframework.lang.Nullable;
 
 import java.io.Serializable;
 import java.util.List;
@@ -62,8 +62,8 @@ public final class TreeUtils {
      * @param <T>
      * @return
      */
-    @NotNull
-    public static <T extends Serializable> List<Tree<T>>  buildList(@Nullable List<Tree<T>> nodes, @NotNull Serializable idParam) {
+    @NonNull
+    public static <T extends Serializable> List<Tree<T>>  buildList(@Nullable List<Tree<T>> nodes, @NonNull Serializable idParam) {
         if (nodes == null) {
             return Lists.newArrayList();
         }

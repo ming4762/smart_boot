@@ -4,7 +4,7 @@ import com.gc.common.auth.constants.GrantedAuthorityType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.jetbrains.annotations.NotNull;
+import org.springframework.lang.NonNull;
 
 /**
  * @author jackson
@@ -21,7 +21,7 @@ public class RoleGrantedAuthority implements GcGrantedAuthority {
     private String roleCode;
 
     @Override
-    @NotNull
+    @NonNull
     public String getAuthority() {
         return ROLE_START + this.roleCode;
     }

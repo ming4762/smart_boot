@@ -19,8 +19,8 @@ import com.gc.system.service.SysUserService;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import org.apache.commons.lang3.ObjectUtils;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -46,8 +46,8 @@ public class SysUserGroupServiceImpl extends BaseServiceImpl<SysUserGroupMapper,
      * @return
      */
     @Override
-    @NotNull
-    public Map<Long, List<Long>> listUserIdByIds(@NotNull Collection<Long> groupIds) {
+    @NonNull
+    public Map<Long, List<Long>> listUserIdByIds(@NonNull Collection<Long> groupIds) {
         if (groupIds.isEmpty()) {
             return Maps.newHashMap();
         }
@@ -72,7 +72,7 @@ public class SysUserGroupServiceImpl extends BaseServiceImpl<SysUserGroupMapper,
      * @return
      */
     @Override
-    public @NotNull List<SysUserGroupPO> list(@NotNull QueryWrapper<SysUserGroupPO> queryWrapper, @NotNull PageQueryParameter<String, Object> parameter, @NotNull Boolean paging) {
+    public @NonNull List<SysUserGroupPO> list(@NonNull QueryWrapper<SysUserGroupPO> queryWrapper, @NonNull PageQueryParameter<String, Object> parameter, @NonNull Boolean paging) {
         List<SysUserGroupPO> list =  super.list(queryWrapper, parameter, paging);
         if (list.isEmpty()) {
             return list;
@@ -92,8 +92,8 @@ public class SysUserGroupServiceImpl extends BaseServiceImpl<SysUserGroupMapper,
      * @return
      */
     @Override
-    @NotNull
-    public Map<Long, List<SysUserPO>> listUserByIds(@NotNull Collection<Long> groupIds) {
+    @NonNull
+    public Map<Long, List<SysUserPO>> listUserByIds(@NonNull Collection<Long> groupIds) {
         // 查询用户ID信息
         final Map<Long, List<Long>> idResult = this.listUserIdByIds(groupIds);
         if (!idResult.isEmpty()) {
@@ -127,7 +127,7 @@ public class SysUserGroupServiceImpl extends BaseServiceImpl<SysUserGroupMapper,
      */
     @Override
     @Transactional(value = TransactionManagerConstants.SYSTEM_MANAGER, rollbackFor = Exception.class, readOnly = true)
-    public boolean saveUserGroupByGroupId(@NotNull UserGroupUserSaveDTO parameter) {
+    public boolean saveUserGroupByGroupId(@NonNull UserGroupUserSaveDTO parameter) {
         // 删除用户组用户信息信息
         this.sysUserGroupUserService.remove(
                 new QueryWrapper<SysUserGroupUserPO>().lambda()
@@ -152,7 +152,7 @@ public class SysUserGroupServiceImpl extends BaseServiceImpl<SysUserGroupMapper,
      */
     @Override
     @Transactional(value = TransactionManagerConstants.SYSTEM_MANAGER, rollbackFor = Exception.class)
-    public boolean saveUserGroupByUserId(@NotNull UserUserGroupSaveDTO parameter) {
+    public boolean saveUserGroupByUserId(@NonNull UserUserGroupSaveDTO parameter) {
         // 删除用户组用户信息信息
         this.sysUserGroupUserService.remove(
                 new QueryWrapper<SysUserGroupUserPO>().lambda()

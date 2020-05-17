@@ -1,8 +1,8 @@
 package com.gc.common.base.utils;
 
 import com.google.common.collect.Lists;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.springframework.lang.NonNull;
+import org.springframework.lang.Nullable;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -54,8 +54,8 @@ public final class DateUtil {
      * @param pattern 格式
      * @return Date
      */
-    @NotNull
-    public static Date parse(@NotNull String dateStr, @NotNull String pattern) {
+    @NonNull
+    public static Date parse(@NonNull String dateStr, @NonNull String pattern) {
         final LocalDateTime localDateTime = LocalDateTime.parse(dateStr, DateTimeFormatter.ofPattern(pattern));
         final Instant instant = localDateTime.atZone(ZoneId.systemDefault()).toInstant();
         return Date.from(instant);
@@ -67,8 +67,8 @@ public final class DateUtil {
      * @param pattern 格式
      * @return 时间字符串
      */
-    @NotNull
-    public static String format(@NotNull Date date, @NotNull String pattern) {
+    @NonNull
+    public static String format(@NonNull Date date, @NonNull String pattern) {
         return DateUtil.batchFormat(Lists.newArrayList(date), pattern).get(0);
     }
 
@@ -78,7 +78,7 @@ public final class DateUtil {
      * @param pattern 格式
      * @return 时间字符串
      */
-    public static List<String> batchFormat(@NotNull List<Date> dateList, @NotNull String pattern) {
+    public static List<String> batchFormat(@NonNull List<Date> dateList, @NonNull String pattern) {
         final DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern);
         return dateList
                 .stream()
