@@ -22,6 +22,9 @@
 
 		<swagger.version>2.9.2</swagger.version>
 		<jjwt.veersion>0.9.1</jjwt.veersion>
+		<spring-boot-admin.version>2.2.2</spring-boot-admin.version>
+
+		<IJPay.version>2.6.1</IJPay.version>
 	</properties>
 
 	<modules>
@@ -29,6 +32,7 @@
 		<module>gc-commons</module>
 		<module>gc-database</module>
 		<module>gc-modules</module>
+		<module>gc-monitor</module>
 		<module>gc-starter</module>
 	</modules>
 
@@ -42,10 +46,10 @@
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>org.jetbrains</groupId>
-			<artifactId>annotations</artifactId>
-		</dependency>
+<!--		<dependency>-->
+<!--			<groupId>org.jetbrains</groupId>-->
+<!--			<artifactId>annotations</artifactId>-->
+<!--		</dependency>-->
 	</dependencies>
 
 	<dependencyManagement>
@@ -54,6 +58,12 @@
 			<dependency>
 				<groupId>com.gc</groupId>
 				<artifactId>gc-auth-common</artifactId>
+				<version>${gc-boot.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>com.gc</groupId>
+				<artifactId>gc-i18n-common</artifactId>
 				<version>${gc-boot.version}</version>
 			</dependency>
 
@@ -109,6 +119,25 @@
 				<groupId>io.jsonwebtoken</groupId>
 				<artifactId>jjwt</artifactId>
 				<version>${jjwt.veersion}</version>
+			</dependency>
+
+			<!--    引入监控服务    -->
+			<dependency>
+				<groupId>de.codecentric</groupId>
+				<artifactId>spring-boot-admin-starter-server</artifactId>
+				<version>${spring-boot-admin.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>com.github.javen205</groupId>
+				<artifactId>IJPay-AliPay</artifactId>
+				<version>${IJPay.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>com.github.javen205</groupId>
+				<artifactId>IJPay-Core</artifactId>
+				<version>${IJPay.version}</version>
 			</dependency>
 
 		</dependencies>

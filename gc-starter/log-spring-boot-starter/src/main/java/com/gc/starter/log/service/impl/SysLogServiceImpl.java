@@ -4,7 +4,7 @@ import com.gc.starter.crud.service.impl.BaseServiceImpl;
 import com.gc.starter.log.mapper.SysLogMapper;
 import com.gc.starter.log.model.SysLogPO;
 import com.gc.starter.log.service.SysLogService;
-import org.jetbrains.annotations.Nullable;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

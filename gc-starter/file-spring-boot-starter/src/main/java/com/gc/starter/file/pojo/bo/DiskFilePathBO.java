@@ -3,7 +3,7 @@ package com.gc.starter.file.pojo.bo;
 import com.gc.common.base.utils.Base64Util;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import org.jetbrains.annotations.NotNull;
+import org.springframework.lang.NonNull;
 import org.springframework.util.StringUtils;
 
 import java.io.File;
@@ -83,8 +83,8 @@ public class DiskFilePathBO {
      * @param basePath
      * @return
      */
-    @NotNull
-    public static DiskFilePathBO createById(@NotNull String id, @NotNull String basePath) {
+    @NonNull
+    public static DiskFilePathBO createById(@NonNull String id, @NonNull String basePath) {
         final String[] ids = id.split(DiskFilePathBO.ID_CUT);
         DiskFilePathBO diskFilePath = new DiskFilePathBO();
         diskFilePath.basePath = basePath;

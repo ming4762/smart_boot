@@ -2,7 +2,6 @@ package com.gc.module.faq.config;
 
 import com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceBuilder;
 import com.baomidou.mybatisplus.extension.spring.MybatisSqlSessionFactoryBean;
-import com.gc.common.base.constants.TransactionManagerConstants;
 import com.github.pagehelper.PageInterceptor;
 import org.apache.ibatis.plugin.Interceptor;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -50,7 +49,7 @@ public class FaqDataSourceMybatisConfig {
         return new SqlSessionTemplate(sqlSessionFactory);
     }
 
-    @Bean(name = TransactionManagerConstants.FAQ_MANAGER)
+//    @Bean(name = TransactionManagerConstants.FAQ_MANAGER)
     public DataSourceTransactionManager faqTransactionManager(@Qualifier("faqDataSource") DataSource dataSource) {
         return new DataSourceTransactionManager(dataSource);
     }

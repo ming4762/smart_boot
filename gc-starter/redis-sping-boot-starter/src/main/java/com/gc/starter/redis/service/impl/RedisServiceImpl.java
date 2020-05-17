@@ -1,13 +1,13 @@
 package com.gc.starter.redis.service.impl;
 
 import com.gc.starter.redis.service.RedisService;
-import org.jetbrains.annotations.Nullable;
 import org.springframework.data.redis.connection.RedisStringCommands;
 import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.types.Expiration;
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.lang.NonNull;
+import org.springframework.lang.Nullable;
 
 import java.util.Collection;
 import java.util.Date;
@@ -101,7 +101,7 @@ public class RedisServiceImpl implements RedisService {
     }
 
     @Override
-    public <T> @Nullable T get(@NonNull Object key, @NonNull Class<T> clazz) {
+    public <T> T get(@NonNull Object key, @NonNull Class<T> clazz) {
         return (T) this.get(key);
     }
 

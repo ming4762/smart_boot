@@ -12,9 +12,9 @@ import com.gc.starter.crud.utils.CrudUtils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import lombok.extern.slf4j.Slf4j;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.lang.NonNull;
+import org.springframework.lang.Nullable;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -73,7 +73,7 @@ public abstract class BaseQueryController<K extends BaseService<T>, T extends Ba
      * @return
      */
     @Nullable
-    protected Page<T> doPage(@NotNull PageQueryParameter<String, Object> parameter) {
+    protected Page<T> doPage(@NonNull PageQueryParameter<String, Object> parameter) {
         Page<T> page = null;
         final Integer limit = parameter.getLimit();
         Integer offset = parameter.getOffset();
@@ -97,7 +97,7 @@ public abstract class BaseQueryController<K extends BaseService<T>, T extends Ba
      * @return
      */
     @Nullable
-    protected String analysisOrder(@NotNull PageQueryParameter<String, Object> parameter) {
+    protected String analysisOrder(@NonNull PageQueryParameter<String, Object> parameter) {
         final String sortName = parameter.getSortName();
         if (!StringUtils.isEmpty(sortName)) {
             final String sortOrder = parameter.getSortOrder();
@@ -128,7 +128,7 @@ public abstract class BaseQueryController<K extends BaseService<T>, T extends Ba
      * @param queryWrapper
      * @param keyword
      */
-    private void addKeyword(@NotNull QueryWrapper<T> queryWrapper, @NotNull String keyword) {
+    private void addKeyword(@NonNull QueryWrapper<T> queryWrapper, @NonNull String keyword) {
         final Class<? extends BaseModel>  clazz = CrudUtils.getModelClassByType(getModelType());
         if (clazz != null) {
             final Field[] fieldList = clazz.getDeclaredFields();
