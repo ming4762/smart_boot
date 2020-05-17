@@ -1,0 +1,8 @@
+auth:
+  login:
+    error:
+      noLogin: 用户未登录
+      usernamePasswordError: 用户名或密码错误
+      usernamePasswordNull: 用户名密码不能为空
+    success:
+      logout: 登出成功
