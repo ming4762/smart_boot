@@ -1,5 +1,6 @@
 package com.gc.auth.security.authentication;
 
+import com.gc.common.i18n.utils.I18nUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
@@ -39,7 +40,7 @@ public class RestAuthenticationProvider extends AbstractUserDetailsAuthenticatio
         final String password = authentication.getCredentials().toString();
         if (!StringUtils.equals(userDetails.getPassword(), password)) {
             logger.debug("登录失败：密码错误");
-            throw new InternalAuthenticationServiceException(USERNAME_PASSWORD_ERROR);
+            throw new InternalAuthenticationServiceException(I18nUtils.get("auth.exception.usernamePasswordError"));
         }
     }
 
@@ -51,7 +52,7 @@ public class RestAuthenticationProvider extends AbstractUserDetailsAuthenticatio
         }
         UserDetails user = this.restUserDetailsService.loadUserByUsername(username);
         if (ObjectUtils.isEmpty(user)) {
-            throw new InternalAuthenticationServiceException(USERNAME_PASSWORD_ERROR);
+            throw new InternalAuthenticationServiceException(I18nUtils.get("auth.exception.usernamePasswordError"));
         }
         return user;
     }

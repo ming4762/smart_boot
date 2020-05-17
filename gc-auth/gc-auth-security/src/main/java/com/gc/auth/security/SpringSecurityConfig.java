@@ -141,7 +141,6 @@ public class SpringSecurityConfig  extends WebSecurityConfigurerAdapter {
             http.cors().and().authorizeRequests().anyRequest().permitAll();
         } else {
             if (this.authProperties.isUrlCheck()) {
-//                http.authorizeRequests().and();
                 http.authorizeRequests()
                         .anyRequest()
                         .access("@dynamicUrlCheckProvider.hasUrlPermission(request, authentication)");
