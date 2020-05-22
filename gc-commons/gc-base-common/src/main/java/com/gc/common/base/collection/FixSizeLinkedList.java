@@ -10,7 +10,7 @@ import java.util.LinkedList;
  * @author shizhongming
  * 2020/5/8 11:15 上午
  */
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper = false)
 public class FixSizeLinkedList<T> extends LinkedList<T> {
     private static final long serialVersionUID = 175167908539941771L;
 

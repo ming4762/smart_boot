@@ -16,10 +16,7 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestBodyAdvice;
 
 import java.beans.IntrospectionException;
 import java.beans.PropertyDescriptor;
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Modifier;
-import java.lang.reflect.Type;
+import java.lang.reflect.*;
 
 /**
  * 参数处理类，将map转为queryParameter
@@ -43,6 +40,9 @@ public class ParameterConvertRequestBodyAdvice implements RequestBodyAdvice {
     @NonNull
     @Override
     public Object afterBodyRead(@NonNull Object body, @NonNull HttpInputMessage httpInputMessage, @NonNull MethodParameter methodParameter, @NonNull Type type, @NonNull Class<? extends HttpMessageConverter<?>> aClass) {
+        if (type instanceof ParameterizedType) {
+            type = ((ParameterizedType) type).getRawType();
+        }
         final Class clazz;
         if (type instanceof Class) {
             clazz = (Class) type;

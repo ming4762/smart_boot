@@ -12,6 +12,10 @@ public class I18nUtils {
 
     private static MessageSource messageSource;
 
+    private I18nUtils() {
+        throw new IllegalStateException("Utility class");
+    }
+
     /**
      * 通过key获取I18N信息
      * @param key key
