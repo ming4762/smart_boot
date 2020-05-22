@@ -18,6 +18,7 @@
         <module>gc-auth-common</module>
         <module>gc-base-common</module>
         <module>gc-cache-common</module>
+        <module>gc-i18n-common</module>
     </modules>
 
     <properties>
