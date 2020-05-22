@@ -4,8 +4,8 @@ import com.gc.module.file.model.SysFilePO;
 import com.gc.module.file.pojo.bo.SysFileBO;
 import com.gc.module.file.pojo.dto.SaveFileDTO;
 import com.gc.starter.crud.service.BaseService;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.springframework.lang.NonNull;
+import org.springframework.lang.Nullable;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -24,8 +24,8 @@ public interface SysFileService extends BaseService<SysFilePO> {
      * @return 文件实体
      * @throws IOException 异常信息
      */
-    @NotNull
-    SysFilePO saveFile(@NotNull MultipartFile multipartFile, @NotNull SaveFileDTO saveFileDTO) throws IOException;
+    @NonNull
+    SysFilePO saveFile(@NonNull MultipartFile multipartFile, @NonNull SaveFileDTO saveFileDTO) throws IOException;
 
     /**
      * 保存文件
@@ -33,8 +33,8 @@ public interface SysFileService extends BaseService<SysFilePO> {
      * @return 文件信息
      * @throws IOException 异常信息
      */
-    @NotNull
-    SysFilePO saveFile(@NotNull SysFileBO file)  throws IOException;
+    @NonNull
+    SysFilePO saveFile(@NonNull SysFileBO file)  throws IOException;
 
     /**
      * 保存文件
@@ -42,7 +42,7 @@ public interface SysFileService extends BaseService<SysFilePO> {
      * @param type 文件类型
      * @return 文件实体信息
      */
-    SysFilePO saveFile(@NotNull MultipartFile multipartFile, String type);
+    SysFilePO saveFile(@NonNull MultipartFile multipartFile, String type);
 
     /**
      * 删除文件
@@ -51,7 +51,7 @@ public interface SysFileService extends BaseService<SysFilePO> {
      * @return 文件信息
      */
     @Nullable
-    SysFilePO deleteFile(@NotNull Long fileId) throws IOException;
+    SysFilePO deleteFile(@NonNull Long fileId) throws IOException;
 
     /**
      * 批量删除文件
@@ -59,19 +59,19 @@ public interface SysFileService extends BaseService<SysFilePO> {
      * @throws IOException IOException
      * @return 删除是否成功
      */
-    boolean batchDeleteFile(@NotNull Collection<Long> fileIds) throws IOException;
+    boolean batchDeleteFile(@NonNull Collection<Long> fileIds) throws IOException;
 
     /**
      * 下载文件
      * @param fileId 文件ID
      * @return 文件信息
      */
-    SysFileBO download(@NotNull Long fileId);
+    SysFileBO download(@NonNull Long fileId);
 
     /**
      * 下载文件
      * @param file 文件实体类信息
      * @return 文件信息
      */
-    SysFileBO download(@NotNull SysFilePO file);
+    SysFileBO download(@NonNull SysFilePO file);
 }

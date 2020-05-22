@@ -2,6 +2,8 @@ package com.gc.common.auth.model;
 
 import lombok.*;
 
+import java.io.Serializable;
+
 /**
  * 权限信息
  * @author shizhongming
@@ -14,8 +16,9 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Permission {
+public class Permission implements Serializable {
 
+    private static final long serialVersionUID = -8062914682511384643L;
     /**
      * 请求方法
      */
@@ -23,5 +26,5 @@ public class Permission {
 
     private String url;
 
-    private String permission;
+    private String authority;
 }

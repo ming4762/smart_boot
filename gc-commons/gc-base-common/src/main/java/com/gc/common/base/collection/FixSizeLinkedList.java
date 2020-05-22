@@ -1,6 +1,6 @@
 package com.gc.common.base.collection;
 
-import org.apache.commons.lang3.StringUtils;
+import lombok.EqualsAndHashCode;
 
 import java.util.LinkedList;
 
@@ -10,6 +10,7 @@ import java.util.LinkedList;
  * @author shizhongming
  * 2020/5/8 11:15 上午
  */
+@EqualsAndHashCode
 public class FixSizeLinkedList<T> extends LinkedList<T> {
     private static final long serialVersionUID = 175167908539941771L;
 
@@ -24,7 +25,7 @@ public class FixSizeLinkedList<T> extends LinkedList<T> {
     }
 
     public  static <T> FixSizeLinkedList<T> init(int capacity) {
-        return new FixSizeLinkedList<T>(capacity);
+        return new FixSizeLinkedList<>(capacity);
     }
 
     @Override

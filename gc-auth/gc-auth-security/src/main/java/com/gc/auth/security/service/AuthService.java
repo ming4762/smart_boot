@@ -10,8 +10,7 @@ import com.gc.common.auth.utils.AuthUtils;
 import com.gc.common.base.http.HttpStatus;
 import com.google.common.collect.ImmutableList;
 import org.apache.commons.lang3.ObjectUtils;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.springframework.lang.NonNull;
 import org.springframework.security.core.Authentication;
 import org.springframework.util.Assert;
 
@@ -24,9 +23,9 @@ import java.util.Objects;
  */
 public class AuthService {
 
-    private AuthProperties authProperties;
+    private final AuthProperties authProperties;
 
-    private CacheService cacheService;
+    private final CacheService cacheService;
 
     private static final String KEY_PREFIX = "gc:session";
 
@@ -71,7 +70,6 @@ public class AuthService {
         String attributeKey = this.getAttributeKey(jwt);
 
         // 获取有效期
-        @Nullable
         Long timeout = this.cacheService.get(jwtKey, Long.class);
         if (ObjectUtils.isNotEmpty(timeout)) {
             this.cacheService.batchExpire(ImmutableList.of(jwtKey, attributeKey), timeout);
@@ -86,12 +84,12 @@ public class AuthService {
      * @param username 用户名
      * @return jst
      */
-    @NotNull
-    private String getTokenKey(@NotNull String username, @NotNull String jwt) {
+    @NonNull
+    private String getTokenKey(@NonNull String username, @NonNull String jwt) {
         return String.format("%s:jwt:%s:%s", KEY_PREFIX, username, jwt);
     }
 
-    public String getAttributeKey(@NotNull String jwt) {
+    public String getAttributeKey(@NonNull String jwt) {
         return String.format("%s:attribute:%s", KEY_PREFIX, jwt);
     }
 
@@ -99,7 +97,7 @@ public class AuthService {
      * 登出操作
      * @param request 请求体
      */
-    public void logout(@NotNull HttpServletRequest request) {
+    public void logout(@NonNull HttpServletRequest request) {
         String jwt = JwtUtil.getJwt(request);
         RestUserDetailsImpl user = AuthUtils.getCurrentUser();
         Assert.notNull(user, "系统发生未知异常：未找到当前用户");

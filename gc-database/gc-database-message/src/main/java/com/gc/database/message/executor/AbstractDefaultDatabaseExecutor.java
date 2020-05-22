@@ -44,10 +44,10 @@ public abstract class AbstractDefaultDatabaseExecutor implements DatabaseExecuto
     public @Nullable
     Connection getConnection(@NonNull DatabaseConnectionBO databaseConnection) throws SQLException {
         final String key = databaseConnection.createConnectionKey();
-        Connection connection = CacheUtils.CONNECTION_CACHE.get(key);
+        Connection connection = CacheUtils.getConnection(key);
         if (connection == null || connection.isClosed()) {
             connection = databaseConnection.connection();
-            CacheUtils.CONNECTION_CACHE.put(key, connection);
+            CacheUtils.setConnectionCache(key, connection);
         }
         return connection;
     }
@@ -81,7 +81,7 @@ public abstract class AbstractDefaultDatabaseExecutor implements DatabaseExecuto
         }
         boolean result = this.testConnection(connection);
         if (!result) {
-            CacheUtils.CONNECTION_CACHE.remove(key);
+            CacheUtils.removeConnection(key);
         }
         return result;
     }
@@ -108,7 +108,7 @@ public abstract class AbstractDefaultDatabaseExecutor implements DatabaseExecuto
                 return Lists.newArrayList();
             }
             ResultSet resultSet = connection.getMetaData().getTables(connection.getCatalog(), connection.getSchema(), null, types);
-            Map<String, Field> mapping = CacheUtils.DATABASE_FIELD_MAPPING.get(TableViewBO.class);
+            Map<String, Field> mapping = CacheUtils.getFieldMapping(TableViewBO.class);
             if (mapping == null) {
                 throw new SmartDatabaseException(ExceptionConstant.DATABASE_FILE_MAPPING_NOT_FOUND, TableViewBO.class.getName());
             }
@@ -132,7 +132,7 @@ public abstract class AbstractDefaultDatabaseExecutor implements DatabaseExecuto
                 return Lists.newArrayList();
             }
             ResultSet resultSet = connection.getMetaData().getPrimaryKeys(connection.getCatalog(), connection.getSchema(), tableName);
-            Map<String, Field> mapping = CacheUtils.DATABASE_FIELD_MAPPING.get(PrimaryKeyBO.class);
+            Map<String, Field> mapping = CacheUtils.getFieldMapping(PrimaryKeyBO.class);
             if (mapping == null) {
                 throw new SmartDatabaseException(ExceptionConstant.DATABASE_FILE_MAPPING_NOT_FOUND, PrimaryKeyBO.class.getName());
             }
@@ -156,7 +156,7 @@ public abstract class AbstractDefaultDatabaseExecutor implements DatabaseExecuto
                 return Lists.newArrayList();
             }
             ResultSet resultSet = connection.getMetaData().getImportedKeys(connection.getCatalog(), connection.getSchema(), tableName);
-            Map<String, Field> mapping = CacheUtils.DATABASE_FIELD_MAPPING.get(ImportKeyBO.class);
+            Map<String, Field> mapping = CacheUtils.getFieldMapping(ImportKeyBO.class);
             if (mapping == null) {
                 throw new SmartDatabaseException(ExceptionConstant.DATABASE_FILE_MAPPING_NOT_FOUND, ImportKeyBO.class.getName());
             }
@@ -188,7 +188,7 @@ public abstract class AbstractDefaultDatabaseExecutor implements DatabaseExecuto
                 unique = true;
             }
             ResultSet resultSet = connection.getMetaData().getIndexInfo(connection.getCatalog(), connection.getSchema(), tableName, unique, approximate);
-            Map<String, Field> mapping = CacheUtils.DATABASE_FIELD_MAPPING.get(IndexBO.class);
+            Map<String, Field> mapping = CacheUtils.getFieldMapping(IndexBO.class);
             if (mapping == null) {
                 throw new SmartDatabaseException(ExceptionConstant.DATABASE_FILE_MAPPING_NOT_FOUND, IndexBO.class.getName());
             }
@@ -213,7 +213,7 @@ public abstract class AbstractDefaultDatabaseExecutor implements DatabaseExecuto
                 return Lists.newArrayList();
             }
             ResultSet resultSet = connection.getMetaData().getColumns(connection.getCatalog(), connection.getSchema(), tableName, null);
-            Map<String, Field> mapping = CacheUtils.DATABASE_FIELD_MAPPING.get(ColumnBO.class);
+            Map<String, Field> mapping = CacheUtils.getFieldMapping(ColumnBO.class);
             if (mapping == null) {
                 throw new SmartDatabaseException(ExceptionConstant.DATABASE_FILE_MAPPING_NOT_FOUND, ColumnBO.class.getName());
             }
@@ -252,7 +252,7 @@ public abstract class AbstractDefaultDatabaseExecutor implements DatabaseExecuto
                 // TODO:查询其他索引
                 // 设置其他信息
                 columnList.forEach(item -> {
-                    TypeMappingConstant typeMappingConstant = CacheUtils.TYPE_MAPPING_CACHE.get(item.getDataType());
+                    TypeMappingConstant typeMappingConstant = CacheUtils.getFieldMapping(item.getDataType());
                     if (typeMappingConstant != null) {
                         item.setJavaType(typeMappingConstant.getJavaClass().getName());
                         item.setSimpleJavaType(typeMappingConstant.getJavaClass().getSimpleName());
@@ -280,12 +280,12 @@ public abstract class AbstractDefaultDatabaseExecutor implements DatabaseExecuto
      * 映射数据库字段与实体类属性关系
      */
     private static void mappingDatabaseFieldToCache() {
-        if (CacheUtils.DATABASE_FIELD_MAPPING.isEmpty()) {
-            CacheUtils.DATABASE_FIELD_MAPPING.put(TableViewBO.class, mappingDatabaseField(TableViewBO.class));
-            CacheUtils.DATABASE_FIELD_MAPPING.put(PrimaryKeyBO.class, mappingDatabaseField(PrimaryKeyBO.class));
-            CacheUtils.DATABASE_FIELD_MAPPING.put(IndexBO.class, mappingDatabaseField(IndexBO.class));
-            CacheUtils.DATABASE_FIELD_MAPPING.put(ImportKeyBO.class, mappingDatabaseField(ImportKeyBO.class));
-            CacheUtils.DATABASE_FIELD_MAPPING.put(ColumnBO.class, mappingDatabaseField(ColumnBO.class));
+        if (CacheUtils.isFieldMappingEmpty()) {
+            CacheUtils.setFieldMapping(TableViewBO.class, mappingDatabaseField(TableViewBO.class));
+            CacheUtils.setFieldMapping(PrimaryKeyBO.class, mappingDatabaseField(PrimaryKeyBO.class));
+            CacheUtils.setFieldMapping(IndexBO.class, mappingDatabaseField(IndexBO.class));
+            CacheUtils.setFieldMapping(ImportKeyBO.class, mappingDatabaseField(ImportKeyBO.class));
+            CacheUtils.setFieldMapping(ColumnBO.class, mappingDatabaseField(ColumnBO.class));
         }
     }
 
@@ -293,7 +293,7 @@ public abstract class AbstractDefaultDatabaseExecutor implements DatabaseExecuto
      * 初始化类型映射
      */
     private static void initTypeMappingCache() {
-        CacheUtils.TYPE_MAPPING_CACHE.putAll(
+        CacheUtils.setTypeMapping(
                 Arrays.stream(TypeMappingConstant.values())
                 .collect(Collectors.toMap(TypeMappingConstant :: getDataType, item -> item))
         );

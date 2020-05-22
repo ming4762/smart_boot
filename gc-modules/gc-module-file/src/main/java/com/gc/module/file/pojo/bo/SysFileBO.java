@@ -9,7 +9,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import org.apache.commons.lang3.StringUtils;
-import org.jetbrains.annotations.NotNull;
+import org.springframework.lang.NonNull;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -28,7 +28,7 @@ public class SysFileBO {
 
     private InputStream inputStream;
 
-    public SysFileBO(@NotNull MultipartFile multipartFile, String filename, String type) throws IOException {
+    public SysFileBO(@NonNull MultipartFile multipartFile, String filename, String type) throws IOException {
         this.file = SysFilePO.builder()
                 .fileId(IdGenerator.nextId())
                 .fileName(StringUtils.isEmpty(filename) ? multipartFile.getOriginalFilename() : filename)

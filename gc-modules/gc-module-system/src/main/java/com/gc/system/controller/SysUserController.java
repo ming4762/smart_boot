@@ -38,7 +38,7 @@ public class SysUserController extends BaseController<AuthUserService, SysUserPO
     @ApiOperation("添加/更新用户")
     @Log(value = "添加/更新用户", type = LogType.UPDATE)
     @PreAuthorize("hasPermission('sys:user', 'save') or hasPermission('sys:user', 'update')")
-    protected Result<Boolean> saveUpdate(@RequestBody SysUserPO model) {
+    public Result<Boolean> saveUpdate(@RequestBody SysUserPO model) {
         return super.saveUpdate(model);
     }
 
@@ -47,7 +47,7 @@ public class SysUserController extends BaseController<AuthUserService, SysUserPO
     @ApiOperation("添加用户")
     @Log(value = "添加用户", type = LogType.ADD)
     @PreAuthorize("hasPermission('sys:user', 'save')")
-    protected Result<Boolean> save(@RequestBody SysUserPO model) {
+    public Result<Boolean> save(@RequestBody SysUserPO model) {
         return super.save(model);
     }
 
@@ -56,7 +56,7 @@ public class SysUserController extends BaseController<AuthUserService, SysUserPO
     @ApiOperation("更新用户")
     @Log(value = "更新用户", type = LogType.UPDATE)
     @PreAuthorize("hasPermission('sys:user', 'update')")
-    protected Result<Boolean> update(@RequestBody SysUserPO model) {
+    public Result<Boolean> update(@RequestBody SysUserPO model) {
         return super.update(model);
     }
 
@@ -64,7 +64,7 @@ public class SysUserController extends BaseController<AuthUserService, SysUserPO
     @PostMapping("list")
     @ApiOperation(value = "查询用户列表（支持分页、实体类属性查询）")
     @PreAuthorize("hasPermission('sys:user', 'query')")
-    protected Result<Object> list(@RequestBody PageQueryParameter<String, Object> parameter) {
+    public Result<Object> list(@RequestBody PageQueryParameter<String, Object> parameter) {
         return super.list(parameter);
     }
 

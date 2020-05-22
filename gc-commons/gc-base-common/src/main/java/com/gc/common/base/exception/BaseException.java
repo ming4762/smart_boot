@@ -11,27 +11,31 @@ import org.springframework.http.HttpStatus;
  */
 @Getter
 @NoArgsConstructor
-@AllArgsConstructor
 public class BaseException extends RuntimeException {
     private static final long serialVersionUID = 5741320275497601133L;
 
-    private Integer code = HttpStatus.INTERNAL_SERVER_ERROR.value();
+    private Integer code;
 
-    private String message = "系统发生未知错误";
+    private String message;
 
     private Throwable e;
 
-
     public BaseException(String message) {
+        this(message, null);
+    }
+
+    public BaseException(Integer code, String message, Throwable e) {
+        super(message, e);
+        this.code = code;
         this.message = message;
+        this.e = e;
     }
 
     public BaseException(String message, Throwable e) {
-        this.e = e;
-        this.message = message;
+        this(HttpStatus.INTERNAL_SERVER_ERROR.value(), message, e);
     }
 
     public BaseException(Throwable e) {
-        this.e = e;
+        this(500, "系统发生未知错误", e);
     }
 }

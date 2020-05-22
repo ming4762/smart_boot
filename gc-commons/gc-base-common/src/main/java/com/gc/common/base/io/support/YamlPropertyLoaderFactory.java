@@ -1,5 +1,6 @@
 package com.gc.common.base.io.support;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.boot.env.YamlPropertySourceLoader;
 import org.springframework.core.env.PropertySource;
 import org.springframework.core.io.support.DefaultPropertySourceFactory;
@@ -21,7 +22,7 @@ public class YamlPropertyLoaderFactory extends DefaultPropertySourceFactory {
     @NonNull
     public PropertySource<?> createPropertySource(@Nullable String name, @NonNull EncodedResource resource) throws IOException {
         List<PropertySource<?>> propertySourceList =  new YamlPropertySourceLoader().load(resource.getResource().getFilename(), resource.getResource());
-        if (propertySourceList != null && propertySourceList.size() > 0) {
+        if (CollectionUtils.isNotEmpty(propertySourceList)) {
             return propertySourceList.get(0);
         } else {
             return super.createPropertySource(name, resource);

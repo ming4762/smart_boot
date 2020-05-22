@@ -40,7 +40,7 @@ public class RestPermissionEvaluatorImpl implements PermissionEvaluator {
         // 验证权限
         final String permissionStr = String.join(":", targetDomainObject.toString(), permission.toString());
         Set<String> permissions = user.getPermissions().stream()
-                .map(Permission::getPermission)
+                .map(Permission::getAuthority)
                 .collect(Collectors.toSet());
         return permissions.contains(permissionStr);
     }

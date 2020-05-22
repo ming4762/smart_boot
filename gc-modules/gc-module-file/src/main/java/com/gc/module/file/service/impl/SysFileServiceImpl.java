@@ -15,9 +15,9 @@ import com.gc.starter.file.serice.ActualFileService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.lang.NonNull;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
@@ -48,7 +48,8 @@ public class SysFileServiceImpl extends BaseServiceImpl<SysFileMapper, SysFilePO
      */
     @Override
     @Transactional(value = FileDatabaseConstants.TRANSACTION_MANAGER, rollbackFor = Exception.class)
-    public @NotNull SysFilePO saveFile(@NotNull MultipartFile multipartFile, @NotNull SaveFileDTO saveFileDto) throws IOException {
+    public @NonNull
+    SysFilePO saveFile(@NonNull MultipartFile multipartFile, @NonNull SaveFileDTO saveFileDto) throws IOException {
         return this.saveFile(new SysFileBO(multipartFile, saveFileDto.getFilename(), saveFileDto.getType()));
     }
 
@@ -59,7 +60,7 @@ public class SysFileServiceImpl extends BaseServiceImpl<SysFileMapper, SysFilePO
      */
     @Override
     @Transactional(value = FileDatabaseConstants.TRANSACTION_MANAGER, rollbackFor = Exception.class)
-    public @NotNull SysFilePO saveFile(@NotNull SysFileBO file) throws IOException {
+    public @NonNull SysFilePO saveFile(@NonNull SysFileBO file) throws IOException {
         // 根据md5判断文件是否存在
         final List<SysFilePO> md5FileList = this.list(
                 new QueryWrapper<SysFilePO>().lambda().eq(SysFilePO :: getMd5, file.getFile().getMd5())
@@ -93,7 +94,7 @@ public class SysFileServiceImpl extends BaseServiceImpl<SysFileMapper, SysFilePO
      */
     @Override
     @Transactional(value = FileDatabaseConstants.TRANSACTION_MANAGER, rollbackFor = Exception.class)
-    public SysFilePO saveFile(@NotNull MultipartFile multipartFile, String type) {
+    public SysFilePO saveFile(@NonNull MultipartFile multipartFile, String type) {
         final SysFilePO file = new SysFilePO();
         file.setType(type);
         try {
@@ -109,7 +110,7 @@ public class SysFileServiceImpl extends BaseServiceImpl<SysFileMapper, SysFilePO
      * @return 文件信息
      */
     @Override
-    public @Nullable SysFilePO deleteFile(@NotNull Long fileId) throws IOException {
+    public @Nullable SysFilePO deleteFile(@NonNull Long fileId) throws IOException {
         final SysFilePO file = this.getById(fileId);
         if (ObjectUtils.isNotEmpty(file)) {
             // 删除文件信息
@@ -129,7 +130,7 @@ public class SysFileServiceImpl extends BaseServiceImpl<SysFileMapper, SysFilePO
      * @return 删除是否成功
      */
     @Override
-    public boolean batchDeleteFile(@NotNull Collection<Long> fileIds) throws IOException {
+    public boolean batchDeleteFile(@NonNull Collection<Long> fileIds) throws IOException {
         if (!fileIds.isEmpty()) {
             final List<SysFilePO> fileList = this.listByIds(fileIds);
             this.removeByIds(fileIds);
@@ -151,7 +152,7 @@ public class SysFileServiceImpl extends BaseServiceImpl<SysFileMapper, SysFilePO
      */
     @Override
     @Nullable
-    public SysFileBO download(@NotNull Long fileId) {
+    public SysFileBO download(@NonNull Long fileId) {
         final SysFilePO file = this.getById(fileId);
         if (ObjectUtils.isNotEmpty(file)) {
             return this.download(file);
@@ -165,8 +166,8 @@ public class SysFileServiceImpl extends BaseServiceImpl<SysFileMapper, SysFilePO
      * @return 文件信息
      */
     @Override
-    @NotNull
-    public SysFileBO download(@NotNull SysFilePO file) {
+    @NonNull
+    public SysFileBO download(@NonNull SysFilePO file) {
         Assert.notNull(file.getDbId(), "实际文件ID未空，删除失败");
         try {
             return new SysFileBO(file, this.actualFileService.download(file.getDbId()));

@@ -91,7 +91,7 @@ public class LoginController {
                 .roles(userDetails.getRoles())
                 .permissions(
                         Optional.ofNullable(userDetails.getPermissions())
-                        .map(item -> item.stream().map(Permission :: getPermission).collect(Collectors.toSet()))
+                        .map(item -> item.stream().map(Permission ::getAuthority).collect(Collectors.toSet()))
                         .orElse(Sets.newHashSet())
                 )
                 .build();

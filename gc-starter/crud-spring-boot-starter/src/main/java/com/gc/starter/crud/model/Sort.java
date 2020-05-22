@@ -11,16 +11,16 @@ import org.springframework.lang.NonNull;
 @Getter
 public final class Sort {
     @NonNull
-    private String name;
+    private final String name;
 
     @NonNull
-    private String order;
+    private final String order;
 
     /**
      * 对应的数据库字段
      */
     @NonNull
-    private String dbName;
+    private final String dbName;
 
     public Sort(@NonNull String name, @NonNull String order, @NonNull String dbName) {
         this.name = name;

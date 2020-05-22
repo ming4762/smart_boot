@@ -10,8 +10,8 @@ import com.gc.common.auth.model.SysUserPO;
 import com.gc.common.auth.service.AuthUserService;
 import com.google.common.collect.Sets;
 import org.apache.commons.lang3.StringUtils;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.http.HttpMethod;
+import org.springframework.lang.NonNull;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
@@ -50,7 +50,7 @@ public class RestUserDetailsServiceImpl implements UserDetailsService{
                   Permission.builder()
                   .method(HttpMethod.POST.name())
                   .url("/sys/userGroup/list")
-                  .permission("sys:test")
+                  .authority("sys:test")
                   .build()
           )
         );
@@ -60,8 +60,8 @@ public class RestUserDetailsServiceImpl implements UserDetailsService{
         return restUserDetails;
     }
 
-    @NotNull
-    private static RestUserDetailsImpl createByUser(@NotNull SysUserPO user) {
+    @NonNull
+    private static RestUserDetailsImpl createByUser(@NonNull SysUserPO user) {
         final RestUserDetailsImpl restUserDetails = new RestUserDetailsImpl();
         restUserDetails.setUserId(user.getUserId());
         restUserDetails.setRealname(user.getRealname());
