@@ -3,7 +3,7 @@ package com.gc.starter.async.timeout;
 import com.gc.starter.async.timeout.aspect.TimeoutAspect;
 import com.gc.starter.async.timeout.handler.DefaultTimeoutHandler;
 import com.gc.starter.async.timeout.handler.TimeoutHandler;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -15,8 +15,8 @@ import org.springframework.context.annotation.Configuration;
 public class TimeoutConfig {
 
     @Bean
-    public TimeoutAspect timeoutAspect(TimeoutHandler timeoutHandler) {
-        return new TimeoutAspect(timeoutHandler);
+    public TimeoutAspect timeoutAspect(ApplicationContext applicationContext) {
+        return new TimeoutAspect(applicationContext);
     }
 
     /**
@@ -24,7 +24,6 @@ public class TimeoutConfig {
      * @return
      */
     @Bean
-    @ConditionalOnMissingBean
     public TimeoutHandler timeoutHandler() {
         return new DefaultTimeoutHandler();
     }

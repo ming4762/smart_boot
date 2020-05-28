@@ -2,6 +2,7 @@ package com.gc.starter.async.timeout.aspect;
 
 import com.gc.starter.async.timeout.annotation.Timeout;
 import com.gc.starter.async.timeout.handler.CompleteHandler;
+import com.gc.starter.async.timeout.handler.DefaultTimeoutHandler;
 import com.gc.starter.async.timeout.handler.TimeoutHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -10,11 +11,14 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
+import org.springframework.beans.factory.BeanNotOfRequiredTypeException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.Assert;
+import org.springframework.util.StringUtils;
 import org.springframework.web.context.request.async.WebAsyncTask;
 
 import java.lang.reflect.Method;
@@ -29,12 +33,13 @@ import java.util.Objects;
 @Slf4j
 public class TimeoutAspect {
 
-    private final TimeoutHandler timeoutHandler;
+
+    private final ApplicationContext applicationContext;
 
     private CompleteHandler completeHandler;
 
-    public TimeoutAspect(TimeoutHandler timeoutHandler) {
-        this.timeoutHandler = timeoutHandler;
+    public TimeoutAspect(ApplicationContext applicationContext) {
+        this.applicationContext = applicationContext;
     }
 
     /**
@@ -45,6 +50,12 @@ public class TimeoutAspect {
         // 切点
     }
 
+    /**
+     * 超时执行逻辑
+     * @param point 切点
+     * @return 执行结果
+     * @throws Throwable
+     */
     @Around("timeoutPointCut()")
     public Object around(ProceedingJoinPoint point) throws Throwable {
         final Signature signature = point.getSignature();
@@ -63,9 +74,9 @@ public class TimeoutAspect {
 
     /**
      * 执行timeout检查
-     * @param method
-     * @param point
-     * @return
+     * @param method 目标方法
+     * @param point 切点
+     * @return 异步执行任务
      */
     private Object doAsyncTimeout(@NonNull Method method, @NonNull ProceedingJoinPoint point) {
         final Timeout timeoutAnnotation = AnnotationUtils.findAnnotation(method, Timeout.class);
@@ -83,17 +94,45 @@ public class TimeoutAspect {
                 throw new RuntimeException(throwable);
             }
         });
-        webAsyncTask.onTimeout(() -> {
-            return this.timeoutHandler.handler(point, webAsyncTask);
-        });
-        webAsyncTask.onCompletion(() -> {
-            if (!Objects.isNull(this.completeHandler)) {
-                this.completeHandler.handler(point, webAsyncTask, result[0]);
-            }
-        });
+        // 绑定超时操作
+        webAsyncTask.onTimeout(() -> this.getTimeoutHandler(timeoutAnnotation).handler(point, webAsyncTask));
+        // 绑定执行结束操作
+        if (!Objects.isNull(this.completeHandler)) {
+            webAsyncTask.onCompletion(() -> this.completeHandler.handler(point, webAsyncTask, result[0]));
+        }
         return webAsyncTask;
     }
 
+    /**
+     * 获取超时执行器
+     * @param timeoutAnnotation 超时注解
+     * @return 超时执行器
+     */
+    @NonNull
+    private TimeoutHandler getTimeoutHandler(@NonNull Timeout timeoutAnnotation) {
+        // 获取类型/名字
+        final Class<? extends TimeoutHandler> clazz = timeoutAnnotation.handlerClass();
+        final String beanName = timeoutAnnotation.handlerName();
+        boolean userName = false;
+        if (Objects.equals(clazz, DefaultTimeoutHandler.class) && !StringUtils.isEmpty(beanName)) {
+            userName = true;
+        }
+        if (userName) {
+            Object bean = this.applicationContext.getBean(beanName);
+            // 类型不匹配抛出异常
+            if (!(bean instanceof TimeoutHandler)) {
+                throw new BeanNotOfRequiredTypeException(beanName, TimeoutHandler.class, bean.getClass());
+            }
+            return (TimeoutHandler) bean;
+        } else {
+            return this.applicationContext.getBean(clazz);
+        }
+    }
+
+    /**
+     * 注入结束执行器
+     * @param completeHandler 结束执行器
+     */
     @Autowired(required = false)
     public void setCompleteHandler(CompleteHandler completeHandler) {
         this.completeHandler = completeHandler;
