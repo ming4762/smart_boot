@@ -18,6 +18,7 @@
 	</properties>
 
 	<modules>
+		<module>async-spring-boot-starter</module>
 		<module>crud-spring-boot-starter</module>
 		<module>file-spring-boot-starter</module>
 		<module>log-spring-boot-starter</module>
