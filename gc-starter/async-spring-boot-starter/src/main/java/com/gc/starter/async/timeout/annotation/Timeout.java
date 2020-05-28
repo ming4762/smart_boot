@@ -21,7 +21,7 @@ public @interface Timeout {
      * 超时时间
      * @return
      */
-    long value() default Long.MIN_VALUE;
+    long value() default Long.MAX_VALUE;
 
     /**
      * 执行器名称
