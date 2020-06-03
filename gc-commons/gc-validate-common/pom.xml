@@ -3,29 +3,24 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <artifactId>gc-boot</artifactId>
         <groupId>com.gc</groupId>
+        <artifactId>gc-commons</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
-    <artifactId>gc-commons</artifactId>
+    <artifactId>gc-validate-common</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>gc-commons</name>
-    <description>Demo project for Spring Boot</description>
-
-    <packaging>pom</packaging>
-
-    <modules>
-        <module>gc-auth-common</module>
-        <module>gc-base-common</module>
-        <module>gc-cache-common</module>
-        <module>gc-i18n-common</module>
-        <module>gc-validate-common</module>
-    </modules>
+    <name>gc-validate-common</name>
+    <description>校验工具包</description>
 
     <properties>
     </properties>
 
     <dependencies>
-
+        <dependency>
+            <groupId>jakarta.validation</groupId>
+            <artifactId>jakarta.validation-api</artifactId>
+        </dependency>
     </dependencies>
+
+
 </project>
