@@ -7,9 +7,9 @@ import java.util.regex.Pattern;
  * @author shizhongming
  * 2020/6/2 2:05 下午
  */
-public final class ValidateorUtils {
+public final class ValidatorUtils {
 
-    private ValidateorUtils() {
+    private ValidatorUtils() {
         throw new IllegalStateException("Utility class");
     }
 

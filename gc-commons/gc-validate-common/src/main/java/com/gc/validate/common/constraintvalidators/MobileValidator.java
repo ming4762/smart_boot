@@ -1,7 +1,7 @@
 package com.gc.validate.common.constraintvalidators;
 
 import com.gc.validate.common.constraints.Mobile;
-import com.gc.validate.common.utils.ValidateorUtils;
+import com.gc.validate.common.utils.ValidatorUtils;
 import org.springframework.util.StringUtils;
 
 import javax.validation.ConstraintValidator;
@@ -25,6 +25,6 @@ public class MobileValidator implements ConstraintValidator<Mobile, String> {
         if (StringUtils.isEmpty(value)) {
             return true;
         }
-        return ValidateorUtils.checkMobile(value);
+        return ValidatorUtils.checkMobile(value);
     }
 }
