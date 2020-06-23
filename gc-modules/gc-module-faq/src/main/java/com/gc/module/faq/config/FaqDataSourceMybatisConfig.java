@@ -49,7 +49,6 @@ public class FaqDataSourceMybatisConfig {
         return new SqlSessionTemplate(sqlSessionFactory);
     }
 
-//    @Bean(name = TransactionManagerConstants.FAQ_MANAGER)
     public DataSourceTransactionManager faqTransactionManager(@Qualifier("faqDataSource") DataSource dataSource) {
         return new DataSourceTransactionManager(dataSource);
     }

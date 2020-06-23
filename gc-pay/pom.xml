@@ -18,6 +18,7 @@
 
     <modules>
         <module>gc-pay-core</module>
+        <module>gc-pay-ali</module>
     </modules>
 
     <dependencies>

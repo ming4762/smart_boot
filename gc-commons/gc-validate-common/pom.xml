@@ -8,7 +8,7 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
     <artifactId>gc-validate-common</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>${gc-boot.version}</version>
     <name>gc-validate-common</name>
     <description>校验工具包</description>
 

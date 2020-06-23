@@ -8,7 +8,7 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
     <artifactId>gc-auth-shiro</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>${gc-boot.version}</version>
     <name>gc-auth-shiro</name>
     <description>shiro权限认证器</description>
 

@@ -8,7 +8,7 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
     <artifactId>i18n-spring-boot-starter</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>${gc-boot.version}</version>
     <name>i18n-spring-boot-starter</name>
     <description>i18n支持</description>
 

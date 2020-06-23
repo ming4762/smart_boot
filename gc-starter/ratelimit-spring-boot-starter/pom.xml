@@ -8,7 +8,7 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
     <artifactId>ratelimit-spring-boot-starter</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>${gc-boot.version}</version>
     <name>ratelimit-spring-boot-starter</name>
     <description>限流启动器</description>
 

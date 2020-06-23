@@ -8,7 +8,7 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
     <artifactId>log-spring-boot-starter</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>${gc-boot.version}</version>
     <name>log-spring-boot-starter</name>
     <description>Demo project for Spring Boot</description>
 

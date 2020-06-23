@@ -7,21 +7,17 @@
         <artifactId>gc-boot</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
-    <artifactId>gc-modules</artifactId>
-    <version>${gc-boot.version}</version>
-    <name>gc-modules</name>
-    <description>模块</description>
-
+    <artifactId>gc-monitor</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>gc-monitor</name>
+    <description>监控模块</description>
     <packaging>pom</packaging>
 
     <properties>
     </properties>
 
     <modules>
-        <module>gc-module-code</module>
-        <module>gc-module-faq</module>
-        <module>gc-module-file</module>
-        <module>gc-module-system</module>
+        <module>gc-monitor-server</module>
     </modules>
 
     <dependencies>

@@ -8,7 +8,7 @@
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 	<artifactId>gc-auth-common</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>${gc-boot.version}</version>
 	<name>gc-auth-common</name>
 	<description>认证模块common</description>
 

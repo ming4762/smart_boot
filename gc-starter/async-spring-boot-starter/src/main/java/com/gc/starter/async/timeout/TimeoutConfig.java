@@ -20,8 +20,8 @@ public class TimeoutConfig {
     }
 
     /**
-     * 构建超时执行器
-     * @return
+     * 构建默认timeout执行器
+     * @return 默认timeout执行器
      */
     @Bean
     public TimeoutHandler timeoutHandler() {

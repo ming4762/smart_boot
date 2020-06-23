@@ -8,7 +8,7 @@
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 	<artifactId>gc-module-file</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>${gc-boot.version}</version>
 	<name>gc-module-file</name>
 	<description>文件管理模块</description>
 

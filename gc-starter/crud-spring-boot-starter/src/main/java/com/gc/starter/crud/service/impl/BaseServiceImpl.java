@@ -8,8 +8,8 @@ import com.baomidou.mybatisplus.core.toolkit.Assert;
 import com.baomidou.mybatisplus.core.toolkit.ReflectionKit;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.gc.common.base.exception.BaseException;
 import com.gc.common.base.exception.IllegalAccessRuntimeException;
+import com.gc.common.base.exception.IntrospectionRuntimeException;
 import com.gc.common.base.exception.InvocationTargetRuntimeException;
 import com.gc.common.base.exception.NoSuchMethodRuntimeException;
 import com.gc.common.base.utils.ReflectUtil;
@@ -27,6 +27,7 @@ import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 
+import java.beans.IntrospectionException;
 import java.beans.PropertyDescriptor;
 import java.io.Serializable;
 import java.lang.reflect.Field;
@@ -209,8 +210,12 @@ public abstract class BaseServiceImpl<K extends CrudBaseMapper<T>, T extends Bas
             try {
                 PropertyDescriptor propertyDescriptor = new PropertyDescriptor(tableInfo.getKeyProperty(), entity.getClass());
                 propertyDescriptor.getWriteMethod().invoke(entity, IdGenerator.nextId());
-            } catch (Exception e) {
-                throw new BaseException(e.getMessage(), e);
+            } catch (IllegalAccessException e) {
+                throw new IllegalAccessRuntimeException(e);
+            } catch (IntrospectionException e) {
+                throw new IntrospectionRuntimeException(e);
+            } catch (InvocationTargetException e) {
+                throw new InvocationTargetRuntimeException(e);
             }
         }
     }
@@ -372,9 +377,9 @@ public abstract class BaseServiceImpl<K extends CrudBaseMapper<T>, T extends Bas
     }
 
     /**
-     * 判断是否是添加
-     * @param entity
-     * @return
+     * 判断是否是保存操作
+     * @param entity 实体类
+     * @return 是否执行保存
      */
     protected boolean isAdd(@NonNull T entity) {
         Serializable key = this.getKeyValue(entity);

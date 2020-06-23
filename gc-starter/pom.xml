@@ -8,7 +8,7 @@
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 	<artifactId>gc-starter</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>${gc-boot.version}</version>
 	<name>gc-starter</name>
 	<description>启动器</description>
 
@@ -21,7 +21,9 @@
 		<module>async-spring-boot-starter</module>
 		<module>crud-spring-boot-starter</module>
 		<module>file-spring-boot-starter</module>
+		<module>i18n-spring-boot-starter</module>
 		<module>log-spring-boot-starter</module>
+		<module>ratelimit-spring-boot-starter</module>
 		<module>redis-sping-boot-starter</module>
 	</modules>
 

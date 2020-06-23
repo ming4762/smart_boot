@@ -1,5 +1,7 @@
 package com.gc.starter.ratelimit;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
@@ -8,6 +10,8 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * 2020/4/16 2:08 下午
  */
 @ConfigurationProperties(prefix = "gc.limit")
+@Getter
+@Setter
 public class RateLimiterProperties {
 
     /**
