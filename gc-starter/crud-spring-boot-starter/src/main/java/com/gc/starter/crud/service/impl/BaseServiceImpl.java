@@ -26,6 +26,7 @@ import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.beans.IntrospectionException;
 import java.beans.PropertyDescriptor;
@@ -78,6 +79,7 @@ public abstract class BaseServiceImpl<K extends CrudBaseMapper<T>, T extends Bas
      * @return 删除数量
      */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public @NonNull Integer batchDelete(@NonNull List<T> modelList) {
         int num;
         final List<String> keyList = this.getKeyList();
@@ -107,6 +109,7 @@ public abstract class BaseServiceImpl<K extends CrudBaseMapper<T>, T extends Bas
      * @return 删除结果
      */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public boolean removeByIds(Collection<? extends Serializable> idList) {
         if (idList.size() == 1) {
             return this.removeById(idList.iterator().next());
@@ -166,6 +169,7 @@ public abstract class BaseServiceImpl<K extends CrudBaseMapper<T>, T extends Bas
      * @return 是否保存成功
      */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public boolean saveBatch(Collection<T> entityList, int batchSize) {
         if (ObjectUtils.isEmpty(entityList)) {
             return false;
