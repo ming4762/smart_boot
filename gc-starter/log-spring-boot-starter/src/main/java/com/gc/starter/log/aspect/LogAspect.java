@@ -1,16 +1,16 @@
 package com.gc.starter.log.aspect;
 
-import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.toolkit.IdWorker;
-import com.gc.common.auth.utils.AuthUtils;
 import com.gc.common.base.exception.handler.GlobalExceptionHandler;
 import com.gc.common.base.message.Result;
+import com.gc.common.base.utils.AopUtils;
 import com.gc.common.base.utils.IpUtils;
+import com.gc.common.base.utils.JsonUtils;
 import com.gc.starter.log.LogProperties;
 import com.gc.starter.log.annotation.Log;
 import com.gc.starter.log.constants.LogIdentConstant;
+import com.gc.starter.log.handler.LogHandler;
 import com.gc.starter.log.model.SysLogPO;
-import com.gc.starter.log.service.SysLogService;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.BooleanUtils;
@@ -21,6 +21,7 @@ import org.aspectj.lang.Signature;
 import org.aspectj.lang.annotation.*;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.lang.Nullable;
 import org.springframework.util.StringUtils;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -45,22 +46,22 @@ public final class LogAspect {
     /**
      * 保存日志的编码集合
      */
-    private static List<Integer> codeList;
+    private List<Integer> codeList;
 
     @Autowired
     private LogProperties logProperties;
 
     @Autowired
-    private SysLogService logService;
+    private LogHandler logHandler;
 
     @PostConstruct
     public void init() {
-        if (LogAspect.codeList == null) {
+        if (this.codeList == null) {
             String codes = this.logProperties.getCodes();
             if (StringUtils.isEmpty(codes)) {
-                LogAspect.codeList = Lists.newArrayList();
+                this.codeList = Lists.newArrayList();
             } else {
-                LogAspect.codeList = Arrays.stream(codes.split(","))
+                this.codeList = Arrays.stream(codes.split(","))
                         .map(code -> Integer.parseInt(code.trim()))
                         .collect(Collectors.toList());
             }
@@ -78,7 +79,7 @@ public final class LogAspect {
     /**
      * 环绕
      * @param point 切入点
-     * @return
+     * @return 结果
      */
     @Around("logPointCut()")
     public Object around(ProceedingJoinPoint point) throws Throwable {
@@ -107,7 +108,7 @@ public final class LogAspect {
 
     /**
      * 执行前
-     * @param point
+     * @param point 切点
      */
     @Before("logPointCut()")
     private void before(JoinPoint point) {
@@ -162,7 +163,7 @@ public final class LogAspect {
                     }
                 }
                 if (saveLog) {
-                    this.doSaveLog(point, signature, logAnnotation, time, code, errorMessage);
+                    this.doSaveLog(point, result, signature, logAnnotation, time, code, errorMessage);
                 }
 
             }
@@ -173,23 +174,19 @@ public final class LogAspect {
 
     /**
      * 执行保存日志
-     * @param point
-     * @param signature
-     * @param logAnnotation
-     * @param time
-     * @param code
-     * @param errorMessage
+     * @param point 切面
+     * @param signature signature
+     * @param logAnnotation 日志注解
+     * @param time 用户
+     * @param code 编码
+     * @param errorMessage 错误信息
      */
-    private void doSaveLog(ProceedingJoinPoint point, Signature signature, Log logAnnotation, long time, int code, String errorMessage) {
+    private void doSaveLog(ProceedingJoinPoint point, @Nullable Object result, Signature signature, Log logAnnotation, long time, int code, String errorMessage) {
         // 请求的方法名
         final String className = point.getTarget().getClass().getName();
         final String methodName = signature.getName();
         // 设置请求参数
-        Object[] args = point.getArgs();
-        String parameter = "";
-        if (args.length > 0) {
-            parameter = JSON.toJSONString(args);
-        }
+        String parameter = JsonUtils.toJsonString(AopUtils.getParameterMap(point));
         final SysLogPO sysLog = SysLogPO.builder()
                 .logId(IdWorker.getId())
                 .operation(logAnnotation.value())
@@ -202,17 +199,20 @@ public final class LogAspect {
                 .errorMessage(errorMessage)
                 .type(logAnnotation.type().name())
                 .ident(LogIdentConstant.AUTO.getValue())
-                // 待处理
+                // todo：待处理
                 .platform(null)
                 .build();
-        this.logService.saveWithUser(sysLog, AuthUtils.getCurrentUserId());
+        if (logAnnotation.saveResult() && Objects.nonNull(result)) {
+            sysLog.setResult(JsonUtils.toJsonString(result));
+        }
+        this.logHandler.save(sysLog, point, logAnnotation, time, code, result, errorMessage);
     }
 
     /**
      * 获取编码集合
-     * @return
+     * @return 允许的编码集合
      */
     private List<Integer> getCodeList() {
-        return LogAspect.codeList;
+        return this.codeList;
     }
 }

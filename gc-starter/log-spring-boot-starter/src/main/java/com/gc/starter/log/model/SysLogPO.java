@@ -69,6 +69,11 @@ public class SysLogPO extends BaseModelCreateUserTime {
      */
     private String errorMessage;
 
+    /**
+     * 返回值
+     */
+    private String result;
+
     private String type;
 
     private String platform;

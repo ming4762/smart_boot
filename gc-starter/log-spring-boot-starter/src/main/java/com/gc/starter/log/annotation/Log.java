@@ -27,4 +27,10 @@ public @interface Log {
      * @return 日志类型
      */
     LogType type() default LogType.QUERY;
+
+    /**
+     * 是否保存返回值
+     * @return 是否保存返回值
+     */
+    boolean saveResult() default true;
 }
