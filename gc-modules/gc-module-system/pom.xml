@@ -5,10 +5,10 @@
 	<parent>
 		<groupId>com.gc</groupId>
 		<artifactId>gc-modules</artifactId>
-		<version>0.0.1-SNAPSHOT</version>
+		<version>0.0.3-SNAPSHOT</version>
 	</parent>
 	<artifactId>gc-module-system</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>${gc-boot.version}</version>
 	<name>gc-module-system</name>
 	<description>系统模块</description>
 
@@ -20,6 +20,13 @@
 		<dependency>
 			<groupId>com.gc</groupId>
 			<artifactId>crud-spring-boot-starter</artifactId>
+			<version>${gc-boot.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.gc</groupId>
+			<artifactId>gc-validate-common</artifactId>
+			<version>${gc-boot.version}</version>
 		</dependency>
 
 
@@ -27,6 +34,7 @@
 		<dependency>
 			<groupId>com.gc</groupId>
 			<artifactId>log-spring-boot-starter</artifactId>
+			<version>${gc-boot.version}</version>
 		</dependency>
 
 		<dependency>
