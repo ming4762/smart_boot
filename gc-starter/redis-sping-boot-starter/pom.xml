@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>com.gc</groupId>
 		<artifactId>gc-starter</artifactId>
-		<version>0.0.1-SNAPSHOT</version>
+		<version>0.0.3-SNAPSHOT</version>
 	</parent>
 	<artifactId>redis-sping-boot-starter</artifactId>
 	<version>${gc-boot.version}</version>
@@ -26,6 +26,7 @@
 		<dependency>
 			<groupId>com.gc</groupId>
 			<artifactId>gc-cache-common</artifactId>
+			<version>${gc-boot.version}</version>
 		</dependency>
 
 		<dependency>

@@ -5,7 +5,7 @@
     <parent>
         <groupId>com.gc</groupId>
         <artifactId>gc-modules</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
+        <version>0.0.3-SNAPSHOT</version>
     </parent>
     <artifactId>gc-module-code</artifactId>
     <version>${gc-boot.version}</version>
@@ -19,17 +19,20 @@
         <dependency>
             <groupId>com.gc</groupId>
             <artifactId>crud-spring-boot-starter</artifactId>
+            <version>${gc-boot.version}</version>
         </dependency>
 
         <!--	日志启动器	-->
         <dependency>
             <groupId>com.gc</groupId>
             <artifactId>log-spring-boot-starter</artifactId>
+            <version>${gc-boot.version}</version>
         </dependency>
 
         <dependency>
             <groupId>com.gc</groupId>
             <artifactId>gc-database-message</artifactId>
+            <version>${gc-boot.version}</version>
         </dependency>
     </dependencies>
 

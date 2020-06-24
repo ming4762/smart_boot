@@ -5,12 +5,12 @@
 	<parent>
 		<groupId>com.gc</groupId>
 		<artifactId>gc-starter</artifactId>
-		<version>0.0.1-SNAPSHOT</version>
+		<version>0.0.3-SNAPSHOT</version>
 	</parent>
 	<artifactId>crud-spring-boot-starter</artifactId>
 	<version>${gc-boot.version}</version>
 	<name>crud-spring-boot-starter</name>
-	<description>Demo project for Spring Boot</description>
+	<description>crud启动器</description>
 
 	<properties>
 	</properties>
@@ -26,6 +26,7 @@
 		<dependency>
 			<groupId>com.gc</groupId>
 			<artifactId>gc-base-common</artifactId>
+			<version>${gc-boot.version}</version>
 		</dependency>
 
 		<!--pagehelper支持-->
