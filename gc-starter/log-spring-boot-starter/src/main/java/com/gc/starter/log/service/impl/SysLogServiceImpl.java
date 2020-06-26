@@ -29,7 +29,6 @@ public class SysLogServiceImpl extends BaseServiceImpl<SysLogMapper, SysLogPO> i
      */
     @Override
     public boolean saveException(String message, @Nullable Exception e) {
-
         return false;
     }
 }
