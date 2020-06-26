@@ -4,6 +4,7 @@ import com.google.common.collect.Maps;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.Signature;
 import org.aspectj.lang.reflect.MethodSignature;
+import org.springframework.lang.NonNull;
 
 import java.util.Map;
 
@@ -23,6 +24,7 @@ public class AopUtils {
      * @param point 切面
      * @return 参数
      */
+    @NonNull
     public static Map<String, Object> getParameterMap(ProceedingJoinPoint point) {
         final Signature signature = point.getSignature();
         Map<String, Object> parameterMap = Maps.newHashMap();
