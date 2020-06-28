@@ -6,6 +6,7 @@ import com.gc.common.base.constants.TransactionManagerConstants;
 import com.gc.common.base.exception.IllegalAccessRuntimeException;
 import com.gc.common.base.exception.InvocationTargetRuntimeException;
 import com.gc.common.base.exception.NoSuchMethodRuntimeException;
+import com.gc.common.base.utils.security.Md5Utils;
 import com.gc.starter.crud.constants.UserPropertyConstants;
 import com.gc.starter.crud.service.impl.BaseServiceImpl;
 import com.gc.system.mapper.SysUserGroupRoleMapper;
@@ -21,7 +22,6 @@ import com.gc.system.service.SysUserService;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import org.apache.commons.beanutils.PropertyUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -40,17 +40,20 @@ import java.util.stream.Collectors;
 @Service
 public class SysUserServiceImpl extends BaseServiceImpl<SysUserMapper, SysUserPO> implements SysUserService {
 
-    @Autowired
-    private SysUserRoleMapper sysUserRoleMapper;
+    private final SysUserRoleMapper sysUserRoleMapper;
 
-    @Autowired
-    private SysUserGroupUserMapper sysUserGroupUserMapper;
+    private final SysUserGroupUserMapper sysUserGroupUserMapper;
 
-    @Autowired
-    private SysUserGroupRoleMapper sysUserGroupRoleMapper;
+    private final SysUserGroupRoleMapper sysUserGroupRoleMapper;
 
-    @Autowired
-    private SysRoleService sysRoleService;
+    private final SysRoleService sysRoleService;
+
+    public SysUserServiceImpl(SysUserRoleMapper sysUserRoleMapper, SysUserGroupUserMapper sysUserGroupUserMapper, SysUserGroupRoleMapper sysUserGroupRoleMapper, SysRoleService sysRoleService) {
+        this.sysUserRoleMapper = sysUserRoleMapper;
+        this.sysUserGroupUserMapper = sysUserGroupUserMapper;
+        this.sysUserGroupRoleMapper = sysUserGroupRoleMapper;
+        this.sysRoleService = sysRoleService;
+    }
 
     /**
      * 查询用户的角色列表
@@ -93,6 +96,17 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserMapper, SysUserPO
                 .in(SysRolePO :: getRoleId, roleIdSet)
                 .eq(SysRolePO :: getEnable, Boolean.TRUE)
         );
+    }
+
+    /**
+     * 重新保存方法设置密码
+     * @param entity 实体类
+     * @return
+     */
+    @Override
+    public boolean save(@NonNull SysUserPO entity) {
+        entity.setPassword(Md5Utils.md5(entity.getUsername()));
+        return super.save(entity);
     }
 
     /**

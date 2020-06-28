@@ -26,8 +26,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 用户组层
- * @author jackson
+ * 用户组controller
+ * @author shizhongming
  * 2020/1/24 3:10 下午
  */
 @RestController

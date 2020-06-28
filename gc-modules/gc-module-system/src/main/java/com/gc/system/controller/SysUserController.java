@@ -8,19 +8,22 @@ import com.gc.starter.crud.controller.BaseController;
 import com.gc.starter.crud.query.PageQueryParameter;
 import com.gc.starter.log.annotation.Log;
 import com.gc.starter.log.constants.LogType;
+import com.gc.system.pojo.dto.user.UserSaveDTO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.BeanUtils;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
 import java.util.List;
 
 /**
  * 用户controller层
- * @author jackson
+ * @author shizhongming
  * 2020/1/24 2:22 下午
  */
 @RestController
@@ -30,16 +33,17 @@ public class SysUserController extends BaseController<AuthUserService, SysUserPO
 
     /**
      * 添加保存方法
-     * @param model 用户实体
+     * @param parameter 用户实体
      * @return 是否保存成功
      */
-    @Override
     @PostMapping("saveUpdate")
     @ApiOperation("添加/更新用户")
     @Log(value = "添加/更新用户", type = LogType.UPDATE)
     @PreAuthorize("hasPermission('sys:user', 'save') or hasPermission('sys:user', 'update')")
-    public Result<Boolean> saveUpdate(@RequestBody SysUserPO model) {
-        return super.saveUpdate(model);
+    public Result<Boolean> saveUpdate(@RequestBody @Valid UserSaveDTO parameter) {
+        SysUserPO model = new SysUserPO();
+        BeanUtils.copyProperties(parameter, model);
+        return Result.success(this.service.saveOrUpdateWithAllUser(model, 1L));
     }
 
     @Override
@@ -47,7 +51,7 @@ public class SysUserController extends BaseController<AuthUserService, SysUserPO
     @ApiOperation("添加用户")
     @Log(value = "添加用户", type = LogType.ADD)
     @PreAuthorize("hasPermission('sys:user', 'save')")
-    public Result<Boolean> save(@RequestBody SysUserPO model) {
+    public Result<Boolean> save(@RequestBody @Valid SysUserPO model) {
         return super.save(model);
     }
 

@@ -19,7 +19,6 @@ import com.gc.system.service.SysUserService;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import org.apache.commons.lang3.ObjectUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,17 +27,21 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
+ * 用户组服务层
  * @author jackson
  * 2020/1/24 3:05 下午
  */
 @Service
 public class SysUserGroupServiceImpl extends BaseServiceImpl<SysUserGroupMapper, SysUserGroupPO> implements SysUserGroupService {
 
-    @Autowired
-    private SysUserGroupUserService sysUserGroupUserService;
+    private final SysUserGroupUserService sysUserGroupUserService;
 
-    @Autowired
-    private SysUserService sysUserService;
+    private final SysUserService sysUserService;
+
+    public SysUserGroupServiceImpl(SysUserGroupUserService sysUserGroupUserService, SysUserService sysUserService) {
+        this.sysUserGroupUserService = sysUserGroupUserService;
+        this.sysUserService = sysUserService;
+    }
 
     /**
      * 查询用户组ID包含的用户id集合

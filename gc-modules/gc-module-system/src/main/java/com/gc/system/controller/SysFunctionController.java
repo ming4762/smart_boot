@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  * 功能controller
- * @author jackson
+ * @author 史仲明
  * 2020/1/27 12:16 下午
  */
 @RestController
