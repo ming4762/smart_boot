@@ -9,6 +9,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
+ * 启动接口超时支持
  * @author shizhongming
  * 2020/5/28 2:55 下午
  */

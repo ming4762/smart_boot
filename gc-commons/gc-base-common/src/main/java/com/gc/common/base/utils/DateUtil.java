@@ -7,14 +7,18 @@ import org.springframework.lang.Nullable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
+import java.util.function.UnaryOperator;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * 日期时间工具类
@@ -145,10 +149,53 @@ public final class DateUtil {
     }
 
     /**
-     * todo: 待开发
-     * @return
+     * 获取天时间间隔
+     * @param startDate 开始时间
+     * @param endDate 结束时间
+     * @return 时间段
      */
-    public static List<Date> createHourInterval() {
-        return Lists.newArrayList();
+    public static List<LocalDate> getBetweenDay(LocalDate startDate, LocalDate endDate) {
+        return getBetweenTime(startDate, endDate, ChronoUnit.DAYS, f -> f.plusDays(1));
+    }
+
+    /**
+     * 获取时间间隔-周
+     * @param startDate 开始时间
+     * @param endDate 结束时间
+     * @return 时间段
+     */
+    public static List<LocalDate> getBetweenWeek(LocalDate startDate, LocalDate endDate) {
+        return getBetweenTime(startDate, endDate, ChronoUnit.WEEKS, f -> f.plusWeeks(1));
+    }
+
+    /**
+     * 获取时间间隔-月
+     * @param startDate 开始时间
+     * @param endDate 结束时间
+     * @return 时间段
+     */
+    public static List<LocalDate> getBetweenMonth(LocalDate startDate, LocalDate endDate) {
+        return getBetweenTime(startDate, endDate, ChronoUnit.MONTHS, f -> f.plusMonths(1));
+    }
+
+
+    /**
+     * 获取间隔时间
+     * @param startDate 开始时间
+     * @param endDate 结束时间
+     * @param chronoUnit date periods units
+     * @param unaryOperator 操作
+     * @return 时间段
+     */
+    public static List<LocalDate> getBetweenTime(@NonNull LocalDate startDate, @NonNull LocalDate endDate, @NonNull ChronoUnit chronoUnit, @NonNull UnaryOperator<LocalDate> unaryOperator) {
+        long distance = chronoUnit.between(startDate, endDate);
+        List<LocalDate> result = Lists.newLinkedList();
+        if (distance < 1) {
+            return result;
+        }
+        Stream.iterate(startDate, unaryOperator)
+                .limit(distance + 1)
+                .forEach(result :: add);
+        return result;
     }
 }
