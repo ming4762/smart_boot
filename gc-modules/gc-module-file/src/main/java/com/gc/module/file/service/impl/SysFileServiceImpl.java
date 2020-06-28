@@ -3,7 +3,6 @@ package com.gc.module.file.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.gc.common.auth.utils.AuthUtils;
 import com.gc.common.base.exception.BaseException;
-import com.gc.module.file.constants.FileDatabaseConstants;
 import com.gc.module.file.constants.FileTypeConstants;
 import com.gc.module.file.mapper.SysFileMapper;
 import com.gc.module.file.model.SysFilePO;
@@ -15,7 +14,6 @@ import com.gc.starter.file.serice.ActualFileService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
@@ -37,17 +35,20 @@ import java.util.stream.Collectors;
 @Slf4j
 public class SysFileServiceImpl extends BaseServiceImpl<SysFileMapper, SysFilePO> implements SysFileService {
 
-    @Autowired
-    private ActualFileService actualFileService;
+    private final ActualFileService actualFileService;
+
+    public SysFileServiceImpl(ActualFileService actualFileService) {
+        this.actualFileService = actualFileService;
+    }
 
     /**
      * 保存文件
-     * @param multipartFile
-     * @param saveFileDto
-     * @return
+     * @param multipartFile 文件信息
+     * @param saveFileDto 文件传输对象
+     * @return 保存的文件信息
      */
     @Override
-    @Transactional(value = FileDatabaseConstants.TRANSACTION_MANAGER, rollbackFor = Exception.class)
+    @Transactional(rollbackFor = Exception.class)
     public @NonNull
     SysFilePO saveFile(@NonNull MultipartFile multipartFile, @NonNull SaveFileDTO saveFileDto) throws IOException {
         return this.saveFile(new SysFileBO(multipartFile, saveFileDto.getFilename(), saveFileDto.getType()));
@@ -55,15 +56,16 @@ public class SysFileServiceImpl extends BaseServiceImpl<SysFileMapper, SysFilePO
 
     /**
      * 保存文件
-     * @param file
-     * @return
+     * @param file 文件对象
+     * @return 保存的文件信息
      */
     @Override
-    @Transactional(value = FileDatabaseConstants.TRANSACTION_MANAGER, rollbackFor = Exception.class)
+    @Transactional(rollbackFor = Exception.class)
     public @NonNull SysFilePO saveFile(@NonNull SysFileBO file) throws IOException {
         // 根据md5判断文件是否存在
         final List<SysFilePO> md5FileList = this.list(
-                new QueryWrapper<SysFilePO>().lambda().eq(SysFilePO :: getMd5, file.getFile().getMd5())
+                new QueryWrapper<SysFilePO>().lambda()
+                        .eq(SysFilePO :: getMd5, file.getFile().getMd5())
                         .eq(SysFilePO :: getFileSize, file.getFile().getFileSize())
         );
         if (md5FileList.isEmpty()) {
@@ -87,13 +89,12 @@ public class SysFileServiceImpl extends BaseServiceImpl<SysFileMapper, SysFilePO
 
     /**
      * 保存文件
-     * @param multipartFile
-     * @param type
-     * @return
-     * @throws IOException
+     * @param multipartFile 文件信息
+     * @param type 文件类型
+     * @return 保存的文件信息
      */
     @Override
-    @Transactional(value = FileDatabaseConstants.TRANSACTION_MANAGER, rollbackFor = Exception.class)
+    @Transactional(rollbackFor = Exception.class)
     public SysFilePO saveFile(@NonNull MultipartFile multipartFile, String type) {
         final SysFilePO file = new SysFilePO();
         file.setType(type);
@@ -110,6 +111,7 @@ public class SysFileServiceImpl extends BaseServiceImpl<SysFileMapper, SysFilePO
      * @return 文件信息
      */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public @Nullable SysFilePO deleteFile(@NonNull Long fileId) throws IOException {
         final SysFilePO file = this.getById(fileId);
         if (ObjectUtils.isNotEmpty(file)) {
@@ -130,6 +132,7 @@ public class SysFileServiceImpl extends BaseServiceImpl<SysFileMapper, SysFilePO
      * @return 删除是否成功
      */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public boolean batchDeleteFile(@NonNull Collection<Long> fileIds) throws IOException {
         if (!fileIds.isEmpty()) {
             final List<SysFilePO> fileList = this.listByIds(fileIds);
@@ -178,8 +181,8 @@ public class SysFileServiceImpl extends BaseServiceImpl<SysFileMapper, SysFilePO
 
     /**
      * 保存实际文件
-     * @param file
-     * @return
+     * @param file 文件信息
+     * @return 文件ID
      */
     private String saveActualFile(SysFileBO file) throws IOException {
         return this.actualFileService.save(file.getInputStream(), file.getFile().getFileName());
