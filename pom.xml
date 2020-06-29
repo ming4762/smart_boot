@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<artifactId>gc-boot</artifactId>
-	<version>0.0.4-SNAPSHOT</version>
+	<version>0.0.5-SNAPSHOT</version>
 	<name>gc-boot</name>
 	<description>gc 通用开发框架</description>
 
@@ -17,7 +17,7 @@
 
 	<properties>
 		<java.version>8</java.version>
-		<gc-boot.version>0.0.4-SNAPSHOT</gc-boot.version>
+		<gc-boot.version>0.0.5-SNAPSHOT</gc-boot.version>
 		<kettle.version>7.1.0.0</kettle.version>
 	</properties>
 
