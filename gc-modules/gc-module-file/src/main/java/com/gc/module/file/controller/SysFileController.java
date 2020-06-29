@@ -26,7 +26,6 @@ import java.util.stream.Collectors;
  * @author jackson
  * 2020/1/27 7:51 下午
  */
-@RestController
 @RequestMapping("file")
 @Slf4j
 @Api(value = "文件管理", tags = "文件管理")
@@ -39,7 +38,6 @@ public class SysFileController extends BaseController<SysFileService, SysFilePO>
      * @param type 文件类型
      * @return 保存的文件信息
      */
-    @PostMapping("upload")
     @ApiOperation(value = "上传文件")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "file", value = "文件信息", dataTypeClass = MultipartFile.class, required = true),
@@ -66,7 +64,6 @@ public class SysFileController extends BaseController<SysFileService, SysFilePO>
      * @param type
      * @return
      */
-    @PostMapping("batchUpload")
     @ApiOperation(value = "批量上传文件")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "files", value = "文件集合", required = true),
@@ -97,7 +94,6 @@ public class SysFileController extends BaseController<SysFileService, SysFilePO>
      * @param response
      * @throws Exception
      */
-    @GetMapping("download/{id}")
     @ApiOperation(value = "下载文件")
     public void download(@PathVariable("id") Long id, HttpServletResponse response) throws IOException {
         final SysFileBO file = this.service.download(id);
@@ -114,7 +110,6 @@ public class SysFileController extends BaseController<SysFileService, SysFilePO>
      * @param ids
      * @return
      */
-    @PostMapping("batchDeleteById")
     @ApiOperation("批量删除文件")
     public Result<Boolean> batchDeleteById(@RequestBody List<Long> ids) throws IOException {
         return Result.success(this.service.batchDeleteFile(ids));
