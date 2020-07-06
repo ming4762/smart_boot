@@ -18,9 +18,9 @@ public enum ResultCodeEnum {
      */
     FAILURE(500, "失败");
 
-    private Integer code;
+    private final Integer code;
 
-    private String msg;
+    private final String msg;
 
     ResultCodeEnum(Integer code, String msg) {
         this.code = code;
