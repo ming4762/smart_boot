@@ -37,6 +37,7 @@ public class CacheUtils {
      */
     private static final ConcurrentMap<Integer, TypeMappingConstant> TYPE_MAPPING_CACHE = Maps.newConcurrentMap();
 
+
     /**
      * 缓存数据库连接
      * @param key key

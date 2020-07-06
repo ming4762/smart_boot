@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.util.List;
+
 /**
  * 数据库表实体
  * @author shizhongming
@@ -36,4 +38,6 @@ public class TableViewBO extends AbstractTableBaseBO {
 
     @DatabaseField("REF_GENERATION")
     private String refGeneration;
+
+    private List<ColumnBO> columnList;
 }

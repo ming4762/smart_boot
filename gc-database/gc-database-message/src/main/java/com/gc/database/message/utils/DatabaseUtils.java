@@ -53,6 +53,9 @@ public class DatabaseUtils {
                         } else {
                             value = resultSet.getObject(i);
                         }
+                        if (value instanceof Short) {
+                            value = new Integer((Short)value);
+                        }
                         field.set(model, value);
                     }
                 }

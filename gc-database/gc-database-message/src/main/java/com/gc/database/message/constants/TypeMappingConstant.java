@@ -96,9 +96,9 @@ public enum TypeMappingConstant {
     TIMESTAMP_WITH_TIMEZONE(2014, Date.class)
     ;
 
-    private Integer dataType;
+    private final Integer dataType;
 
-    private Class<?> javaClass;
+    private final Class<?> javaClass;
 
     TypeMappingConstant(Integer dataType, Class<?> javaClass) {
         this.dataType = dataType;

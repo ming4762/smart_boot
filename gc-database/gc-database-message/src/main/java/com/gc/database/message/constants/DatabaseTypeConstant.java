@@ -16,14 +16,14 @@ public enum DatabaseTypeConstant {
      * mysql
      */
     MYSQL("com.mysql.cj.jdbc.Driver", MysqlDatabaseExecutor.class),
-    SQL_SERVER("com.microsoft.jdbc.SqlServer.SQLServerDriver", SqlServerDatabaseExecutor.class),
+    SQL_SERVER("com.microsoft.sqlserver.jdbc.SQLServerDriver", SqlServerDatabaseExecutor.class),
     ORACLE("Oracle.jdbc.driver.OracleDriver", OracleDatabaseExecutor.class);
 
 
 
-    private String driverClass;
+    private final String driverClass;
 
-    private Class<? extends DatabaseExecutor> executerClass;
+    private final Class<? extends DatabaseExecutor> executerClass;
 
     DatabaseTypeConstant(String driverClass, Class<? extends DatabaseExecutor> executerClass) {
         this.driverClass = driverClass;

@@ -1,5 +1,6 @@
 package com.gc.database.message.executor;
 
+import com.gc.database.message.constants.TableTypeConstants;
 import com.gc.database.message.pojo.bo.*;
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
@@ -14,13 +15,14 @@ import java.util.List;
  */
 public interface DatabaseExecutor {
 
+
     /**
      * 获取数据库连接
      * @param databaseConnection 数据库连接信息
      * @throws SQLException 连接失败错误
      * @return 数据库连接
      */
-    @Nullable
+    @NonNull
     Connection getConnection(@NonNull DatabaseConnectionBO databaseConnection) throws SQLException;
 
     /**
@@ -43,27 +45,30 @@ public interface DatabaseExecutor {
     /**
      * 获取数据库表格
      * @param databaseConnection 数据库连接信息
+     * @param tableNamePattern 表名
      * @return 表列表
      */
     @NonNull
-    List<TableViewBO> listTable(@NonNull DatabaseConnectionBO databaseConnection);
+    List<TableViewBO> listTable(@NonNull DatabaseConnectionBO databaseConnection, @Nullable String tableNamePattern);
 
     /**
      * 获取数据库实体
+     * @param tableNamePattern 表名
      * @param databaseConnection 数据库连接信息
      * @return 表列表
      */
     @NonNull
-    List<TableViewBO> listView(@NonNull DatabaseConnectionBO databaseConnection);
+    List<TableViewBO> listView(@NonNull DatabaseConnectionBO databaseConnection, @Nullable String tableNamePattern);
 
     /**
      * 获取数据库表格
      * @param databaseConnection 数据库连接信息
+     * @param tableNamePattern 表名
      * @param types 视图/表格
      * @return 表列表
      */
     @NonNull
-    List<TableViewBO> listTable(@NonNull DatabaseConnectionBO databaseConnection, String... types);
+    List<TableViewBO> listTable(@NonNull DatabaseConnectionBO databaseConnection, @Nullable String tableNamePattern, TableTypeConstants... types);
 
     /**
      * 查询主键信息
@@ -105,6 +110,21 @@ public interface DatabaseExecutor {
      * @param tableName 表名
      * @return 列信息
      */
-    List<ColumnBO> listColumn(@NonNull DatabaseConnectionBO databaseConnection, String tableName);
+    List<ColumnBO> listColumn(@NonNull DatabaseConnectionBO databaseConnection, @NonNull String tableName);
+
+    /**
+     * 获取连接URL
+     * @param databaseConnection 连接信息
+     * @return 连接URL
+     */
+    String getUrl(@NonNull DatabaseConnectionBO databaseConnection);
+
+    /**
+     * 创建数据库连接
+     * @param databaseConnection 数据库连接信息
+     * @return 数据库连接
+     * @throws SQLException 数据库操作异常
+     */
+    Connection createConnection(@NonNull DatabaseConnectionBO databaseConnection) throws SQLException;
 
 }

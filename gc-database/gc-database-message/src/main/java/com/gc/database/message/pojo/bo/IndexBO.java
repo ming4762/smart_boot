@@ -17,7 +17,7 @@ public class IndexBO extends AbstractTableBaseBO {
     private static final long serialVersionUID = -6827286891209056960L;
 
     @DatabaseField("NON_UNIQUE")
-    private Boolean nonUnique;
+    private Integer nonUnique;
 
     @DatabaseField("INDEX_QUALIFIER")
     private String indexQualifier;
@@ -38,10 +38,10 @@ public class IndexBO extends AbstractTableBaseBO {
     private String ascOrDesc;
 
     @DatabaseField("CARDINALITY")
-    private Long cardinality;
+    private Integer cardinality;
 
     @DatabaseField("PAGES")
-    private Long pages;
+    private Integer pages;
 
     @DatabaseField("FILTER_CONDITION")
     private String filterCondition;
