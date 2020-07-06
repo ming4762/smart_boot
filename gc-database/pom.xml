@@ -18,6 +18,7 @@
     </properties>
 
     <modules>
+        <module>gc-database-generator</module>
         <module>gc-database-message</module>
     </modules>
 
