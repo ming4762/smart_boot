@@ -5,6 +5,12 @@ import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * 反射工具类
@@ -33,6 +39,41 @@ public final class ReflectUtil {
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             return null;
+        }
+    }
+
+    /**
+     * 判断field是否是静态变量
+     * @param field field
+     * @return 是否是静态变量
+     */
+    public static boolean isStatic(@NonNull Field field) {
+        return Modifier.isStatic(field.getModifiers());
+    }
+
+    /**
+     * 判断field是否是静态变量
+     * @param field field
+     * @return 是否是静态变量
+     */
+    public static boolean isNotStatic(@NonNull Field field) {
+        return !Modifier.isStatic(field.getModifiers());
+    }
+
+    /**
+     * 获取所有Filed 包括上级的
+     * @param clazz Class
+     * @param fields field集合
+     */
+    public static void getAllFields(@NonNull Class<?> clazz, Set<Field> fields) {
+        final Field[] fieldArray = clazz.getDeclaredFields();
+        fields.addAll(Arrays.stream(fieldArray)
+                .filter(ReflectUtil :: isNotStatic)
+                .collect(Collectors.toSet()));
+        // 获取上级
+        Class<?> superClass = clazz.getSuperclass();
+        if (Objects.nonNull(superClass)) {
+            getAllFields(superClass, fields);
         }
     }
 }
