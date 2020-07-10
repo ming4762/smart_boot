@@ -4,6 +4,7 @@ import com.gc.common.auth.annotation.NonUrlCheck;
 import com.gc.common.auth.core.RestUserDetails;
 import com.gc.common.auth.exception.AuthException;
 import com.gc.common.auth.model.Permission;
+import com.gc.common.auth.properties.AuthProperties;
 import com.gc.common.base.http.HttpStatus;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
@@ -12,6 +13,7 @@ import lombok.Setter;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.core.annotation.AnnotationUtils;
+import org.springframework.http.HttpMethod;
 import org.springframework.lang.NonNull;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
@@ -34,13 +36,16 @@ public class DynamicUrlCheckProvider {
 
     private final RequestMappingHandlerMapping mapping;
 
+    private final AuthProperties authProperties;
+
     /**
      * 所有URL映射
      */
     private Multimap<String, UrlMapping> allUrlMapping = null;
 
-    public DynamicUrlCheckProvider(RequestMappingHandlerMapping mapping) {
+    public DynamicUrlCheckProvider(RequestMappingHandlerMapping mapping, AuthProperties authProperties) {
         this.mapping = mapping;
+        this.authProperties = authProperties;
     }
 
     /**
@@ -80,6 +85,10 @@ public class DynamicUrlCheckProvider {
      * @return 改URL是否需要校验
      */
     private boolean hasCheck(HttpServletRequest request) {
+        // 判断是否需要校验地址
+//        if (this.isIgnore(request)) {
+//            return false;
+//        }
         if (Objects.isNull(this.allUrlMapping)) {
             this.allUrlMapping = this.getAllUrlMapping();
         }
@@ -109,6 +118,73 @@ public class DynamicUrlCheckProvider {
         }
         return check;
     }
+
+    /**
+     * 判断是否是忽略地址
+     * @param request 请求体
+     * @return 是否忽略
+     */
+    private boolean isIgnore(HttpServletRequest request) {
+        // 判断pattern
+        final AuthProperties.IgnoreConfig ignores = this.authProperties.getIgnores();
+        for (String url : ignores.getPattern()) {
+            AntPathRequestMatcher antPathMatcher = new AntPathRequestMatcher(url);
+            if (antPathMatcher.matches(request)) {
+                return true;
+            }
+        }
+        for (String url : ignores.getPost()) {
+            AntPathRequestMatcher antPathMatcher = new AntPathRequestMatcher(url, HttpMethod.POST.name());
+            if (antPathMatcher.matches(request)) {
+                return true;
+            }
+        }
+
+        for (String url : ignores.getDelete()) {
+            AntPathRequestMatcher antPathMatcher = new AntPathRequestMatcher(url, HttpMethod.DELETE.name());
+            if (antPathMatcher.matches(request)) {
+                return true;
+            }
+        }
+
+        for (String url : ignores.getPut()) {
+            AntPathRequestMatcher antPathMatcher = new AntPathRequestMatcher(url, HttpMethod.PUT.name());
+            if (antPathMatcher.matches(request)) {
+                return true;
+            }
+        }
+
+        for (String url : ignores.getHead()) {
+            AntPathRequestMatcher antPathMatcher = new AntPathRequestMatcher(url, HttpMethod.HEAD.name());
+            if (antPathMatcher.matches(request)) {
+                return true;
+            }
+        }
+
+        for (String url : ignores.getPatch()) {
+            AntPathRequestMatcher antPathMatcher = new AntPathRequestMatcher(url, HttpMethod.PATCH.name());
+            if (antPathMatcher.matches(request)) {
+                return true;
+            }
+        }
+
+        for (String url : ignores.getOptions()) {
+            AntPathRequestMatcher antPathMatcher = new AntPathRequestMatcher(url, HttpMethod.OPTIONS.name());
+            if (antPathMatcher.matches(request)) {
+                return true;
+            }
+        }
+
+        for (String url : ignores.getTrace()) {
+            AntPathRequestMatcher antPathMatcher = new AntPathRequestMatcher(url, HttpMethod.TRACE.name());
+            if (antPathMatcher.matches(request)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
 
     /**
      * 获取url映射

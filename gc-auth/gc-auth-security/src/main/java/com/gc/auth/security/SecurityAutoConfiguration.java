@@ -64,8 +64,8 @@ public class SecurityAutoConfiguration {
      */
     @Bean
     @ConditionalOnProperty(prefix = "gc.auth", name = "urlCheck", havingValue = "true")
-    public DynamicUrlCheckProvider dynamicUrlCheckProvider(RequestMappingHandlerMapping mapping) {
-        return new DynamicUrlCheckProvider(mapping);
+    public DynamicUrlCheckProvider dynamicUrlCheckProvider(RequestMappingHandlerMapping mapping, AuthProperties authProperties) {
+        return new DynamicUrlCheckProvider(mapping, authProperties);
     }
 
 }

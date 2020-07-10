@@ -124,7 +124,7 @@ public class SpringSecurityConfig  extends WebSecurityConfigurerAdapter {
         } else {
             // 未登录处理
             http.formLogin()
-                    .loginProcessingUrl("/public/auth/login")
+                    .loginProcessingUrl("/auth/login")
                     // 登录成功
                     .successHandler(restAuthSuccessHandler)
                     //配置登录失败的自定义处理类
@@ -132,7 +132,7 @@ public class SpringSecurityConfig  extends WebSecurityConfigurerAdapter {
                     .and().httpBasic().authenticationEntryPoint(restAuthenticationEntryPoint)
                     .and()
                     .logout()
-                    .logoutUrl("/public/auth/logout")
+                    .logoutUrl("/auth/logout")
                     // 登出成功
                     .logoutSuccessHandler(restLogoutSuccessHandler);
         }
