@@ -1,6 +1,6 @@
 package com.gc.common.base.model;
 
-import com.alibaba.fastjson.JSON;
+import com.gc.common.base.utils.JsonUtils;
 import com.google.common.collect.Lists;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -38,6 +38,6 @@ public class Tree<T extends Serializable> implements Serializable {
 
     @Override
     public String toString() {
-        return JSON.toJSONString(this);
+        return JsonUtils.toJsonString(this);
     }
 }
