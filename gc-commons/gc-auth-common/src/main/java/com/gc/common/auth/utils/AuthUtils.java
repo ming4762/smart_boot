@@ -1,7 +1,7 @@
 package com.gc.common.auth.utils;
 
+import com.gc.common.auth.core.RestUserDetails;
 import com.gc.common.auth.exception.AuthException;
-import com.gc.common.auth.model.RestUserDetailsImpl;
 import com.gc.common.base.http.HttpStatus;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -33,7 +33,7 @@ public final class AuthUtils {
      * @return 当前用户
      */
     @Nullable
-    public static RestUserDetailsImpl getCurrentUser() {
+    public static RestUserDetails getCurrentUser() {
         Object principal = Optional.of(SecurityContextHolder.getContext())
                 .map(SecurityContext :: getAuthentication)
                 .map(Authentication :: getPrincipal)
@@ -42,7 +42,7 @@ public final class AuthUtils {
             log.warn("用户未登录");
             return null;
         }
-        return (RestUserDetailsImpl)principal;
+        return (RestUserDetails)principal;
     }
 
     /**
@@ -50,8 +50,8 @@ public final class AuthUtils {
      * @return 当前登录用户
      */
     @NonNull
-    public static RestUserDetailsImpl getNonNullCurrentUser() {
-        RestUserDetailsImpl userDetails = getCurrentUser();
+    public static RestUserDetails getNonNullCurrentUser() {
+        RestUserDetails userDetails = getCurrentUser();
         if (Objects.isNull(userDetails)) {
             throw new AuthException(HttpStatus.UNAUTHORIZED);
         }
@@ -73,7 +73,7 @@ public final class AuthUtils {
      */
     @Nullable
     public static Long getCurrentUserId() {
-        RestUserDetailsImpl user = getCurrentUser();
+        RestUserDetails user = getCurrentUser();
         if (user == null) {
             return null;
         }

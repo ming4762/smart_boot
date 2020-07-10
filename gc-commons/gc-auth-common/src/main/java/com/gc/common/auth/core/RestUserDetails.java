@@ -4,7 +4,6 @@ import com.gc.common.auth.model.Permission;
 import lombok.NonNull;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.io.Serializable;
 import java.util.Set;
 
 /**
@@ -17,7 +16,7 @@ public interface RestUserDetails extends UserDetails {
      * 获取用户ID
      * @return 用户ID
      */
-    Serializable getUserId();
+    Long getUserId();
 
     /**
      * 获取用户姓名
