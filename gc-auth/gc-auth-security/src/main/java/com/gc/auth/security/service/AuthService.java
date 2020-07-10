@@ -1,14 +1,13 @@
 package com.gc.auth.security.service;
 
-import com.gc.cache.service.CacheService;
 import com.gc.common.auth.constants.LoginTypeConstants;
 import com.gc.common.auth.core.RestUserDetails;
 import com.gc.common.auth.exception.AuthException;
 import com.gc.common.auth.model.RestUserDetailsImpl;
 import com.gc.common.auth.properties.AuthProperties;
+import com.gc.common.auth.service.AuthCache;
 import com.gc.common.auth.utils.AuthUtils;
 import com.gc.common.base.http.HttpStatus;
-import com.google.common.collect.ImmutableList;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.lang.NonNull;
 import org.springframework.security.core.Authentication;
@@ -18,6 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Objects;
 
 /**
+ * 认证服务层
  * @author jackson
  * 2020/2/15 9:49 上午
  */
@@ -25,13 +25,14 @@ public class AuthService {
 
     private final AuthProperties authProperties;
 
-    private final CacheService cacheService;
+    private final AuthCache<String, Object> authCache;
+
 
     private static final String KEY_PREFIX = "gc:session";
 
-    public AuthService(AuthProperties authProperties, CacheService cacheService) {
+    public AuthService(AuthProperties authProperties, AuthCache<String, Object> authCache) {
         this.authProperties = authProperties;
-        this.cacheService = cacheService;
+        this.authCache = authCache;
     }
 
     /**
@@ -53,7 +54,7 @@ public class AuthService {
             timeout = this.authProperties.getSession().getTimeout().getRemember();
         }
         // 保存jwt到cache中
-        this.cacheService.put(this.getTokenKey(userDetails.getUsername(), jwt), timeout, timeout);
+        this.authCache.put(this.getTokenKey(userDetails.getUsername(), jwt), timeout, timeout);
         return jwt;
     }
 
@@ -70,9 +71,10 @@ public class AuthService {
         String attributeKey = this.getAttributeKey(jwt);
 
         // 获取有效期
-        Long timeout = this.cacheService.get(jwtKey, Long.class);
+        Long timeout = (Long) this.authCache.get(jwtKey);
         if (ObjectUtils.isNotEmpty(timeout)) {
-            this.cacheService.batchExpire(ImmutableList.of(jwtKey, attributeKey), timeout);
+            this.authCache.expire(jwtKey, timeout);
+            this.authCache.expire(attributeKey, timeout);
         } else {
             throw new AuthException(HttpStatus.UNAUTHORIZED, "token已过期，请重新登录");
         }
@@ -99,9 +101,10 @@ public class AuthService {
      */
     public void logout(@NonNull HttpServletRequest request) {
         String jwt = JwtUtil.getJwt(request);
-        RestUserDetailsImpl user = AuthUtils.getCurrentUser();
+        RestUserDetails user = AuthUtils.getCurrentUser();
         Assert.notNull(user, "系统发生未知异常：未找到当前用户");
         Assert.notNull(jwt, "系统发生未知异常，未找到token");
-        this.cacheService.batchDelete(ImmutableList.of(this.getTokenKey(user.getUsername(), jwt), this.getAttributeKey(jwt)));
+        this.authCache.remove(this.getTokenKey(user.getUsername(), jwt));
+        this.authCache.remove(this.getAttributeKey(jwt));
     }
 }

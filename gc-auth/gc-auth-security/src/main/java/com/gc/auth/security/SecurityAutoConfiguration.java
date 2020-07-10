@@ -11,9 +11,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpHeaders;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.session.web.http.HeaderHttpSessionIdResolver;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -39,10 +37,10 @@ public class SecurityAutoConfiguration {
      * 创建session id 读取类
      * @return session id 读取
      */
-    @Bean
-    public HeaderHttpSessionIdResolver headerHttpSessionIdResolver() {
-        return new HeaderHttpSessionIdResolver(HttpHeaders.AUTHORIZATION);
-    }
+//    @Bean
+//    public HeaderHttpSessionIdResolver headerHttpSessionIdResolver() {
+//        return new HeaderHttpSessionIdResolver(HttpHeaders.AUTHORIZATION);
+//    }
 
     /**
      * cors资源配置

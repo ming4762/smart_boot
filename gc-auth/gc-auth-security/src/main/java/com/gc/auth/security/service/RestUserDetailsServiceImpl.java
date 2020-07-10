@@ -61,7 +61,7 @@ public class RestUserDetailsServiceImpl implements UserDetailsService{
     }
 
     @NonNull
-    private static RestUserDetailsImpl createByUser(@NonNull SysUserPO user) {
+    protected static RestUserDetailsImpl createByUser(@NonNull SysUserPO user) {
         final RestUserDetailsImpl restUserDetails = new RestUserDetailsImpl();
         restUserDetails.setUserId(user.getUserId());
         restUserDetails.setRealname(user.getRealname());

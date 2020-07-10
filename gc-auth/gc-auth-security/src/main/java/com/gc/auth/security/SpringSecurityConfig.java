@@ -5,6 +5,7 @@ import com.gc.auth.security.filter.JwtAuthenticationFilter;
 import com.gc.auth.security.handler.*;
 import com.gc.common.auth.properties.AuthProperties;
 import org.apache.commons.lang3.BooleanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -40,9 +41,9 @@ public class SpringSecurityConfig  extends WebSecurityConfigurerAdapter {
 
     private final RestAuthenticationProvider provider;
 
-    private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    private JwtAuthenticationFilter jwtAuthenticationFilter;
 
-    public SpringSecurityConfig(AuthProperties authProperties, RestAuthenticationEntryPoint restAuthenticationEntryPoint, RestAuthAccessDeniedHandler restAuthAccessDeniedHandler, RestAuthSuccessHandler restAuthSuccessHandler, RestLogoutSuccessHandler restLogoutSuccessHandler, RestAuthenticationFailureHandler restAuthenticationFailureHandler, RestAuthenticationProvider provider, JwtAuthenticationFilter jwtAuthenticationFilter) {
+    public SpringSecurityConfig(AuthProperties authProperties, RestAuthenticationEntryPoint restAuthenticationEntryPoint, RestAuthAccessDeniedHandler restAuthAccessDeniedHandler, RestAuthSuccessHandler restAuthSuccessHandler, RestLogoutSuccessHandler restLogoutSuccessHandler, RestAuthenticationFailureHandler restAuthenticationFailureHandler, RestAuthenticationProvider provider) {
         this.authProperties = authProperties;
         this.restAuthenticationEntryPoint = restAuthenticationEntryPoint;
         this.restAuthAccessDeniedHandler = restAuthAccessDeniedHandler;
@@ -50,7 +51,6 @@ public class SpringSecurityConfig  extends WebSecurityConfigurerAdapter {
         this.restLogoutSuccessHandler = restLogoutSuccessHandler;
         this.restAuthenticationFailureHandler = restAuthenticationFailureHandler;
         this.provider = provider;
-        this.jwtAuthenticationFilter = jwtAuthenticationFilter;
     }
 
     @Override
@@ -150,5 +150,10 @@ public class SpringSecurityConfig  extends WebSecurityConfigurerAdapter {
                         .anyRequest().authenticated();
             }
         }
+    }
+
+    @Autowired(required = false)
+    public void setJwtAuthenticationFilter(JwtAuthenticationFilter jwtAuthenticationFilter) {
+        this.jwtAuthenticationFilter = jwtAuthenticationFilter;
     }
 }

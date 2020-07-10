@@ -3,8 +3,8 @@ package com.gc.auth.security;
 import com.gc.auth.security.controller.LoginController;
 import com.gc.auth.security.filter.JwtAuthenticationFilter;
 import com.gc.auth.security.service.AuthService;
-import com.gc.cache.service.CacheService;
 import com.gc.common.auth.properties.AuthProperties;
+import com.gc.common.auth.service.AuthCache;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
@@ -34,12 +34,12 @@ public class JwtConfig {
     /**
      * 创建认证服务
      * @param authProperties 认证参数
-     * @param cacheService 缓存服务
+     * @param authCache 缓存服务
      * @return 认证服务
      */
     @Bean
-    public AuthService authService(@Autowired AuthProperties authProperties, @Autowired CacheService cacheService) {
-        return new AuthService(authProperties, cacheService);
+    public AuthService authService(@Autowired AuthProperties authProperties, @Autowired AuthCache<String, Object> authCache) {
+        return new AuthService(authProperties, authCache);
     }
 
     @Bean
