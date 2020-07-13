@@ -33,7 +33,7 @@ public class Result<T> {
     private String message = null;
 
     @ApiModelProperty(value = "接口返回状态", example = "true", required = true)
-    private Boolean ok = Boolean.TRUE;
+    private boolean success = true;
 
     @ApiModelProperty(value = "接口返回数据")
     private T data = null;
@@ -88,6 +88,15 @@ public class Result<T> {
     }
 
     /**
+     * 成功消息
+     * @return 成功消息
+     */
+    public static Result<Object> success() {
+        return Result.success(null);
+    }
+
+
+    /**
      * 失败消息
      * @param code
      * @param message
@@ -97,7 +106,7 @@ public class Result<T> {
      */
     public static <T> Result<T> failure(Integer code, String message, T data) {
         final Result<T> result = newInstance();
-        result.setOk(Boolean.FALSE);
+        result.setSuccess(Boolean.FALSE);
         result.setCode(code);
         result.setMessage(message);
         result.setData(data);
