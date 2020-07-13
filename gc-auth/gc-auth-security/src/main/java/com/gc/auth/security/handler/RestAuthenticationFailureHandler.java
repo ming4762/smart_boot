@@ -3,6 +3,7 @@ package com.gc.auth.security.handler;
 import com.gc.common.base.message.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
@@ -26,6 +27,8 @@ public class RestAuthenticationFailureHandler implements AuthenticationFailureHa
         log.error("登录时发生错误: {}", exception.getMessage());
         if (exception instanceof InternalAuthenticationServiceException) {
             RestJsonWriter.writeJson(response, Result.failure(HttpStatus.UNAUTHORIZED.value(), String.format("登录失败：%s", exception.getMessage())));
+        } else if (exception instanceof BadCredentialsException) {
+            RestJsonWriter.writeJson(response, Result.failure(HttpStatus.UNAUTHORIZED.value(), exception.getMessage()));
         } else {
             RestJsonWriter.writeJson(response, Result.failure(HttpStatus.INTERNAL_SERVER_ERROR.value(), "登录时发生未知错误"));
         }

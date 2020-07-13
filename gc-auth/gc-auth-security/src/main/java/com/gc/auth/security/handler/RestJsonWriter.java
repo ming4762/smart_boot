@@ -1,7 +1,7 @@
 package com.gc.auth.security.handler;
 
-import com.alibaba.fastjson.JSON;
 import com.gc.common.base.message.Result;
+import com.gc.common.base.utils.JsonUtils;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -18,6 +18,6 @@ public class RestJsonWriter {
 
     public static void writeJson(HttpServletResponse response, Result<?> result) throws IOException {
         response.setContentType("application/json;charset=UTF-8");
-        response.getWriter().write(JSON.toJSONString(result));
+        response.getWriter().write(JsonUtils.toJsonString(result));
     }
 }

@@ -93,11 +93,13 @@ public class DynamicUrlCheckProvider {
             this.allUrlMapping = this.getAllUrlMapping();
         }
         boolean check = true;
+        boolean match = false;
         // 获取请求方法
         String currentMethod = request.getMethod();
         for (String uri : this.allUrlMapping.keySet()) {
             AntPathRequestMatcher antPathMatcher = new AntPathRequestMatcher(uri);
             if (antPathMatcher.matches(request)) {
+                match = true;
                 Collection<UrlMapping> urlMappingList = this.allUrlMapping.get(uri);
                 // 获取对应的请求
                 List<UrlMapping> filterUrlMapping = urlMappingList.stream()
@@ -115,6 +117,9 @@ public class DynamicUrlCheckProvider {
                 check = Objects.isNull(nonUrlCheck);
                 break;
             }
+        }
+        if (!match) {
+            return false;
         }
         return check;
     }
