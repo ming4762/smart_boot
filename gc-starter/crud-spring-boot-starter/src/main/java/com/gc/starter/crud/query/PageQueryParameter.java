@@ -21,5 +21,7 @@ public class PageQueryParameter<K, V> extends SortQueryParameter<K, V> {
 
     private Integer offset = 0;
 
+    private Integer page;
+
     private String keyword;
 }

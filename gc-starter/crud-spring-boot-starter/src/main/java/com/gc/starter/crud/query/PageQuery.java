@@ -23,5 +23,10 @@ public class PageQuery implements Serializable {
 
     private Integer offset = 0;
 
-    private String keyword;
+    private Integer page;
+
+    private String sortName;
+
+    private String sortOrder;
+
 }

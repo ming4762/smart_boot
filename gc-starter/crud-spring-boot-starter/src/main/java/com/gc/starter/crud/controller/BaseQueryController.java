@@ -6,6 +6,7 @@ import com.gc.starter.crud.constants.CrudConstants;
 import com.gc.starter.crud.model.BaseModel;
 import com.gc.starter.crud.model.PageData;
 import com.gc.starter.crud.model.Sort;
+import com.gc.starter.crud.query.PageQuery;
 import com.gc.starter.crud.query.PageQueryParameter;
 import com.gc.starter.crud.service.BaseService;
 import com.gc.starter.crud.utils.CrudUtils;
@@ -24,6 +25,7 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -74,33 +76,59 @@ public abstract class BaseQueryController<K extends BaseService<T>, T extends Ba
      */
     @Nullable
     protected Page<T> doPage(@NonNull PageQueryParameter<String, Object> parameter) {
+        return this.createPage(parameter.getLimit(), parameter.getOffset(), parameter.getPage(), parameter.getSortName(), parameter.getSortOrder());
+    }
+
+    /**
+     * 执行分页
+     * @param parameter 分页参数
+     * @return 分页对象
+     */
+    protected Page<T> doPage(@NonNull PageQuery parameter) {
+        return this.createPage(parameter.getLimit(), parameter.getOffset(), parameter.getPage(), parameter.getSortName(), parameter.getSortOrder());
+    }
+
+    /**
+     * 创建分页
+     * @param limit 分页条数
+     * @param offset 开始记录
+     * @param pageNum 页数（优先级高）
+     * @param sortName 排序字段
+     * @param sortOrder 排序方向
+     * @return 分页信息
+     */
+    @Nullable
+    private Page<T> createPage(@Nullable Integer limit, @Nullable Integer offset, @Nullable Integer pageNum, @Nullable String sortName, @Nullable String sortOrder) {
         Page<T> page = null;
-        final Integer limit = parameter.getLimit();
-        Integer offset = parameter.getOffset();
-        if (limit != null) {
-            if (ObjectUtils.isEmpty(offset)) {
-                offset = 0;
-            }
+        if (Objects.nonNull(limit)) {
             // 解析排序字段
-            final String orderMessage = this.analysisOrder(parameter);
+            final String orderMessage = this.analysisOrder(sortName, sortOrder);
             if (!StringUtils.isEmpty(orderMessage)) {
                 PageHelper.orderBy(orderMessage);
             }
-            page = PageHelper.offsetPage(offset, limit);
+            // 进行分页
+            if (Objects.nonNull(pageNum)) {
+                page = PageHelper.startPage(pageNum, limit);
+            } else {
+                if (ObjectUtils.isEmpty(offset)) {
+                    offset = 0;
+                }
+                page = PageHelper.offsetPage(offset, limit);
+            }
         }
         return page;
     }
 
+
     /**
      * 解析排序字段
-     * @param parameter 前台参数
+     * @param sortName 排序名字
+     * @param sortOrder 排序方向
      * @return
      */
     @Nullable
-    protected String analysisOrder(@NonNull PageQueryParameter<String, Object> parameter) {
-        final String sortName = parameter.getSortName();
+    protected String analysisOrder(@Nullable String sortName, @Nullable String sortOrder) {
         if (!StringUtils.isEmpty(sortName)) {
-            final String sortOrder = parameter.getSortOrder();
             final Class<? extends BaseModel> clazz = CrudUtils.getModelClassByType(this.getModelType());
             final List<Sort> sortList = CrudUtils.analysisOrder(sortName, sortOrder, clazz);
             if (sortList.isEmpty()) {
