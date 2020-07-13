@@ -153,7 +153,7 @@ public final class LogAspect {
                 String errorMessage = null;
                 if (result instanceof Result) {
                     code = ((Result) result).getCode();
-                    if (BooleanUtils.isFalse(((Result) result).getOk())) {
+                    if (BooleanUtils.isFalse(((Result) result).isSuccess())) {
                         errorMessage = ((Result) result).getMessage();
                     }
                     List<Integer> saveCodeList = this.getCodeList();
