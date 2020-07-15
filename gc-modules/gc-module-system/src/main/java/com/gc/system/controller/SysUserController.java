@@ -81,7 +81,7 @@ public class SysUserController extends BaseController<AuthUserService, SysUserPO
     @ApiOperation(value = "通过ID批量删除用户")
     @PostMapping("batchDeleteById")
     @Log(value = "通过ID批量删除用户", type = LogType.DELETE)
-    public Result<Boolean> batchDeleteByid(@RequestBody List<Long> idList) {
+    public Result<Boolean> batchDeleteById(@RequestBody List<Long> idList) {
         if (idList.isEmpty()) {
             return Result.ofStatus(HttpStatus.PARAM_NOT_NULL, "用户ID集合不能为空");
         }

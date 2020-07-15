@@ -136,7 +136,7 @@ public abstract class AbstractDefaultDatabaseExecutor implements DatabaseExecuto
                     .map(Enum::name)
                     .toArray(String[]::new);
             // 获取resultSet
-            ResultSet resultSet = connection.getMetaData().getTables(connection.getCatalog(), null, null, typesStr);
+            ResultSet resultSet = connection.getMetaData().getTables(connection.getCatalog(), null, tableNamePattern, typesStr);
             Map<String, Field> mapping = this.getDatabaseMapping(TableViewBO.class);
             List<TableViewBO> tableList = DatabaseUtils.resultSetToModel(resultSet, TableViewBO.class, mapping);
             // 获取列信息

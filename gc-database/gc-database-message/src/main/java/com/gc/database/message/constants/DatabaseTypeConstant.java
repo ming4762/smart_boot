@@ -17,7 +17,7 @@ public enum DatabaseTypeConstant {
      */
     MYSQL("com.mysql.cj.jdbc.Driver", MysqlDatabaseExecutor.class),
     SQL_SERVER("com.microsoft.sqlserver.jdbc.SQLServerDriver", SqlServerDatabaseExecutor.class),
-    ORACLE("Oracle.jdbc.driver.OracleDriver", OracleDatabaseExecutor.class);
+    ORACLE("oracle.jdbc.driver.OracleDriver", OracleDatabaseExecutor.class);
 
 
 

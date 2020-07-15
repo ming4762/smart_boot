@@ -9,6 +9,6 @@ import com.gc.database.message.pojo.bo.DatabaseConnectionBO;
 public class OracleDatabaseExecutor extends AbstractDefaultDatabaseExecutor implements DatabaseExecutor {
     @Override
     public String getUrl(DatabaseConnectionBO databaseConnection) {
-        return String.format("%s:%s", databaseConnection.getUrl(), databaseConnection.getDatabaseName());
+        return databaseConnection.getUrl();
     }
 }

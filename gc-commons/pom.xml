@@ -5,10 +5,10 @@
     <parent>
         <artifactId>gc-boot</artifactId>
         <groupId>com.gc</groupId>
-        <version>0.0.5-SNAPSHOT</version>
+        <version>0.0.6-SNAPSHOT</version>
     </parent>
     <artifactId>gc-commons</artifactId>
-    <version>0.0.5-SNAPSHOT</version>
+    <version>0.0.6-SNAPSHOT</version>
     <name>gc-commons</name>
     <description>Demo project for Spring Boot</description>
 
