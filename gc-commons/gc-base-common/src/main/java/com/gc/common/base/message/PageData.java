@@ -1,4 +1,4 @@
-package com.gc.starter.crud.model;
+package com.gc.common.base.message;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

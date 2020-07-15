@@ -4,6 +4,7 @@ package com.gc.common.base.message;
 import com.gc.common.base.exception.BaseException;
 import com.gc.common.base.http.HttpStatus;
 import com.gc.common.base.http.IHttpStatus;
+import com.github.pagehelper.Page;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
@@ -13,6 +14,7 @@ import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.lang.NonNull;
 import org.springframework.validation.BindingResult;
 
+import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.util.Objects;
 import java.util.Optional;
@@ -92,7 +94,17 @@ public class Result<T> {
      * @return 成功消息
      */
     public static Result<Object> success() {
-        return Result.success(null);
+        return Result.success(null, ResultCodeEnum.SUCCESS.getMsg());
+    }
+
+    /**
+     * 返回分页数据
+     * @param page 分页信息
+     * @param <T> 泛型
+     * @return 分页数据
+     */
+    public static <T extends Serializable> Result<PageData<T>> success(@NonNull Page<T> page) {
+        return Result.success(new PageData<>(page.getResult(), page.getTotal()));
     }
 
 
