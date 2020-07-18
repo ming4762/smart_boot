@@ -1,10 +1,10 @@
 package com.gc.starter.crud.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.gc.common.base.message.PageData;
 import com.gc.common.base.message.Result;
 import com.gc.starter.crud.constants.CrudConstants;
 import com.gc.starter.crud.model.BaseModel;
-import com.gc.starter.crud.model.PageData;
 import com.gc.starter.crud.model.Sort;
 import com.gc.starter.crud.query.PageQuery;
 import com.gc.starter.crud.query.PageQueryParameter;
