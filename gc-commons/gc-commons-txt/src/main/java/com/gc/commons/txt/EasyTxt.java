@@ -26,6 +26,14 @@ public class EasyTxt {
         return read(inputStream, clazz, readListener, StandardCharsets.UTF_8);
     }
 
+    /**
+     * 读取TXT
+     * @param inputStream 输入流
+     * @param clazz 实体列
+     * @param readListener 读取监听
+     * @param charset 编码方式
+     * @return TxtReaderBuilder
+     */
     public static <T extends TxtBaseModel> TxtReaderBuilder<T> read(@NonNull InputStream inputStream, @NonNull Class<T> clazz, @NonNull ReadListener<T> readListener, @NonNull Charset charset) {
         final TxtReaderBuilder<T> txtReaderBuilder = new TxtReaderBuilder<>();
         txtReaderBuilder
