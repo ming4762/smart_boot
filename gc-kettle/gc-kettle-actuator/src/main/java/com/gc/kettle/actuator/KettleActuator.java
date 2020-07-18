@@ -1,8 +1,13 @@
 package com.gc.kettle.actuator;
 
+import org.apache.commons.lang3.StringUtils;
 import org.pentaho.di.core.KettleEnvironment;
 import org.pentaho.di.core.exception.KettleException;
 import org.pentaho.di.core.util.EnvUtil;
+import org.pentaho.di.job.Job;
+import org.pentaho.di.job.JobMeta;
+import org.pentaho.di.repository.RepositoryDirectoryInterface;
+import org.pentaho.di.repository.kdr.KettleDatabaseRepository;
 import org.pentaho.di.trans.Trans;
 import org.pentaho.di.trans.TransMeta;
 import org.springframework.lang.NonNull;
@@ -69,6 +74,76 @@ public class KettleActuator {
             throw new KettleException("There are errors during transformation exception!(传输过程中发生异常)");
         }
     }
+
+    /**
+     * 执行数据库trans
+     * @param repository 资源库
+     * @param transName 转换名
+     * @param directoryName 目录名
+     * @param params 参数
+     * @param variableMap 变量
+     * @param parameterMap 命名参数
+     * @throws KettleException KettleException
+     */
+    public static void excuteDbTransfer(@NonNull KettleDatabaseRepository repository, @NonNull String transName, String directoryName, @NonNull String[] params, @NonNull Map<String, String> variableMap, @NonNull Map<String, String> parameterMap) throws KettleException {
+        final RepositoryDirectoryInterface directoryInterface = getDirectoryInterface(repository, directoryName);
+        // 获取转换
+        final TransMeta transMeta = repository.loadTransformation(transName, directoryInterface,null,true,null);
+        doExecuteTransfer(transMeta, params, variableMap, parameterMap);
+    }
+
+    /**
+     * 执行资源库JOB
+     * @param repository 资源库
+     * @param jobName job名称
+     * @param directoryName 目录
+     * @param params job参数
+     * @param parameterMap 命名参数
+     * @throws Exception Exception
+     */
+    public static void excuteDbJob(@NonNull KettleDatabaseRepository repository, String jobName, String directoryName, @NonNull Map<String, String> params, @NonNull Map<String, String> parameterMap) throws Exception {
+        final RepositoryDirectoryInterface directoryInterface = getDirectoryInterface(repository, directoryName);
+        final JobMeta jobMeta = repository.loadJob(jobName, directoryInterface, null, null);
+        final Job job = new Job(repository, jobMeta);
+        doExcuteJob(job, params, parameterMap);
+    }
+
+    /**
+     * 执行JOB
+     * @param job job对象
+     * @param params job参数
+     * @param parameterMap 命名参数
+     * @throws Exception Exception
+     */
+    private static void doExcuteJob(@NonNull Job job, @NonNull Map<String, String> params, @NonNull Map<String, String> parameterMap) throws Exception {
+        params.forEach(job :: setVariable);
+        for (Map.Entry<String, String> entry : parameterMap.entrySet()) {
+            String key = entry.getKey();
+            String value = entry.getValue();
+            job.setParameterValue(key, value);
+        }
+        job.start();
+        job.waitUntilFinished();
+        if (job.getErrors() > 0) {
+            throw new Exception("There are errors during job exception!(执行job发生异常)");
+        }
+    }
+
+    /**
+     * 获取资源路径
+     * @param repository 资源库
+     * @param directoryName 目录名
+     * @return 目录路径
+     * @throws KettleException KettleException
+     */
+    private static RepositoryDirectoryInterface getDirectoryInterface(@NonNull KettleDatabaseRepository repository, String directoryName) throws KettleException {
+        RepositoryDirectoryInterface directoryInterface = repository.loadRepositoryDirectoryTree();
+        if (StringUtils.isNotBlank(directoryName)) {
+            directoryInterface = directoryInterface.findDirectory(directoryName);
+        }
+        return directoryInterface;
+    }
+
 
     public static void main(String[] args) throws KettleException {
         KettleActuator.excuteTransfer("/Users/shizhongming/Documents/temp/test/kettle/ceshi1.ktr");
