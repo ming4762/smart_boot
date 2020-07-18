@@ -5,17 +5,19 @@
     <parent>
         <groupId>com.gc</groupId>
         <artifactId>gc-boot</artifactId>
-        <version>0.0.5-SNAPSHOT</version>
+        <version>0.0.6-SNAPSHOT</version>
     </parent>
     <artifactId>gc-kettle</artifactId>
-    <version>0.0.5-SNAPSHOT</version>
+    <version>0.0.6-SNAPSHOT</version>
     <name>gc-kettle</name>
     <description>Demo project for Spring Boot</description>
 
     <packaging>pom</packaging>
 
     <modules>
+        <module>kettle-spring-boot-starter</module>
         <module>gc-kettle-actuator</module>
+        <module>gc-kettle-xxl-executor</module>
     </modules>
 
     <properties>
