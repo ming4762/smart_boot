@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.gc</groupId>
+        <artifactId>gc-auth</artifactId>
+        <version>0.0.6-SNAPSHOT</version>
+    </parent>
+    <artifactId>gc-auth-cache-redis</artifactId>
+    <version>${gc-boot.version}</version>
+    <name>gc-auth-cache-redis</name>
+    <description>认证模块的缓存工具</description>
+
+    <properties>
+        <java.version>1.8</java.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.gc</groupId>
+            <artifactId>redis-sping-boot-starter</artifactId>
+            <version>${gc-boot.version}</version>
+        </dependency>
+    </dependencies>
+
+</project>
