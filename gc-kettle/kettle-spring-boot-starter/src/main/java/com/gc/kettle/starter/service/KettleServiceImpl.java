@@ -2,6 +2,7 @@ package com.gc.kettle.starter.service;
 
 import com.gc.kettle.actuator.KettleActuator;
 import com.gc.kettle.starter.pool.KettleRepositoryProvider;
+import org.pentaho.di.core.exception.KettleException;
 import org.pentaho.di.repository.kdr.KettleDatabaseRepository;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
@@ -29,10 +30,10 @@ public class KettleServiceImpl implements KettleService {
      * @param params 参数
      * @param variableMap 变量
      * @param parameterMap  命名参数
-     * @throws Exception Exception
+     * @throws KettleException Exception
      */
     @Override
-    public void executeDbTransfer(@NonNull String transName, String directoryName, @NonNull String[] params, @NonNull Map<String, String> variableMap, @NonNull Map<String, String> parameterMap) throws Exception {
+    public void executeDbTransfer(@NonNull String transName, String directoryName, @NonNull String[] params, @NonNull Map<String, String> variableMap, @NonNull Map<String, String> parameterMap) throws KettleException {
         KettleDatabaseRepository repository = this.kettleRepositoryProvider.getRepository();
         KettleActuator.excuteDbTransfer(repository, transName, directoryName, params, variableMap, parameterMap);
         kettleRepositoryProvider.returnRepository(repository);
@@ -44,10 +45,10 @@ public class KettleServiceImpl implements KettleService {
      * @param directoryName job所在目录
      * @param params 参数
      * @param parameterMap 命名参数
-     * @throws Exception Exception
+     * @throws KettleException Exception
      */
     @Override
-    public void executeDbJob(@NonNull String name, String directoryName, @NonNull Map<String, String> params, @NonNull Map<String, String> parameterMap) throws Exception {
+    public void executeDbJob(@NonNull String name, String directoryName, @NonNull Map<String, String> params, @NonNull Map<String, String> parameterMap) throws KettleException {
         KettleDatabaseRepository repository = this.kettleRepositoryProvider.getRepository();
         KettleActuator.excuteDbJob(repository, name, directoryName, params, parameterMap);
         kettleRepositoryProvider.returnRepository(repository);

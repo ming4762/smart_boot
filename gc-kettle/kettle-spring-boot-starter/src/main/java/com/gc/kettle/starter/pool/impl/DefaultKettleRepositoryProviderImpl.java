@@ -35,11 +35,16 @@ public class DefaultKettleRepositoryProviderImpl implements KettleRepositoryProv
      */
     @Override
     @Nullable
-    public KettleDatabaseRepository getRepository() throws Exception {
+    public KettleDatabaseRepository getRepository() {
         if (this.objectPool.getNumWaiters() > 0) {
             log.warn("线程池暂无空闲资源库对象");
         }
-        return objectPool.borrowObject();
+        try {
+            return objectPool.borrowObject();
+        } catch (Exception e) {
+            log.warn("从连接池中获取资源库发生错误", e);
+            return null;
+        }
     }
 
     /**

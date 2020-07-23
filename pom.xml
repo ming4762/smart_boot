@@ -18,7 +18,7 @@
 	<properties>
 		<java.version>8</java.version>
 		<gc-boot.version>0.0.6-SNAPSHOT</gc-boot.version>
-		<kettle.version>7.1.0.0</kettle.version>
+		<kettle.version>8.3.0.0</kettle.version>
 	</properties>
 
 	<modules>
@@ -79,11 +79,11 @@
 	<distributionManagement>
 		<repository>
 			<id>releases</id>
-			<url>http://192.168.25.232:8081/repository/maven-releases/</url>
+			<url>http://maven.gc-it.cn/repository/maven-releases/</url>
 		</repository>
 		<snapshotRepository>
 			<id>snapshots</id>
-			<url>http://192.168.25.232:8081/repository/maven-snapshots/</url>
+			<url>http://maven.gc-it.cn/repository/maven-snapshots/</url>
 		</snapshotRepository>
 	</distributionManagement>
 

@@ -12,7 +12,7 @@ public interface KettleRepositoryProvider {
      * 获取资源库
      * @return kettle资源库
      */
-    KettleDatabaseRepository getRepository() throws Exception;
+    KettleDatabaseRepository getRepository();
 
     /**
      * 归还资源库连接池

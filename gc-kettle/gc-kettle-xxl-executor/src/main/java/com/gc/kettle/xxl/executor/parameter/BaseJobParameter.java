@@ -14,7 +14,7 @@ import java.util.Map;
 @Getter
 @Setter
 @ToString
-public class XxlExecuteJobParameter implements Serializable {
+public class BaseJobParameter implements Serializable {
 
 
     private static final long serialVersionUID = 8843801592146285210L;

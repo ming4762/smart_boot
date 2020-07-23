@@ -1,12 +1,30 @@
 package com.gc.kettle.actuator.meta;
 
+import com.gc.kettle.actuator.constants.DatabaseTypeEnum;
+import org.apache.commons.lang3.StringUtils;
 import org.pentaho.di.core.database.DatabaseMeta;
+import org.pentaho.di.core.exception.KettleDatabaseException;
 
 /**
  * @author shizhongming
  * 2020/7/16 8:24 下午
  */
 public class CustomDatabaseMeta extends DatabaseMeta {
+    /**
+     * 旧的mysql驱动
+     */
+    private final String OLD_MYSQL_DRIVER = "org.gjt.mm.mysql.Driver";
+
+    /**
+     * 新的mysql驱动
+     */
+    private final String NEW_MYSQL_DRIVER = "com.mysql.cj.jdbc.Driver";
+
+    /**
+     * mysql servertimezone
+     */
+    private final String MYSQL_TIME_ZONE = "&serverTimeZone=GMT%2B8";
+
 
 //    private String name;
 //
@@ -37,9 +55,23 @@ public class CustomDatabaseMeta extends DatabaseMeta {
     @Override
     public String getDriverClass() {
         String driverClass = super.getDriverClass();
-        if ("org.gjt.mm.mysql.Driver".equals(driverClass)) {
-            driverClass = "com.mysql.cj.jdbc.Driver";
+        if (OLD_MYSQL_DRIVER.equals(driverClass)) {
+            driverClass = NEW_MYSQL_DRIVER;
         }
         return driverClass;
+    }
+
+    /**
+     * 重写getURL函数，解决mysql serverTimeZone问题
+     * @return url
+     * @throws KettleDatabaseException KettleDatabaseException
+     */
+    @Override
+    public String getURL() throws KettleDatabaseException {
+        String url = super.getURL();
+        if (StringUtils.equals(this.getDatabaseInterface().getPluginName(), DatabaseTypeEnum.MySql.name())) {
+            url += MYSQL_TIME_ZONE;
+        }
+        return url;
     }
 }

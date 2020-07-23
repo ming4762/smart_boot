@@ -14,7 +14,7 @@ import java.util.Map;
 @Getter
 @Setter
 @ToString
-public class XxlExecuteTransferParameter implements Serializable {
+public class BaseTransferParameter implements Serializable {
     private static final long serialVersionUID = -377870716025550955L;
 
     private String transName;

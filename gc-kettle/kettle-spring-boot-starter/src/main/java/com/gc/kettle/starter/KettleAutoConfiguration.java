@@ -5,6 +5,7 @@ import com.gc.kettle.starter.pool.impl.DefaultKettleRepositoryProviderImpl;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
 /**
@@ -12,6 +13,7 @@ import org.springframework.context.annotation.Configuration;
  * 2020/7/16 8:10 下午
  */
 @Configuration
+@ComponentScan
 @EnableConfigurationProperties(KettleProperties.class)
 public class KettleAutoConfiguration {
 

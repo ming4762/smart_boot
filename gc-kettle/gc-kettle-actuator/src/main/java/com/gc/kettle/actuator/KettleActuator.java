@@ -28,7 +28,7 @@ public class KettleActuator {
      * @throws KettleException 转换异常
      */
     public static void excuteTransfer(@NonNull String ktrPath) throws KettleException {
-        excuteTransfer(ktrPath, new String[0], new HashMap<>(), new HashMap<>());
+        excuteTransfer(ktrPath, new String[0], new HashMap<>(0), new HashMap<>(0));
     }
 
     /**
@@ -99,9 +99,9 @@ public class KettleActuator {
      * @param directoryName 目录
      * @param params job参数
      * @param parameterMap 命名参数
-     * @throws Exception Exception
+     * @throws KettleException Exception
      */
-    public static void excuteDbJob(@NonNull KettleDatabaseRepository repository, String jobName, String directoryName, @NonNull Map<String, String> params, @NonNull Map<String, String> parameterMap) throws Exception {
+    public static void excuteDbJob(@NonNull KettleDatabaseRepository repository, String jobName, String directoryName, @NonNull Map<String, String> params, @NonNull Map<String, String> parameterMap) throws KettleException {
         final RepositoryDirectoryInterface directoryInterface = getDirectoryInterface(repository, directoryName);
         final JobMeta jobMeta = repository.loadJob(jobName, directoryInterface, null, null);
         final Job job = new Job(repository, jobMeta);
@@ -113,9 +113,9 @@ public class KettleActuator {
      * @param job job对象
      * @param params job参数
      * @param parameterMap 命名参数
-     * @throws Exception Exception
+     * @throws KettleException Exception
      */
-    private static void doExcuteJob(@NonNull Job job, @NonNull Map<String, String> params, @NonNull Map<String, String> parameterMap) throws Exception {
+    private static void doExcuteJob(@NonNull Job job, @NonNull Map<String, String> params, @NonNull Map<String, String> parameterMap) throws KettleException {
         params.forEach(job :: setVariable);
         for (Map.Entry<String, String> entry : parameterMap.entrySet()) {
             String key = entry.getKey();
@@ -125,7 +125,7 @@ public class KettleActuator {
         job.start();
         job.waitUntilFinished();
         if (job.getErrors() > 0) {
-            throw new Exception("There are errors during job exception!(执行job发生异常)");
+            throw new KettleException("There are errors during job exception!(执行job发生异常)");
         }
     }
 
