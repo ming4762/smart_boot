@@ -4,7 +4,7 @@ import com.gc.starter.file.serice.ActualFileService;
 import com.mongodb.client.gridfs.GridFSBuckets;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.bson.types.ObjectId;
-import org.springframework.data.mongodb.MongoDbFactory;
+import org.springframework.data.mongodb.MongoDatabaseFactory;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.gridfs.GridFsTemplate;
@@ -22,9 +22,9 @@ import java.util.List;
 
         private final GridFsTemplate gridFsTemplate;
 
-        private final MongoDbFactory dbFactory;
+        private final MongoDatabaseFactory dbFactory;
 
-        public ActualFileServiceMongoImpl(GridFsTemplate gridFsTemplate, MongoDbFactory dbFactory) {
+        public ActualFileServiceMongoImpl(GridFsTemplate gridFsTemplate, MongoDatabaseFactory dbFactory) {
             this.gridFsTemplate = gridFsTemplate;
             this.dbFactory = dbFactory;
         }
@@ -82,7 +82,7 @@ import java.util.List;
      */
     @Override
     public InputStream download(@NonNull String id) throws FileNotFoundException {
-        return GridFSBuckets.create(dbFactory.getDb()).openDownloadStream(new ObjectId(id));
+        return GridFSBuckets.create(dbFactory.getMongoDatabase()).openDownloadStream(new ObjectId(id));
     }
 
     /**
