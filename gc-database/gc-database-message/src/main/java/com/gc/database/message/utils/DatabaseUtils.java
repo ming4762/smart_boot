@@ -69,7 +69,7 @@ public class DatabaseUtils {
         } catch (NoSuchMethodException e) {
             throw new NoSuchMethodRuntimeException(e);
         } catch (SQLException e) {
-            throw new SQLRuntimeException(e);
+            throw new SqlRuntimeException(e);
         } catch (IllegalAccessException e) {
             throw new IllegalAccessRuntimeException(e);
         }

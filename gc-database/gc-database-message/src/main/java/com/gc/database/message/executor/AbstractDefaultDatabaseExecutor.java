@@ -1,6 +1,6 @@
 package com.gc.database.message.executor;
 
-import com.gc.common.base.exception.SQLRuntimeException;
+import com.gc.common.base.exception.SqlRuntimeException;
 import com.gc.common.base.utils.ReflectUtil;
 import com.gc.database.message.annotation.DatabaseField;
 import com.gc.database.message.constants.ExceptionConstant;
@@ -146,7 +146,7 @@ public abstract class AbstractDefaultDatabaseExecutor implements DatabaseExecuto
             });
             return tableList;
         } catch (SQLException e) {
-            throw new SQLRuntimeException(e);
+            throw new SqlRuntimeException(e);
         }
     }
 
@@ -170,7 +170,7 @@ public abstract class AbstractDefaultDatabaseExecutor implements DatabaseExecuto
             }
             return DatabaseUtils.resultSetToModel(resultSet, PrimaryKeyBO.class, mapping);
         } catch (SQLException e) {
-            throw new SQLRuntimeException(e);
+            throw new SqlRuntimeException(e);
         }
     }
 
@@ -194,7 +194,7 @@ public abstract class AbstractDefaultDatabaseExecutor implements DatabaseExecuto
             }
             return DatabaseUtils.resultSetToModel(resultSet, ImportKeyBO.class, mapping);
         } catch (SQLException e) {
-            throw new SQLRuntimeException(e);
+            throw new SqlRuntimeException(e);
         }
     }
 
@@ -226,7 +226,7 @@ public abstract class AbstractDefaultDatabaseExecutor implements DatabaseExecuto
             }
             return DatabaseUtils.resultSetToModel(resultSet, IndexBO.class, mapping);
         } catch (SQLException e) {
-            throw new SQLRuntimeException(e);
+            throw new SqlRuntimeException(e);
         }
     }
 
@@ -295,7 +295,7 @@ public abstract class AbstractDefaultDatabaseExecutor implements DatabaseExecuto
             }
             return columnList;
         } catch (SQLException e) {
-            throw new SQLRuntimeException(e);
+            throw new SqlRuntimeException(e);
         }
     }
 
