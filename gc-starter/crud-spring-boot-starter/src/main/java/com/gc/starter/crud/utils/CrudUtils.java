@@ -206,7 +206,7 @@ public final class CrudUtils {
      */
     @NonNull
     public static String getDefaultDbField(@NonNull String fieldName) {
-        return StringUtils.underscoreName(fieldName);
+        return StringUtils.humpToLine(fieldName);
     }
 
     /**
