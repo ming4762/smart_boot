@@ -1,19 +1,18 @@
-package com.gc.database.message.pojo.bo;
+package com.gc.database.message.pojo.dbo;
 
 import com.gc.database.message.annotation.DatabaseField;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 
 /**
- * 外键信息
- * @author shizhongming
- * 2020/1/20 9:08 下午
+ * @author ShiZhongMing
+ * 2020/7/25 17:11
+ * @since 1.0
  */
 @Getter
 @Setter
-@ToString
-public class ImportKeyBO extends AbstractDatabaseBaseBO {
+public class ImportKeyDO extends AbstractDatabaseBaseDO {
+
     private static final long serialVersionUID = 2244980886860996732L;
 
     @DatabaseField("PKTABLE_CAT")

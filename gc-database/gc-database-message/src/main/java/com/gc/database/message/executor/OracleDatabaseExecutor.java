@@ -1,6 +1,7 @@
 package com.gc.database.message.executor;
 
 import com.gc.database.message.pojo.bo.DatabaseConnectionBO;
+import org.springframework.lang.NonNull;
 
 /**
  * @author shizhongming
@@ -8,7 +9,7 @@ import com.gc.database.message.pojo.bo.DatabaseConnectionBO;
  */
 public class OracleDatabaseExecutor extends AbstractDefaultDatabaseExecutor implements DatabaseExecutor {
     @Override
-    public String getUrl(DatabaseConnectionBO databaseConnection) {
+    public String getUrl(@NonNull DatabaseConnectionBO databaseConnection) {
         return databaseConnection.getUrl();
     }
 }

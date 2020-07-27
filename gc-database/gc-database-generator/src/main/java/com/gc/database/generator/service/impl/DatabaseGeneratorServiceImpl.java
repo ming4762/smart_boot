@@ -56,7 +56,7 @@ public class DatabaseGeneratorServiceImpl implements DatabaseGeneratorService {
         final DatabaseExecutor databaseExecutor = databaseConnection.getDatabaseExecutor();
         // 获取所有数据
         final List<TableViewBO> tableList = databaseExecutor.listTable(databaseConnection, null);
-//        final List<ColumnBO> columnList = databaseExecutor.listColumn(databaseConnection, null);
+
         final DatabaseTemplateModel model = DatabaseTemplateModel.builder()
                 .tableList(tableList)
                 .currentDate(LocalDate.now().format(DateTimeFormatter.ISO_DATE))

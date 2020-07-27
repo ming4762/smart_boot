@@ -1,5 +1,8 @@
 package com.gc.database.message.annotation;
 
+import com.gc.database.message.converter.AutoConverter;
+import com.gc.database.message.converter.Converter;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -14,4 +17,6 @@ import java.lang.annotation.Target;
 public @interface DatabaseField {
 
     String value();
+
+    Class<? extends Converter> converter() default AutoConverter.class;
 }

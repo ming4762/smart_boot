@@ -7,7 +7,9 @@ import com.gc.database.message.constants.ExceptionConstant;
 import com.gc.database.message.constants.TableTypeConstants;
 import com.gc.database.message.constants.TypeMappingConstant;
 import com.gc.database.message.exception.SmartDatabaseException;
-import com.gc.database.message.pojo.bo.*;
+import com.gc.database.message.pojo.bo.ColumnBO;
+import com.gc.database.message.pojo.bo.DatabaseConnectionBO;
+import com.gc.database.message.pojo.dbo.*;
 import com.gc.database.message.utils.CacheUtils;
 import com.gc.database.message.utils.DatabaseUtils;
 import com.google.common.collect.Lists;
@@ -110,22 +112,13 @@ public abstract class AbstractDefaultDatabaseExecutor implements DatabaseExecuto
         return result;
     }
 
-    @Override
-    public @NonNull List<TableViewBO> listTable(@NonNull DatabaseConnectionBO databaseConnection, @Nullable String tableNamePattern) {
-        return this.listTable(databaseConnection, tableNamePattern, TableTypeConstants.TABLE);
-    }
-
-    @Override
-    public @NonNull List<TableViewBO> listView(@NonNull DatabaseConnectionBO databaseConnection, @Nullable String tableNamePattern) {
-        return this.listTable(databaseConnection, tableNamePattern, TableTypeConstants.VIEW);
-    }
-
     /**
      * 获取表格信息
      * @param types 类型
      */
     @Override
-    public @NonNull List<TableViewBO> listTable(@NonNull DatabaseConnectionBO databaseConnection, @Nullable String tableNamePattern, TableTypeConstants... types) {
+    public @NonNull List<TableViewDO> listBaseTable(@NonNull DatabaseConnectionBO databaseConnection, @Nullable String tableNamePattern, TableTypeConstants... types) {
+        ResultSet resultSet = null;
         try {
             final Connection connection = this.getConnection(databaseConnection);
             if (!this.testConnection(connection)|| ArrayUtils.isEmpty(types)) {
@@ -136,17 +129,13 @@ public abstract class AbstractDefaultDatabaseExecutor implements DatabaseExecuto
                     .map(Enum::name)
                     .toArray(String[]::new);
             // 获取resultSet
-            ResultSet resultSet = connection.getMetaData().getTables(connection.getCatalog(), null, tableNamePattern, typesStr);
-            Map<String, Field> mapping = this.getDatabaseMapping(TableViewBO.class);
-            List<TableViewBO> tableList = DatabaseUtils.resultSetToModel(resultSet, TableViewBO.class, mapping);
-            // 获取列信息
-            tableList.forEach(table -> {
-                final List<ColumnBO> columnList = this.listColumn(databaseConnection, table.getTableName());
-                table.setColumnList(columnList);
-            });
-            return tableList;
+            resultSet = connection.getMetaData().getTables(connection.getCatalog(), connection.getSchema(), tableNamePattern, typesStr);
+            Map<String, Field> mapping = this.getDatabaseMapping(TableViewDO.class);
+            return DatabaseUtils.resultSetToModel(resultSet, TableViewDO.class, mapping);
         } catch (SQLException e) {
             throw new SqlRuntimeException(e);
+        } finally {
+            close(resultSet);
         }
     }
 
@@ -157,20 +146,23 @@ public abstract class AbstractDefaultDatabaseExecutor implements DatabaseExecuto
      * @return 主键列表
      */
     @Override
-    public List<PrimaryKeyBO> listPrimaryKey(@NonNull DatabaseConnectionBO databaseConnection, String tableName)  {
+    public List<PrimaryKeyDO> listPrimaryKey(@NonNull DatabaseConnectionBO databaseConnection, String tableName)  {
+        ResultSet resultSet = null;
         try {
             Connection connection = this.getConnection(databaseConnection);
             if (!this.testConnection(connection)) {
                 return Lists.newArrayList();
             }
-            ResultSet resultSet = connection.getMetaData().getPrimaryKeys(connection.getCatalog(), null, tableName);
-            Map<String, Field> mapping = CacheUtils.getFieldMapping(PrimaryKeyBO.class);
+            resultSet = connection.getMetaData().getPrimaryKeys(connection.getCatalog(), null, tableName);
+            Map<String, Field> mapping = CacheUtils.getFieldMapping(PrimaryKeyDO.class);
             if (mapping == null) {
-                throw new SmartDatabaseException(ExceptionConstant.DATABASE_FILE_MAPPING_NOT_FOUND, PrimaryKeyBO.class.getName());
+                throw new SmartDatabaseException(ExceptionConstant.DATABASE_FILE_MAPPING_NOT_FOUND, PrimaryKeyDO.class.getName());
             }
-            return DatabaseUtils.resultSetToModel(resultSet, PrimaryKeyBO.class, mapping);
+            return DatabaseUtils.resultSetToModel(resultSet, PrimaryKeyDO.class, mapping);
         } catch (SQLException e) {
             throw new SqlRuntimeException(e);
+        } finally {
+            close(resultSet);
         }
     }
 
@@ -181,20 +173,23 @@ public abstract class AbstractDefaultDatabaseExecutor implements DatabaseExecuto
      * @return 外键列表
      */
     @Override
-    public List<ImportKeyBO> listImportedKeys(@NonNull DatabaseConnectionBO databaseConnection, String tableName){
+    public List<ImportKeyDO> listImportedKeys(@NonNull DatabaseConnectionBO databaseConnection, String tableName){
+        ResultSet resultSet = null;
         try {
             Connection connection = this.getConnection(databaseConnection);
             if (!this.testConnection(connection)) {
                 return Lists.newArrayList();
             }
-            ResultSet resultSet = connection.getMetaData().getImportedKeys(connection.getCatalog(), connection.getSchema(), tableName);
-            Map<String, Field> mapping = CacheUtils.getFieldMapping(ImportKeyBO.class);
+            resultSet  = connection.getMetaData().getImportedKeys(connection.getCatalog(), connection.getSchema(), tableName);
+            Map<String, Field> mapping = CacheUtils.getFieldMapping(ImportKeyDO.class);
             if (mapping == null) {
-                throw new SmartDatabaseException(ExceptionConstant.DATABASE_FILE_MAPPING_NOT_FOUND, ImportKeyBO.class.getName());
+                throw new SmartDatabaseException(ExceptionConstant.DATABASE_FILE_MAPPING_NOT_FOUND, ImportKeyDO.class.getName());
             }
-            return DatabaseUtils.resultSetToModel(resultSet, ImportKeyBO.class, mapping);
+            return DatabaseUtils.resultSetToModel(resultSet, ImportKeyDO.class, mapping);
         } catch (SQLException e) {
             throw new SqlRuntimeException(e);
+        } finally {
+            close(resultSet);
         }
     }
 
@@ -207,7 +202,8 @@ public abstract class AbstractDefaultDatabaseExecutor implements DatabaseExecuto
      * @return
      */
     @Override
-    public List<IndexBO> listIndex(@NonNull DatabaseConnectionBO databaseConnection, String tableName, Boolean unique, Boolean approximate) {
+    public List<IndexDO> listIndex(@NonNull DatabaseConnectionBO databaseConnection, String tableName, Boolean unique, Boolean approximate) {
+        ResultSet resultSet = null;
         try {
             Connection connection = this.getConnection(databaseConnection);
             if (!this.testConnection(connection)) {
@@ -219,14 +215,16 @@ public abstract class AbstractDefaultDatabaseExecutor implements DatabaseExecuto
             if (unique == null) {
                 unique = true;
             }
-            ResultSet resultSet = connection.getMetaData().getIndexInfo(connection.getCatalog(), connection.getSchema(), tableName, unique, approximate);
-            Map<String, Field> mapping = CacheUtils.getFieldMapping(IndexBO.class);
+            resultSet  = connection.getMetaData().getIndexInfo(connection.getCatalog(), connection.getSchema(), tableName, unique, approximate);
+            Map<String, Field> mapping = CacheUtils.getFieldMapping(IndexDO.class);
             if (mapping == null) {
-                throw new SmartDatabaseException(ExceptionConstant.DATABASE_FILE_MAPPING_NOT_FOUND, IndexBO.class.getName());
+                throw new SmartDatabaseException(ExceptionConstant.DATABASE_FILE_MAPPING_NOT_FOUND, IndexDO.class.getName());
             }
-            return DatabaseUtils.resultSetToModel(resultSet, IndexBO.class, mapping);
+            return DatabaseUtils.resultSetToModel(resultSet, IndexDO.class, mapping);
         } catch (SQLException e) {
             throw new SqlRuntimeException(e);
+        } finally {
+            close(resultSet);
         }
     }
 
@@ -240,62 +238,77 @@ public abstract class AbstractDefaultDatabaseExecutor implements DatabaseExecuto
     @NonNull
     public List<ColumnBO> listColumn(@NonNull DatabaseConnectionBO databaseConnection, @NonNull String tableName) {
         final String join = "#";
+        final List<ColumnDO> baseColumnList = this.listBaseColumn(databaseConnection, tableName);
+        final List<ColumnBO> columnList = ColumnBO.batchCreateFromDo(baseColumnList);
+        if (!columnList.isEmpty()) {
+            Map<String, ColumnBO> columnMap = columnList.stream().collect(Collectors.toMap(column -> String.join(join, column.getTableName(), column.getColumnName()), item -> item));
+            // 查询主键信息并设置
+            List<PrimaryKeyDO> primaryKeyList = this.listPrimaryKey(databaseConnection, tableName);
+            primaryKeyList.forEach(item -> {
+                String key = String.join(join, item.getTableName(), item.getColumnName());
+                ColumnBO column = columnMap.get(key);
+                if (column != null) {
+                    column.setPrimaryKey(Boolean.TRUE);
+                    column.setKeySeq(item.getKeySeq());
+                    column.setPkName(item.getPkName());
+                }
+            });
+            // 查询外键信息并设置
+            List<ImportKeyDO> importKeyList = this.listImportedKeys(databaseConnection, tableName);
+            importKeyList.forEach(item -> {
+                ColumnBO column = columnMap.get(String.join(join, item.getFktableName(), item.getPkcolumnName()));
+                if (column != null) {
+                    column.setImportKey(Boolean.TRUE);
+                    column.setImportPkName(item.getPkName());
+                }
+            });
+            // 查询索引信息并设置
+            List<IndexDO> indexList = this.listUniqueIndex(databaseConnection, tableName);
+            indexList.forEach(item -> {
+                ColumnBO column = columnMap.get(String.join(join, item.getTableName(), item.getColumnName()));
+                if (column != null) {
+                    column.setIndexed(Boolean.TRUE);
+                    column.setUnique(Boolean.TRUE);
+                    column.setIndexType(item.getType());
+                }
+            });
+            // TODO:查询其他索引
+            // 设置其他信息
+            columnList.forEach(item -> {
+                TypeMappingConstant typeMappingConstant = CacheUtils.getFieldMapping(item.getDataType());
+                if (typeMappingConstant != null) {
+                    item.setJavaType(typeMappingConstant.getJavaClass().getName());
+                    item.setSimpleJavaType(typeMappingConstant.getJavaClass().getSimpleName());
+                }
+            });
+        }
+        return columnList;
+    }
+
+    /**
+     * 查询列基本信息
+     * @param databaseConnection 数据库连接
+     * @param tableName 表名
+     * @return 列基本信息
+     */
+    @Override
+    public List<ColumnDO> listBaseColumn(@NonNull DatabaseConnectionBO databaseConnection, @NonNull String tableName) {
+        ResultSet resultSet = null;
         try {
             Connection connection = this.getConnection(databaseConnection);
             if (!this.testConnection(connection)) {
                 return Lists.newArrayList();
             }
-            ResultSet resultSet = connection.getMetaData().getColumns(connection.getCatalog(), connection.getSchema(), tableName, null);
-            Map<String, Field> mapping = CacheUtils.getFieldMapping(ColumnBO.class);
+            resultSet  = connection.getMetaData().getColumns(connection.getCatalog(), connection.getSchema(), tableName, null);
+            Map<String, Field> mapping = CacheUtils.getFieldMapping(ColumnDO.class);
             if (mapping == null) {
                 throw new SmartDatabaseException(ExceptionConstant.DATABASE_FILE_MAPPING_NOT_FOUND, ColumnBO.class.getName());
             }
-            List<ColumnBO> columnList = DatabaseUtils.resultSetToModel(resultSet, ColumnBO.class, mapping);
-            if (!columnList.isEmpty()) {
-                Map<String, ColumnBO> columnMap = columnList.stream().collect(Collectors.toMap(column -> String.join(join, column.getTableName(), column.getColumnName()), item -> item));
-                // 查询主键信息并设置
-                List<PrimaryKeyBO> primaryKeyList = this.listPrimaryKey(databaseConnection, tableName);
-                primaryKeyList.forEach(item -> {
-                    String key = String.join(join, item.getTableName(), item.getColumnName());
-                    ColumnBO column = columnMap.get(key);
-                    if (column != null) {
-                        column.setPrimaryKey(Boolean.TRUE);
-                        column.setKeySeq(item.getKeySeq());
-                        column.setPkName(item.getPkName());
-                    }
-                });
-                // 查询外键信息并设置
-                List<ImportKeyBO> importKeyList = this.listImportedKeys(databaseConnection, tableName);
-                importKeyList.forEach(item -> {
-                    ColumnBO column = columnMap.get(String.join(join, item.getFktableName(), item.getPkcolumnName()));
-                    if (column != null) {
-                        column.setImportKey(Boolean.TRUE);
-                        column.setImportPkName(item.getPkName());
-                    }
-                });
-                // 查询索引信息并设置
-                List<IndexBO> indexList = this.listUniqueIndex(databaseConnection, tableName);
-                indexList.forEach(item -> {
-                    ColumnBO column = columnMap.get(String.join(join, item.getTableName(), item.getColumnName()));
-                    if (column != null) {
-                        column.setIndexed(Boolean.TRUE);
-                        column.setUnique(Boolean.TRUE);
-                        column.setIndexType(item.getType());
-                    }
-                });
-                // TODO:查询其他索引
-                // 设置其他信息
-                columnList.forEach(item -> {
-                    TypeMappingConstant typeMappingConstant = CacheUtils.getFieldMapping(item.getDataType());
-                    if (typeMappingConstant != null) {
-                        item.setJavaType(typeMappingConstant.getJavaClass().getName());
-                        item.setSimpleJavaType(typeMappingConstant.getJavaClass().getSimpleName());
-                    }
-                });
-            }
-            return columnList;
-        } catch (SQLException e) {
-            throw new SqlRuntimeException(e);
+            return DatabaseUtils.resultSetToModel(resultSet, ColumnDO.class, mapping);
+        } catch (SQLException sqlException) {
+            throw new SqlRuntimeException(sqlException);
+        } finally {
+            close(resultSet);
         }
     }
 
@@ -306,7 +319,7 @@ public abstract class AbstractDefaultDatabaseExecutor implements DatabaseExecuto
      * @return 唯一索引列表
      */
     @Override
-    public List<IndexBO> listUniqueIndex(@NonNull DatabaseConnectionBO databaseConnection, String tableName) {
+    public List<IndexDO> listUniqueIndex(@NonNull DatabaseConnectionBO databaseConnection, String tableName) {
         return this.listIndex(databaseConnection, tableName, true, true);
     }
 
@@ -315,13 +328,13 @@ public abstract class AbstractDefaultDatabaseExecutor implements DatabaseExecuto
      */
     private static void mappingDatabaseFieldToCache() {
         if (CacheUtils.isFieldMappingEmpty()) {
-            CacheUtils.setFieldMapping(TableViewBO.class, mappingDatabaseField(TableViewBO.class));
-            CacheUtils.setFieldMapping(PrimaryKeyBO.class, mappingDatabaseField(PrimaryKeyBO.class));
-            CacheUtils.setFieldMapping(IndexBO.class, mappingDatabaseField(IndexBO.class));
-            CacheUtils.setFieldMapping(ImportKeyBO.class, mappingDatabaseField(ImportKeyBO.class));
-            CacheUtils.setFieldMapping(ColumnBO.class, mappingDatabaseField(ColumnBO.class));
-            CacheUtils.setFieldMapping(ColumnRemarkBO.class, mappingDatabaseField(ColumnRemarkBO.class));
-            CacheUtils.setFieldMapping(TableRemarkBO.class, mappingDatabaseField(TableRemarkBO.class));
+            CacheUtils.setFieldMapping(TableViewDO.class, mappingDatabaseField(TableViewDO.class));
+            CacheUtils.setFieldMapping(PrimaryKeyDO.class, mappingDatabaseField(PrimaryKeyDO.class));
+            CacheUtils.setFieldMapping(IndexDO.class, mappingDatabaseField(IndexDO.class));
+            CacheUtils.setFieldMapping(ImportKeyDO.class, mappingDatabaseField(ImportKeyDO.class));
+            CacheUtils.setFieldMapping(ColumnDO.class, mappingDatabaseField(ColumnDO.class));
+            CacheUtils.setFieldMapping(ColumnRemarkDO.class, mappingDatabaseField(ColumnRemarkDO.class));
+            CacheUtils.setFieldMapping(TableRemarkDO.class, mappingDatabaseField(TableRemarkDO.class));
         }
     }
 
@@ -340,7 +353,7 @@ public abstract class AbstractDefaultDatabaseExecutor implements DatabaseExecuto
      * @param clazz
      * @return
      */
-    private static Map<String, Field> mappingDatabaseField(Class<? extends AbstractDatabaseBaseBO> clazz) {
+    private static Map<String, Field> mappingDatabaseField(Class<? extends AbstractDatabaseBaseDO> clazz) {
         final Map<String, Field> mapping = Maps.newHashMap();
         Set<Field> fieldSet = Sets.newHashSet();
         // 获取所有field
@@ -364,7 +377,7 @@ public abstract class AbstractDefaultDatabaseExecutor implements DatabaseExecuto
      * @param commentSql 查询sql
      */
     @SneakyThrows
-    protected void queryTableRemark(@NonNull DatabaseConnectionBO databaseConnection, @NonNull List<TableViewBO> tableList, @NonNull String commentSql) {
+    protected void queryTableRemark(@NonNull DatabaseConnectionBO databaseConnection, @NonNull List<TableViewDO> tableList, @NonNull String commentSql) {
         if (tableList.isEmpty()) {
             return;
         }
@@ -372,17 +385,17 @@ public abstract class AbstractDefaultDatabaseExecutor implements DatabaseExecuto
         final Connection connection = this.getConnection(databaseConnection);
         // 获取表名
         List<String> tableNameList = tableList.stream()
-                .map(TableViewBO::getTableName).collect(Collectors.toList());
+                .map(TableViewDO::getTableName).collect(Collectors.toList());
         PreparedStatement psmt = null;
         ResultSet rs = null;
         try {
             psmt = this.setInParameter(connection, commentSql, tableNameList);
             rs = psmt.executeQuery();
-            final List<TableRemarkBO> tableRemarkList = DatabaseUtils.resultSetToModel(rs, TableRemarkBO.class, this.getDatabaseMapping(TableRemarkBO.class));
+            final List<TableRemarkDO> tableRemarkList = DatabaseUtils.resultSetToModel(rs, TableRemarkDO.class, this.getDatabaseMapping(TableRemarkDO.class));
             // 转为map
             if (CollectionUtils.isNotEmpty(tableRemarkList)) {
                 Map<String, String> tableRemarkMap = tableRemarkList.stream()
-                        .collect(Collectors.toMap(TableRemarkBO :: getTableName, TableRemarkBO :: getRemark));
+                        .collect(Collectors.toMap(TableRemarkDO :: getTableName, TableRemarkDO :: getRemark));
                 // 遍历设置备注
                 tableList.forEach(table -> table.setRemarks(tableRemarkMap.get(table.getTableName())));
             }
@@ -399,7 +412,7 @@ public abstract class AbstractDefaultDatabaseExecutor implements DatabaseExecuto
      * @param commentSql 查询sql
      */
     @SneakyThrows
-    protected void queryColumnRemark(@NonNull DatabaseConnectionBO databaseConnection, @NonNull List<ColumnBO> columnList, @NonNull String commentSql) {
+    protected void queryColumnRemark(@NonNull DatabaseConnectionBO databaseConnection, @NonNull List<ColumnDO> columnList, @NonNull String commentSql) {
         if (columnList.isEmpty()) {
             return;
         }
@@ -407,16 +420,16 @@ public abstract class AbstractDefaultDatabaseExecutor implements DatabaseExecuto
         final Connection connection = this.getConnection(databaseConnection);
         // 获取表名
         Set<String> tableNames = columnList.stream()
-                .map(ColumnBO::getTableName).collect(Collectors.toSet());
+                .map(ColumnDO::getTableName).collect(Collectors.toSet());
         PreparedStatement psmt = null;
         ResultSet rs = null;
         try {
             psmt = this.setInParameter(connection, commentSql, tableNames);
             rs = psmt.executeQuery();
-            final List<ColumnRemarkBO> columnRemarkList = DatabaseUtils.resultSetToModel(rs, ColumnRemarkBO.class, this.getDatabaseMapping(ColumnRemarkBO.class));
+            final List<ColumnRemarkDO> columnRemarkList = DatabaseUtils.resultSetToModel(rs, ColumnRemarkDO.class, this.getDatabaseMapping(ColumnRemarkDO.class));
             if (CollectionUtils.isNotEmpty(columnRemarkList)) {
                 Map<String, String> columnRemarkMap = columnRemarkList.stream()
-                        .collect(Collectors.toMap(item -> item.getTableName() + item.getColumnName(), ColumnRemarkBO::getRemark));
+                        .collect(Collectors.toMap(item -> item.getTableName() + item.getColumnName(), ColumnRemarkDO::getRemark));
                 columnList.forEach(column -> column.setRemarks(columnRemarkMap.get(column.getTableName() + column.getColumnName())));
             }
         } finally {
@@ -452,7 +465,7 @@ public abstract class AbstractDefaultDatabaseExecutor implements DatabaseExecuto
      * 获取数据库实体映射
      * @param clazz 实体类
      */
-    protected Map<String, Field> getDatabaseMapping(Class<? extends AbstractDatabaseBaseBO> clazz) {
+    protected Map<String, Field> getDatabaseMapping(Class<? extends AbstractDatabaseBaseDO> clazz) {
         final Map<String, Field> fieldMap = CacheUtils.getFieldMapping(clazz);
         if (MapUtils.isEmpty(fieldMap)) {
             throw new SmartDatabaseException(ExceptionConstant.DATABASE_FILE_MAPPING_NOT_FOUND, clazz.getName());

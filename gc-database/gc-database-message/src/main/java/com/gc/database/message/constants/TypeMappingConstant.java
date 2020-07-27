@@ -3,6 +3,9 @@ package com.gc.database.message.constants;
 import lombok.Getter;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Date;
 
 /**
@@ -40,11 +43,11 @@ public enum TypeMappingConstant {
 
     LONGVARCHAR(-1, String.class),
 
-    DATE(91, Date.class),
+    DATE(91, LocalDate.class),
 
-    TIME(92, Date.class),
+    TIME(92, LocalTime.class),
 
-    TIMESTAMP(93, Date .class),
+    TIMESTAMP(93, LocalDateTime.class),
 
     BINARY(-2, byte[].class),
 

@@ -1,18 +1,19 @@
-package com.gc.database.message.pojo.bo;
+package com.gc.database.message.pojo.dbo;
 
 import com.gc.database.message.annotation.DatabaseField;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 
 /**
- * @author shizhongming
- * 2020/7/5 8:32 下午
+ * 字段注释
+ * @author ShiZhongMing
+ * 2020/7/25 17:11
+ * @since 1.0
  */
-@ToString
-@Setter
 @Getter
-public class ColumnRemarkBO extends AbstractDatabaseBaseBO {
+@Setter
+public class ColumnRemarkDO extends AbstractDatabaseBaseDO {
+
     private static final long serialVersionUID = 374924028298986492L;
 
     @DatabaseField("TABLE_NAME")

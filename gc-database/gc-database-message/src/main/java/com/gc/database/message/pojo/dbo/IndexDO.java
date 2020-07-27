@@ -1,20 +1,19 @@
-package com.gc.database.message.pojo.bo;
+package com.gc.database.message.pojo.dbo;
 
 import com.gc.database.message.annotation.DatabaseField;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 
 /**
  * 索引信息
- * @author shizhongming
- * 2020/1/20 9:11 下午
+ * @author ShiZhongMing
+ * 2020/7/25 17:08
+ * @since 1.0
  */
 @Getter
 @Setter
-@ToString
-public class IndexBO extends AbstractTableBaseBO {
-    private static final long serialVersionUID = -6827286891209056960L;
+public class IndexDO extends AbstractTableBaseDO {
+    private static final long serialVersionUID = -1195053644810330715L;
 
     @DatabaseField("NON_UNIQUE")
     private Integer nonUnique;

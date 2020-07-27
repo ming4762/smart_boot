@@ -1,9 +1,9 @@
 package com.gc.database.message.executor;
 
 import com.gc.database.message.constants.TableTypeConstants;
-import com.gc.database.message.pojo.bo.ColumnBO;
 import com.gc.database.message.pojo.bo.DatabaseConnectionBO;
-import com.gc.database.message.pojo.bo.TableViewBO;
+import com.gc.database.message.pojo.dbo.ColumnDO;
+import com.gc.database.message.pojo.dbo.TableViewDO;
 import org.springframework.lang.NonNull;
 
 import java.util.List;
@@ -26,7 +26,7 @@ public class SqlServerDatabaseExecutor extends AbstractDefaultDatabaseExecutor i
 
 
     @Override
-    public String getUrl(DatabaseConnectionBO databaseConnection) {
+    public String getUrl(@NonNull DatabaseConnectionBO databaseConnection) {
         return String.format("%s;database=%s", databaseConnection.getUrl(), databaseConnection.getDatabaseName());
     }
 
@@ -39,8 +39,8 @@ public class SqlServerDatabaseExecutor extends AbstractDefaultDatabaseExecutor i
      */
     @Override
     @NonNull
-    public List<TableViewBO> listTable(@NonNull DatabaseConnectionBO databaseConnection, String tableNamePattern, TableTypeConstants... types) {
-        List<TableViewBO> tableList = super.listTable(databaseConnection, tableNamePattern, types);
+    public List<TableViewDO> listBaseTable(@NonNull DatabaseConnectionBO databaseConnection, String tableNamePattern, TableTypeConstants... types) {
+        List<TableViewDO> tableList = super.listBaseTable(databaseConnection, tableNamePattern, types);
         this.queryTableRemark(databaseConnection, tableList, TABLE_COMMENTS_SQL);
         return tableList;
     }
@@ -53,8 +53,8 @@ public class SqlServerDatabaseExecutor extends AbstractDefaultDatabaseExecutor i
      */
     @NonNull
     @Override
-    public List<ColumnBO> listColumn(@NonNull DatabaseConnectionBO databaseConnection, @NonNull String tableName) {
-        List<ColumnBO> columnList = super.listColumn(databaseConnection, tableName);
+    public List<ColumnDO> listBaseColumn(@NonNull DatabaseConnectionBO databaseConnection, @NonNull String tableName) {
+        List<ColumnDO> columnList = super.listBaseColumn(databaseConnection, tableName);
         this.queryColumnRemark(databaseConnection, columnList, COLUMN_COMMENTS_SQL);
         return columnList;
     }

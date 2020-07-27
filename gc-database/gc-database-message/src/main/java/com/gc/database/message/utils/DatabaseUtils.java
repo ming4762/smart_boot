@@ -1,7 +1,13 @@
 package com.gc.database.message.utils;
 
 import com.gc.common.base.exception.*;
+import com.gc.database.message.annotation.DatabaseField;
+import com.gc.database.message.constants.ExceptionConstant;
+import com.gc.database.message.converter.AutoConverter;
+import com.gc.database.message.converter.Converter;
+import com.gc.database.message.exception.SmartDatabaseException;
 import com.google.common.collect.Lists;
+import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.lang.NonNull;
 
 import java.lang.reflect.Field;
@@ -9,9 +15,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 数据库工具类
@@ -56,7 +60,15 @@ public class DatabaseUtils {
                         if (value instanceof Short) {
                             value = new Integer((Short)value);
                         }
-                        field.set(model, value);
+                        if (Objects.nonNull(value)) {
+                            // 判断类型是否一致，如果不一致 使用转换器进行转换
+                            if (!Objects.equals(field.getType(), value.getClass())) {
+                                // 执行转换
+                                value = convertValue(field, value);
+                            }
+                            field.set(model, value);
+                        }
+
                     }
                 }
                 modelList.add(model);
@@ -73,5 +85,35 @@ public class DatabaseUtils {
         } catch (IllegalAccessException e) {
             throw new IllegalAccessRuntimeException(e);
         }
+    }
+
+    /**
+     * 转换至
+     * @param field java field
+     * @param value 需要转换的值
+     * @return 转换后的值
+     */
+    private static Object convertValue(@NonNull Field field, @NonNull Object value) throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
+        Converter converter = null;
+        // 1、判断field是否有自定义的转换器，如果有使用自定义转换器
+        Class<? extends Converter> converterClass = Optional.ofNullable(AnnotationUtils.findAnnotation(field, DatabaseField.class))
+                .map(DatabaseField::converter)
+                .orElse(null);
+        if (Objects.nonNull(converterClass) && !Objects.equals(converterClass, AutoConverter.class)) {
+            converter = CacheUtils.getConverter(converterClass);
+        }
+        // 2、如果没有自定义转换器，使用自动转换器
+        if (Objects.isNull(converter)) {
+            // 获取key
+            final String key = value.getClass().getName() + field.getType().getName();
+            converter = CacheUtils.getAutoConverter(key);
+        }
+        // 3、如果都没有转换器，抛出异常
+        if (Objects.isNull(converter)) {
+            throw new SmartDatabaseException(ExceptionConstant.DATABASE_FIELD_TO_JAVA_CONVERT_ERROR, value.getClass().getName(), field.getType().getName(), field.getName());
+        }
+        // 4、执行转换
+        value = converter.convert(value);
+        return value;
     }
 }

@@ -1,7 +1,10 @@
 package com.gc.database.message.executor;
 
 import com.gc.database.message.constants.TableTypeConstants;
-import com.gc.database.message.pojo.bo.*;
+import com.gc.database.message.pojo.bo.ColumnBO;
+import com.gc.database.message.pojo.bo.DatabaseConnectionBO;
+import com.gc.database.message.pojo.bo.TableViewBO;
+import com.gc.database.message.pojo.dbo.*;
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 
@@ -49,16 +52,20 @@ public interface DatabaseExecutor {
      * @return 表列表
      */
     @NonNull
-    List<TableViewBO> listTable(@NonNull DatabaseConnectionBO databaseConnection, @Nullable String tableNamePattern);
+    default List<TableViewDO> listBaseTable(@NonNull DatabaseConnectionBO databaseConnection, @Nullable String tableNamePattern) {
+        return this.listBaseTable(databaseConnection, tableNamePattern, TableTypeConstants.TABLE);
+    }
 
     /**
-     * 获取数据库实体
+     * 获取数据库视图
      * @param tableNamePattern 表名
      * @param databaseConnection 数据库连接信息
      * @return 表列表
      */
     @NonNull
-    List<TableViewBO> listView(@NonNull DatabaseConnectionBO databaseConnection, @Nullable String tableNamePattern);
+    default List<TableViewDO> listBaseView(@NonNull DatabaseConnectionBO databaseConnection, @Nullable String tableNamePattern) {
+        return this.listBaseTable(databaseConnection, tableNamePattern, TableTypeConstants.VIEW);
+    }
 
     /**
      * 获取数据库表格
@@ -68,7 +75,46 @@ public interface DatabaseExecutor {
      * @return 表列表
      */
     @NonNull
-    List<TableViewBO> listTable(@NonNull DatabaseConnectionBO databaseConnection, @Nullable String tableNamePattern, TableTypeConstants... types);
+    List<TableViewDO> listBaseTable(@NonNull DatabaseConnectionBO databaseConnection, @Nullable String tableNamePattern, TableTypeConstants... types);
+
+    /**
+     * 获取数据库表格
+     * @param databaseConnection 数据库连接信息
+     * @param tableNamePattern 表名
+     * @param types 视图/表格
+     * @return 表列表
+     */
+    @NonNull
+    default List<TableViewBO> listTable(@NonNull DatabaseConnectionBO databaseConnection, @Nullable String tableNamePattern, TableTypeConstants... types) {
+        final List<TableViewDO> baseTableList = this.listBaseTable(databaseConnection, tableNamePattern, types);
+        final List<TableViewBO> tableList = TableViewBO.batchCreateFromDo(baseTableList);
+        tableList.forEach(table -> {
+            final List<ColumnBO> columnList = this.listColumn(databaseConnection, table.getTableName());
+            table.setColumnList(columnList);
+        });
+        return tableList;
+    }
+
+    /**
+     * 获取数据库表格
+     * @param databaseConnection 数据库连接信息
+     * @param tableNamePattern 表名
+     * @return 表列表
+     */
+    default List<TableViewBO> listTable(@NonNull DatabaseConnectionBO databaseConnection, @Nullable String tableNamePattern) {
+        return this.listTable(databaseConnection, tableNamePattern, TableTypeConstants.TABLE);
+    }
+
+    /**
+     * 获取数据库视图
+     * @param tableNamePattern 表名
+     * @param databaseConnection 数据库连接信息
+     * @return 表列表
+     */
+    default List<TableViewBO> listView(@NonNull DatabaseConnectionBO databaseConnection, @Nullable String tableNamePattern) {
+        return this.listTable(databaseConnection, tableNamePattern, TableTypeConstants.VIEW);
+    }
+
 
     /**
      * 查询主键信息
@@ -76,7 +122,7 @@ public interface DatabaseExecutor {
      * @param tableName 表名
      * @return 主键列表
      */
-    List<PrimaryKeyBO> listPrimaryKey(@NonNull DatabaseConnectionBO databaseConnection, String tableName);
+    List<PrimaryKeyDO> listPrimaryKey(@NonNull DatabaseConnectionBO databaseConnection, String tableName);
 
     /**
      * 查询外键信息
@@ -84,7 +130,7 @@ public interface DatabaseExecutor {
      * @param tableName 表名
      * @return 外键列表
      */
-    List<ImportKeyBO> listImportedKeys(@NonNull DatabaseConnectionBO databaseConnection, String tableName);
+    List<ImportKeyDO> listImportedKeys(@NonNull DatabaseConnectionBO databaseConnection, String tableName);
 
     /**
      * 查询主键信息
@@ -94,7 +140,7 @@ public interface DatabaseExecutor {
      * @param approximate
      * @return
      */
-    List<IndexBO> listIndex(@NonNull DatabaseConnectionBO databaseConnection, String tableName, Boolean unique, Boolean approximate);
+    List<IndexDO> listIndex(@NonNull DatabaseConnectionBO databaseConnection, String tableName, Boolean unique, Boolean approximate);
 
     /**
      * 查询唯一索引
@@ -102,7 +148,7 @@ public interface DatabaseExecutor {
      * @param tableName 表名
      * @return 唯一索引列表
      */
-    List<IndexBO> listUniqueIndex(@NonNull DatabaseConnectionBO databaseConnection, String tableName);
+    List<IndexDO> listUniqueIndex(@NonNull DatabaseConnectionBO databaseConnection, String tableName);
 
     /**
      * 查询列信息
@@ -111,6 +157,14 @@ public interface DatabaseExecutor {
      * @return 列信息
      */
     List<ColumnBO> listColumn(@NonNull DatabaseConnectionBO databaseConnection, @NonNull String tableName);
+
+    /**
+     * 查询列基本信息
+     * @param databaseConnection 数据库连接
+     * @param tableName 表名
+     * @return 列基本信息
+     */
+    List<ColumnDO> listBaseColumn(@NonNull DatabaseConnectionBO databaseConnection, @NonNull String tableName);
 
     /**
      * 获取连接URL
