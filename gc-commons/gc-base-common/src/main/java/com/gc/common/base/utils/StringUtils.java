@@ -18,13 +18,15 @@ public final class StringUtils {
 
     private static final Pattern PATTERN = Pattern.compile("[A-Z]");
 
+    private static final Pattern LINE_PATTERN = Pattern.compile("_(\\w)");
+
     /**
-     * 下划线改为驼峰表示
-     * @param camelCaseName
-     * @return
+     * 驼峰标识改为下划线
+     * @param camelCaseName 源字符串
+     * @return 改为下划线的字符串
      */
     @NonNull
-    public static String underscoreName(@NonNull String camelCaseName) {
+    public static String humpToLine(@NonNull String camelCaseName) {
         final Matcher matcher = PATTERN.matcher(camelCaseName);
         StringBuffer stringBuffer = new StringBuffer(camelCaseName);
         if (matcher.find()) {
@@ -34,7 +36,22 @@ public final class StringUtils {
         } else {
             return stringBuffer.toString();
         }
-        return underscoreName(stringBuffer.toString());
+        return humpToLine(stringBuffer.toString());
     }
 
+    /**
+     * 下划线转驼峰
+     * @param str 源字符串
+     * @return 改为驼峰标识的字符串
+     */
+    public static String lineToHump(String str) {
+        str = str.toLowerCase();
+        Matcher matcher = LINE_PATTERN.matcher(str);
+        StringBuffer sb = new StringBuffer();
+        while (matcher.find()) {
+            matcher.appendReplacement(sb, matcher.group(1).toUpperCase());
+        }
+        matcher.appendTail(sb);
+        return sb.toString();
+    }
 }
