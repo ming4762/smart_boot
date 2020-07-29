@@ -5,6 +5,7 @@ import com.gc.database.message.pojo.bo.DatabaseConnectionBO;
 import com.gc.database.message.pojo.dbo.ColumnDO;
 import com.gc.database.message.pojo.dbo.TableViewDO;
 import org.springframework.lang.NonNull;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
@@ -12,6 +13,7 @@ import java.util.List;
  * @author shizhongming
  * 2020/1/19 8:18 下午
  */
+@Component
 public class SqlServerDatabaseExecutor extends AbstractDefaultDatabaseExecutor implements DatabaseExecutor {
 
     /**
