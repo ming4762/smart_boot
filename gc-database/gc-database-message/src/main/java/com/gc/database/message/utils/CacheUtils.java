@@ -1,25 +1,17 @@
 package com.gc.database.message.utils;
 
 import com.gc.database.message.constants.TypeMappingConstant;
-import com.gc.database.message.converter.BigDecimalToIntegerConverter;
 import com.gc.database.message.converter.Converter;
 import com.gc.database.message.pojo.dbo.AbstractDatabaseBaseDO;
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Maps;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
 import java.sql.Connection;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentMap;
-import java.util.stream.Collectors;
 
 /**
  * 缓存工具类
@@ -57,34 +49,14 @@ public class CacheUtils {
      */
     private static final ConcurrentMap<String, Converter> AUTO_CONVERTER_CACHE = Maps.newConcurrentMap();
 
-    static {
-        initAutoConverter();
-    }
 
     /**
-     * 初始化转换器
+     * 添加converter
+     * @param key key
+     * @param converter converter
      */
-    private static void initAutoConverter() {
-        // 创建所有的转换器
-        final List<Converter> converterList = ImmutableList.of(
-                new BigDecimalToIntegerConverter()
-        );
-        AUTO_CONVERTER_CACHE.clear();
-        converterList.forEach(item -> {
-            // 获取接口类型
-            final Type[] types = item.getClass().getGenericInterfaces();
-            for (Type type : types) {
-                if (type instanceof ParameterizedType && StringUtils.equals(((ParameterizedType) type).getRawType().getTypeName(), Converter.class.getName())) {
-                    final ParameterizedType parameterizedType = (ParameterizedType) type;
-                    // 将接口中的两个类型拼接到一起作为key
-                    String key = Arrays.stream(parameterizedType.getActualTypeArguments())
-                            .map(Type :: getTypeName)
-                            .collect(Collectors.joining());
-                    AUTO_CONVERTER_CACHE.put(key, item);
-                    break;
-                }
-            }
-        });
+    public static void addConverter(@NonNull String key, @NonNull Converter converter) {
+        AUTO_CONVERTER_CACHE.put(key, converter);
     }
 
     /**
