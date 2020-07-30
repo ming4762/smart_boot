@@ -1,5 +1,6 @@
 package com.gc.database.message.utils;
 
+import com.gc.database.message.constants.ExtMappingConstant;
 import com.gc.database.message.constants.TypeMappingConstant;
 import com.gc.database.message.converter.Converter;
 import com.gc.database.message.pojo.dbo.AbstractDatabaseBaseDO;
@@ -48,6 +49,11 @@ public class CacheUtils {
      * 自动转换器存储
      */
     private static final ConcurrentMap<String, Converter> AUTO_CONVERTER_CACHE = Maps.newConcurrentMap();
+
+    /**
+     * extjs与java映射
+     */
+    private static final ConcurrentMap<String, ExtMappingConstant> EXT_JAVA_MAPPING_CACHE = Maps.newConcurrentMap();
 
 
     /**
@@ -133,5 +139,22 @@ public class CacheUtils {
     @Nullable
     public static TypeMappingConstant getFieldMapping(@NonNull Integer key) {
         return TYPE_MAPPING_CACHE.get(key);
+    }
+
+    /**
+     * 设置ext映射
+     * @param mapping ext映射
+     */
+    public static void setExtTypeMapping(@NonNull Map<String, ExtMappingConstant> mapping) {
+        EXT_JAVA_MAPPING_CACHE.putAll(mapping);
+    }
+
+    /**
+     * 获取java类映射的ext类型
+     * @param key java类型
+     * @return ext类型
+     */
+    public static ExtMappingConstant getExtTypeMapping(@NonNull String key) {
+        return EXT_JAVA_MAPPING_CACHE.get(key);
     }
 }

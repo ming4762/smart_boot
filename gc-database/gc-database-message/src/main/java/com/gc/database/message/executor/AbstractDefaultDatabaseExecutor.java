@@ -4,6 +4,7 @@ import com.gc.common.base.exception.SqlRuntimeException;
 import com.gc.common.base.utils.ReflectUtil;
 import com.gc.database.message.annotation.DatabaseField;
 import com.gc.database.message.constants.ExceptionConstant;
+import com.gc.database.message.constants.ExtMappingConstant;
 import com.gc.database.message.constants.TableTypeConstants;
 import com.gc.database.message.constants.TypeMappingConstant;
 import com.gc.database.message.exception.SmartDatabaseException;
@@ -279,6 +280,11 @@ public abstract class AbstractDefaultDatabaseExecutor implements DatabaseExecuto
                 if (typeMappingConstant != null) {
                     item.setJavaType(typeMappingConstant.getJavaClass().getName());
                     item.setSimpleJavaType(typeMappingConstant.getJavaClass().getSimpleName());
+                    // 设置extjs类型
+                    final String extType = Optional.ofNullable(CacheUtils.getExtTypeMapping(item.getJavaType()))
+                            .map(ExtMappingConstant::getExtClass)
+                            .orElse(null);
+                    item.setExtType(extType);
                 }
             });
         }
@@ -345,6 +351,10 @@ public abstract class AbstractDefaultDatabaseExecutor implements DatabaseExecuto
         CacheUtils.setTypeMapping(
                 Arrays.stream(TypeMappingConstant.values())
                 .collect(Collectors.toMap(TypeMappingConstant :: getDataType, item -> item))
+        );
+        CacheUtils.setExtTypeMapping(
+                Arrays.stream(ExtMappingConstant.values())
+                .collect(Collectors.toMap(item -> item.getJavaClass().getName(), item -> item))
         );
     }
 
