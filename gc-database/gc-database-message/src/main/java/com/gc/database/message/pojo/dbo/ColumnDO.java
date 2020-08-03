@@ -25,16 +25,16 @@ public class ColumnDO extends AbstractTableBaseDO {
     @DatabaseField("TYPE_NAME")
     private String typeName;
 
-    @DatabaseField(value = "COLUMN_SIZE", converter = BigDecimalToIntegerConverter.class)
+    @DatabaseField(value = "COLUMN_SIZE")
     private Integer columnSize;
 
-    @DatabaseField(value = "BUFFER_LENGTH", converter = BigDecimalToIntegerConverter.class)
+    @DatabaseField(value = "BUFFER_LENGTH")
     private Integer bufferLength;
 
-    @DatabaseField(value = "DECIMAL_DIGITS", converter = BigDecimalToIntegerConverter.class)
+    @DatabaseField(value = "DECIMAL_DIGITS")
     private Integer decimalDigits;
 
-    @DatabaseField(value = "NUM_PREC_RADIX", converter = BigDecimalToIntegerConverter.class)
+    @DatabaseField(value = "NUM_PREC_RADIX")
     private Integer numPrecRadix;
 
     @DatabaseField("NULLABLE")
