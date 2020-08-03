@@ -1,10 +1,12 @@
 package com.gc.database.message;
 
+import com.gc.common.base.imports.EnableSpringContext;
 import com.gc.database.message.converter.ConverterInitializer;
 import com.gc.database.message.converter.ConverterProvider;
 import com.gc.database.message.converter.DefaultConverterProvider;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
 /**
@@ -12,6 +14,8 @@ import org.springframework.context.annotation.Configuration;
  * 2020/7/29 8:45 下午
  */
 @Configuration
+@ComponentScan
+@EnableSpringContext
 public class DatabaseMessageAutoConfiguration {
 
     /**

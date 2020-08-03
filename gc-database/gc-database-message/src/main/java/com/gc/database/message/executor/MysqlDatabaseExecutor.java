@@ -2,12 +2,14 @@ package com.gc.database.message.executor;
 
 import com.gc.database.message.pojo.bo.DatabaseConnectionBO;
 import org.springframework.lang.NonNull;
+import org.springframework.stereotype.Component;
 
 /**
  * mysql数据库执行器
  * @author shizhongming
  * 2020/1/19 8:17 下午
  */
+@Component
 public class MysqlDatabaseExecutor extends AbstractDefaultDatabaseExecutor implements DatabaseExecutor {
 
     /**

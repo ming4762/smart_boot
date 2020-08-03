@@ -106,4 +106,9 @@ public class ColumnBO extends ColumnDO {
      * java属性名
      */
     private String javaProperty;
+
+    /**
+     * ext类型
+     */
+    private String extType;
 }

@@ -1,6 +1,7 @@
 package com.gc.common.base.spring;
 
 import lombok.extern.log4j.Log4j2;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.lang.NonNull;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Component;
  * @author jackson
  */
 @Component
+@ConditionalOnMissingBean(ApplicationContextRegister.class)
 @Log4j2
 public class ApplicationContextRegister implements ApplicationContextAware {
 

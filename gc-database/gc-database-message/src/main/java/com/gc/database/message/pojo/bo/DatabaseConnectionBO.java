@@ -1,5 +1,6 @@
 package com.gc.database.message.pojo.bo;
 
+import com.gc.common.base.spring.ApplicationContextRegister;
 import com.gc.database.message.constants.DatabaseTypeConstant;
 import com.gc.database.message.constants.ExceptionConstant;
 import com.gc.database.message.exception.SmartDatabaseException;
@@ -66,11 +67,12 @@ public class DatabaseConnectionBO extends AbstractDatabaseConnectionBaseBO {
 
     /**
      * 获取数据库执行器
-     * TODO: 目前是每次创建，后台改为spring管理或使用缓存获取
      * @return 数据库执行器
      */
     @SneakyThrows
     public DatabaseExecutor getDatabaseExecutor() {
-        return this.getDatabaseExecutorClass().newInstance();
+        final DatabaseExecutor databaseExecutor = ApplicationContextRegister.getBean(this.getDatabaseExecutorClass());
+        Assert.notNull(databaseExecutor, "获取数据库执行器失败，spring上下文中未找到bean：" + this.getDatabaseExecutorClass());
+        return databaseExecutor;
     }
 }
