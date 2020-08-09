@@ -35,7 +35,7 @@ public class KettleServiceImpl implements KettleService {
     @Override
     public void executeDbTransfer(@NonNull String transName, String directoryName, @NonNull String[] params, @NonNull Map<String, String> variableMap, @NonNull Map<String, String> parameterMap) throws KettleException {
         KettleDatabaseRepository repository = this.kettleRepositoryProvider.getRepository();
-        KettleActuator.excuteDbTransfer(repository, transName, directoryName, params, variableMap, parameterMap);
+        KettleActuator.executeDbTransfer(repository, transName, directoryName, params, variableMap, parameterMap);
         kettleRepositoryProvider.returnRepository(repository);
     }
 
@@ -50,7 +50,7 @@ public class KettleServiceImpl implements KettleService {
     @Override
     public void executeDbJob(@NonNull String name, String directoryName, @NonNull Map<String, String> params, @NonNull Map<String, String> parameterMap) throws KettleException {
         KettleDatabaseRepository repository = this.kettleRepositoryProvider.getRepository();
-        KettleActuator.excuteDbJob(repository, name, directoryName, params, parameterMap);
+        KettleActuator.executeDbJob(repository, name, directoryName, params, parameterMap);
         kettleRepositoryProvider.returnRepository(repository);
     }
 }
