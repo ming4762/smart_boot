@@ -16,7 +16,7 @@ public interface TimeoutHandler {
      * 超时执行器
      * @param point 切点
      * @param task 异步任务
-     * @param <T>
+     * @param <T> 泛型
      * @return 超时结果
      */
     default <T> Object handler(@NonNull ProceedingJoinPoint point, WebAsyncTask<T> task) {
