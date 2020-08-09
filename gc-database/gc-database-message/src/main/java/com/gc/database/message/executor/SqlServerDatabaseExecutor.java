@@ -1,6 +1,7 @@
 package com.gc.database.message.executor;
 
 import com.gc.database.message.constants.TableTypeConstants;
+import com.gc.database.message.converter.DbJavaTypeConverter;
 import com.gc.database.message.pojo.bo.DatabaseConnectionBO;
 import com.gc.database.message.pojo.dbo.ColumnDO;
 import com.gc.database.message.pojo.dbo.TableViewDO;
@@ -15,6 +16,13 @@ import java.util.List;
  */
 @Component
 public class SqlServerDatabaseExecutor extends AbstractDefaultDatabaseExecutor implements DatabaseExecutor {
+
+    private final DbJavaTypeConverter dbJavaTypeConverter;
+
+    public SqlServerDatabaseExecutor(DbJavaTypeConverter dbJavaTypeConverter) {
+        super(dbJavaTypeConverter);
+        this.dbJavaTypeConverter = dbJavaTypeConverter;
+    }
 
     /**
      * 查询表格备注SQL

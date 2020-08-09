@@ -7,6 +7,7 @@ import com.gc.database.message.constants.ExceptionConstant;
 import com.gc.database.message.constants.ExtMappingConstant;
 import com.gc.database.message.constants.TableTypeConstants;
 import com.gc.database.message.constants.TypeMappingConstant;
+import com.gc.database.message.converter.DbJavaTypeConverter;
 import com.gc.database.message.exception.SmartDatabaseException;
 import com.gc.database.message.pojo.bo.ColumnBO;
 import com.gc.database.message.pojo.bo.DatabaseConnectionBO;
@@ -38,6 +39,12 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 public abstract class AbstractDefaultDatabaseExecutor implements DatabaseExecutor {
+
+    private final DbJavaTypeConverter dbJavaTypeConverter;
+
+    public AbstractDefaultDatabaseExecutor(DbJavaTypeConverter dbJavaTypeConverter) {
+        this.dbJavaTypeConverter = dbJavaTypeConverter;
+    }
 
     static {
         AbstractDefaultDatabaseExecutor.mappingDatabaseFieldToCache();
@@ -276,7 +283,7 @@ public abstract class AbstractDefaultDatabaseExecutor implements DatabaseExecuto
             // TODO:查询其他索引
             // 设置其他信息
             columnList.forEach(item -> {
-                TypeMappingConstant typeMappingConstant = CacheUtils.getFieldMapping(item.getDataType());
+                TypeMappingConstant typeMappingConstant = this.dbJavaTypeConverter.convert(item);
                 if (typeMappingConstant != null) {
                     item.setJavaType(typeMappingConstant.getJavaClass().getName());
                     item.setSimpleJavaType(typeMappingConstant.getJavaClass().getSimpleName());

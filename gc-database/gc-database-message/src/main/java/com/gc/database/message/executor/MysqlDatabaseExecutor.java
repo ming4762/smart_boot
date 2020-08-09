@@ -1,5 +1,6 @@
 package com.gc.database.message.executor;
 
+import com.gc.database.message.converter.DbJavaTypeConverter;
 import com.gc.database.message.pojo.bo.DatabaseConnectionBO;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
@@ -11,6 +12,13 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class MysqlDatabaseExecutor extends AbstractDefaultDatabaseExecutor implements DatabaseExecutor {
+
+    private final DbJavaTypeConverter dbJavaTypeConverter;
+
+    public MysqlDatabaseExecutor(DbJavaTypeConverter dbJavaTypeConverter) {
+        super(dbJavaTypeConverter);
+        this.dbJavaTypeConverter = dbJavaTypeConverter;
+    }
 
     /**
      * 获取连接URL
