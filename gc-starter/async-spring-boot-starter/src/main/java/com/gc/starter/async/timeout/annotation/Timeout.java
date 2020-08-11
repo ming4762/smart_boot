@@ -19,20 +19,20 @@ public @interface Timeout {
 
     /**
      * 超时时间
-     * @return
+     * @return 超时事件
      */
     long value() default Long.MAX_VALUE;
 
     /**
      * 执行器名称
      * handlerClass 优先级高
-     * @return
+     * @return 执行器名称
      */
-    String handlerName() default "";
+    String timeoutHandlerName() default "";
 
     /**
      * 执行器类型
-     * @return
+     * @return 执行器类型
      */
     Class<? extends TimeoutHandler> handlerClass() default DefaultTimeoutHandler.class;
 }

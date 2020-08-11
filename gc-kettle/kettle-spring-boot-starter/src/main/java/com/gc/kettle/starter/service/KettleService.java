@@ -87,7 +87,7 @@ public interface KettleService {
      * @throws KettleException 转换异常
      */
     default void executeFileTransfer(@NonNull String ktrPath, @NonNull String[] params, @NonNull Map<String, String> variableMap, @NonNull Map<String, String> parameter) throws KettleException {
-        KettleActuator.excuteTransfer(ktrPath, params, variableMap, parameter);
+        KettleActuator.executeTransfer(ktrPath, params, variableMap, parameter);
     }
 
     /**

@@ -33,8 +33,8 @@ public class KettleActuator {
      * @param ktrPath 转换路径
      * @throws KettleException 转换异常
      */
-    public static void excuteTransfer(@NonNull String ktrPath) throws KettleException {
-        excuteTransfer(ktrPath, new String[0], new HashMap<>(0), new HashMap<>(0));
+    public static void executeTransfer(@NonNull String ktrPath) throws KettleException {
+        executeTransfer(ktrPath, new String[0], new HashMap<>(0), new HashMap<>(0));
     }
 
     /**
@@ -45,7 +45,7 @@ public class KettleActuator {
      * @param parameter 命名参数
      * @throws KettleException 转换异常
      */
-    public static void excuteTransfer(@NonNull String ktrPath, @NonNull String[] params, @NonNull Map<String, String> variableMap, @NonNull Map<String, String> parameter) throws KettleException {
+    public static void executeTransfer(@NonNull String ktrPath, @NonNull String[] params, @NonNull Map<String, String> variableMap, @NonNull Map<String, String> parameter) throws KettleException {
         // 初始化kettle环境
         // TODO: 开发中
         System.setProperty("KETTLE_DISABLE_CONSOLE_LOGGING", "Y");
@@ -104,7 +104,7 @@ public class KettleActuator {
      * @param parameterMap 命名参数
      * @throws KettleException KettleException
      */
-    public static void excuteDbTransfer(@NonNull KettleDatabaseRepository repository, @NonNull String transName, String directoryName, @NonNull String[] params, @NonNull Map<String, String> variableMap, @NonNull Map<String, String> parameterMap) throws KettleException {
+    public static void executeDbTransfer(@NonNull KettleDatabaseRepository repository, @NonNull String transName, String directoryName, @NonNull String[] params, @NonNull Map<String, String> variableMap, @NonNull Map<String, String> parameterMap) throws KettleException {
         final RepositoryDirectoryInterface directoryInterface = getDirectoryInterface(repository, directoryName);
         // 获取转换
         final TransMeta transMeta = repository.loadTransformation(transName, directoryInterface,null,true,null);
@@ -120,11 +120,11 @@ public class KettleActuator {
      * @param parameterMap 命名参数
      * @throws KettleException Exception
      */
-    public static void excuteDbJob(@NonNull KettleDatabaseRepository repository, String jobName, String directoryName, @NonNull Map<String, String> params, @NonNull Map<String, String> parameterMap) throws KettleException {
+    public static void executeDbJob(@NonNull KettleDatabaseRepository repository, String jobName, String directoryName, @NonNull Map<String, String> params, @NonNull Map<String, String> parameterMap) throws KettleException {
         final RepositoryDirectoryInterface directoryInterface = getDirectoryInterface(repository, directoryName);
         final JobMeta jobMeta = repository.loadJob(jobName, directoryInterface, null, null);
         final Job job = new Job(repository, jobMeta);
-        doExcuteJob(job, params, parameterMap);
+        doExecuteJob(job, params, parameterMap);
     }
 
     /**
@@ -134,7 +134,7 @@ public class KettleActuator {
      * @param parameterMap 命名参数
      * @throws KettleException Exception
      */
-    private static void doExcuteJob(@NonNull Job job, @NonNull Map<String, String> params, @NonNull Map<String, String> parameterMap) throws KettleException {
+    private static void doExecuteJob(@NonNull Job job, @NonNull Map<String, String> params, @NonNull Map<String, String> parameterMap) throws KettleException {
         params.forEach(job :: setVariable);
         for (Map.Entry<String, String> entry : parameterMap.entrySet()) {
             String key = entry.getKey();

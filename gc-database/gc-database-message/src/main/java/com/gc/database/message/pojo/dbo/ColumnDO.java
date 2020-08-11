@@ -1,7 +1,6 @@
 package com.gc.database.message.pojo.dbo;
 
 import com.gc.database.message.annotation.DatabaseField;
-import com.gc.database.message.converter.BigDecimalToIntegerConverter;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -19,7 +18,7 @@ public class ColumnDO extends AbstractTableBaseDO {
     @DatabaseField("COLUMN_NAME")
     private String columnName;
 
-    @DatabaseField(value = "DATA_TYPE", converter = BigDecimalToIntegerConverter.class)
+    @DatabaseField(value = "DATA_TYPE")
     private Integer dataType;
 
     @DatabaseField("TYPE_NAME")

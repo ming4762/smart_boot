@@ -17,7 +17,7 @@ public interface CompleteHandler {
      * @param point 切点
      * @param task 异步任务
      * @param result 执行结果
-     * @param <T>
+     * @param <T> 泛型
      */
     <T> void handler(@NonNull ProceedingJoinPoint point, WebAsyncTask<T> task, @Nullable Object result);
 }

@@ -54,7 +54,7 @@ public class TimeoutAspect {
      * 超时执行逻辑
      * @param point 切点
      * @return 执行结果
-     * @throws Throwable
+     * @throws Throwable Throwable
      */
     @Around("timeoutPointCut()")
     public Object around(ProceedingJoinPoint point) throws Throwable {
@@ -62,9 +62,9 @@ public class TimeoutAspect {
         if (signature instanceof MethodSignature) {
             // 获取目标方法对应类
             final Method method = ((MethodSignature) signature).getMethod();
-            final Class<?> controllClass = method.getDeclaringClass();
+            final Class<?> controllerClass = method.getDeclaringClass();
             // 验证是否是controller
-            final Controller controllerAnnotation = AnnotationUtils.findAnnotation(controllClass, Controller.class);
+            final Controller controllerAnnotation = AnnotationUtils.findAnnotation(controllerClass, Controller.class);
             if (!Objects.isNull(controllerAnnotation)) {
                 return this.doAsyncTimeout(method, point);
             }
@@ -112,12 +112,12 @@ public class TimeoutAspect {
     private TimeoutHandler getTimeoutHandler(@NonNull Timeout timeoutAnnotation) {
         // 获取类型/名字
         final Class<? extends TimeoutHandler> clazz = timeoutAnnotation.handlerClass();
-        final String beanName = timeoutAnnotation.handlerName();
-        boolean userName = false;
+        final String beanName = timeoutAnnotation.timeoutHandlerName();
+        boolean useName = false;
         if (Objects.equals(clazz, DefaultTimeoutHandler.class) && !StringUtils.isEmpty(beanName)) {
-            userName = true;
+            useName = true;
         }
-        if (userName) {
+        if (useName) {
             Object bean = this.applicationContext.getBean(beanName);
             // 类型不匹配抛出异常
             if (!(bean instanceof TimeoutHandler)) {
