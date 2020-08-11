@@ -4,7 +4,6 @@ import com.gc.common.auth.model.Permission;
 import com.gc.common.auth.model.RestUserDetailsImpl;
 import com.gc.common.auth.properties.AuthProperties;
 import org.apache.commons.lang3.BooleanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.PermissionEvaluator;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
@@ -23,8 +22,11 @@ public class RestPermissionEvaluatorImpl implements PermissionEvaluator {
 
     private static final String ROLE_SUPERADMIN = "SUPERADMIN";
 
-    @Autowired
-    private AuthProperties authProperties;
+    private final AuthProperties authProperties;
+
+    public RestPermissionEvaluatorImpl(AuthProperties authProperties) {
+        this.authProperties = authProperties;
+    }
 
     @Override
     public boolean hasPermission(Authentication authentication, Object targetDomainObject, Object permission) {
