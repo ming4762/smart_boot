@@ -162,9 +162,4 @@ public class KettleActuator {
         }
         return directoryInterface;
     }
-
-
-    public static void main(String[] args) throws KettleException {
-        KettleActuator.excuteTransfer("C:\\Users\\ShiZhong\\Documents\\workspace\\my-github\\gc-boot\\gc-tests\\gc-test-kettle\\src\\main\\resources\\kettle\\ceshi.ktr");
-    }
 }
