@@ -7,6 +7,7 @@ import lombok.SneakyThrows;
 import org.springframework.lang.NonNull;
 
 import java.lang.reflect.Field;
+import java.math.BigDecimal;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
@@ -33,6 +34,7 @@ public class ConverterHolder {
         ALL_CONVERTER.put(Double.class, new DoubleConverter());
         ALL_CONVERTER.put(String.class, new StringConverter());
         ALL_CONVERTER.put(Integer.class, new IntegerConverter());
+        ALL_CONVERTER.put(BigDecimal.class, new BigDecimalConverter());
         return ALL_CONVERTER;
     }
 

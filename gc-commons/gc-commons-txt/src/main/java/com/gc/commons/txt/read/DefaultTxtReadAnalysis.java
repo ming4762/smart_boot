@@ -18,13 +18,14 @@ public class DefaultTxtReadAnalysis implements TxtReadAnalysis {
     /**
      * 读取行
      * @param line 行数据
+     * @param separator 分隔符
      * @param headerList 头部信息
      * @return 读取的数据
      */
     @Override
     @NonNull
-    public LinkedHashMap<String, String> readLine(String line, List<String> headerList) {
-        String[] values = StringUtils.split(line, "\t");
+    public LinkedHashMap<String, String> readLine(String line, String separator, List<String> headerList) {
+        String[] values = StringUtils.split(line, separator);
         LinkedHashMap<String, String> result = new LinkedHashMap<>();
         AtomicInteger atomicInteger = new AtomicInteger(0);
         Arrays.asList(values).forEach(item -> {
@@ -34,7 +35,7 @@ public class DefaultTxtReadAnalysis implements TxtReadAnalysis {
             if (headerList.size() > (index + 1)) {
                 header = headerList.get(index);
             }
-            result.put(header, item);
+            result.put(header, item.trim());
         });
         return result;
     }

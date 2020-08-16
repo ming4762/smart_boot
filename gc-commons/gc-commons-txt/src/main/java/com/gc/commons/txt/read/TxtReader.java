@@ -64,8 +64,11 @@ public class TxtReader {
                     if (!readListener.hasNext(line)) {
                         break;
                     }
+                    if (!readListener.readLine(line)) {
+                        continue;
+                    }
                     // 解析内容
-                    LinkedHashMap<String, String> result = this.txtReadAnalysis.readLine(line, new ArrayList<>());
+                    LinkedHashMap<String, String> result = this.txtReadAnalysis.readLine(line, readListener.separator(), new ArrayList<>());
                     T txtBaseModel = this.convertToBean(readParameter.getClazz(), result);
                     readListener.invoke(txtBaseModel);
                 } catch (Exception e) {
@@ -103,9 +106,13 @@ public class TxtReader {
                 value = valueList.get(index);
             }
             if (StringUtils.isNotBlank(value)) {
+                Object convertValue = value;
                 // 获取转换器
-                final Converter<?> converter = ConverterHolder.getConverter(field);
-                method.invoke(result, converter.convertToJavaData(value));
+                if (!Objects.equals(field.getType(), String.class)) {
+                    final Converter<?> converter = ConverterHolder.getConverter(field);
+                    convertValue = converter.convertToJavaData(value);
+                }
+                method.invoke(result, convertValue);
             }
         }
         return result;

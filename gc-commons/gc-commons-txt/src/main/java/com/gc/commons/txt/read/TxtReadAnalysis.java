@@ -15,11 +15,12 @@ public interface TxtReadAnalysis {
     /**
      * 读取行
      * @param line 行数据
+     * @param separator 分隔符
      * @param headerList 头部信息
      * @return 读取的数据
      */
     @NonNull
-    LinkedHashMap<String, String> readLine(String line, List<String> headerList);
+    LinkedHashMap<String, String> readLine(String line, String separator, List<String> headerList);
 
 
 }

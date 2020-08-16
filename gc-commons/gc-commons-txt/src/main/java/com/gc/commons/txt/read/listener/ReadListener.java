@@ -29,8 +29,25 @@ public interface ReadListener<T extends TxtBaseModel> {
 
     /**
      * 是否有下一行
-     * @param lineData
+     * @param lineData 行数据
      * @return 是否有下一行
      */
     boolean hasNext(String lineData);
+
+    /**
+     * 分隔符
+     * @return 分隔符
+     */
+    default String separator() {
+     return "\t";
+    }
+
+    /**
+     * 是否读取该行
+     * @param lineData 行数据
+     * @return 是否读取
+     */
+    default boolean readLine(String lineData) {
+        return true;
+    }
 }
