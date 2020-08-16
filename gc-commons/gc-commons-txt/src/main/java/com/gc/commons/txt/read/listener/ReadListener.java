@@ -12,9 +12,8 @@ public interface ReadListener<T extends TxtBaseModel> {
     /**
      * 异常处理
      * @param exception 异常信息
-     * @throws Exception 抛出一样
      */
-    void onException(Exception exception) throws Exception;
+    void onException(Exception exception) ;
 
     /**
      * 处理数据

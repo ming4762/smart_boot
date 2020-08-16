@@ -6,6 +6,7 @@ import com.gc.commons.txt.read.listener.ReadListener;
 import com.gc.commons.txt.read.parameter.ReadParameter;
 import org.springframework.lang.NonNull;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.Charset;
 
@@ -61,7 +62,7 @@ public class TxtReaderBuilder<T extends TxtBaseModel> {
     /**
      * 执行读取
      */
-    public void doRead() throws Exception {
+    public void doRead() throws IOException {
         TxtReader txtReader = new TxtReader();
         txtReader.read(this.readParameter);
     }

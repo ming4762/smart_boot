@@ -20,22 +20,22 @@ public class ConverterHolder {
 
     private static final Map<Class<?>, Converter<?>> ALL_CONVERTER = new ConcurrentHashMap<>();
 
-    public static final Map<Field, Converter<?>> FIELD_CONVERTER_MAP = new ConcurrentHashMap<>();
+    private static final Map<Field, Converter<?>> FIELD_CONVERTER_MAP = new ConcurrentHashMap<>();
+
+    private ConverterHolder() {
+        throw new IllegalStateException("Utility class");
+    }
 
     /**
      * 加载所有转换器
-     * @return 所有转换器
      */
-    @NonNull
-    public static Map<Class<?>, Converter<?>> loadAllConverter() {
-        if (!ALL_CONVERTER.isEmpty()) {
-            return ALL_CONVERTER;
+    public static void loadAllConverter() {
+        if (ALL_CONVERTER.isEmpty()) {
+            ALL_CONVERTER.put(Double.class, new DoubleConverter());
+            ALL_CONVERTER.put(String.class, new StringConverter());
+            ALL_CONVERTER.put(Integer.class, new IntegerConverter());
+            ALL_CONVERTER.put(BigDecimal.class, new BigDecimalConverter());
         }
-        ALL_CONVERTER.put(Double.class, new DoubleConverter());
-        ALL_CONVERTER.put(String.class, new StringConverter());
-        ALL_CONVERTER.put(Integer.class, new IntegerConverter());
-        ALL_CONVERTER.put(BigDecimal.class, new BigDecimalConverter());
-        return ALL_CONVERTER;
     }
 
     /**
@@ -74,12 +74,10 @@ public class ConverterHolder {
     @SneakyThrows
     private static void createCustomConverter(@NonNull Field field)  {
         final TxtProperty txtProperty = CacheUtils.getTxtProperty(field);
-        if (Objects.nonNull(txtProperty)) {
+        if (Objects.nonNull(txtProperty) && !Objects.equals(txtProperty.converter(), AutoConverter.class)) {
             // 获取转换器
-            if (!Objects.equals(txtProperty.converter(), AutoConverter.class)) {
-                Converter<?> converter = txtProperty.converter().getDeclaredConstructor().newInstance();
-                FIELD_CONVERTER_MAP.put(field, converter);
-            }
+            Converter<?> converter = txtProperty.converter().getDeclaredConstructor().newInstance();
+            FIELD_CONVERTER_MAP.put(field, converter);
         }
     }
 }

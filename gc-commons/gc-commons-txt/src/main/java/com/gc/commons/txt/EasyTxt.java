@@ -15,6 +15,10 @@ import java.nio.charset.StandardCharsets;
  */
 public class EasyTxt {
 
+    private EasyTxt() {
+        throw new IllegalStateException("Utility class");
+    }
+
     /**
      * 读取TXT
      * @param inputStream 输入流

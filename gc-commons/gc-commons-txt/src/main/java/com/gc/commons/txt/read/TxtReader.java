@@ -15,6 +15,7 @@ import org.apache.commons.io.LineIterator;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.nio.charset.Charset;
@@ -43,7 +44,7 @@ public class TxtReader {
      * 执行读取
      * @param readParameter 读取参数
      */
-    public <T extends TxtBaseModel> void read(ReadParameter<T> readParameter) throws Exception {
+    public <T extends TxtBaseModel> void read(ReadParameter<T> readParameter) throws IOException {
         // 获取监听器
         ReadListener<T> readListener = readParameter.getReadListener();
         // 获取编码方式
@@ -57,15 +58,12 @@ public class TxtReader {
                     String line = lineIterator.nextLine();
                     // 判断头部位置
                     int index = atomicInteger.getAndIncrement();
-                    if (index < readParameter.getFirstRow()) {
+                    if (index < readParameter.getFirstRow() || !readListener.readLine(line)) {
                         continue;
                     }
                     // 判断是否有下一行
                     if (!readListener.hasNext(line)) {
                         break;
-                    }
-                    if (!readListener.readLine(line)) {
-                        continue;
                     }
                     // 解析内容
                     LinkedHashMap<String, String> result = this.txtReadAnalysis.readLine(line, readListener.separator(), new ArrayList<>());
@@ -86,13 +84,10 @@ public class TxtReader {
         final List<String> valueList = new ArrayList<>(data.values());
         // todo: 实体类继续处理
         for (Field field : modelClass.getDeclaredFields()) {
-            if (ReflectUtil.isStatic(field)) {
-                continue;
-            }
             Method method = CacheUtils.getWriteMethod(field);
             // 获取 TxtProperty
             final TxtProperty txtProperty = CacheUtils.getTxtProperty(field);
-            if (Objects.isNull(txtProperty)) {
+            if (ReflectUtil.isStatic(field) || Objects.isNull(txtProperty)) {
                 continue;
             }
             // 获取值

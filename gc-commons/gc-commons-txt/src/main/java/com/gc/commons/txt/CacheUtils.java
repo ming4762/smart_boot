@@ -1,5 +1,6 @@
 package com.gc.commons.txt;
 
+import com.gc.common.base.exception.SetMethodNotFountException;
 import com.gc.commons.txt.annotation.TxtProperty;
 import org.springframework.beans.BeanUtils;
 import org.springframework.core.annotation.AnnotationUtils;
@@ -25,6 +26,10 @@ public class CacheUtils {
 
     private static final Map<Field, TxtProperty> TXT_PROPERTY_MAP = new ConcurrentHashMap<>();
 
+    private CacheUtils() {
+        throw new IllegalStateException("Utility class");
+    }
+
     /**
      * 获取属性的set函数
      * @param field 属性
@@ -40,7 +45,7 @@ public class CacheUtils {
                 .map(PropertyDescriptor::getWriteMethod)
                 .orElse(null);
         if (Objects.isNull(method)) {
-            throw new RuntimeException("未找到set方法,field:" + field.toString());
+            throw new SetMethodNotFountException("未找到set方法,field:" + field.toString());
         }
         WRITE_METHOD_MAP.put(field, method);
         return method;
