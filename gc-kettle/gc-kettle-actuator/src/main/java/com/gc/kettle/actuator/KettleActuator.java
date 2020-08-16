@@ -1,8 +1,13 @@
 package com.gc.kettle.actuator;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.pentaho.di.core.KettleEnvironment;
 import org.pentaho.di.core.exception.KettleException;
+import org.pentaho.di.core.logging.KettleLogStore;
+import org.pentaho.di.core.logging.KettleLoggingEvent;
+import org.pentaho.di.core.logging.LogLevel;
+import org.pentaho.di.core.logging.LoggingBuffer;
 import org.pentaho.di.core.util.EnvUtil;
 import org.pentaho.di.job.Job;
 import org.pentaho.di.job.JobMeta;
@@ -20,6 +25,7 @@ import java.util.Map;
  * @author shizhongming
  * 2020/6/18 11:39 下午
  */
+@Slf4j
 public class KettleActuator {
 
     /**
@@ -41,6 +47,8 @@ public class KettleActuator {
      */
     public static void executeTransfer(@NonNull String ktrPath, @NonNull String[] params, @NonNull Map<String, String> variableMap, @NonNull Map<String, String> parameter) throws KettleException {
         // 初始化kettle环境
+        // TODO: 开发中
+        System.setProperty("KETTLE_DISABLE_CONSOLE_LOGGING", "Y");
         KettleEnvironment.init();
         EnvUtil.environmentInit();
         TransMeta transMeta = new TransMeta(ktrPath);
@@ -66,6 +74,11 @@ public class KettleActuator {
             String value = entry.getValue();
             trans.setParameterValue(key, value);
         }
+        KettleLogStore.getAppender().addLoggingEventListener((KettleLoggingEvent kettleLoggingEvent) -> {
+            log.debug("=====================");
+            log.debug(kettleLoggingEvent.getLevel() + ":" + kettleLoggingEvent.getMessage());
+        });
+        trans.setLogLevel(LogLevel.DEBUG);
         // 执行转换
         trans.execute(params);
         // 等待转换完成
@@ -73,6 +86,12 @@ public class KettleActuator {
         if (trans.getErrors() > 0) {
             throw new KettleException("There are errors during transformation exception!(传输过程中发生异常)");
         }
+        // 日志处理
+        String logChannelId = trans.getLogChannelId();
+        LoggingBuffer appender = KettleLogStore.getAppender();
+        String logText = appender.getBuffer(logChannelId, true).toString();
+//        log.info(logText);
+
     }
 
     /**
