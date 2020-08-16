@@ -1,7 +1,6 @@
 package com.gc.auth.security;
 
 import com.gc.auth.security.authentication.RestPermissionEvaluatorImpl;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler;
 import org.springframework.security.access.expression.method.MethodSecurityExpressionHandler;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -14,8 +13,11 @@ import org.springframework.security.config.annotation.method.configuration.Globa
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class MethodSecurityConfig extends GlobalMethodSecurityConfiguration {
 
-    @Autowired
-    private RestPermissionEvaluatorImpl restPermissionEvaluator;
+    private final RestPermissionEvaluatorImpl restPermissionEvaluator;
+
+    public MethodSecurityConfig(RestPermissionEvaluatorImpl restPermissionEvaluator) {
+        this.restPermissionEvaluator = restPermissionEvaluator;
+    }
 
     @Override
     protected MethodSecurityExpressionHandler createExpressionHandler() {
