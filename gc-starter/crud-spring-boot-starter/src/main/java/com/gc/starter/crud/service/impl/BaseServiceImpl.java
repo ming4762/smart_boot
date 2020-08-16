@@ -369,7 +369,7 @@ public abstract class BaseServiceImpl<K extends CrudBaseMapper<T>, T extends Bas
 
     /**
      * 获取数据库表的key
-     * @return
+     * @return 数据库表key列表
      */
     private List<String> getKeyList() {
         final List<Field> keyList = CrudUtils.getModelKeysByType(this.getModelType());

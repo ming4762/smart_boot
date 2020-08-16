@@ -108,7 +108,7 @@ public final class CrudUtils {
     /**
      * 通过类型获取实体类Class
      * @param type 实体类type
-     * @return 实体类calss
+     * @return 实体类class
      */
     @SuppressWarnings({"rawtypes", "unchecked"})
     @Nullable
