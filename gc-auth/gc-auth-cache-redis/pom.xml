@@ -5,7 +5,7 @@
     <parent>
         <groupId>com.gc</groupId>
         <artifactId>gc-auth</artifactId>
-        <version>0.0.6-SNAPSHOT</version>
+        <version>0.0.7-SNAPSHOT</version>
     </parent>
     <artifactId>gc-auth-cache-redis</artifactId>
     <version>${gc-boot.version}</version>
