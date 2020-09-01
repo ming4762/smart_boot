@@ -63,4 +63,11 @@ public interface ActualFileService {
      */
     void download(@NonNull String id, @NonNull OutputStream outputStream) throws IOException;
 
+    /**
+     * 获取文件的绝对路径
+     * @param id 文件ID
+     * @return 文件绝对路径
+     */
+    String getAbsolutePath(@NonNull String id);
+
 }

@@ -115,4 +115,14 @@ public class ActualFileServiceDiskImpl implements ActualFileService {
             IOUtils.copy(inputStream, outputStream);
         }
     }
+
+    /**
+     * 获取文件的绝对路径
+     * @param id 文件ID
+     * @return 文件绝对路径
+     */
+    @Override
+    public String getAbsolutePath(@NonNull String id) {
+        return DiskFilePathBO.createById(id, this.basePath).getFilePath();
+    }
 }

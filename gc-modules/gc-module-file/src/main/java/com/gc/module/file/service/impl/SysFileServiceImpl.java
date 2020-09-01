@@ -163,6 +163,19 @@ public class SysFileServiceImpl extends BaseServiceImpl<SysFileMapper, SysFilePO
         return null;
     }
 
+
+    /**
+     * 获取文件的绝对路径
+     * @param fileId 文件ID
+     * @return 文件绝对路径
+     */
+    @Override
+    public String getAbsolutePath(@NonNull Long fileId) {
+        final SysFilePO file = this.getById(fileId);
+        Assert.notNull(file.getDbId(), "获取文件信息发生错误，未找到文件实体ID");
+        return actualFileService.getAbsolutePath(file.getDbId());
+    }
+
     /**
      * 下载文件
      * @param file 文件实体类信息
