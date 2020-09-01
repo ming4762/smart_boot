@@ -3,11 +3,9 @@ package com.gc.kettle.actuator;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.pentaho.di.core.KettleEnvironment;
+import org.pentaho.di.core.database.DatabaseMeta;
 import org.pentaho.di.core.exception.KettleException;
-import org.pentaho.di.core.logging.KettleLogStore;
-import org.pentaho.di.core.logging.KettleLoggingEvent;
-import org.pentaho.di.core.logging.LogLevel;
-import org.pentaho.di.core.logging.LoggingBuffer;
+import org.pentaho.di.core.logging.*;
 import org.pentaho.di.core.util.EnvUtil;
 import org.pentaho.di.job.Job;
 import org.pentaho.di.job.JobMeta;
@@ -29,12 +27,31 @@ import java.util.Map;
 public class KettleActuator {
 
     /**
+     * 不显示控制台日志
+     */
+    private static final String KETTLE_DISABLE_CONSOLE_LOGGING = "KETTLE_DISABLE_CONSOLE_LOGGING";
+
+    /**
      * 执行转换
      * @param ktrPath 转换路径
      * @throws KettleException 转换异常
      */
     public static void executeTransfer(@NonNull String ktrPath) throws KettleException {
         executeTransfer(ktrPath, new String[0], new HashMap<>(0), new HashMap<>(0));
+    }
+
+    /**
+     * 关闭控制台日志
+     */
+    public static void closeConsoleLogging() {
+        System.setProperty(KETTLE_DISABLE_CONSOLE_LOGGING, "Y");
+    }
+
+    /**
+     * 打开控制台日志
+     */
+    public static void openConsoleLogging() {
+        System.clearProperty(KETTLE_DISABLE_CONSOLE_LOGGING);
     }
 
     /**
@@ -47,8 +64,6 @@ public class KettleActuator {
      */
     public static void executeTransfer(@NonNull String ktrPath, @NonNull String[] params, @NonNull Map<String, String> variableMap, @NonNull Map<String, String> parameter) throws KettleException {
         // 初始化kettle环境
-        // TODO: 开发中
-        System.setProperty("KETTLE_DISABLE_CONSOLE_LOGGING", "Y");
         KettleEnvironment.init();
         EnvUtil.environmentInit();
         TransMeta transMeta = new TransMeta(ktrPath);
@@ -65,6 +80,28 @@ public class KettleActuator {
      * @throws KettleException 转换异常
      */
     private static void doExecuteTransfer(@NonNull TransMeta transMeta, @NonNull String[] params, @NonNull Map<String, String> variableMap, @NonNull Map<String, String> parameter) throws KettleException {
+
+        // todo:测试代码
+        StepLogTable stepLogTable = StepLogTable.getDefault(transMeta, transMeta);
+        DatabaseMeta databaseMeta = new DatabaseMeta();
+        databaseMeta.setName("ceshi");
+        databaseMeta.setDatabaseType("mysql");
+        databaseMeta.setHostname("localhost");
+        databaseMeta.setDBPort("3306");
+        databaseMeta.setDBName("kettle_log_db");
+        databaseMeta.setUsername("root");
+        databaseMeta.setPassword("ming8858");
+        transMeta.addDatabase(databaseMeta);
+        stepLogTable.setConnectionName("ceshi");
+        stepLogTable.setTableName("step_log");
+        transMeta.setStepLogTable(stepLogTable);
+
+        TransLogTable transLogTable = TransLogTable.getDefault(transMeta, transMeta, transMeta.getSteps());
+        transLogTable.setConnectionName("ceshi");
+        transLogTable.setTableName("trans_log");
+        transMeta.setTransLogTable(transLogTable);
+
+
         final Trans trans = new Trans(transMeta);
         // 设置变量
         variableMap.forEach(trans :: setVariable);

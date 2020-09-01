@@ -55,7 +55,7 @@ public class TxtReader {
             while (lineIterator.hasNext()) {
                 try {
                     // 读取行
-                    String line = lineIterator.nextLine();
+                    String line = readListener.formatLine(lineIterator.nextLine());
                     // 判断头部位置
                     int index = atomicInteger.getAndIncrement();
                     if (index < readParameter.getFirstRow() || !readListener.readLine(line)) {
@@ -84,12 +84,12 @@ public class TxtReader {
         final List<String> valueList = new ArrayList<>(data.values());
         // todo: 实体类继续处理
         for (Field field : modelClass.getDeclaredFields()) {
-            Method method = CacheUtils.getWriteMethod(field);
             // 获取 TxtProperty
             final TxtProperty txtProperty = CacheUtils.getTxtProperty(field);
             if (ReflectUtil.isStatic(field) || Objects.isNull(txtProperty)) {
                 continue;
             }
+            Method method = CacheUtils.getWriteMethod(field);
             // 获取值
             String value = null;
             final String headerKey = txtProperty.value();

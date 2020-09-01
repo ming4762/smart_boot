@@ -49,4 +49,13 @@ public interface ReadListener<T extends TxtBaseModel> {
     default boolean readLine(String lineData) {
         return true;
     }
+
+    /**
+     * 格式化行
+     * @param lineData 行
+     * @return 格式化后的行
+     */
+    default String formatLine(String lineData) {
+        return lineData;
+    }
 }

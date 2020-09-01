@@ -44,7 +44,7 @@ public class SecurityAutoConfiguration {
 
     /**
      * cors资源配置
-     * @return
+     * @return corsConfigurationSource
      */
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
@@ -59,8 +59,8 @@ public class SecurityAutoConfiguration {
 
     /**
      * 创建URL校验器
-     * @param mapping
-     * @return
+     * @param mapping springmvc映射
+     * @return 动态URL校验器
      */
     @Bean
     @ConditionalOnProperty(prefix = "gc.auth", name = "urlCheck", havingValue = "true")
