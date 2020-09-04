@@ -25,7 +25,7 @@ public class DefaultTxtReadAnalysis implements TxtReadAnalysis {
     @Override
     @NonNull
     public LinkedHashMap<String, String> readLine(String line, String separator, List<String> headerList) {
-        String[] values = StringUtils.split(line, separator);
+        String[] values = StringUtils.splitPreserveAllTokens(line, separator);
         LinkedHashMap<String, String> result = new LinkedHashMap<>();
         AtomicInteger atomicInteger = new AtomicInteger(0);
         Arrays.asList(values).forEach(item -> {

@@ -34,12 +34,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class TxtReader {
 
 
-    private final TxtReadAnalysis txtReadAnalysis;
-
-    public TxtReader() {
-        this.txtReadAnalysis = new DefaultTxtReadAnalysis();
-    }
-
     /**
      * 执行读取
      * @param readParameter 读取参数
@@ -47,6 +41,13 @@ public class TxtReader {
     public <T extends TxtBaseModel> void read(ReadParameter<T> readParameter) throws IOException {
         // 获取监听器
         ReadListener<T> readListener = readParameter.getReadListener();
+        // 获取分析类
+        TxtReadAnalysis txtReadAnalysis;
+        if (Objects.nonNull(readParameter.getTxtReadAnalysis())) {
+            txtReadAnalysis = readParameter.getTxtReadAnalysis();
+        } else {
+            txtReadAnalysis = new DefaultTxtReadAnalysis();
+        }
         // 获取编码方式
         final Charset charset = ObjectUtils.firstNonNull(readParameter.getCharset(), StandardCharsets.UTF_8);
         // 计数器
@@ -66,7 +67,7 @@ public class TxtReader {
                         break;
                     }
                     // 解析内容
-                    LinkedHashMap<String, String> result = this.txtReadAnalysis.readLine(line, readListener.separator(), new ArrayList<>());
+                    LinkedHashMap<String, String> result = txtReadAnalysis.readLine(line, readListener.separator(), new ArrayList<>());
                     T txtBaseModel = this.convertToBean(readParameter.getClazz(), result);
                     readListener.invoke(txtBaseModel);
                 } catch (Exception e) {
