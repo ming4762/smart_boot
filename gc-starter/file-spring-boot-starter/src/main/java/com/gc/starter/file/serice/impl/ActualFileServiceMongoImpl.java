@@ -1,5 +1,6 @@
 package com.gc.starter.file.serice.impl;
 
+import com.gc.common.base.exception.OperationNotSupportedException;
 import com.gc.starter.file.serice.ActualFileService;
 import com.mongodb.client.gridfs.GridFSBuckets;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
@@ -13,38 +14,42 @@ import org.springframework.lang.NonNull;
 import java.io.*;
 import java.util.List;
 
+/**
+ * mongo文件执行器
+ *
+ * @author shizhongming
+ * 2020/1/15 8:54 下午
+ */
+public class ActualFileServiceMongoImpl implements ActualFileService {
+
+    private final GridFsTemplate gridFsTemplate;
+
+    private final MongoDatabaseFactory dbFactory;
+
+    public ActualFileServiceMongoImpl(GridFsTemplate gridFsTemplate, MongoDatabaseFactory dbFactory) {
+        this.gridFsTemplate = gridFsTemplate;
+        this.dbFactory = dbFactory;
+    }
+
+
     /**
-     * mongo文件执行器
-     * @author shizhongming
-     * 2020/1/15 8:54 下午
+     * 保存文件
+     *
+     * @param file     文件
+     * @param filename 文件名
+     * @return 文件id
      */
-    public class ActualFileServiceMongoImpl implements ActualFileService {
-
-        private final GridFsTemplate gridFsTemplate;
-
-        private final MongoDatabaseFactory dbFactory;
-
-        public ActualFileServiceMongoImpl(GridFsTemplate gridFsTemplate, MongoDatabaseFactory dbFactory) {
-            this.gridFsTemplate = gridFsTemplate;
-            this.dbFactory = dbFactory;
-        }
-
-
-        /**
-         * 保存文件
-         * @param file 文件
-         * @param filename 文件名
-         * @return 文件id
-         */
-        @Override
-        public @NonNull String save(@NonNull File file, String filename) throws IOException {
+    @Override
+    public @NonNull
+    String save(@NonNull File file, String filename) throws IOException {
         return this.gridFsTemplate.store(new FileInputStream(file), filename).toString();
     }
 
     /**
      * 保存文件
+     *
      * @param inputStream 文件流
-     * @param filename 文件名
+     * @param filename    文件名
      * @return 文件ID
      */
     @Override
@@ -55,6 +60,7 @@ import java.util.List;
 
     /**
      * 删除文件
+     *
      * @param id 文件ID
      */
     @Override
@@ -66,6 +72,7 @@ import java.util.List;
 
     /**
      * 批量删除文件
+     *
      * @param fileIdList 文件ID
      */
     @Override
@@ -77,6 +84,7 @@ import java.util.List;
 
     /**
      * 下载文件
+     *
      * @param id 文件id
      * @return 文件流
      */
@@ -88,7 +96,8 @@ import java.util.List;
     /**
      * 下载文件并写入输出流
      * 请注意关闭输出流
-     * @param id 文件ID
+     *
+     * @param id           文件ID
      * @param outputStream 输出流
      * @throws IOException IO异常
      */
@@ -97,5 +106,16 @@ import java.util.List;
         try (InputStream inputStream = this.download(id)) {
             IOUtils.copy(inputStream, outputStream);
         }
+    }
+
+    /**
+     * 获取文件的绝对路径
+     *
+     * @param id 文件ID
+     * @return 文件绝对路径
+     */
+    @Override
+    public String getAbsolutePath(@NonNull String id) {
+        throw new OperationNotSupportedException("mongoDB不支持获取文件绝对路径");
     }
 }
