@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 /**
  * @author jackson
@@ -18,5 +18,5 @@ public abstract class BaseModelCreateUserTime extends BaseModel {
     private static final long serialVersionUID = 5157863351256809974L;
     protected Long createUserId;
 
-    protected Date createTime;
+    protected LocalDateTime createTime;
 }

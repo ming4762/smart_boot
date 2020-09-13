@@ -3,9 +3,9 @@ package com.gc.starter.crud.advice;
 import com.gc.common.base.exception.IllegalAccessRuntimeException;
 import com.gc.common.base.exception.IntrospectionRuntimeException;
 import com.gc.common.base.exception.InvocationTargetRuntimeException;
-import com.gc.starter.crud.query.PageQueryParameter;
+import com.gc.common.base.utils.ReflectUtil;
 import com.gc.starter.crud.query.QueryParameter;
-import com.gc.starter.crud.query.SortQueryParameter;
+import com.google.common.collect.Sets;
 import lombok.SneakyThrows;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.HttpInputMessage;
@@ -17,6 +17,7 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestBodyAdvice;
 import java.beans.IntrospectionException;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.*;
+import java.util.Set;
 
 /**
  * 参数处理类，将map转为queryParameter
@@ -67,13 +68,7 @@ public class ParameterConvertRequestBodyAdvice implements RequestBodyAdvice {
     @SuppressWarnings("rawtypes")
     private void convertParameter(QueryParameter parameter, Class clazz) {
         // 处理PageQueryParameter
-        if (parameter instanceof PageQueryParameter) {
-            this.addParameter(parameter, clazz);
-        }
-        // 处理SortQueryParameter
-        if (parameter instanceof SortQueryParameter) {
-            this.addParameter(parameter, clazz);
-        }
+        this.addParameter(parameter, clazz);
     }
 
     /**
@@ -83,8 +78,10 @@ public class ParameterConvertRequestBodyAdvice implements RequestBodyAdvice {
      */
     @SuppressWarnings("rawtypes")
     private void addParameter(QueryParameter parameter, Class<? extends QueryParameter> clazz) {
+        final Set<Field> fieldSet = Sets.newHashSet();
+        ReflectUtil.getAllFields(clazz, fieldSet);
         try {
-            for (Field field : clazz.getDeclaredFields()) {
+            for (Field field : fieldSet) {
                 if (!Modifier.isFinal(field.getModifiers()) && !Modifier.isStatic(field.getModifiers())) {
                     String name = field.getName();
                     if (parameter.containsKey(name)) {

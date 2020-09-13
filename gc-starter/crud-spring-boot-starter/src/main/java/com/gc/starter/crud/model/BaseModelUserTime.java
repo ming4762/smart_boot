@@ -3,7 +3,7 @@ package com.gc.starter.crud.model;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 /**
  * 带有创建/修改用户信息的基础类
@@ -17,5 +17,5 @@ public abstract class BaseModelUserTime extends BaseModelCreateUserTime {
 
     protected Long updateUserId;
 
-    protected Date updateTime;
+    protected LocalDateTime updateTime;
 }
