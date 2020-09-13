@@ -3,6 +3,8 @@ package com.gc.common.i18n.utils;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 
+import java.util.Optional;
+
 /**
  * I18N工具类
  * @author shizhongming
@@ -21,8 +23,10 @@ public class I18nUtils {
      * @param key key
      * @return
      */
-    public static String get(String key) {
-        return messageSource.getMessage(key, null, LocaleContextHolder.getLocale());
+    public static String get(String key, String defaultMessage) {
+        return Optional.ofNullable(messageSource)
+                .map(item -> item.getMessage(key, null, LocaleContextHolder.getLocale()))
+                .orElse(defaultMessage);
     }
 
     public static void setMessageSource(MessageSource messageSource) {
