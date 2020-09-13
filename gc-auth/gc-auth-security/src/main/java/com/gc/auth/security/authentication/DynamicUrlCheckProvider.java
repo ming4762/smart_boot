@@ -1,5 +1,6 @@
 package com.gc.auth.security.authentication;
 
+import com.gc.auth.security.constants.RoleConstants;
 import com.gc.common.auth.annotation.NonUrlCheck;
 import com.gc.common.auth.core.RestUserDetails;
 import com.gc.common.auth.exception.AuthException;
@@ -64,6 +65,9 @@ public class DynamicUrlCheckProvider {
         Object userInfo = authentication.getPrincipal();
         if (userInfo instanceof RestUserDetails) {
             RestUserDetails restUserDetails = (RestUserDetails) userInfo;
+            if (restUserDetails.getRoles().contains(RoleConstants.ROLE_SUPERADMIN.getRole())) {
+//                return true;
+            }
             Set<Permission> permissionList = restUserDetails.getPermissions();
             if (ObjectUtils.isNotEmpty(permissionList)) {
                 for (Permission permission : permissionList) {

@@ -20,6 +20,8 @@ public class RestAuthenticationProvider extends AbstractUserDetailsAuthenticatio
 
     private static final String USERNAME_PASSWORD_NULL = "用户名密码不能为空";
 
+    private static final String USERNAME_PASSWORD_ERROR = "用户名密码错误";
+
 
     private static final String NONE_PROVIDED = "NONE_PROVIDED";
 
@@ -39,7 +41,7 @@ public class RestAuthenticationProvider extends AbstractUserDetailsAuthenticatio
         final String password = authentication.getCredentials().toString();
         if (!StringUtils.equals(userDetails.getPassword(), password)) {
             logger.debug("登录失败：密码错误");
-            throw new InternalAuthenticationServiceException(I18nUtils.get("auth.exception.usernamePasswordError"));
+            throw new InternalAuthenticationServiceException(I18nUtils.get("auth.exception.usernamePasswordError", USERNAME_PASSWORD_ERROR));
         }
     }
 
@@ -51,7 +53,7 @@ public class RestAuthenticationProvider extends AbstractUserDetailsAuthenticatio
         }
         UserDetails user = this.restUserDetailsService.loadUserByUsername(username);
         if (ObjectUtils.isEmpty(user)) {
-            throw new InternalAuthenticationServiceException(I18nUtils.get("auth.exception.usernamePasswordError"));
+            throw new InternalAuthenticationServiceException(I18nUtils.get("auth.exception.usernamePasswordError", USERNAME_PASSWORD_ERROR));
         }
         return user;
     }

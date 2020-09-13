@@ -13,7 +13,6 @@
     <description>认证模块的缓存工具</description>
 
     <properties>
-        <java.version>1.8</java.version>
     </properties>
 
     <dependencies>

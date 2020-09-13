@@ -1,5 +1,6 @@
 package com.gc.auth.security.authentication;
 
+import com.gc.auth.security.constants.RoleConstants;
 import com.gc.common.auth.model.Permission;
 import com.gc.common.auth.model.RestUserDetailsImpl;
 import com.gc.common.auth.properties.AuthProperties;
@@ -20,7 +21,6 @@ import java.util.stream.Collectors;
 @Component
 public class RestPermissionEvaluatorImpl implements PermissionEvaluator {
 
-    private static final String ROLE_SUPERADMIN = "SUPERADMIN";
 
     private final AuthProperties authProperties;
 
@@ -36,7 +36,7 @@ public class RestPermissionEvaluatorImpl implements PermissionEvaluator {
         }
         // 验证角色，超级管理员角色不拦截
         final RestUserDetailsImpl user = (RestUserDetailsImpl) authentication.getPrincipal();
-        if (user.getRoles().contains(ROLE_SUPERADMIN)) {
+        if (user.getRoles().contains(RoleConstants.ROLE_SUPERADMIN.getRole())) {
             return true;
         }
         // 验证权限
