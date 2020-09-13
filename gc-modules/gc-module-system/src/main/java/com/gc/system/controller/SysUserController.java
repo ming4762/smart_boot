@@ -1,5 +1,6 @@
 package com.gc.system.controller;
 
+import com.gc.common.auth.annotation.NonUrlCheck;
 import com.gc.common.auth.model.SysUserPO;
 import com.gc.common.auth.service.AuthUserService;
 import com.gc.common.base.http.HttpStatus;
@@ -29,6 +30,7 @@ import java.util.List;
 @RestController
 @RequestMapping("sys/user")
 @Api(value = "用户管理", tags = "系统模块")
+@NonUrlCheck
 public class SysUserController extends BaseController<AuthUserService, SysUserPO> {
 
     /**
@@ -87,4 +89,6 @@ public class SysUserController extends BaseController<AuthUserService, SysUserPO
         }
         return Result.success(this.service.removeByIds(idList));
     }
+
+
 }
