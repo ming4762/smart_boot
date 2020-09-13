@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.gc</groupId>
+        <artifactId>gc-auth</artifactId>
+        <version>0.0.7-SNAPSHOT</version>
+    </parent>
+    <artifactId>gc-auth-cache-guava</artifactId>
+    <version>${gc-boot.version}</version>
+    <name>gc-auth-cache-guava</name>
+    <description>auth 模块 guava缓存</description>
+
+    <properties>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+        </dependency>
+    </dependencies>
+
+</project>

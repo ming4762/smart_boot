@@ -18,6 +18,7 @@
     </properties>
 
     <modules>
+        <module>gc-auth-cache-guava</module>
         <module>gc-auth-cache-redis</module>
         <module>gc-auth-security</module>
         <module>gc-auth-shiro</module>
