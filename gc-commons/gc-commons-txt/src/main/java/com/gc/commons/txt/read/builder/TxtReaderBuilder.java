@@ -1,6 +1,7 @@
 package com.gc.commons.txt.read.builder;
 
 import com.gc.commons.txt.TxtBaseModel;
+import com.gc.commons.txt.read.TxtReadAnalysis;
 import com.gc.commons.txt.read.TxtReader;
 import com.gc.commons.txt.read.listener.ReadListener;
 import com.gc.commons.txt.read.parameter.ReadParameter;
@@ -46,6 +47,16 @@ public class TxtReaderBuilder<T extends TxtBaseModel> {
 
     public TxtReaderBuilder<T> firstRowNum(int rowNumber) {
         this.readParameter.setFirstRow(rowNumber);
+        return this;
+    }
+
+    /**
+     * 设置分析类
+     * @param txtReadAnalysis txt分析类
+     * @return 分析类
+     */
+    public TxtReaderBuilder<T> readAnalysis(@NonNull TxtReadAnalysis txtReadAnalysis) {
+        this.readParameter.setTxtReadAnalysis(txtReadAnalysis);
         return this;
     }
 

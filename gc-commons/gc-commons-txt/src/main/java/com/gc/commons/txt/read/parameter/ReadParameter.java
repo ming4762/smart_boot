@@ -1,6 +1,7 @@
 package com.gc.commons.txt.read.parameter;
 
 import com.gc.commons.txt.TxtBaseModel;
+import com.gc.commons.txt.read.TxtReadAnalysis;
 import com.gc.commons.txt.read.listener.ReadListener;
 import lombok.Getter;
 import lombok.Setter;
@@ -39,4 +40,6 @@ public class ReadParameter<T extends TxtBaseModel> {
      * 编码方式
      */
     private Charset charset;
+
+    private TxtReadAnalysis txtReadAnalysis;
 }
