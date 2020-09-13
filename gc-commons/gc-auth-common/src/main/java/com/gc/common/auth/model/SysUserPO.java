@@ -9,7 +9,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 /**
  * 用户实体类
@@ -69,7 +69,7 @@ public class SysUserPO extends BaseModelUserTime {
     /**
      * 生日
      */
-    private Date birthday;
+    private LocalDateTime birthday;
 
     /**
      * 部门ID
