@@ -24,3 +24,71 @@ CREATE TABLE `sys_user` (
   UNIQUE KEY `uni_work_no` (`work_no`) USING BTREE COMMENT '工号唯一键',
   KEY `idx_post_id` (`post_id`) COMMENT '部门ID索引'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='系统用户表';
+
+
+create table sys_role
+(
+    role_id        bigint               not null
+        primary key,
+    role_name      varchar(50)          not null comment '角色名称',
+    role_code      varchar(50)          not null comment '角色编码',
+    remark         varchar(255)         null comment '备注',
+    enable         tinyint(1) default 1 not null comment '是否启用',
+    role_type      char(2)              null comment '角色类型',
+    create_user_id bigint               null comment '创建人员ID',
+    create_time    datetime             null comment '创建时间',
+    update_user_id bigint               null comment '更新人员ID',
+    update_time    datetime             null comment '更新时间',
+    dept_id        bigint               null comment '部门id',
+    seq            int                  null comment '序号'
+)
+    charset = utf8;
+
+create table sys_user_group
+(
+    group_id       bigint               not null
+        primary key,
+    group_name     varchar(50)          not null comment '用户组名称',
+    group_code     varchar(50)          not null comment '用户组编码',
+    remark         varchar(255)         null comment '备注',
+    seq            int                  null comment '序号',
+    enable         tinyint(1) default 1 not null comment '是否启用',
+    create_user_id bigint               null,
+    create_time    datetime             null,
+    update_user_id bigint               null,
+    update_time    datetime             null,
+    constraint uk_group_code
+        unique (group_code)
+)
+    charset = utf8;
+
+create table sys_user_group_role
+(
+    group_id       bigint               not null comment '用户组ID',
+    role_id        bigint               not null comment '角色ID',
+    enable         tinyint(1) default 1 not null comment '是否启用',
+    create_time    datetime             not null comment '创建时间',
+    create_user_id bigint               null comment '创建人员ID',
+    primary key (group_id, role_id)
+)
+    charset = utf8;
+
+create table sys_user_group_user
+(
+    user_id        bigint     not null comment '用户ID',
+    user_group_id  bigint     not null comment '用户组ID',
+    enable         tinyint(1) not null comment '是否启用',
+    create_time    datetime   null,
+    create_user_id bigint     null,
+    primary key (user_id, user_group_id)
+);
+
+create table sys_user_role
+(
+    user_id        bigint               not null comment '用户ID',
+    role_id        bigint               not null comment '角色ID',
+    enable         tinyint(1) default 1 not null comment '是否启用',
+    create_time    datetime             not null comment '创建时间',
+    create_user_id bigint               null comment '创建人员Id',
+    primary key (user_id, role_id)
+);
