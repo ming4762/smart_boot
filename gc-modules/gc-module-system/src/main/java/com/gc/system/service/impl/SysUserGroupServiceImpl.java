@@ -1,6 +1,7 @@
 package com.gc.system.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.gc.common.auth.model.SysUserPO;
 import com.gc.common.base.constants.TransactionManagerConstants;
 import com.gc.common.base.utils.BeanUtils;
@@ -22,7 +23,9 @@ import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
+import java.io.Serializable;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -41,6 +44,23 @@ public class SysUserGroupServiceImpl extends BaseServiceImpl<SysUserGroupMapper,
     public SysUserGroupServiceImpl(SysUserGroupUserService sysUserGroupUserService, SysUserService sysUserService) {
         this.sysUserGroupUserService = sysUserGroupUserService;
         this.sysUserService = sysUserService;
+    }
+
+    /**
+     * 重写批量删除
+     * @param idList ID列表
+     * @return 删除用户组用户关系
+     */
+    @Override
+    @Transactional(transactionManager = TransactionManagerConstants.SYSTEM_MANAGER, rollbackFor = Exception.class)
+    public boolean removeByIds(Collection<? extends Serializable> idList) {
+        // 删除用户组用户关系
+        if (!CollectionUtils.isEmpty(idList)) {
+            this.sysUserGroupUserService.remove(
+                    new UpdateWrapper<SysUserGroupUserPO>().lambda().in(SysUserGroupUserPO :: getUserGroupId, idList)
+            );
+        }
+        return super.removeByIds(idList);
     }
 
     /**
@@ -129,7 +149,7 @@ public class SysUserGroupServiceImpl extends BaseServiceImpl<SysUserGroupMapper,
      * @return
      */
     @Override
-    @Transactional(value = TransactionManagerConstants.SYSTEM_MANAGER, rollbackFor = Exception.class, readOnly = true)
+    @Transactional(value = TransactionManagerConstants.SYSTEM_MANAGER, rollbackFor = Exception.class)
     public boolean saveUserGroupByGroupId(@NonNull UserGroupUserSaveDTO parameter) {
         // 删除用户组用户信息信息
         this.sysUserGroupUserService.remove(

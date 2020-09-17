@@ -1,5 +1,6 @@
 package com.gc.system.controller;
 
+import com.gc.common.auth.annotation.NonUrlCheck;
 import com.gc.common.auth.model.SysUserPO;
 import com.gc.common.auth.utils.AuthUtils;
 import com.gc.common.base.http.HttpStatus;
@@ -33,6 +34,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("sys/userGroup")
 @Api(value = "用户组管理", tags = "系统模块")
+@NonUrlCheck
 public class SysUserGroupController extends BaseController<SysUserGroupService, SysUserGroupPO> {
 
     @Override
