@@ -35,6 +35,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -413,7 +414,7 @@ public abstract class BaseServiceImpl<K extends CrudBaseMapper<T>, T extends Bas
      */
     private void setCreateTime(T model) {
         try {
-            PropertyUtils.setProperty(model, UserPropertyConstants.CREATE_TIME.getName(), new Date());
+            PropertyUtils.setProperty(model, UserPropertyConstants.CREATE_TIME.getName(), LocalDateTime.now());
         } catch (IllegalAccessException e) {
             throw new IllegalAccessRuntimeException(e);
         } catch (InvocationTargetException e) {
@@ -437,7 +438,7 @@ public abstract class BaseServiceImpl<K extends CrudBaseMapper<T>, T extends Bas
 
     private void setUpdateTime(T model) {
         try {
-            PropertyUtils.setProperty(model, UserPropertyConstants.UPDATE_TIME.getName(), new Date());
+            PropertyUtils.setProperty(model, UserPropertyConstants.UPDATE_TIME.getName(), LocalDateTime.now());
         } catch (IllegalAccessException e) {
             throw new IllegalAccessRuntimeException(e);
         } catch (InvocationTargetException e) {
