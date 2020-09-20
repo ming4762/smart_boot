@@ -20,6 +20,7 @@ import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -67,6 +68,15 @@ public abstract class BaseQueryController<K extends BaseService<T>, T extends Ba
      */
     public Result<T> get(@RequestBody T model) {
         return Result.success(this.service.get(model));
+    }
+
+    /**
+     * 通过ID获取
+     * @param id ID
+     * @return 实体类
+     */
+    public Result<T> getById(@RequestBody Serializable id) {
+        return Result.success(this.service.getById(id));
     }
 
     /**

@@ -33,7 +33,7 @@ public class SysFunctionPO extends BaseModelUserTime {
     /**
      * 功能名称
      */
-    private Long functionName;
+    private String functionName;
 
     /**
      * 功能类型（10：目录 20：菜单 30：功能）
