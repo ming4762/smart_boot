@@ -9,6 +9,7 @@ import org.springframework.lang.Nullable;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.Collection;
 
 /**
@@ -64,7 +65,7 @@ public interface SysFileService extends BaseService<SysFilePO> {
      * @return 删除是否成功
      * @throws IOException IOException
      */
-    boolean batchDeleteFile(@NonNull Collection<Long> fileIds) throws IOException;
+    boolean batchDeleteFile(@NonNull Collection<Serializable> fileIds) throws IOException;
 
     /**
      * 下载文件

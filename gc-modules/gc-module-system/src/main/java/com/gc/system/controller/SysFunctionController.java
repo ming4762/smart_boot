@@ -3,8 +3,6 @@ package com.gc.system.controller;
 import com.gc.common.auth.annotation.NonUrlCheck;
 import com.gc.common.auth.utils.AuthUtils;
 import com.gc.common.base.message.Result;
-import com.gc.common.base.model.Tree;
-import com.gc.common.base.utils.TreeUtils;
 import com.gc.starter.crud.controller.BaseController;
 import com.gc.starter.crud.query.PageQueryParameter;
 import com.gc.starter.log.annotation.Log;
@@ -33,11 +31,12 @@ import java.util.List;
 public class SysFunctionController extends BaseController<SysFunctionService, SysFunctionPO> {
 
 
+    @Override
     @PostMapping("batchDeleteById")
     @Log(value = "通过ID批量删除功能", type = LogType.DELETE)
     @ApiOperation(value = "通过ID批量删除功能", httpMethod = "POST")
     @PreAuthorize("hasPermission('sys:function', 'delete')")
-    public Result<Boolean> batchDeleteById(@RequestBody List<Long> idList) {
+    public Result<Boolean> batchDeleteById(@RequestBody List<Serializable> idList) {
         if (CollectionUtils.isEmpty(idList)) {
             return Result.success(false);
         }

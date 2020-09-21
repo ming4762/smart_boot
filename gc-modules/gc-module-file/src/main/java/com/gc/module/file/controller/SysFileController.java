@@ -11,6 +11,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.Serializable;
 import java.net.URLEncoder;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -110,8 +112,10 @@ public class SysFileController extends BaseController<SysFileService, SysFilePO>
      * @param ids
      * @return
      */
+    @SneakyThrows
     @ApiOperation("批量删除文件")
-    public Result<Boolean> batchDeleteById(@RequestBody List<Long> ids) throws IOException {
+    @Override
+    public Result<Boolean> batchDeleteById(@RequestBody List<Serializable> ids)  {
         return Result.success(this.service.batchDeleteFile(ids));
     }
 

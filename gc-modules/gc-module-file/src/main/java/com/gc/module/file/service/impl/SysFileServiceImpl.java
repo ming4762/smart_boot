@@ -23,6 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -133,7 +134,7 @@ public class SysFileServiceImpl extends BaseServiceImpl<SysFileMapper, SysFilePO
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public boolean batchDeleteFile(@NonNull Collection<Long> fileIds) throws IOException {
+    public boolean batchDeleteFile(@NonNull Collection<Serializable> fileIds) throws IOException {
         if (!fileIds.isEmpty()) {
             final List<SysFilePO> fileList = this.listByIds(fileIds);
             this.removeByIds(fileIds);

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -58,8 +59,9 @@ public class FaqCategoryController extends BaseController<FaqCategoryService, Fa
      * @param idList
      * @return
      */
+    @Override
     @PostMapping("batchDeleteById")
-    public Result<Boolean> batchDeleteById(@RequestBody List<Long> idList) {
+    public Result<Boolean> batchDeleteById(@RequestBody List<Serializable> idList) {
         if (idList.isEmpty()) {
             return Result.ofStatus(HttpStatus.PARAM_NOT_NULL, "id集合不能为空");
         }

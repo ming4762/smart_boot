@@ -10,6 +10,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.Serializable;
 import java.util.List;
 import java.util.Optional;
 
@@ -56,6 +57,13 @@ public abstract class BaseController<K extends BaseService<T>, T extends BaseMod
      */
     protected Result<Integer> batchDelete(@RequestBody List<T> modelList) {
         return Result.success(this.service.batchDelete(modelList));
+    }
+
+    public Result<Boolean> batchDeleteById(@RequestBody List<Serializable> idList) {
+        if (idList.isEmpty()) {
+            return Result.success(Boolean.FALSE);
+        }
+        return Result.success(this.service.removeByIds(idList));
     }
 
     /**

@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
@@ -55,7 +56,8 @@ public class SysUserGroupController extends BaseController<SysUserGroupService, 
     @ApiOperation(value = "通过ID批量删除用户组")
     @PostMapping("batchDeleteById")
     @Log(value = "通过ID批量删除用户组", type = LogType.DELETE)
-    public Result<Boolean> batchDeleteById(@RequestBody List<Long> idList) {
+    @Override
+    public Result<Boolean> batchDeleteById(@RequestBody List<Serializable> idList) {
         if (idList.isEmpty()) {
             return Result.ofStatus(HttpStatus.PARAM_NOT_NULL, "用户组ID集合不能为空");
         }
