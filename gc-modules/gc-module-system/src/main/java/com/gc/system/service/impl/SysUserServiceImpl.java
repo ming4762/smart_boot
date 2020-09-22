@@ -1,7 +1,9 @@
 package com.gc.system.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.gc.common.auth.core.RestUserDetails;
 import com.gc.common.auth.model.SysUserPO;
+import com.gc.common.auth.utils.AuthUtils;
 import com.gc.common.base.constants.TransactionManagerConstants;
 import com.gc.common.base.exception.IllegalAccessRuntimeException;
 import com.gc.common.base.exception.InvocationTargetRuntimeException;
@@ -9,19 +11,20 @@ import com.gc.common.base.exception.NoSuchMethodRuntimeException;
 import com.gc.common.base.utils.security.Md5Utils;
 import com.gc.starter.crud.constants.UserPropertyConstants;
 import com.gc.starter.crud.service.impl.BaseServiceImpl;
+import com.gc.system.constants.FunctionTypeConstants;
 import com.gc.system.mapper.SysUserGroupRoleMapper;
 import com.gc.system.mapper.SysUserGroupUserMapper;
 import com.gc.system.mapper.SysUserMapper;
 import com.gc.system.mapper.SysUserRoleMapper;
-import com.gc.system.model.SysRolePO;
-import com.gc.system.model.SysUserGroupRolePO;
-import com.gc.system.model.SysUserGroupUserPO;
-import com.gc.system.model.SysUserRolePO;
+import com.gc.system.model.*;
+import com.gc.system.service.SysFunctionService;
+import com.gc.system.service.SysRoleFunctionService;
 import com.gc.system.service.SysRoleService;
 import com.gc.system.service.SysUserService;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import org.apache.commons.beanutils.PropertyUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -48,11 +51,17 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserMapper, SysUserPO
 
     private final SysRoleService sysRoleService;
 
-    public SysUserServiceImpl(SysUserRoleMapper sysUserRoleMapper, SysUserGroupUserMapper sysUserGroupUserMapper, SysUserGroupRoleMapper sysUserGroupRoleMapper, SysRoleService sysRoleService) {
+    private final SysRoleFunctionService sysRoleFunctionService;
+
+    @Autowired
+    private SysFunctionService sysFunctionService;
+
+    public SysUserServiceImpl(SysUserRoleMapper sysUserRoleMapper, SysUserGroupUserMapper sysUserGroupUserMapper, SysUserGroupRoleMapper sysUserGroupRoleMapper, SysRoleService sysRoleService, SysRoleFunctionService sysRoleFunctionService) {
         this.sysUserRoleMapper = sysUserRoleMapper;
         this.sysUserGroupUserMapper = sysUserGroupUserMapper;
         this.sysUserGroupRoleMapper = sysUserGroupRoleMapper;
         this.sysRoleService = sysRoleService;
+        this.sysRoleFunctionService = sysRoleFunctionService;
     }
 
     /**
@@ -183,5 +192,54 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserMapper, SysUserPO
                 throw new NoSuchMethodRuntimeException(e);
             }
         }
+    }
+
+    /**
+     * 查询用户菜单信息
+     * @return 菜单列表
+     */
+    @NonNull
+    @Override
+    @Transactional(value = TransactionManagerConstants.SYSTEM_MANAGER, readOnly = true)
+    public List<SysFunctionPO> listCurrentUserMenu() {
+        // 获取当前用户的角色信息
+        final RestUserDetails userDetails = AuthUtils.getCurrentUser();
+        if (Objects.isNull(userDetails)) {
+            return Lists.newArrayList();
+        }
+        final Set<String> roleCodes = userDetails.getRoles();
+        if (roleCodes.isEmpty()) {
+            return Lists.newArrayList();
+        }
+        // 查询角色ID
+        final Set<Long> roleIds = this.sysRoleService.list(
+                new QueryWrapper<SysRolePO>().lambda()
+                        .select(SysRolePO :: getRoleId)
+                        .in(SysRolePO :: getRoleCode, roleCodes)
+        )
+                .stream()
+                .map(SysRolePO :: getRoleId)
+                .collect(Collectors.toSet());
+        if (roleIds.isEmpty()) {
+            return Lists.newArrayList();
+        }
+        // 查询功能ID
+        final Set<Long> functionIds = this.sysRoleFunctionService.list(
+                new QueryWrapper<SysRoleFunctionPO>().lambda()
+                        .select(SysRoleFunctionPO :: getFunctionId)
+                        .in(SysRoleFunctionPO :: getRoleId, roleIds)
+        ).stream().map(SysRoleFunctionPO :: getFunctionId).collect(Collectors.toSet());
+        if (functionIds.isEmpty()) {
+            return Lists.newArrayList();
+        }
+        // 查询功能信息
+        return this.sysFunctionService.list(
+                new QueryWrapper<SysFunctionPO>().lambda()
+                        .in(SysFunctionPO :: getFunctionId, functionIds)
+                        .and(
+                                (query) -> query.eq(SysFunctionPO :: getFunctionType, FunctionTypeConstants.CATALOG.getValue())
+                                .or().eq(SysFunctionPO :: getFunctionType, FunctionTypeConstants.MENU.getValue())
+                        )
+        );
     }
 }

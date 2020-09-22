@@ -1,6 +1,7 @@
 package com.gc.system.service;
 
 import com.gc.common.auth.service.AuthUserService;
+import com.gc.system.model.SysFunctionPO;
 import com.gc.system.model.SysRolePO;
 import org.springframework.lang.NonNull;
 
@@ -41,4 +42,11 @@ public interface SysUserService extends AuthUserService {
      * @param <T> 目标类型
      */
     <T> void setWithUpdateUser(@NonNull List<T> resource);
+
+    /**
+     * 查询用户菜单信息
+     * @return 菜单列表
+     */
+    @NonNull
+    List<SysFunctionPO> listCurrentUserMenu();
 }

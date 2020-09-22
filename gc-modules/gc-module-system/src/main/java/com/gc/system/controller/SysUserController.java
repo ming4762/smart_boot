@@ -2,14 +2,15 @@ package com.gc.system.controller;
 
 import com.gc.common.auth.annotation.NonUrlCheck;
 import com.gc.common.auth.model.SysUserPO;
-import com.gc.common.auth.service.AuthUserService;
 import com.gc.common.base.http.HttpStatus;
 import com.gc.common.base.message.Result;
 import com.gc.starter.crud.controller.BaseController;
 import com.gc.starter.crud.query.PageQueryParameter;
 import com.gc.starter.log.annotation.Log;
 import com.gc.starter.log.constants.LogType;
+import com.gc.system.model.SysFunctionPO;
 import com.gc.system.pojo.dto.user.UserSaveDTO;
+import com.gc.system.service.SysUserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.BeanUtils;
@@ -32,7 +33,7 @@ import java.util.List;
 @RequestMapping("sys/user")
 @Api(value = "用户管理", tags = "系统模块")
 @NonUrlCheck
-public class SysUserController extends BaseController<AuthUserService, SysUserPO> {
+public class SysUserController extends BaseController<SysUserService, SysUserPO> {
 
     /**
      * 添加保存方法
@@ -92,5 +93,13 @@ public class SysUserController extends BaseController<AuthUserService, SysUserPO
         return Result.success(this.service.removeByIds(idList));
     }
 
-
+    /**
+     * 查询用户菜单信息
+     * @return 用户菜单
+     */
+    @ApiOperation(value = "查询用户菜单信息")
+    @PostMapping("listUserMenu")
+    public Result<List<SysFunctionPO>> listUserMenu() {
+        return Result.success(this.service.listCurrentUserMenu());
+    }
 }
