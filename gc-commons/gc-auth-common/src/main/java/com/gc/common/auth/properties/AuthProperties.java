@@ -20,7 +20,7 @@ public class AuthProperties {
 
     private String jwtKey = "gc-it";
 
-    private boolean jwt = true;
+    private boolean jwt = false;
 
     private boolean urlCheck = false;
 

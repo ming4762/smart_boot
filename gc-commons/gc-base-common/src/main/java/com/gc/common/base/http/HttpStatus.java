@@ -30,6 +30,8 @@ public enum HttpStatus implements IHttpStatus {
      */
     PARAM_NOT_MATCH(400, "参数不匹配！", "parameter not match"),
 
+    UNSUPPORTED_MEDIA_TYPE(415, "不支持的媒体类型", "Unsupported Media Type"),
+
     /**
      * 参数不能为空！
      */
