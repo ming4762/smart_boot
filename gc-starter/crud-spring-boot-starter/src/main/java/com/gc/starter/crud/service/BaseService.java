@@ -89,4 +89,20 @@ public interface BaseService<T extends BaseModel> extends IService<T> {
      */
     @NonNull
     List<T> list(@NonNull QueryWrapper<T> queryWrapper, @NonNull PageQueryParameter<String, Object> parameter, @NonNull Boolean paging);
+
+    /**
+     * 批量保存带有创建人员信息
+     * @param modelList 实体类
+     * @param userId 用户ID
+     * @return 是否保存成功
+     */
+    boolean saveBatchWithUser(@NonNull List<T> modelList, Long userId);
+
+    /**
+     * 批量更新带有更新人员
+     * @param modelList 实体类
+     * @param userId 人员信息
+     * @return 是否更新成功
+     */
+    boolean updateBatchWithUserById(@NonNull List<T> modelList, Long userId);
 }

@@ -23,6 +23,7 @@ import com.gc.starter.crud.utils.CrudUtils;
 import com.gc.starter.crud.utils.IdGenerator;
 import com.google.common.collect.Lists;
 import org.apache.commons.beanutils.PropertyUtils;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
@@ -263,6 +264,7 @@ public abstract class BaseServiceImpl<K extends CrudBaseMapper<T>, T extends Bas
      * @return 是否成功
      */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public boolean saveOrUpdateWithCreateUser(@NonNull T model, Long userId) {
         boolean isAdd = this.isAdd(model);
         if (isAdd) {
@@ -279,6 +281,7 @@ public abstract class BaseServiceImpl<K extends CrudBaseMapper<T>, T extends Bas
      * @return 是否成功
      */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public boolean saveOrUpdateWithUpdateUser(@NonNull T model, Long userId) {
         boolean isAdd = this.isAdd(model);
         if (isAdd) {
@@ -295,6 +298,7 @@ public abstract class BaseServiceImpl<K extends CrudBaseMapper<T>, T extends Bas
      * @return 是否成功
      */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public boolean saveOrUpdateWithAllUser(@NonNull T model, Long userId) {
         boolean isAdd = this.isAdd(model);
         if (isAdd) {
@@ -311,6 +315,7 @@ public abstract class BaseServiceImpl<K extends CrudBaseMapper<T>, T extends Bas
      * @return 是否保存成功
      */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public boolean saveWithUser(@NonNull T model, Long userId) {
         this.setCreateUserId(model, userId);
         this.setCreateTime(model);
@@ -320,10 +325,49 @@ public abstract class BaseServiceImpl<K extends CrudBaseMapper<T>, T extends Bas
 
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public boolean updateWithUserById(@NonNull T model, Long userId) {
         this.setUpdateTime(model);
         this.setUpdateUserId(model, userId);
         return updateById(model);
+    }
+
+    /**
+     * 批量保存带有创建人员信息
+     * @param modelList 实体类
+     * @param userId 用户ID
+     * @return 是否保存成功
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public boolean saveBatchWithUser(@NonNull List<T> modelList, Long userId) {
+        if (CollectionUtils.isNotEmpty(modelList)) {
+            modelList.forEach(item -> {
+                this.setCreateUserId(item, userId);
+                this.setCreateTime(item);
+            });
+            return this.saveBatch(modelList);
+        }
+        return false;
+    }
+
+    /**
+     * 批量更新带有更新人员
+     * @param modelList 实体类
+     * @param userId 人员信息
+     * @return 是否更新成功
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public boolean updateBatchWithUserById(@NonNull List<T> modelList, Long userId) {
+        if (CollectionUtils.isNotEmpty(modelList)) {
+            modelList.forEach(item -> {
+                this.setUpdateTime(item);
+                this.setUpdateUserId(item, userId);
+            });
+            return this.updateBatchById(modelList);
+        }
+        return false;
     }
 
     /**
