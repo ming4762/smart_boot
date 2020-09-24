@@ -3,9 +3,8 @@ package com.gc.kettle.actuator;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.pentaho.di.core.KettleEnvironment;
-import org.pentaho.di.core.database.DatabaseMeta;
 import org.pentaho.di.core.exception.KettleException;
-import org.pentaho.di.core.logging.*;
+import org.pentaho.di.core.logging.LogLevel;
 import org.pentaho.di.core.util.EnvUtil;
 import org.pentaho.di.job.Job;
 import org.pentaho.di.job.JobMeta;
@@ -81,27 +80,6 @@ public class KettleActuator {
      */
     private static void doExecuteTransfer(@NonNull TransMeta transMeta, @NonNull String[] params, @NonNull Map<String, String> variableMap, @NonNull Map<String, String> parameter) throws KettleException {
 
-        // todo:测试代码
-        StepLogTable stepLogTable = StepLogTable.getDefault(transMeta, transMeta);
-        DatabaseMeta databaseMeta = new DatabaseMeta();
-        databaseMeta.setName("ceshi");
-        databaseMeta.setDatabaseType("mysql");
-        databaseMeta.setHostname("localhost");
-        databaseMeta.setDBPort("3306");
-        databaseMeta.setDBName("kettle_log_db");
-        databaseMeta.setUsername("root");
-        databaseMeta.setPassword("ming8858");
-        transMeta.addDatabase(databaseMeta);
-        stepLogTable.setConnectionName("ceshi");
-        stepLogTable.setTableName("step_log");
-        transMeta.setStepLogTable(stepLogTable);
-
-        TransLogTable transLogTable = TransLogTable.getDefault(transMeta, transMeta, transMeta.getSteps());
-        transLogTable.setConnectionName("ceshi");
-        transLogTable.setTableName("trans_log");
-        transMeta.setTransLogTable(transLogTable);
-
-
         final Trans trans = new Trans(transMeta);
         // 设置变量
         variableMap.forEach(trans :: setVariable);
@@ -111,10 +89,7 @@ public class KettleActuator {
             String value = entry.getValue();
             trans.setParameterValue(key, value);
         }
-        KettleLogStore.getAppender().addLoggingEventListener((KettleLoggingEvent kettleLoggingEvent) -> {
-            log.debug("=====================");
-            log.debug(kettleLoggingEvent.getLevel() + ":" + kettleLoggingEvent.getMessage());
-        });
+
         trans.setLogLevel(LogLevel.DEBUG);
         // 执行转换
         trans.execute(params);
@@ -123,12 +98,6 @@ public class KettleActuator {
         if (trans.getErrors() > 0) {
             throw new KettleException("There are errors during transformation exception!(传输过程中发生异常)");
         }
-        // 日志处理
-        String logChannelId = trans.getLogChannelId();
-        LoggingBuffer appender = KettleLogStore.getAppender();
-        String logText = appender.getBuffer(logChannelId, true).toString();
-//        log.info(logText);
-
     }
 
     /**
