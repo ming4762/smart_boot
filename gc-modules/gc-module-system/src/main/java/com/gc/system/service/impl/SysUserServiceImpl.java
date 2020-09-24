@@ -15,8 +15,8 @@ import com.gc.system.constants.FunctionTypeConstants;
 import com.gc.system.mapper.SysUserGroupRoleMapper;
 import com.gc.system.mapper.SysUserGroupUserMapper;
 import com.gc.system.mapper.SysUserMapper;
-import com.gc.system.mapper.SysUserRoleMapper;
 import com.gc.system.model.*;
+import com.gc.system.pojo.dto.user.UserSetRoleDTO;
 import com.gc.system.service.SysFunctionService;
 import com.gc.system.service.SysRoleFunctionService;
 import com.gc.system.service.SysRoleService;
@@ -24,16 +24,15 @@ import com.gc.system.service.SysUserService;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import org.apache.commons.beanutils.PropertyUtils;
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -43,7 +42,7 @@ import java.util.stream.Collectors;
 @Service
 public class SysUserServiceImpl extends BaseServiceImpl<SysUserMapper, SysUserPO> implements SysUserService {
 
-    private final SysUserRoleMapper sysUserRoleMapper;
+    private final SysUserRoleService sysUserRoleService;
 
     private final SysUserGroupUserMapper sysUserGroupUserMapper;
 
@@ -56,8 +55,8 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserMapper, SysUserPO
     @Autowired
     private SysFunctionService sysFunctionService;
 
-    public SysUserServiceImpl(SysUserRoleMapper sysUserRoleMapper, SysUserGroupUserMapper sysUserGroupUserMapper, SysUserGroupRoleMapper sysUserGroupRoleMapper, SysRoleService sysRoleService, SysRoleFunctionService sysRoleFunctionService) {
-        this.sysUserRoleMapper = sysUserRoleMapper;
+    public SysUserServiceImpl(SysUserRoleService sysUserRoleService, SysUserGroupUserMapper sysUserGroupUserMapper, SysUserGroupRoleMapper sysUserGroupRoleMapper, SysRoleService sysRoleService, SysRoleFunctionService sysRoleFunctionService) {
+        this.sysUserRoleService = sysUserRoleService;
         this.sysUserGroupUserMapper = sysUserGroupUserMapper;
         this.sysUserGroupRoleMapper = sysUserGroupRoleMapper;
         this.sysRoleService = sysRoleService;
@@ -75,7 +74,7 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserMapper, SysUserPO
     List<SysRolePO> listRole(@NonNull Long userId) {
         final Set<Long> roleIdSet = Sets.newHashSet();
         // 1、查询用户对应的角色
-        final Set<Long> userRoleIdSet = this.sysUserRoleMapper.selectList(
+        final Set<Long> userRoleIdSet = this.sysUserRoleService.list(
                 new QueryWrapper<SysUserRolePO>().lambda()
                         .eq(SysUserRolePO :: getUserId, userId)
                         .eq(SysUserRolePO :: getEnable, Boolean.TRUE)
@@ -105,6 +104,30 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserMapper, SysUserPO
                 .in(SysRolePO :: getRoleId, roleIdSet)
                 .eq(SysRolePO :: getEnable, Boolean.TRUE)
         );
+    }
+
+    /**
+     * 重写删除方法：删除用户关系
+     * @param idList ID列表
+     * @return 是否删除
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class, transactionManager = TransactionManagerConstants.SYSTEM_MANAGER)
+    public boolean removeByIds(Collection<? extends Serializable> idList) {
+        if (CollectionUtils.isEmpty(idList)) {
+            return false;
+        }
+        // 删除用户与用户组管理
+        this.sysUserGroupUserMapper.delete(
+                new QueryWrapper<SysUserGroupUserPO>().lambda()
+                .in(SysUserGroupUserPO :: getUserId, idList)
+        );
+        // 删除用户与角色关系
+        this.sysUserRoleService.remove(
+                new QueryWrapper<SysUserRolePO>().lambda()
+                .in(SysUserRolePO::getUserId, idList)
+        );
+        return super.removeByIds(idList);
     }
 
     /**
@@ -200,7 +223,7 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserMapper, SysUserPO
      */
     @NonNull
     @Override
-    @Transactional(value = TransactionManagerConstants.SYSTEM_MANAGER, readOnly = true)
+    @Transactional(value = TransactionManagerConstants.SYSTEM_MANAGER, readOnly = true, rollbackFor = Exception.class)
     public List<SysFunctionPO> listCurrentUserMenu() {
         // 获取当前用户的角色信息
         final RestUserDetails userDetails = AuthUtils.getCurrentUser();
@@ -241,5 +264,32 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserMapper, SysUserPO
                                 .or().eq(SysFunctionPO :: getFunctionType, FunctionTypeConstants.MENU.getValue())
                         )
         );
+    }
+
+
+    /**
+     * 设置角色
+     * @param parameter 参数
+     * @return 是否这是成功
+     */
+    @Override
+    @Transactional(value = TransactionManagerConstants.SYSTEM_MANAGER, rollbackFor = Exception.class)
+    public boolean setRole(@NonNull UserSetRoleDTO parameter) {
+        // 删除用户角色关系
+        this.sysUserRoleService.remove(
+                new QueryWrapper<SysUserRolePO>().lambda().eq(SysUserRolePO :: getUserId, parameter.getUserId())
+        );
+        // 保存用户角色关系
+        if (CollectionUtils.isNotEmpty(parameter.getRoleIdList())) {
+            this.sysUserRoleService.saveBatchWithUser(
+                    parameter.getRoleIdList().stream().map(roleId -> SysUserRolePO.builder()
+                            .roleId(roleId)
+                            .enable(Boolean.TRUE)
+                            .userId(parameter.getUserId())
+                            .build()).collect(Collectors.toList()),
+                    AuthUtils.getCurrentUserId()
+            );
+        }
+        return true;
     }
 }

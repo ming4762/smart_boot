@@ -3,6 +3,7 @@ package com.gc.system.service;
 import com.gc.common.auth.service.AuthUserService;
 import com.gc.system.model.SysFunctionPO;
 import com.gc.system.model.SysRolePO;
+import com.gc.system.pojo.dto.user.UserSetRoleDTO;
 import org.springframework.lang.NonNull;
 
 import java.util.List;
@@ -49,4 +50,11 @@ public interface SysUserService extends AuthUserService {
      */
     @NonNull
     List<SysFunctionPO> listCurrentUserMenu();
+
+    /**
+     * 设置角色
+     * @param parameter 参数
+     * @return 是否这是成功
+     */
+    boolean setRole(@NonNull UserSetRoleDTO parameter);
 }
