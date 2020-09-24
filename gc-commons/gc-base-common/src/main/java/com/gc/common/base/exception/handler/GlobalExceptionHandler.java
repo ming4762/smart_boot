@@ -10,6 +10,7 @@ import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
+import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -74,6 +75,9 @@ public class GlobalExceptionHandler {
         } else if (e instanceof IllegalStateException && StringUtils.startsWith(e.getMessage(), MISMATCH_ERROR_MESSAGE)) {
             log.error("参数类型不支持", e);
             return Result.failure("参数类型不支持", e.getMessage());
+        } else if (e instanceof HttpMediaTypeNotSupportedException) {
+            log.error(HttpStatus.UNSUPPORTED_MEDIA_TYPE.getMessage(), e);
+            return Result.failure(HttpStatus.UNSUPPORTED_MEDIA_TYPE.getCode(), e.getMessage());
         }
         log.error("系统发生未知异常", e);
         return Result.ofStatus(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());

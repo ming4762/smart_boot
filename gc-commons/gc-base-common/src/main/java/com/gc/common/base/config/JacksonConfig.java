@@ -18,7 +18,7 @@ import java.util.Objects;
 @Configuration
 public class JacksonConfig {
 
-    @Value("${spring.jackson.serialization.write-dates-as-timestamps}")
+    @Value("${spring.jackson.serialization.write-dates-as-timestamps : #{null}}")
     private Boolean datesAsTimestamps;
 
     @Bean
