@@ -1,5 +1,6 @@
 package com.gc.system.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.gc.common.auth.annotation.NonUrlCheck;
 import com.gc.common.auth.model.SysUserPO;
 import com.gc.common.base.http.HttpStatus;
@@ -9,11 +10,16 @@ import com.gc.starter.crud.query.PageQueryParameter;
 import com.gc.starter.log.annotation.Log;
 import com.gc.starter.log.constants.LogType;
 import com.gc.system.model.SysFunctionPO;
+import com.gc.system.model.SysUserRolePO;
 import com.gc.system.pojo.dto.user.UserSaveDTO;
+import com.gc.system.pojo.dto.user.UserSetRoleDTO;
 import com.gc.system.service.SysUserService;
+import com.gc.system.service.impl.SysUserRoleService;
+import com.google.common.collect.Sets;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,6 +29,9 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.Valid;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * 用户controller层
@@ -34,6 +43,9 @@ import java.util.List;
 @Api(value = "用户管理", tags = "系统模块")
 @NonUrlCheck
 public class SysUserController extends BaseController<SysUserService, SysUserPO> {
+
+    @Autowired
+    private SysUserRoleService sysUserRoleService;
 
     /**
      * 添加保存方法
@@ -101,5 +113,34 @@ public class SysUserController extends BaseController<SysUserService, SysUserPO>
     @PostMapping("listUserMenu")
     public Result<List<SysFunctionPO>> listUserMenu() {
         return Result.success(this.service.listCurrentUserMenu());
+    }
+
+    /**
+     * 通过用户ID查询角色ID
+     * @param userId 用户ID
+     * @return 角色ID
+     */
+    @ApiOperation(value = "查询角色ID列表")
+    @PostMapping("listRoleId")
+    public Result<Set<Long>> listRoleId(@RequestBody Long userId) {
+        if (Objects.isNull(userId)) {
+            return Result.success(Sets.newHashSet());
+        }
+        return Result.success(
+                this.sysUserRoleService.list(
+                        new QueryWrapper<SysUserRolePO>().lambda()
+                        .select(SysUserRolePO :: getRoleId)
+                        .eq(SysUserRolePO :: getUserId, userId)
+                ).stream().map(SysUserRolePO :: getRoleId)
+                .collect(Collectors.toSet())
+        );
+    }
+
+    @PostMapping("setRole")
+    @Log(value = "设置角色", type = LogType.UPDATE)
+    @PreAuthorize("hasPermission('sys:user', 'setRole')")
+    @ApiOperation(value = "设置角色")
+    public Result<Boolean> setRole(@RequestBody @Valid UserSetRoleDTO parameter) {
+        return Result.success(this.service.setRole(parameter));
     }
 }
