@@ -1,7 +1,6 @@
 package com.gc.system.controller;
 
 import com.gc.common.auth.annotation.NonUrlCheck;
-import com.gc.common.auth.model.SysUserPO;
 import com.gc.common.auth.utils.AuthUtils;
 import com.gc.common.base.http.HttpStatus;
 import com.gc.common.base.message.Result;

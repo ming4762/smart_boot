@@ -2,7 +2,6 @@ package com.gc.system.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.gc.common.auth.annotation.NonUrlCheck;
-import com.gc.common.auth.model.SysUserPO;
 import com.gc.common.base.http.HttpStatus;
 import com.gc.common.base.message.Result;
 import com.gc.starter.crud.controller.BaseController;

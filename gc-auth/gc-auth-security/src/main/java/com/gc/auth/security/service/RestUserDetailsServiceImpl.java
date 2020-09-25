@@ -1,22 +1,20 @@
 package com.gc.auth.security.service;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.gc.common.auth.core.GcGrantedAuthority;
 import com.gc.common.auth.core.PermissionGrantedAuthority;
 import com.gc.common.auth.core.RoleGrantedAuthority;
-import com.gc.common.auth.model.Permission;
+import com.gc.common.auth.model.AuthUser;
 import com.gc.common.auth.model.RestUserDetailsImpl;
-import com.gc.common.auth.model.SysUserPO;
 import com.gc.common.auth.service.AuthUserService;
 import com.google.common.collect.Sets;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.http.HttpMethod;
 import org.springframework.lang.NonNull;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * @author jackson
@@ -37,22 +35,22 @@ public class RestUserDetailsServiceImpl implements UserDetailsService{
             return null;
         }
         // 查询用户
-        final SysUserPO user = this.userService.getOne(
-                new QueryWrapper<SysUserPO>().lambda().eq(SysUserPO::getUsername, username)
-        );
+        final AuthUser user = this.userService.getByUsername(username);
         if (Objects.isNull(user)) {
             return null;
         }
-        // todo：测试数据
-        Set<GcGrantedAuthority> grantedAuthoritySet = Sets.newHashSet(
-          new RoleGrantedAuthority("SUPERADMIN"),
-          new PermissionGrantedAuthority(
-                  Permission.builder()
-                  .method(HttpMethod.POST.name())
-                  .url("/sys/userGroup/list")
-                  .authority("sys:test")
-                  .build()
-          )
+        Set<GcGrantedAuthority> grantedAuthoritySet = Sets.newHashSet();
+        // 添加角色
+        grantedAuthoritySet.addAll(
+                this.userService.listRoleCode(user).stream()
+                .map(RoleGrantedAuthority::new)
+                .collect(Collectors.toList())
+        );
+        // 添加权限
+        grantedAuthoritySet.addAll(
+                this.userService.listPermission(user)
+                .stream()
+                .map(PermissionGrantedAuthority::new).collect(Collectors.toList())
         );
         // 查询用户角色信息
         final RestUserDetailsImpl restUserDetails = createByUser(user);
@@ -61,7 +59,7 @@ public class RestUserDetailsServiceImpl implements UserDetailsService{
     }
 
     @NonNull
-    protected static RestUserDetailsImpl createByUser(@NonNull SysUserPO user) {
+    protected static RestUserDetailsImpl createByUser(@NonNull AuthUser user) {
         final RestUserDetailsImpl restUserDetails = new RestUserDetailsImpl();
         restUserDetails.setUserId(user.getUserId());
         restUserDetails.setRealname(user.getRealname());

@@ -1,7 +1,7 @@
 package com.gc.system.mapper;
 
-import com.gc.common.auth.model.SysUserPO;
 import com.gc.starter.crud.mapper.CrudBaseMapper;
+import com.gc.system.model.SysUserPO;
 
 /**
  * @author jackson

@@ -1,6 +1,5 @@
 package com.gc.system.pojo.bo;
 
-import com.gc.common.auth.model.SysUserPO;
 import com.gc.system.model.SysUserGroupPO;
 import lombok.Getter;
 import lombok.Setter;

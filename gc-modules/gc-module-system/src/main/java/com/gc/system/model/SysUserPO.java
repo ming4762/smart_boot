@@ -1,4 +1,4 @@
-package com.gc.common.auth.model;
+package com.gc.system.model;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;

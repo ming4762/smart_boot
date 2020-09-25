@@ -1,8 +1,9 @@
 package com.gc.system.service;
 
-import com.gc.common.auth.service.AuthUserService;
+import com.gc.starter.crud.service.BaseService;
 import com.gc.system.model.SysFunctionPO;
 import com.gc.system.model.SysRolePO;
+import com.gc.system.model.SysUserPO;
 import com.gc.system.pojo.dto.user.UserSetRoleDTO;
 import org.springframework.lang.NonNull;
 
@@ -12,7 +13,7 @@ import java.util.List;
  * @author jackson
  * 2020/1/24 3:49 下午
  */
-public interface SysUserService extends AuthUserService {
+public interface SysUserService extends BaseService<SysUserPO> {
 
     /**
      * 查询用户的角色

@@ -2,7 +2,6 @@ package com.gc.system.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.gc.common.auth.core.RestUserDetails;
-import com.gc.common.auth.model.SysUserPO;
 import com.gc.common.auth.utils.AuthUtils;
 import com.gc.common.base.constants.TransactionManagerConstants;
 import com.gc.common.base.exception.IllegalAccessRuntimeException;
