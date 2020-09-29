@@ -1,6 +1,7 @@
 package com.gc.common.auth.model;
 
 import lombok.*;
+import org.springframework.http.HttpMethod;
 
 import java.io.Serializable;
 
@@ -22,7 +23,7 @@ public class Permission implements Serializable {
     /**
      * 请求方法
      */
-    private String method;
+    private HttpMethod method;
 
     private String url;
 

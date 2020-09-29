@@ -66,12 +66,12 @@ public class DynamicUrlCheckProvider {
         if (userInfo instanceof RestUserDetails) {
             RestUserDetails restUserDetails = (RestUserDetails) userInfo;
             if (restUserDetails.getRoles().contains(RoleConstants.ROLE_SUPERADMIN.getRole())) {
-//                return true;
+                return true;
             }
             Set<Permission> permissionList = restUserDetails.getPermissions();
             if (ObjectUtils.isNotEmpty(permissionList)) {
                 for (Permission permission : permissionList) {
-                    AntPathRequestMatcher antPathMatcher = new AntPathRequestMatcher(permission.getUrl(), permission.getMethod());
+                    AntPathRequestMatcher antPathMatcher = new AntPathRequestMatcher(permission.getUrl(), permission.getMethod().name());
                     if (antPathMatcher.matches(request)) {
                         hasPermission = true;
                         break;
