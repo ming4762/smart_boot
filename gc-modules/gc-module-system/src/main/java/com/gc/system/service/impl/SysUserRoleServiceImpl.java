@@ -3,6 +3,7 @@ package com.gc.system.service.impl;
 import com.gc.starter.crud.service.impl.BaseServiceImpl;
 import com.gc.system.mapper.SysUserRoleMapper;
 import com.gc.system.model.SysUserRolePO;
+import com.gc.system.service.SysUserRoleService;
 import org.springframework.stereotype.Service;
 
 /**

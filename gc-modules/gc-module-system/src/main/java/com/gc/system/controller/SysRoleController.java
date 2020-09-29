@@ -1,5 +1,6 @@
 package com.gc.system.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.gc.common.auth.annotation.NonUrlCheck;
 import com.gc.common.auth.utils.AuthUtils;
 import com.gc.common.base.message.Result;
@@ -7,7 +8,10 @@ import com.gc.starter.crud.controller.BaseController;
 import com.gc.starter.crud.query.PageQueryParameter;
 import com.gc.starter.log.annotation.Log;
 import com.gc.starter.log.constants.LogType;
+import com.gc.system.model.SysRoleFunctionPO;
 import com.gc.system.model.SysRolePO;
+import com.gc.system.pojo.dto.role.RoleMenuSaveDTO;
+import com.gc.system.service.SysRoleFunctionService;
 import com.gc.system.service.SysRoleService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -16,8 +20,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
 import java.io.Serializable;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 角色业务层
@@ -28,6 +34,12 @@ import java.util.List;
 @RequestMapping("sys/role")
 @NonUrlCheck
 public class SysRoleController extends BaseController<SysRoleService, SysRolePO> {
+
+    private SysRoleFunctionService sysRoleFunctionService;
+
+    public SysRoleController(SysRoleFunctionService sysRoleFunctionService) {
+        this.sysRoleFunctionService = sysRoleFunctionService;
+    }
 
     @Override
     @PostMapping("save")
@@ -77,5 +89,32 @@ public class SysRoleController extends BaseController<SysRoleService, SysRolePO>
     @PostMapping("getById")
     public Result<SysRolePO> getById(@RequestBody Serializable id) {
         return super.getById(id);
+    }
+
+    /**
+     * 获取角色对应的功能ID集合
+     * @param roleId 角色ID
+     * @return 功能ID集合
+     */
+    @ApiOperation(value = "获取角色对应的功能ID集合")
+    @PostMapping("listFunctionId")
+    public Result<List<Long>> listFunctionId(@RequestBody Long roleId) {
+        return Result.success(
+                this.sysRoleFunctionService.list(
+                        new QueryWrapper<SysRoleFunctionPO>().lambda()
+                        .select(SysRoleFunctionPO :: getFunctionId)
+                        .eq(SysRoleFunctionPO :: getRoleId, roleId)
+                ).stream().map(SysRoleFunctionPO :: getFunctionId)
+                .collect(Collectors.toList())
+        );
+    }
+
+
+    @ApiOperation(value = "保存角色功能")
+    @PostMapping("saveRoleMenu")
+    @Log(value = "保存角色功能", type = LogType.UPDATE)
+    @PreAuthorize("hasPermission('sys:role', 'update')")
+    public Result<Boolean> saveRoleMenu(@RequestBody @Valid RoleMenuSaveDTO parameter) {
+        return Result.success(this.service.saveRoleMenu(parameter));
     }
 }

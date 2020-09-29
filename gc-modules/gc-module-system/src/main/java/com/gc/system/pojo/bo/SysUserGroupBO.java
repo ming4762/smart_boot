@@ -1,6 +1,7 @@
 package com.gc.system.pojo.bo;
 
 import com.gc.system.model.SysUserGroupPO;
+import com.gc.system.model.SysUserPO;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;

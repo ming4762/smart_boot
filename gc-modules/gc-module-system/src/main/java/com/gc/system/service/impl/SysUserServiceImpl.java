@@ -1,5 +1,6 @@
 package com.gc.system.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.gc.common.auth.core.RestUserDetails;
 import com.gc.common.auth.utils.AuthUtils;
@@ -16,10 +17,8 @@ import com.gc.system.mapper.SysUserGroupUserMapper;
 import com.gc.system.mapper.SysUserMapper;
 import com.gc.system.model.*;
 import com.gc.system.pojo.dto.user.UserSetRoleDTO;
-import com.gc.system.service.SysFunctionService;
-import com.gc.system.service.SysRoleFunctionService;
-import com.gc.system.service.SysRoleService;
-import com.gc.system.service.SysUserService;
+import com.gc.system.service.*;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import org.apache.commons.beanutils.PropertyUtils;
@@ -229,18 +228,21 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserMapper, SysUserPO
         if (Objects.isNull(userDetails)) {
             return Lists.newArrayList();
         }
-        final Set<String> roleCodes = userDetails.getRoles();
-        if (roleCodes.isEmpty()) {
-            return Lists.newArrayList();
-        }
-        // 查询角色ID
-        final Set<Long> roleIds = this.sysRoleService.list(
-                new QueryWrapper<SysRolePO>().lambda()
-                        .select(SysRolePO :: getRoleId)
-                        .in(SysRolePO :: getRoleCode, roleCodes)
-        )
-                .stream()
-                .map(SysRolePO :: getRoleId)
+        return this.listUserFunction(userDetails.getUserId(), ImmutableList.of(FunctionTypeConstants.CATALOG, FunctionTypeConstants.MENU));
+    }
+
+    /**
+     * 查询用户功能
+     * @param userId 用户ID
+     * @param types 查询的功能类型
+     * @return 用户ID表
+     */
+    @Override
+    @Transactional(value = TransactionManagerConstants.SYSTEM_MANAGER, readOnly = true, rollbackFor = Exception.class)
+    public List<SysFunctionPO> listUserFunction(@NonNull Long userId, @NonNull List<FunctionTypeConstants> types) {
+        // 查询角色信息
+        final Set<Long> roleIds = this.listRole(userId)
+                .stream().map(SysRolePO::getRoleId)
                 .collect(Collectors.toSet());
         if (roleIds.isEmpty()) {
             return Lists.newArrayList();
@@ -255,16 +257,13 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserMapper, SysUserPO
             return Lists.newArrayList();
         }
         // 查询功能信息
-        return this.sysFunctionService.list(
-                new QueryWrapper<SysFunctionPO>().lambda()
-                        .in(SysFunctionPO :: getFunctionId, functionIds)
-                        .and(
-                                (query) -> query.eq(SysFunctionPO :: getFunctionType, FunctionTypeConstants.CATALOG.getValue())
-                                .or().eq(SysFunctionPO :: getFunctionType, FunctionTypeConstants.MENU.getValue())
-                        )
-        );
+        final LambdaQueryWrapper<SysFunctionPO> queryWrapper = new QueryWrapper<SysFunctionPO>().lambda()
+                .in(SysFunctionPO :: getFunctionId, functionIds);
+        if (CollectionUtils.isNotEmpty(types)) {
+            queryWrapper.in(SysFunctionPO :: getFunctionType, types.stream().map(FunctionTypeConstants :: getValue).collect(Collectors.toList()));
+        }
+        return this.sysFunctionService.list(queryWrapper);
     }
-
 
     /**
      * 设置角色

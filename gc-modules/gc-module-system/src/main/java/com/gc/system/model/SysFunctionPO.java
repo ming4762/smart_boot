@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.gc.starter.crud.model.BaseModelUserTime;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.http.HttpMethod;
 
 /**
  * @author jackson
@@ -75,4 +76,9 @@ public class SysFunctionPO extends BaseModelUserTime {
      * 是否配置数据权限
      */
     private Boolean dataRule;
+
+    /**
+     * 请求方式
+     */
+    private HttpMethod httpMethod;
 }

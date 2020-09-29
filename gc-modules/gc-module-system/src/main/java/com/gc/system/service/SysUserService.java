@@ -1,6 +1,7 @@
 package com.gc.system.service;
 
 import com.gc.starter.crud.service.BaseService;
+import com.gc.system.constants.FunctionTypeConstants;
 import com.gc.system.model.SysFunctionPO;
 import com.gc.system.model.SysRolePO;
 import com.gc.system.model.SysUserPO;
@@ -51,6 +52,14 @@ public interface SysUserService extends BaseService<SysUserPO> {
      */
     @NonNull
     List<SysFunctionPO> listCurrentUserMenu();
+
+    /**
+     * 查询用户功能
+     * @param userId 用户ID
+     * @param types 查询的功能类型
+     * @return 用户ID表
+     */
+    List<SysFunctionPO> listUserFunction(@NonNull Long userId, List<FunctionTypeConstants> types);
 
     /**
      * 设置角色

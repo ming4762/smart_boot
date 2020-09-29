@@ -1,4 +1,4 @@
-package com.gc.system.service.impl;
+package com.gc.system.service;
 
 import com.gc.starter.crud.service.BaseService;
 import com.gc.system.model.SysUserRolePO;
