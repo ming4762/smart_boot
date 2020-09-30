@@ -2,6 +2,7 @@ package com.gc.system.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.gc.common.auth.annotation.NonUrlCheck;
+import com.gc.common.auth.utils.AuthUtils;
 import com.gc.common.base.http.HttpStatus;
 import com.gc.common.base.message.Result;
 import com.gc.starter.crud.controller.BaseController;
@@ -68,7 +69,7 @@ public class SysUserController extends BaseController<SysUserService, SysUserPO>
     @Log(value = "添加用户", type = LogType.ADD)
     @PreAuthorize("hasPermission('sys:user', 'save')")
     public Result<Boolean> save(@RequestBody @Valid SysUserPO model) {
-        return super.save(model);
+        return Result.success(this.service.saveWithUser(model, AuthUtils.getCurrentUserId()));
     }
 
     @Override
