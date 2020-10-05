@@ -40,6 +40,16 @@ import java.util.stream.Collectors;
 @Service
 public class SysUserServiceImpl extends BaseServiceImpl<SysUserMapper, SysUserPO> implements SysUserService {
 
+    /**
+     * 密码加密盐值
+     */
+    private static final String SALT = "888888$#@";
+
+    /**
+     * 默认密码
+     */
+    private static final String DEFAULT_PASSWORD = "123456";
+
     private final SysUserRoleService sysUserRoleService;
 
     private final SysUserGroupUserMapper sysUserGroupUserMapper;
@@ -131,11 +141,11 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserMapper, SysUserPO
     /**
      * 重新保存方法设置密码
      * @param entity 实体类
-     * @return
+     * @return 是否保存成功
      */
     @Override
     public boolean save(@NonNull SysUserPO entity) {
-        entity.setPassword(Md5Utils.md5(entity.getUsername()));
+        entity.setPassword(Md5Utils.md5(entity.getUsername() + DEFAULT_PASSWORD + SALT, 2));
         return super.save(entity);
     }
 
