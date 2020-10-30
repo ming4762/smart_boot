@@ -1099,7 +1099,7 @@ lang=EN-US><o:p></o:p></span></span></p>
   mso-border-alt:solid windowtext .75pt;padding:0cm 5.4pt 0cm 5.4pt;height:
   13.5pt'>
   <p class=MsoNormal align=left style='text-align:left'><span class=GramE><span
-  lang=EN-US style='font-size:9.0pt;font-family:宋体'>VARCHAR(</span></span></p>
+  lang=EN-US style='font-size:9.0pt;font-family:宋体'>${primaryKey.typeName}(${(primaryKey.typeName == 'NUMBER' && primaryKey.columnSize == 0 && primaryKey.decimalDigits == -127) ? string( '*' , primaryKey.columnSize)})</span></span></p>
   </td>
   <td width=57 style='width:42.9pt;border-top:none;border-left:none;border-bottom:
   solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;mso-border-top-alt:
@@ -1155,14 +1155,14 @@ lang=EN-US><o:p></o:p></span></span></p>
   mso-border-alt:solid windowtext .75pt;padding:0cm 5.4pt 0cm 5.4pt;height:
   13.5pt'>
      <p class=MsoNormal align=left style='text-align:left'><span class=GramE><span
-               lang=EN-US style='font-size:9.0pt;font-family:宋体'>VARCHAR(</span></span></p>
+               lang=EN-US style='font-size:9.0pt;font-family:宋体'>${column.typeName}(${(column.typeName == 'NUMBER' && column.columnSize == 0 && column.decimalDigits == -127) ? string( '*' , column.columnSize)})</span></span></p>
     </td>
     <td width=57 style='width:42.9pt;border-top:none;border-left:none;border-bottom:
   solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;mso-border-top-alt:
   solid windowtext .75pt;mso-border-left-alt:solid windowtext .75pt;mso-border-alt:
   solid windowtext .75pt;padding:0cm 5.4pt 0cm 5.4pt;height:13.5pt'>
      <p class=MsoNormal align=left style='text-align:left'><span style='font-size:
-  9.0pt;font-family:宋体'><span lang=EN-US><o:p></o:p></span></span></p>
+  9.0pt;font-family:宋体'>${column.unique?? ?string('唯一索引', '')}${column.importKey?string(' 外键', '')}${(column.indexed && column.unique != true)?string(' 索引', '')}<span lang=EN-US><o:p></o:p></span></span></p>
     </td>
     <td width=155 style='width:116.1pt;border-top:none;border-left:none;
   border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.5pt;
