@@ -245,6 +245,9 @@ public abstract class AbstractDefaultDatabaseExecutor implements DatabaseExecuto
     @Override
     @NonNull
     public List<ColumnBO> listColumn(@NonNull DatabaseConnectionBO databaseConnection, @NonNull String tableName) {
+
+        log.debug("读取表【{}】列信息", tableName);
+
         final String join = "#";
         final List<ColumnDO> baseColumnList = this.listBaseColumn(databaseConnection, tableName);
         final List<ColumnBO> columnList = ColumnBO.batchCreateFromDo(baseColumnList);

@@ -5,6 +5,8 @@ import com.gc.database.message.pojo.bo.ColumnBO;
 import com.gc.database.message.pojo.bo.DatabaseConnectionBO;
 import com.gc.database.message.pojo.bo.TableViewBO;
 import com.gc.database.message.pojo.dbo.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 
@@ -17,7 +19,6 @@ import java.util.List;
  * @author shizhongming
  */
 public interface DatabaseExecutor {
-
 
     /**
      * 获取数据库连接

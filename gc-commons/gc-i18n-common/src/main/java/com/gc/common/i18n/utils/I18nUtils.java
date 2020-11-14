@@ -21,7 +21,7 @@ public class I18nUtils {
     /**
      * 通过key获取I18N信息
      * @param key key
-     * @return
+     * @return I18N信息
      */
     public static String get(String key, String defaultMessage) {
         return Optional.ofNullable(messageSource)
