@@ -1,11 +1,11 @@
 package com.gc.starter.log.aspect;
 
 import com.baomidou.mybatisplus.core.toolkit.IdWorker;
-import com.gc.common.base.exception.handler.GlobalExceptionHandler;
 import com.gc.common.base.message.Result;
 import com.gc.common.base.utils.AopUtils;
 import com.gc.common.base.utils.IpUtils;
 import com.gc.common.base.utils.JsonUtils;
+import com.gc.starter.exception.handler.GlobalExceptionHandler;
 import com.gc.starter.log.LogProperties;
 import com.gc.starter.log.annotation.Log;
 import com.gc.starter.log.constants.LogIdentConstant;

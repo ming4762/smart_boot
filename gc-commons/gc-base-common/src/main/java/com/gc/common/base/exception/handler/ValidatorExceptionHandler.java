@@ -18,7 +18,7 @@ public class ValidatorExceptionHandler {
     /**
      * 拦截参数校验异常
      * @author jackson
-     * @return
+     * @return 校验结果
      */
     @ResponseBody
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
@@ -30,7 +30,7 @@ public class ValidatorExceptionHandler {
     /**
      * 拦截参数校验异常
      * @author jackson
-     * @return
+     * @return 校验结果
      */
     @ResponseBody
     @ExceptionHandler(value = BindException.class)

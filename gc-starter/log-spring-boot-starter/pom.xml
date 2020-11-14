@@ -33,6 +33,13 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-aop</artifactId>
         </dependency>
+
+        <!--    异常处理支持    -->
+        <dependency>
+            <groupId>com.gc</groupId>
+            <artifactId>exception-spring-boot-starter</artifactId>
+            <version>${gc-boot.version}</version>
+        </dependency>
     </dependencies>
 
 </project>

@@ -22,7 +22,7 @@ public class ValidatorConfig {
     /**
      * 创建验证器
      * 设置只验证第一个
-     * @return
+     * @return 参数校验
      */
     @Bean
     public Validator validator() {

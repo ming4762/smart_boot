@@ -31,7 +31,7 @@ public class Swagger2Properties {
 
     @Getter
     @Setter
-    public class Contact {
+    public static class Contact {
         private String name;
         private String url;
         private String email;

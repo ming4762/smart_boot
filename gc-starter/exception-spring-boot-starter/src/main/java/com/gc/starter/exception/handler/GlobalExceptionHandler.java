@@ -1,5 +1,6 @@
-package com.gc.common.base.exception.handler;
+package com.gc.starter.exception.handler;
 
+import com.gc.common.auth.utils.AuthUtils;
 import com.gc.common.base.exception.BaseException;
 import com.gc.common.base.http.HttpStatus;
 import com.gc.common.base.message.Result;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import java.util.Set;
@@ -33,6 +35,12 @@ import java.util.Set;
 public class GlobalExceptionHandler {
 
     private static final String MISMATCH_ERROR_MESSAGE = "argument type mismatch\nController";
+
+    private final AsyncNoticeHandler asyncNoticeHandler;
+
+    public GlobalExceptionHandler(AsyncNoticeHandler asyncNoticeHandler) {
+        this.asyncNoticeHandler = asyncNoticeHandler;
+    }
 
     /**
      * 处理异常
@@ -85,7 +93,9 @@ public class GlobalExceptionHandler {
 
     @ResponseBody
     @ExceptionHandler(value = Exception.class)
-    public Result<String> handlerException(Exception e) {
-        return doException(e);
+    public Result<String> handlerException(Exception e, HttpServletRequest request) {
+        // 处理异常通知
+        this.asyncNoticeHandler.noticeException(e, AuthUtils.getCurrentUser(), request);
+        return GlobalExceptionHandler.doException(e);
     }
 }
