@@ -12,6 +12,7 @@ import com.google.common.collect.ImmutableList;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -41,6 +42,9 @@ public class AuthUserServiceImpl implements AuthUserService {
                 new QueryWrapper<SysUserPO>().lambda()
                 .eq(SysUserPO :: getUsername, username)
         );
+        if (Objects.isNull(user)) {
+            return null;
+        }
         return AuthUser.builder()
                 .userId(user.getUserId())
                 .password(user.getPassword())
