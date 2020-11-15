@@ -26,7 +26,6 @@
 		<module>gc-commons</module>
 		<module>gc-database</module>
 		<module>gc-file</module>
-		<module>gc-kettle</module>
 		<module>gc-modules</module>
 		<module>gc-monitor</module>
 		<module>gc-starter</module>
