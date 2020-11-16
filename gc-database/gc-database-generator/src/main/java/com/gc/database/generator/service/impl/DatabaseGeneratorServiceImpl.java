@@ -55,7 +55,7 @@ public class DatabaseGeneratorServiceImpl implements DatabaseGeneratorService {
         // 获取数据库执行器
         final DatabaseExecutor databaseExecutor = databaseConnection.getDatabaseExecutor();
         // 获取所有数据
-        final List<TableViewBO> tableList = databaseExecutor.listTable(databaseConnection, null);
+        final List<TableViewBO> tableList = databaseExecutor.listTable(databaseConnection, "TB_PLAN");
 
         final DatabaseTemplateModel model = DatabaseTemplateModel.builder()
                 .tableList(tableList)

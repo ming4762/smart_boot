@@ -4,23 +4,22 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.gc</groupId>
-        <artifactId>gc-commons</artifactId>
-        <version>1.0.2-SNAPSHOT</version>
+        <artifactId>gc-starter</artifactId>
+        <version>0.0.6-SNAPSHOT</version>
     </parent>
-    <artifactId>gc-validate-common</artifactId>
+    <artifactId>ehcache-spring-boot-starter</artifactId>
     <version>${gc-boot.version}</version>
-    <name>gc-validate-common</name>
-    <description>校验工具包</description>
+    <name>ehcache-spring-boot-starter</name>
+    <description>ehcache启动器</description>
 
     <properties>
     </properties>
 
     <dependencies>
         <dependency>
-            <groupId>jakarta.validation</groupId>
-            <artifactId>jakarta.validation-api</artifactId>
+            <groupId>org.ehcache</groupId>
+            <artifactId>ehcache</artifactId>
         </dependency>
     </dependencies>
-
 
 </project>

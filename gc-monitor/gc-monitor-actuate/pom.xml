@@ -5,7 +5,7 @@
     <parent>
         <groupId>com.gc</groupId>
         <artifactId>gc-monitor</artifactId>
-        <version>1.0.1-SNAPSHOT</version>
+        <version>1.0.2-SNAPSHOT</version>
     </parent>
     <artifactId>gc-monitor-actuate</artifactId>
     <version>${gc-boot.version}</version>

@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    "removeComments": true,
+    "module": "AMD",
+//    "strict": true,
+    "alwaysStrict": true
+  }
+}
