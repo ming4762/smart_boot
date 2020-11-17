@@ -55,7 +55,7 @@ public class SysRoleController extends BaseController<SysRoleService, SysRolePO>
     @ApiOperation(value = "更新角色")
     @Log(value = "更新角色", type = LogType.UPDATE)
     @PreAuthorize("hasPermission('sys:role', 'update')")
-    protected Result<Boolean> update(@RequestBody SysRolePO model) {
+    public Result<Boolean> update(@RequestBody SysRolePO model) {
         return super.update(model);
     }
 
@@ -71,7 +71,7 @@ public class SysRoleController extends BaseController<SysRoleService, SysRolePO>
     @PostMapping("saveUpdate")
     @Log(value = "添加修改角色", type = LogType.UPDATE)
     @PreAuthorize("hasPermission('sys:role', 'save') or hasPermission('sys:role', 'update')")
-    protected Result<Boolean> saveUpdate(@RequestBody SysRolePO model) {
+    public Result<Boolean> saveUpdate(@RequestBody SysRolePO model) {
         return super.saveUpdate(model);
     }
 

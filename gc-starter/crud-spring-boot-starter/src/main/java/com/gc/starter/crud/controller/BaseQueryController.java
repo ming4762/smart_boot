@@ -46,7 +46,7 @@ public abstract class BaseQueryController<K extends BaseService<T>, T extends Ba
      * @param parameter 查询参数
      * @return 查询结果集
      */
-    protected Result<Object> list(@RequestBody PageQueryParameter<String, Object> parameter) {
+    public Result<Object> list(@RequestBody PageQueryParameter<String, Object> parameter) {
         final Page<T> page = this.doPage(parameter);
         final QueryWrapper<T> queryWrapper = CrudUtils.createQueryWrapperFromParameters(parameter, this.getModelType());
         final Object keyword = parameter.get(CrudConstants.KEYWORD.name());
@@ -55,7 +55,7 @@ public abstract class BaseQueryController<K extends BaseService<T>, T extends Ba
         }
         final List<T> data = this.service.list(queryWrapper, parameter, page != null);
         if (page != null) {
-            return Result.success(new PageData<T>(data, page.getTotal()));
+            return Result.success(new PageData<>(data, page.getTotal()));
         }
         return Result.success(data);
     }
@@ -81,8 +81,8 @@ public abstract class BaseQueryController<K extends BaseService<T>, T extends Ba
 
     /**
      * 执行分页
-     * @param parameter
-     * @return
+     * @param parameter 参数信息
+     * @return 分页信息
      */
     @Nullable
     protected Page<T> doPage(@NonNull PageQueryParameter<String, Object> parameter) {
@@ -134,7 +134,7 @@ public abstract class BaseQueryController<K extends BaseService<T>, T extends Ba
      * 解析排序字段
      * @param sortName 排序名字
      * @param sortOrder 排序方向
-     * @return
+     * @return 排序信息
      */
     @Nullable
     protected String analysisOrder(@Nullable String sortName, @Nullable String sortOrder) {
@@ -163,8 +163,8 @@ public abstract class BaseQueryController<K extends BaseService<T>, T extends Ba
 
     /**
      * 添加关键字查询
-     * @param queryWrapper
-     * @param keyword
+     * @param queryWrapper 查询条件
+     * @param keyword 关键字
      */
     private void addKeyword(@NonNull QueryWrapper<T> queryWrapper, @NonNull String keyword) {
         final Class<? extends BaseModel>  clazz = CrudUtils.getModelClassByType(getModelType());
