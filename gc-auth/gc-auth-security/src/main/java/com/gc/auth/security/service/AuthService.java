@@ -37,10 +37,10 @@ public class AuthService {
 
     /**
      * 执行登陆
-     * @param authentication
-     * @param remeber
-     * @param loginType
-     * @return
+     * @param authentication 登录信息
+     * @param remeber 是否记住用户
+     * @param loginType 登录类型
+     * @return jwt
      */
     public String doLogin(Authentication authentication, boolean remeber, LoginTypeConstants loginType) {
         final RestUserDetails userDetails = (RestUserDetails) authentication.getPrincipal();
@@ -60,7 +60,7 @@ public class AuthService {
 
     /**
      * 刷新jwt
-     * @param jwt
+     * @param jwt jwt
      */
     public RestUserDetailsImpl refreshJwt(String jwt) {
         // 解析jwt

@@ -36,6 +36,10 @@ import java.util.Set;
 @Slf4j
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
+    /**
+     * 文件前缀开头
+     */
+    private static final String PREFIX_SUFFIX = "*.";
 
     private final AuthService authService;
 
@@ -132,6 +136,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         if (!ignores.isEmpty()) {
             for (String ignore : ignores) {
+                // 判断是否是文件扩展名
+                if (StringUtils.startsWith(ignore, PREFIX_SUFFIX)) {
+                    // 判断文件结尾
+                    if (StringUtils.endsWith(request.getRequestURI(),ignore.substring(1, ignore.length()))) {
+                        return true;
+                    }
+                }
                 AntPathRequestMatcher matcher = new AntPathRequestMatcher(ignore, method);
                 if (matcher.matches(request)) {
                     return true;
