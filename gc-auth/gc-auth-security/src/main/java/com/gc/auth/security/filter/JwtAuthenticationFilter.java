@@ -1,6 +1,7 @@
 package com.gc.auth.security.filter;
 
 import com.gc.auth.security.handler.RestJsonWriter;
+import com.gc.auth.security.matcher.ExtensionPathMatcher;
 import com.gc.auth.security.service.AuthService;
 import com.gc.auth.security.service.JwtUtil;
 import com.gc.common.auth.exception.AuthException;
@@ -136,20 +137,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         if (!ignores.isEmpty()) {
             for (String ignore : ignores) {
-                // 判断是否是文件扩展名
-                if (StringUtils.startsWith(ignore, PREFIX_SUFFIX)) {
-                    // 判断文件结尾
-                    if (StringUtils.endsWith(request.getRequestURI(),ignore.substring(1, ignore.length()))) {
-                        return true;
-                    }
-                }
-                AntPathRequestMatcher matcher = new AntPathRequestMatcher(ignore, method);
-                if (matcher.matches(request)) {
+                ExtensionPathMatcher extensionPathMatcher = new ExtensionPathMatcher(httpMethod, ignore);
+                if (extensionPathMatcher.matches(request)) {
                     return true;
                 }
             }
         }
-
         return false;
     }
 }

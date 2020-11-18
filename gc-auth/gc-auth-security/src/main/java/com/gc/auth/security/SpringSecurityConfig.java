@@ -3,6 +3,7 @@ package com.gc.auth.security;
 import com.gc.auth.security.authentication.RestAuthenticationProvider;
 import com.gc.auth.security.filter.JwtAuthenticationFilter;
 import com.gc.auth.security.handler.*;
+import com.gc.auth.security.matcher.ExtensionPathMatcher;
 import com.gc.common.auth.properties.AuthProperties;
 import org.apache.commons.lang3.BooleanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,42 +61,40 @@ public class SpringSecurityConfig  extends WebSecurityConfigurerAdapter {
     }
 
     @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+    protected void configure(AuthenticationManagerBuilder auth) {
         // 加入自定义的安全认证
         auth.authenticationProvider(provider);
     }
 
     @Override
-    public void configure(WebSecurity web) throws Exception {
+    public void configure(WebSecurity web) {
         WebSecurity and = web.ignoring().and();
 
         // 忽略 GET
-        this.authProperties.getIgnores().getGet().forEach(url -> and.ignoring().antMatchers(HttpMethod.GET, url));
+        this.authProperties.getIgnores().getGet().forEach(url -> and.ignoring().requestMatchers(new ExtensionPathMatcher(HttpMethod.GET, url)));
 
         // 忽略 POST
-        this.authProperties.getIgnores().getPost().forEach(url -> and.ignoring().antMatchers(HttpMethod.POST, url));
+        this.authProperties.getIgnores().getPost().forEach(url -> and.ignoring().requestMatchers(new ExtensionPathMatcher(HttpMethod.POST, url)));
 
         // 忽略 DELETE
-        this.authProperties.getIgnores().getDelete().forEach(url -> and.ignoring().antMatchers(HttpMethod.DELETE, url));
+        this.authProperties.getIgnores().getDelete().forEach(url -> and.ignoring().requestMatchers(new ExtensionPathMatcher(HttpMethod.DELETE, url)));
 
         // 忽略 PUT
-        this.authProperties.getIgnores().getPut().forEach(url -> and.ignoring().antMatchers(HttpMethod.PUT, url));
+        this.authProperties.getIgnores().getPut().forEach(url -> and.ignoring().requestMatchers(new ExtensionPathMatcher(HttpMethod.PUT, url)));
 
         // 忽略 HEAD
-        this.authProperties.getIgnores().getHead().forEach(url -> and.ignoring().antMatchers(HttpMethod.HEAD, url));
+        this.authProperties.getIgnores().getHead().forEach(url -> and.ignoring().requestMatchers(new ExtensionPathMatcher(HttpMethod.HEAD, url)));
 
         // 忽略 PATCH
-        this.authProperties.getIgnores().getPatch().forEach(url -> and.ignoring().antMatchers(HttpMethod.PATCH, url));
+        this.authProperties.getIgnores().getPatch().forEach(url -> and.ignoring().requestMatchers(new ExtensionPathMatcher(HttpMethod.PATCH, url)));
 
         // 忽略 OPTIONS
-        this.authProperties.getIgnores().getOptions().forEach(url -> and.ignoring().antMatchers(HttpMethod.OPTIONS, url));
+        this.authProperties.getIgnores().getOptions().forEach(url -> and.ignoring().requestMatchers(new ExtensionPathMatcher(HttpMethod.OPTIONS, url)));
 
         // 忽略 TRACE
-        this.authProperties.getIgnores().getTrace().forEach(url -> and.ignoring().antMatchers(HttpMethod.TRACE, url));
-
+        this.authProperties.getIgnores().getTrace().forEach(url -> and.ignoring().requestMatchers(new ExtensionPathMatcher(HttpMethod.TRACE, url)));
         // 按照请求格式忽略
-        this.authProperties.getIgnores().getPattern().forEach(url -> and.ignoring().antMatchers(url));
-
+        this.authProperties.getIgnores().getPattern().forEach(url -> and.ignoring().requestMatchers(new ExtensionPathMatcher(url)));
     }
 
     @Override
