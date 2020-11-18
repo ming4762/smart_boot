@@ -118,4 +118,11 @@ public interface CacheService {
      * @param keys 键集合
      */
     void batchDelete(@NonNull List<Object> keys);
+
+    /**
+     * 匹配key
+     * @param patternKey 所有key
+     * @return 所有key
+     */
+    List<Object> matchKeys(@NonNull String patternKey);
 }
