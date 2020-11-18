@@ -35,7 +35,7 @@ import java.util.stream.Collectors;
 @NonUrlCheck
 public class SysRoleController extends BaseController<SysRoleService, SysRolePO> {
 
-    private SysRoleFunctionService sysRoleFunctionService;
+    private final SysRoleFunctionService sysRoleFunctionService;
 
     public SysRoleController(SysRoleFunctionService sysRoleFunctionService) {
         this.sysRoleFunctionService = sysRoleFunctionService;

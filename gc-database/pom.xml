@@ -19,7 +19,6 @@
 
     <modules>
         <module>gc-database-generator</module>
-        <module>gc-database-integrate</module>
         <module>gc-database-message</module>
     </modules>
 
