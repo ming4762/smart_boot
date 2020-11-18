@@ -1,6 +1,5 @@
 package com.gc.starter.log.aspect;
 
-import com.baomidou.mybatisplus.core.toolkit.IdWorker;
 import com.gc.common.base.message.Result;
 import com.gc.common.base.utils.AopUtils;
 import com.gc.common.base.utils.IpUtils;
@@ -188,7 +187,6 @@ public final class LogAspect {
         // 设置请求参数
         String parameter = JsonUtils.toJsonString(AopUtils.getParameterMap(point));
         final SysLogPO sysLog = SysLogPO.builder()
-                .logId(IdWorker.getId())
                 .operation(logAnnotation.value())
                 .useTime(time)
                 .method(String.join(".", className, methodName))
