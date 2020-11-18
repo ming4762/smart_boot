@@ -178,7 +178,7 @@ public abstract class BaseServiceImpl<K extends CrudBaseMapper<T>, T extends Bas
         }
         // 获取实体类tableInfo
         final TableInfo tableInfo = this.getTableInfo();
-        Class<? extends BaseModel> clazz = this.getModelClass();
+        Class<? extends BaseModel> clazz = this.currentModelClass();
         String keyProperty = tableInfo.getKeyProperty();
         Assert.notEmpty(keyProperty, KEY_PROPERTY_NULL_ERROR);
         // 遍历实体类设置主键
@@ -198,7 +198,7 @@ public abstract class BaseServiceImpl<K extends CrudBaseMapper<T>, T extends Bas
      */
     @NonNull
     private TableInfo getTableInfo() {
-        final TableInfo tableInfo = TableInfoHelper.getTableInfo(this.getModelClass());
+        final TableInfo tableInfo = TableInfoHelper.getTableInfo(this.currentModelClass());
         Assert.notNull(tableInfo, "error: can not execute. because can not find cache of TableInfo for entity!");
         return tableInfo;
     }
@@ -402,14 +402,6 @@ public abstract class BaseServiceImpl<K extends CrudBaseMapper<T>, T extends Bas
     @NonNull
     private Type getModelType() {
         return ((ParameterizedType)this.getClass().getGenericSuperclass()).getActualTypeArguments()[1];
-    }
-
-    /**
-     * 获取实体类的类型
-     * @return 实体类类型
-     */
-    private Class<? extends BaseModel> getModelClass() {
-        return CrudUtils.getModelClassByType(this.getModelType());
     }
 
     /**
