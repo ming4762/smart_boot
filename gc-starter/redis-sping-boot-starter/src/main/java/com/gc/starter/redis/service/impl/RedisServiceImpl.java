@@ -32,7 +32,8 @@ public class RedisServiceImpl implements RedisService {
 
     @Override
     public void matchDelete(@NonNull Object prefixKey) {
-        // todo: 待开发
+        final List<Object> keys = this.matchKeys(prefixKey);
+        this.batchDelete(keys);
     }
 
     @Override
@@ -134,7 +135,7 @@ public class RedisServiceImpl implements RedisService {
      * @return 所有key
      */
     @Override
-    public List<Object> matchKeys(@NonNull String patternKey) {
+    public List<Object> matchKeys(@NonNull Object patternKey) {
         List<Object> result = new LinkedList<>();
 
         Cursor<byte[]> scan = this.scan(patternKey, null);
@@ -151,10 +152,10 @@ public class RedisServiceImpl implements RedisService {
      * @param count 获取数量
      * @return 扫描对象
      */
-    private Cursor<byte[]> scan(@NonNull String patternKey, Integer count) {
+    private Cursor<byte[]> scan(@NonNull Object patternKey, Integer count) {
         // 创建扫描参数
         ScanOptions.ScanOptionsBuilder builder = ScanOptions.scanOptions()
-                .match(patternKey);
+                .match(patternKey.toString());
         if (Objects.nonNull(count)) {
             builder.count(count);
         }

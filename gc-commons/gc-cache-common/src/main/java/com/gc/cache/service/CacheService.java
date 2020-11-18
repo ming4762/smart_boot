@@ -124,5 +124,5 @@ public interface CacheService {
      * @param patternKey 所有key
      * @return 所有key
      */
-    List<Object> matchKeys(@NonNull String patternKey);
+    List<Object> matchKeys(@NonNull Object patternKey);
 }
