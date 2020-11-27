@@ -66,7 +66,7 @@ public abstract class BaseServiceImpl<K extends CrudBaseMapper<T>, T extends Bas
         if (keyList.size() == 1) {
             return this.baseMapper.deleteById((Serializable) ReflectUtil.getFieldValue(model, keyList.get(0)));
         }
-        final Class<? extends BaseModel> clazz = CrudUtils.getModelClassByType(this.getModelType());
+        final Class<? extends BaseModel> clazz = this.currentModelClass();
         if (clazz == null) {
             return 0;
         }
@@ -134,7 +134,7 @@ public abstract class BaseServiceImpl<K extends CrudBaseMapper<T>, T extends Bas
         if (keyList.size() == 1) {
             return this.getById((Serializable) ReflectUtil.getFieldValue(model, keyList.get(0)));
         } else {
-            final Class<? extends BaseModel> clazz = CrudUtils.getModelClassByType(this.getModelType());
+            final Class<? extends BaseModel> clazz = this.currentModelClass();
             if (clazz == null) {
                 return null;
             }
@@ -381,7 +381,7 @@ public abstract class BaseServiceImpl<K extends CrudBaseMapper<T>, T extends Bas
         // 如果灭有分页且存在排序字段手动进行排序
         if (!paging && sortName != null) {
             final String sortOrder = parameter.getSortOrder();
-            final Class<? extends BaseModel> clazz = CrudUtils.getModelClassByType(this.getModelType());
+            final Class<? extends BaseModel> clazz = this.currentModelClass();
             final List<Sort> sortList = CrudUtils.analysisOrder(sortName, sortOrder, clazz);
             if (!sortList.isEmpty()) {
                 sortList.forEach(sort -> {

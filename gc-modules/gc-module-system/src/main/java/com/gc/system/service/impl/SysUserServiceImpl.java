@@ -268,7 +268,8 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserMapper, SysUserPO
         }
         // 查询功能信息
         final LambdaQueryWrapper<SysFunctionPO> queryWrapper = new QueryWrapper<SysFunctionPO>().lambda()
-                .in(SysFunctionPO :: getFunctionId, functionIds);
+                .in(SysFunctionPO :: getFunctionId, functionIds)
+                .orderByAsc(SysFunctionPO :: getSeq);
         if (CollectionUtils.isNotEmpty(types)) {
             queryWrapper.in(SysFunctionPO :: getFunctionType, types.stream().map(FunctionTypeConstants :: getValue).collect(Collectors.toList()));
         }

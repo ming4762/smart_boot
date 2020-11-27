@@ -12,7 +12,13 @@
 	<version>1.0.2-SNAPSHOT</version>
 	<name>gc-boot</name>
 	<description>gc 通用开发框架</description>
-
+	<developers>
+		<developer>
+			<id>shizhongming</id>
+			<name>shizhongming</name>
+			<email>szm@gc-it.cn</email>
+		</developer>
+	</developers>
 	<packaging>pom</packaging>
 
 	<properties>
@@ -79,13 +85,24 @@
 	<distributionManagement>
 		<repository>
 			<id>releases</id>
-			<url>http://maven.gc-it.cn/repository/maven-releases/</url>
+			<url>http://109.116.6.139:8081/repository/maven-releases/</url>
 		</repository>
 		<snapshotRepository>
 			<id>snapshots</id>
-			<url>http://maven.gc-it.cn/repository/maven-snapshots/</url>
+			<url>http://109.116.6.139:8081/repository/maven-snapshots/</url>
 		</snapshotRepository>
 	</distributionManagement>
+
+<!--	<distributionManagement>-->
+<!--		<repository>-->
+<!--			<id>releases</id>-->
+<!--			<url>http://maven.gc-it.cn/repository/maven-releases/</url>-->
+<!--		</repository>-->
+<!--		<snapshotRepository>-->
+<!--			<id>snapshots</id>-->
+<!--			<url>http://maven.gc-it.cn/repository/maven-snapshots/</url>-->
+<!--		</snapshotRepository>-->
+<!--	</distributionManagement>-->
 
 <!--	<distributionManagement>-->
 <!--		<repository>-->

@@ -92,3 +92,64 @@ create table sys_user_role
     create_user_id bigint               null comment '创建人员Id',
     primary key (user_id, role_id)
 );
+
+
+-- auto-generated definition
+create table sys_function
+(
+    function_id          bigint               not null comment '功能ID'
+        primary key,
+    parent_id            bigint               not null comment '上级ID',
+    function_name        varchar(50)          not null comment '功能名称',
+    function_type        char(2)              not null comment '功能类型（10：目录 20：菜单 30：功能）',
+    icon                 varchar(50)          null comment '图标',
+    seq                  int                  null comment '序号',
+    create_time          datetime             not null comment '创建时间',
+    create_user_id       bigint               null comment '创建人员ID',
+    update_time          datetime             null comment '更新时间',
+    update_user_id       bigint               null comment '更新人员ID',
+    url                  varchar(500)         null comment 'url',
+    permission           varchar(255)         null comment '权限',
+    is_menu              tinyint(1) default 1 not null comment '是否菜单',
+    internal_or_external tinyint(1) default 0 not null comment '外链菜单打开方式 0/内部打开 1/外部打开',
+    data_rule            tinyint(1) default 0 not null comment '是否配置数据权限',
+    http_method          varchar(10)          null
+)
+    comment '系统功能表';
+
+
+-- auto-generated definition
+create table sys_role_function
+(
+    role_id        bigint   not null,
+    function_id    bigint   not null,
+    create_time    datetime not null,
+    create_user_id bigint   null,
+    primary key (role_id, function_id)
+)
+    comment '角色菜单关系表' charset = utf8mb4;
+
+
+    -- auto-generated definition
+create table sys_log
+(
+    log_id         bigint       not null comment '日志ID'
+        primary key,
+    create_user_id bigint       null comment '用户名',
+    operation      varchar(50)  not null comment '操作',
+    use_time       bigint       not null comment '用时',
+    method         text         not null comment '方法',
+    params         longtext     null comment '参数',
+    ip             varchar(64)  not null comment 'IP',
+    create_time    datetime     not null comment '创建时间',
+    request_path   varchar(255) not null comment '请求路径',
+    status_code    int          not null comment '状态码',
+    error_message  longtext     null comment '错误信息',
+    type           varchar(50)  null comment '请求类型',
+    Platform       varchar(50)  null comment '平台',
+    ident          char(2)      null,
+    result         text         null
+);
+
+create index idx_create_user_id
+    on sys_log (create_user_id);
