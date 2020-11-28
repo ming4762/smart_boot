@@ -28,12 +28,13 @@ public class SysFileBO {
 
     private InputStream inputStream;
 
-    public SysFileBO(@NonNull MultipartFile multipartFile, String filename, String type) throws IOException {
+    public SysFileBO(@NonNull MultipartFile multipartFile, String filename, String type, String handlerType) throws IOException {
         this.file = SysFilePO.builder()
                 .fileId(IdGenerator.nextId())
                 .fileName(StringUtils.isEmpty(filename) ? multipartFile.getOriginalFilename() : filename)
                 .type(StringUtils.isEmpty(type) ? FileTypeConstants.TEMP.name() : type)
                 .contentType(multipartFile.getContentType())
+                .handlerType(handlerType)
                 .md5(Md5Utils.md5(multipartFile.getInputStream()))
                 .fileSize(multipartFile.getSize())
                 .build();

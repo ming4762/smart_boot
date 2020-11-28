@@ -1,5 +1,7 @@
 package com.gc.module.file;
 
+import com.gc.file.common.properties.SmartFileProperties;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
@@ -9,5 +11,6 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 @ComponentScan
+@EnableConfigurationProperties(SmartFileProperties.class)
 public class ModuleFileAutoConfiguration {
 }

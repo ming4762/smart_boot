@@ -1,6 +1,8 @@
 package com.gc.file.common.service;
 
 
+import com.gc.common.base.exception.IORuntimeException;
+import com.gc.file.common.common.ActualFileServiceRegisterName;
 import org.springframework.lang.NonNull;
 
 import java.io.*;
@@ -43,9 +45,9 @@ public interface ActualFileService {
     /**
      * 批量删除文件
      * @param fileIdList 文件ID
-     * @throws IOException IOException
+     * @throws IORuntimeException IOException
      */
-    void batchDelete(@NonNull List<String> fileIdList) throws IOException;
+    void batchDelete(@NonNull List<String> fileIdList) throws IORuntimeException;
 
     /**
      * 下载文件
@@ -69,5 +71,11 @@ public interface ActualFileService {
      * @return 文件绝对路径
      */
     String getAbsolutePath(@NonNull String id);
+
+    /**
+     * 获取注册名字
+     * @return 注册名字
+     */
+    ActualFileServiceRegisterName getRegisterName();
 
 }

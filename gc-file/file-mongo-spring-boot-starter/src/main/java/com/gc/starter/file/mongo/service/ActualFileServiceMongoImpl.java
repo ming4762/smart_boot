@@ -1,6 +1,8 @@
 package com.gc.starter.file.mongo.service;
 
 import com.gc.common.base.exception.OperationNotSupportedException;
+import com.gc.file.common.common.ActualFileServiceRegisterName;
+import com.gc.file.common.constants.ActualFileServiceName;
 import com.gc.file.common.service.ActualFileService;
 import com.mongodb.client.gridfs.GridFSBuckets;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
@@ -116,5 +118,17 @@ public class ActualFileServiceMongoImpl implements ActualFileService {
     public String getAbsolutePath(@NonNull String id) {
         // TODO: i18n
         throw new OperationNotSupportedException("mongoDB不支持获取文件绝对路径");
+    }
+
+    /**
+     * 获取注册名字
+     * @return 注册名字
+     */
+    @Override
+    public ActualFileServiceRegisterName getRegisterName() {
+        return ActualFileServiceRegisterName.builder()
+                .beanName(ActualFileServiceName.MONGO_ACTUAL_FILE_SERVICE)
+                .dbName("mongo")
+                .build();
     }
 }

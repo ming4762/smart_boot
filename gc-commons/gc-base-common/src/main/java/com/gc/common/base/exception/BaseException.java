@@ -1,6 +1,5 @@
 package com.gc.common.base.exception;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -36,6 +35,6 @@ public class BaseException extends RuntimeException {
     }
 
     public BaseException(Throwable e) {
-        this(500, "系统发生未知错误", e);
+        this(500, e.getMessage(), e);
     }
 }

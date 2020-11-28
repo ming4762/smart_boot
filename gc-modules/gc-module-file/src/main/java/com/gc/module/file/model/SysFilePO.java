@@ -60,4 +60,9 @@ public class SysFilePO extends BaseModelCreateUserTime {
      * 序号
      */
     private Integer seq;
+
+    /**
+     * 文件执行器类型
+     */
+    private String handlerType;
 }

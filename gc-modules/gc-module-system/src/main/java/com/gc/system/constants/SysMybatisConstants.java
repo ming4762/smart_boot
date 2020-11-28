@@ -5,9 +5,9 @@ package com.gc.system.constants;
  * @author shizhongming
  * 2020/11/29 2:41 上午
  */
-public class SysMybatsiConstants {
+public class SysMybatisConstants {
 
-    private SysMybatsiConstants() { throw new IllegalStateException("Utility class"); }
+    private SysMybatisConstants() { throw new IllegalStateException("Utility class"); }
 
     public static final String MAPPER_BASE_PACKAGE= "com.gc.system.mapper";
 }
