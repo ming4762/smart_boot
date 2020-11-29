@@ -86,7 +86,7 @@ public class SysFileServiceImpl extends BaseServiceImpl<SysFileMapper, SysFilePO
     @Override
     @Transactional(rollbackFor = Exception.class)
     public @NonNull
-    SysFilePO saveFile(@NonNull MultipartFile multipartFile, @NonNull SaveFileDTO saveFileDto) throws IOException {
+    SysFilePO saveFile(@NonNull MultipartFile multipartFile, @NonNull SaveFileDTO saveFileDto) {
         return this.saveFile(this.createSysFileBo(multipartFile, saveFileDto.getFilename(), saveFileDto.getType(), saveFileDto.getHandlerType()));
     }
 
@@ -97,7 +97,7 @@ public class SysFileServiceImpl extends BaseServiceImpl<SysFileMapper, SysFilePO
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public @NonNull SysFilePO saveFile(@NonNull SysFileBO file) throws IOException {
+    public @NonNull SysFilePO saveFile(@NonNull SysFileBO file) {
         // 根据md5判断文件是否存在
         final List<SysFilePO> md5FileList = this.list(
                 new QueryWrapper<SysFilePO>().lambda()
@@ -181,7 +181,7 @@ public class SysFileServiceImpl extends BaseServiceImpl<SysFileMapper, SysFilePO
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public boolean batchDeleteFile(@NonNull Collection<Serializable> fileIds) throws IOException {
+    public boolean batchDeleteFile(@NonNull Collection<Serializable> fileIds) {
         if (!fileIds.isEmpty()) {
             final List<SysFilePO> fileList = this.listByIds(fileIds);
             if (CollectionUtils.isNotEmpty(fileList)) {
@@ -263,7 +263,7 @@ public class SysFileServiceImpl extends BaseServiceImpl<SysFileMapper, SysFilePO
      * @param file 文件信息
      * @return 文件ID
      */
-    private String saveActualFile(SysFileBO file) throws IOException {
+    private String saveActualFile(SysFileBO file) {
         return this.getActualFileService(file.getFile().getHandlerType()).save(file.getInputStream(), file.getFile().getFileName());
     }
 }

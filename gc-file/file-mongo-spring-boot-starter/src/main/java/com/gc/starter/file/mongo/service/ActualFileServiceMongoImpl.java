@@ -1,5 +1,6 @@
 package com.gc.starter.file.mongo.service;
 
+import com.gc.common.base.exception.IORuntimeException;
 import com.gc.common.base.exception.OperationNotSupportedException;
 import com.gc.file.common.common.ActualFileServiceRegisterName;
 import com.gc.file.common.constants.ActualFileServiceName;
@@ -41,8 +42,12 @@ public class ActualFileServiceMongoImpl implements ActualFileService {
      */
     @Override
     public @NonNull
-    String save(@NonNull File file, String filename) throws IOException {
-        return this.gridFsTemplate.store(new FileInputStream(file), filename).toString();
+    String save(@NonNull File file, String filename) {
+        try {
+            return this.gridFsTemplate.store(new FileInputStream(file), filename).toString();
+        } catch (IOException e) {
+            throw new IORuntimeException(e);
+        }
     }
 
     /**
@@ -99,12 +104,13 @@ public class ActualFileServiceMongoImpl implements ActualFileService {
      *
      * @param id           文件ID
      * @param outputStream 输出流
-     * @throws IOException IO异常
      */
     @Override
-    public void download(@NonNull String id, @NonNull OutputStream outputStream) throws IOException {
+    public void download(@NonNull String id, @NonNull OutputStream outputStream) {
         try (InputStream inputStream = this.download(id)) {
             IOUtils.copy(inputStream, outputStream);
+        } catch (IOException e) {
+            throw new IORuntimeException(e);
         }
     }
 

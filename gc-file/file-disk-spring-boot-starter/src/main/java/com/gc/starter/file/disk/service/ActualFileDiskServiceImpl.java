@@ -48,7 +48,7 @@ public class ActualFileDiskServiceImpl implements ActualFileService {
      * @return 文件ID
      */
     @Override
-    public @NonNull String save(@NonNull InputStream inputStream, String filename) throws IOException {
+    public @NonNull String save(@NonNull InputStream inputStream, String filename) {
         try (
                 final ByteArrayOutputStream outputStream = new ByteArrayOutputStream()
         ) {
@@ -65,6 +65,8 @@ public class ActualFileDiskServiceImpl implements ActualFileService {
             final Path inPath = Paths.get(filePath);
             Files.copy(new ByteArrayInputStream(outputStream.toByteArray()), inPath);
             return diskFilePath.getFileId();
+        } catch (IOException e) {
+            throw new IORuntimeException(e);
         }
     }
 
@@ -114,11 +116,13 @@ public class ActualFileDiskServiceImpl implements ActualFileService {
      * @param outputStream 输出流，文件信息会写入输出流
      */
     @Override
-    public void download(@NonNull String id, @NonNull OutputStream outputStream) throws IOException {
+    public void download(@NonNull String id, @NonNull OutputStream outputStream) {
         final String filePath = DiskFilePathBO.createById(id, this.basePath).getFilePath();
         final File file = new File(filePath);
         try (FileInputStream inputStream = new FileInputStream(file)) {
             IOUtils.copy(inputStream, outputStream);
+        } catch (IOException e) {
+            throw new IORuntimeException(e);
         }
     }
 
