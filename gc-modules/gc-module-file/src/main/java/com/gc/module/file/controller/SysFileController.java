@@ -81,7 +81,7 @@ public class SysFileController extends BaseController<SysFileService, SysFilePO>
         try {
             return Result.success(
                     multipartFileList.stream()
-                            .map(item -> this.service.saveFile(item, type))
+                            .map(item -> this.service.saveFile(item, type, null))
                             .collect(Collectors.toList())
             );
         } catch (Exception e) {

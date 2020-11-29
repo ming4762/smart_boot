@@ -87,7 +87,7 @@ public class SysFileServiceImpl extends BaseServiceImpl<SysFileMapper, SysFilePO
     @Transactional(rollbackFor = Exception.class)
     public @NonNull
     SysFilePO saveFile(@NonNull MultipartFile multipartFile, @NonNull SaveFileDTO saveFileDto) throws IOException {
-        return this.saveFile(new SysFileBO(multipartFile, saveFileDto.getFilename(), saveFileDto.getType(), saveFileDto.getHandlerType()));
+        return this.saveFile(this.createSysFileBo(multipartFile, saveFileDto.getFilename(), saveFileDto.getType(), saveFileDto.getHandlerType()));
     }
 
     /**
@@ -131,14 +131,26 @@ public class SysFileServiceImpl extends BaseServiceImpl<SysFileMapper, SysFilePO
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public SysFilePO saveFile(@NonNull MultipartFile multipartFile, String type) {
+    public SysFilePO saveFile(@NonNull MultipartFile multipartFile, String type, String handlerType) {
         final SysFilePO file = new SysFilePO();
         file.setType(type);
         try {
-            return this.saveFile(new SysFileBO(multipartFile, null, type, null));
+            return this.saveFile(new SysFileBO(multipartFile, null, type, handlerType));
         } catch (Exception e) {
             throw new BaseException("系统发生未知异常", e);
         }
+    }
+
+    /**
+     * 保存文件
+     *
+     * @param multipartFile 文件信息
+     * @param type          文件类型
+     * @return 文件实体信息
+     */
+    @Override
+    public SysFilePO saveFile(@NonNull MultipartFile multipartFile, String type) {
+        return this.saveFile(multipartFile, type, this.fileProperties.getDefaultHandler());
     }
 
     /**
@@ -231,6 +243,19 @@ public class SysFileServiceImpl extends BaseServiceImpl<SysFileMapper, SysFilePO
         } catch (FileNotFoundException e) {
             throw new BaseException("文件未找到", e);
         }
+    }
+
+    /**
+     * 创建 SysFileBO
+     * @param file 文件
+     * @param fileName 文件名
+     * @param type 文件类型
+     * @param handlerType 执行器类型
+     * @return SysFileBO
+     */
+    private SysFileBO createSysFileBo(MultipartFile file, String fileName, String type, String handlerType) {
+        String handler = StringUtils.isBlank(handlerType) ? this.fileProperties.getDefaultHandler() : handlerType;
+        return new SysFileBO(file, fileName, type, handler);
     }
 
     /**

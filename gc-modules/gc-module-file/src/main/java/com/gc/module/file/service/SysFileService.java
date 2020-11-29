@@ -45,6 +45,16 @@ public interface SysFileService extends BaseService<SysFilePO> {
      *
      * @param multipartFile 文件信息
      * @param type          文件类型
+     * @param handlerType   文件执行器类型
+     * @return 文件实体信息
+     */
+    SysFilePO saveFile(@NonNull MultipartFile multipartFile, String type, String handlerType);
+
+    /**
+     * 保存文件
+     *
+     * @param multipartFile 文件信息
+     * @param type          文件类型
      * @return 文件实体信息
      */
     SysFilePO saveFile(@NonNull MultipartFile multipartFile, String type);

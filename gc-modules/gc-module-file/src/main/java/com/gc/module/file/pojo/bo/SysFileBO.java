@@ -1,5 +1,6 @@
 package com.gc.module.file.pojo.bo;
 
+import com.gc.common.base.exception.IORuntimeException;
 import com.gc.common.base.utils.security.Md5Utils;
 import com.gc.module.file.constants.FileTypeConstants;
 import com.gc.module.file.model.SysFilePO;
@@ -28,17 +29,21 @@ public class SysFileBO {
 
     private InputStream inputStream;
 
-    public SysFileBO(@NonNull MultipartFile multipartFile, String filename, String type, String handlerType) throws IOException {
-        this.file = SysFilePO.builder()
-                .fileId(IdGenerator.nextId())
-                .fileName(StringUtils.isEmpty(filename) ? multipartFile.getOriginalFilename() : filename)
-                .type(StringUtils.isEmpty(type) ? FileTypeConstants.TEMP.name() : type)
-                .contentType(multipartFile.getContentType())
-                .handlerType(handlerType)
-                .md5(Md5Utils.md5(multipartFile.getInputStream()))
-                .fileSize(multipartFile.getSize())
-                .build();
-        this.inputStream = multipartFile.getInputStream();
+    public SysFileBO(@NonNull MultipartFile multipartFile, String filename, String type, String handlerType) {
+        try {
+            this.file = SysFilePO.builder()
+                    .fileId(IdGenerator.nextId())
+                    .fileName(StringUtils.isEmpty(filename) ? multipartFile.getOriginalFilename() : filename)
+                    .type(StringUtils.isEmpty(type) ? FileTypeConstants.TEMP.name() : type)
+                    .contentType(multipartFile.getContentType())
+                    .handlerType(handlerType)
+                    .md5(Md5Utils.md5(multipartFile.getInputStream()))
+                    .fileSize(multipartFile.getSize())
+                    .build();
+            this.inputStream = multipartFile.getInputStream();
+        } catch (IOException e) {
+            throw new IORuntimeException(e);
+        }
     }
 
 }

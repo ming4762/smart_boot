@@ -1,6 +1,5 @@
 package com.gc.file.common.properties;
 
-import com.gc.file.common.constants.ActualFileServiceName;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -23,5 +22,5 @@ public class SmartFileProperties {
     /**
      * 默认的文件执行器
      */
-    private String defaultHandler = ActualFileServiceName.DISK_ACTUAL_FILE_SERVICE;
+    private String defaultHandler = "disk";
 }
