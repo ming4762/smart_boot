@@ -13,7 +13,8 @@ import java.io.Serializable;
 import java.util.Collection;
 
 /**
- * @author jackson
+ * 文件服务层
+ * @author shizhongming
  * 2020/1/27 7:50 下午
  */
 public interface SysFileService extends BaseService<SysFilePO> {
@@ -38,6 +39,16 @@ public interface SysFileService extends BaseService<SysFilePO> {
      */
     @NonNull
     SysFilePO saveFile(@NonNull SysFileBO file) throws IOException;
+
+    /**
+     * 保存文件
+     *
+     * @param multipartFile 文件信息
+     * @param type          文件类型
+     * @param handlerType   文件执行器类型
+     * @return 文件实体信息
+     */
+    SysFilePO saveFile(@NonNull MultipartFile multipartFile, String type, String handlerType);
 
     /**
      * 保存文件

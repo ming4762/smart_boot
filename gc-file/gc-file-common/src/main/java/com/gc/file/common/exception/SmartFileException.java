@@ -8,4 +8,12 @@ import com.gc.common.base.exception.BaseException;
  */
 public class SmartFileException extends BaseException {
     private static final long serialVersionUID = 8738840688421208415L;
+
+    public SmartFileException(String message) {
+        super(message);
+    }
+
+    public SmartFileException(String message, Exception e) {
+        super(message,e);
+    }
 }

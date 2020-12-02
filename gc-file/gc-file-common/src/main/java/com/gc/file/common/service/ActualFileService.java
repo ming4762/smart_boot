@@ -1,6 +1,7 @@
 package com.gc.file.common.service;
 
 
+import com.gc.file.common.common.ActualFileServiceRegisterName;
 import org.springframework.lang.NonNull;
 
 import java.io.*;
@@ -30,22 +31,20 @@ public interface ActualFileService {
      * @return 文件ID
      */
     @NonNull
-    String save(@NonNull InputStream inputStream, String filename)  throws IOException;
+    String save(@NonNull InputStream inputStream, String filename);
 
     /**
      * 删除文件
      * @param id 文件ID
-     * @throws IOException IOException
      */
-    void delete(@NonNull String id) throws IOException;
+    void delete(@NonNull String id) ;
 
 
     /**
      * 批量删除文件
      * @param fileIdList 文件ID
-     * @throws IOException IOException
      */
-    void batchDelete(@NonNull List<String> fileIdList) throws IOException;
+    void batchDelete(@NonNull List<String> fileIdList);
 
     /**
      * 下载文件
@@ -59,9 +58,8 @@ public interface ActualFileService {
      * 下载文件
      * @param id 文件ID
      * @param outputStream 输出流
-     * @throws IOException 下载文件发生IO错误
      */
-    void download(@NonNull String id, @NonNull OutputStream outputStream) throws IOException;
+    void download(@NonNull String id, @NonNull OutputStream outputStream);
 
     /**
      * 获取文件的绝对路径
@@ -69,5 +67,11 @@ public interface ActualFileService {
      * @return 文件绝对路径
      */
     String getAbsolutePath(@NonNull String id);
+
+    /**
+     * 获取注册名字
+     * @return 注册名字
+     */
+    ActualFileServiceRegisterName getRegisterName();
 
 }

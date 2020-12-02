@@ -21,4 +21,6 @@ public class SaveFileDTO implements Serializable {
     private String filename;
 
     private String type;
+
+    private String handlerType;
 }

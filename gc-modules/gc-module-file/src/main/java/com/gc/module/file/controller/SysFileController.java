@@ -81,7 +81,7 @@ public class SysFileController extends BaseController<SysFileService, SysFilePO>
         try {
             return Result.success(
                     multipartFileList.stream()
-                            .map(item -> this.service.saveFile(item, type))
+                            .map(item -> this.service.saveFile(item, type, null))
                             .collect(Collectors.toList())
             );
         } catch (Exception e) {
@@ -92,7 +92,7 @@ public class SysFileController extends BaseController<SysFileService, SysFilePO>
 
     /**
      * 下载文件接口
-     * @param id
+     * @param id 文件ID
      * @param response
      * @throws Exception
      */
@@ -109,7 +109,7 @@ public class SysFileController extends BaseController<SysFileService, SysFilePO>
 
     /**
      * 批量删除文件
-     * @param ids
+     * @param ids 文件ID列表
      * @return
      */
     @SneakyThrows

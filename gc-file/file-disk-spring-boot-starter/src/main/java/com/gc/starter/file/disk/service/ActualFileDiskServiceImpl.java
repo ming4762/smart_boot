@@ -1,6 +1,9 @@
 package com.gc.starter.file.disk.service;
 
+import com.gc.common.base.exception.IORuntimeException;
 import com.gc.common.base.utils.security.Md5Utils;
+import com.gc.file.common.common.ActualFileServiceRegisterName;
+import com.gc.file.common.constants.ActualFileServiceName;
 import com.gc.file.common.service.ActualFileService;
 import com.gc.starter.file.disk.pojo.bo.DiskFilePathBO;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
@@ -45,7 +48,7 @@ public class ActualFileDiskServiceImpl implements ActualFileService {
      * @return 文件ID
      */
     @Override
-    public @NonNull String save(@NonNull InputStream inputStream, String filename) throws IOException {
+    public @NonNull String save(@NonNull InputStream inputStream, String filename) {
         try (
                 final ByteArrayOutputStream outputStream = new ByteArrayOutputStream()
         ) {
@@ -62,6 +65,8 @@ public class ActualFileDiskServiceImpl implements ActualFileService {
             final Path inPath = Paths.get(filePath);
             Files.copy(new ByteArrayInputStream(outputStream.toByteArray()), inPath);
             return diskFilePath.getFileId();
+        } catch (IOException e) {
+            throw new IORuntimeException(e);
         }
     }
 
@@ -70,11 +75,15 @@ public class ActualFileDiskServiceImpl implements ActualFileService {
      * @param id 文件ID
      */
     @Override
-    public void delete(@NonNull String id) throws IOException {
-        final String filePath = DiskFilePathBO.createById(id, this.basePath).getFilePath();
-        final Path path = Paths.get(filePath);
-        if (Files.exists(path)) {
-            Files.delete(path);
+    public void delete(@NonNull String id) {
+        try {
+            final String filePath = DiskFilePathBO.createById(id, this.basePath).getFilePath();
+            final Path path = Paths.get(filePath);
+            if (Files.exists(path)) {
+                Files.delete(path);
+            }
+        } catch (IOException e) {
+            throw new IORuntimeException(e);
         }
     }
 
@@ -83,7 +92,7 @@ public class ActualFileDiskServiceImpl implements ActualFileService {
      * @param fileIdList 文件ID
      */
     @Override
-    public void batchDelete(@NonNull List<String> fileIdList) throws IOException {
+    public void batchDelete(@NonNull List<String> fileIdList) throws IORuntimeException {
         for (String fileId : fileIdList) {
             this.delete(fileId);
         }
@@ -107,11 +116,13 @@ public class ActualFileDiskServiceImpl implements ActualFileService {
      * @param outputStream 输出流，文件信息会写入输出流
      */
     @Override
-    public void download(@NonNull String id, @NonNull OutputStream outputStream) throws IOException {
+    public void download(@NonNull String id, @NonNull OutputStream outputStream) {
         final String filePath = DiskFilePathBO.createById(id, this.basePath).getFilePath();
         final File file = new File(filePath);
         try (FileInputStream inputStream = new FileInputStream(file)) {
             IOUtils.copy(inputStream, outputStream);
+        } catch (IOException e) {
+            throw new IORuntimeException(e);
         }
     }
 
@@ -123,5 +134,17 @@ public class ActualFileDiskServiceImpl implements ActualFileService {
     @Override
     public String getAbsolutePath(@NonNull String id) {
         return DiskFilePathBO.createById(id, this.basePath).getFilePath();
+    }
+
+    /**
+     * 获取注册名字
+     * @return 注册名字
+     */
+    @Override
+    public ActualFileServiceRegisterName getRegisterName() {
+        return ActualFileServiceRegisterName.builder()
+                .dbName("disk")
+                .beanName(ActualFileServiceName.DISK_ACTUAL_FILE_SERVICE)
+                .build();
     }
 }
