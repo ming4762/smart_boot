@@ -6,7 +6,7 @@ import lombok.Getter;
 import java.io.Serializable;
 
 /**
- * @author jackson
+ * @author shizhongming
  * 2020/2/15 12:08 下午
  */
 public class SessionCache implements Serializable {

@@ -3,6 +3,7 @@ package com.gc.common.auth.service;
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 
+import java.util.Collection;
 import java.util.Set;
 
 /**
@@ -46,4 +47,20 @@ public interface AuthCache<K, V> {
      * @return key的集合
      */
     Set<K> keys();
+
+    /**
+     * 匹配获取
+     * @param patternKey 匹配的key
+     * @return 所有对象
+     */
+    @NonNull
+    Set<V> matchGet(String patternKey);
+
+    /**
+     * 批量获取
+     * @param keys keys
+     * @return 获取的缓存
+     */
+    @NonNull
+    Set<V> batchGet(@NonNull Collection<K> keys);
 }

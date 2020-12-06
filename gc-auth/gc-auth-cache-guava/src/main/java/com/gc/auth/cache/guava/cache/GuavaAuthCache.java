@@ -5,14 +5,17 @@ import com.gc.common.auth.service.AuthCache;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Sets;
 import org.springframework.lang.NonNull;
 
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 /**
+ * authCache Guava实现
  * @author shizhongming
  * 2020/9/11 9:40 下午
  */
@@ -75,5 +78,39 @@ public class GuavaAuthCache implements AuthCache<String, Object> {
     @Override
     public Set<String> keys() {
         return CACHE.asMap().keySet();
+    }
+
+    /**
+     * 匹配获取
+     * @param patternKey 匹配的key
+     * @return 所有对象
+     */
+    @Override
+    @NonNull
+    public Set<Object> matchGet(@NonNull String patternKey) {
+        final Set<Object> result = Sets.newHashSet();
+        this.CACHE.asMap().forEach((key, value) -> {
+            if (key.startsWith(patternKey)) {
+                result.add(this.get(key));
+            }
+        });
+        return result;
+    }
+
+    /**
+     * 批量获取
+     * @param keys keys
+     * @return 获取的缓存
+     */
+    @Override
+    @NonNull
+    public Set<Object> batchGet(@NonNull Collection<String> keys) {
+        final Set<Object> result = Sets.newHashSet();
+        this.CACHE.asMap().forEach((key, value) -> {
+            if (keys.contains(key)) {
+                result.add(this.get(key));
+            }
+        });
+        return result;
     }
 }

@@ -6,7 +6,8 @@ import com.google.common.collect.Sets;
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author shizhongming
@@ -68,5 +69,31 @@ public class RedisAuthCache implements AuthCache<String, Object> {
     public Set<String> keys() {
         // TODO: 待开发
         return Sets.newHashSet();
+    }
+
+    /**
+     * 匹配获取
+     * @param patternKey 匹配的key
+     * @return 所有对象
+     */
+    @Override
+    @NonNull
+    public Set<Object> matchGet(String patternKey) {
+        final List<String> keys = this.cacheService.matchKeys(patternKey)
+                .stream().map(Object::toString)
+                .collect(Collectors.toList());
+        return this.batchGet(keys);
+    }
+
+    /**
+     * 批量获取
+     * @param keys keys
+     * @return 获取的缓存
+     */
+    @Override
+    @NonNull
+    public Set<Object> batchGet(@NonNull Collection<String> keys) {
+        List<Object> data = this.cacheService.batchGet(Collections.singleton(keys));
+        return Objects.isNull(data) ? Sets.newHashSet() : Sets.newHashSet(data);
     }
 }
