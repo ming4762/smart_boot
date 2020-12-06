@@ -47,6 +47,7 @@ public class AuthUserServiceImpl implements AuthUserService {
         }
         return AuthUser.builder()
                 .userId(user.getUserId())
+                .username(user.getUsername())
                 .password(user.getPassword())
                 .realname(user.getRealname())
                 .build();
