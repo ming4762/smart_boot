@@ -20,7 +20,6 @@
 	<modules>
 		<module>async-spring-boot-starter</module>
 		<module>crud-spring-boot-starter</module>
-		<module>file-spring-boot-starter</module>
 		<module>exception-spring-boot-starter</module>
 		<module>freemarker-spring-boot-starter</module>
 		<module>i18n-spring-boot-starter</module>
