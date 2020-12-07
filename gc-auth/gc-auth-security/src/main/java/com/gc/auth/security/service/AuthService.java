@@ -8,8 +8,10 @@ import com.gc.common.auth.properties.AuthProperties;
 import com.gc.common.auth.service.AuthCache;
 import com.gc.common.auth.utils.AuthUtils;
 import com.gc.common.base.http.HttpStatus;
+import com.gc.common.base.utils.HttpServletUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.lang.NonNull;
+import org.springframework.lang.Nullable;
 import org.springframework.security.core.Authentication;
 import org.springframework.util.Assert;
 
@@ -28,7 +30,9 @@ public class AuthService {
     private final AuthCache<String, Object> authCache;
 
 
-    private static final String KEY_PREFIX = "gc:session";
+    private static final String TOKE_KEY_PREFIX = "gc:session:user";
+
+    private static final String DATA_KEY_PREFIX = "gc:session:attribute";
 
     public AuthService(AuthProperties authProperties, AuthCache<String, Object> authCache) {
         this.authProperties = authProperties;
@@ -81,6 +85,7 @@ public class AuthService {
         return user;
     }
 
+
     /**
      * 获取token的key
      * @param username 用户名
@@ -88,11 +93,11 @@ public class AuthService {
      */
     @NonNull
     private String getTokenKey(@NonNull String username, @NonNull String jwt) {
-        return String.format("%s:jwt:%s:%s", KEY_PREFIX, username, jwt);
+        return String.format("%s:%s:%s", TOKE_KEY_PREFIX, username, jwt);
     }
 
     public String getAttributeKey(@NonNull String jwt) {
-        return String.format("%s:attribute:%s", KEY_PREFIX, jwt);
+        return String.format("%s:%s", DATA_KEY_PREFIX, jwt);
     }
 
     /**
@@ -106,5 +111,16 @@ public class AuthService {
         Assert.notNull(jwt, "系统发生未知异常，未找到token");
         this.authCache.remove(this.getTokenKey(user.getUsername(), jwt));
         this.authCache.remove(this.getAttributeKey(jwt));
+    }
+
+    /**
+     * 获取jwt
+     * @return jwt
+     */
+    @Nullable
+    private String getJwt() {
+        final HttpServletRequest request = HttpServletUtils.getRequest();
+        Assert.notNull(request, "获取request失败");
+        return JwtUtil.getJwt(request);
     }
 }
