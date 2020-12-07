@@ -1,23 +1,15 @@
 package com.gc.starter.file.mongo;
 
-import com.gc.file.common.constants.ActualFileServiceName;
-import com.gc.file.common.service.ActualFileService;
-import com.gc.starter.file.mongo.service.ActualFileServiceMongoImpl;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
+import com.gc.starter.file.mongo.spring.MongoFileImportBeanDefinitionRegistrar;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.mongodb.MongoDatabaseFactory;
-import org.springframework.data.mongodb.gridfs.GridFsTemplate;
+import org.springframework.context.annotation.Import;
 
 /**
  * @author shizhongming
  * 2020/11/14 10:41 下午
  */
 @Configuration
+@Import(MongoFileImportBeanDefinitionRegistrar.class)
 public class SmartMongoFileAutoConfiguration {
 
-    @Bean(name = ActualFileServiceName.MONGO_ACTUAL_FILE_SERVICE)
-    public ActualFileService actualFileService(@Autowired GridFsTemplate gridFsTemplate, @Autowired MongoDatabaseFactory dbFactory) {
-        return new ActualFileServiceMongoImpl(gridFsTemplate, dbFactory);
-    }
 }

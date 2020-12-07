@@ -1,11 +1,11 @@
 package com.gc.starter.file.nfs;
 
 import com.gc.file.common.properties.SmartFileProperties;
-import com.gc.file.common.service.ActualFileService;
 import com.gc.starter.file.nfs.provider.FtpChannelProvider;
-import com.gc.starter.file.nfs.service.ActualFileServiceNfsImpl;
+import com.gc.starter.file.nfs.spring.FileNfsImportBeanDefinitionRegistrar;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 
 /**
  * @author ShiZhongMing
@@ -13,16 +13,9 @@ import org.springframework.context.annotation.Configuration;
  * @since 1.0
  */
 @Configuration
+@Import(FileNfsImportBeanDefinitionRegistrar.class)
 public class SmartNfsFileAutoConfiguration {
 
-    /**
-     * 创建文件执行器
-     * @return 文件执行器
-     */
-    @Bean(name = "ActualFileNfsService")
-    public ActualFileService actualFileServiceNfsImpl(SmartFileProperties properties) {
-        return new ActualFileServiceNfsImpl(this.ftpChannelProvider(properties));
-    }
 
     @Bean
     public FtpChannelProvider ftpChannelProvider(SmartFileProperties properties) {

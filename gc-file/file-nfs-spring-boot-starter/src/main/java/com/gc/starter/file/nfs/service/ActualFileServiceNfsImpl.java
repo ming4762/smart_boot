@@ -33,6 +33,10 @@ public class ActualFileServiceNfsImpl implements ActualFileService {
     @Override
     @NonNull
     public String save(@NonNull File file, String filename) throws IOException {
+        // 获取channel
+        final ChannelSftp channelSftp = this.jcraftChannelProvider.getChannel();
+        // 归还连接
+        this.jcraftChannelProvider.returnChannel(channelSftp);
         return null;
     }
 

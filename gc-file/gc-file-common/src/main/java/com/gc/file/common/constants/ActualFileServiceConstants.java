@@ -10,6 +10,9 @@ import lombok.Getter;
 @Getter
 public enum ActualFileServiceConstants {
 
+    /**
+     * 磁盘文件
+     */
     DISK("ActualFileDiskService"),
     MONGO("ActualFileMongoService"),
     NFS("ActualFileNfsService");
