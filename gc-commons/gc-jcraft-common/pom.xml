@@ -4,30 +4,31 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>com.gc</groupId>
-		<artifactId>gc-file</artifactId>
+		<artifactId>gc-commons</artifactId>
 		<version>1.0.2-SNAPSHOT</version>
 	</parent>
-	<artifactId>gc-file-common</artifactId>
+	<artifactId>gc-jcraft-common</artifactId>
 	<version>${gc-boot.version}</version>
-	<name>gc-file-common</name>
-	<description>common模块</description>
+	<name>gc-jcraft-common</name>
+	<description>jcraft模块</description>
 
 	<properties>
 	</properties>
 
 	<dependencies>
+		<!--	引入连接池	-->
 		<dependency>
-			<groupId>com.gc</groupId>
-			<artifactId>gc-base-common</artifactId>
-			<version>${gc-boot.version}</version>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-pool2</artifactId>
 		</dependency>
-
 		<dependency>
-			<groupId>com.gc</groupId>
-			<artifactId>gc-jcraft-common</artifactId>
-			<version>${gc-boot.version}</version>
+			<groupId>com.jcraft</groupId>
+			<artifactId>jsch</artifactId>
 		</dependency>
-
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+		</dependency>
 	</dependencies>
 
 

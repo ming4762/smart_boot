@@ -3,7 +3,7 @@ package com.gc.starter.file.disk.service;
 import com.gc.common.base.exception.IORuntimeException;
 import com.gc.common.base.utils.security.Md5Utils;
 import com.gc.file.common.common.ActualFileServiceRegisterName;
-import com.gc.file.common.constants.ActualFileServiceName;
+import com.gc.file.common.constants.ActualFileServiceConstants;
 import com.gc.file.common.service.ActualFileService;
 import com.gc.starter.file.disk.pojo.bo.DiskFilePathBO;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
@@ -143,8 +143,8 @@ public class ActualFileDiskServiceImpl implements ActualFileService {
     @Override
     public ActualFileServiceRegisterName getRegisterName() {
         return ActualFileServiceRegisterName.builder()
-                .dbName("disk")
-                .beanName(ActualFileServiceName.DISK_ACTUAL_FILE_SERVICE)
+                .dbName(ActualFileServiceConstants.DISK.name())
+                .beanName(ActualFileServiceConstants.DISK.getServiceName())
                 .build();
     }
 }

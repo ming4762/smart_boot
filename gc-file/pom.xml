@@ -16,6 +16,7 @@
 	<modules>
 		<module>file-disk-spring-boot-starter</module>
 		<module>file-mongo-spring-boot-starter</module>
+		<module>file-nfs-spring-boot-starter</module>
 		<module>gc-file-common</module>
 	</modules>
 

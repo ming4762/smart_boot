@@ -1,5 +1,7 @@
 package com.gc.file.common.properties;
 
+import com.gc.common.jcraft.properties.SmartJcraftProperties;
+import com.gc.file.common.constants.ActualFileServiceConstants;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -22,5 +24,11 @@ public class SmartFileProperties {
     /**
      * 默认的文件执行器
      */
-    private String defaultHandler = "disk";
+    private String defaultHandler = ActualFileServiceConstants.DISK.name();
+
+    /**
+     * NFS文件配置
+     */
+    private SmartJcraftProperties nfs;
+
 }

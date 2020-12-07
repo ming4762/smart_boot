@@ -3,7 +3,7 @@ package com.gc.starter.file.mongo.service;
 import com.gc.common.base.exception.IORuntimeException;
 import com.gc.common.base.exception.OperationNotSupportedException;
 import com.gc.file.common.common.ActualFileServiceRegisterName;
-import com.gc.file.common.constants.ActualFileServiceName;
+import com.gc.file.common.constants.ActualFileServiceConstants;
 import com.gc.file.common.service.ActualFileService;
 import com.mongodb.client.gridfs.GridFSBuckets;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
@@ -133,8 +133,8 @@ public class ActualFileServiceMongoImpl implements ActualFileService {
     @Override
     public ActualFileServiceRegisterName getRegisterName() {
         return ActualFileServiceRegisterName.builder()
-                .beanName(ActualFileServiceName.MONGO_ACTUAL_FILE_SERVICE)
-                .dbName("mongo")
+                .beanName(ActualFileServiceConstants.MONGO.getServiceName())
+                .dbName(ActualFileServiceConstants.MONGO.name())
                 .build();
     }
 }
