@@ -39,7 +39,7 @@ import java.util.stream.Collectors;
  * 2020/1/27 7:50 下午
  */
 @Slf4j
-public class DefaultFileService extends BaseServiceImpl<SysFileMapper, SysFilePO> implements SysFileService {
+public class DefaultFileServiceImpl extends BaseServiceImpl<SysFileMapper, SysFilePO> implements SysFileService {
 
 
 
@@ -47,8 +47,8 @@ public class DefaultFileService extends BaseServiceImpl<SysFileMapper, SysFilePO
 
     private final SmartFileProperties fileProperties;
 
-    public DefaultFileService(ApplicationContext applicationContext, SmartFileProperties fileProperties) {
-        this.actualFileServiceMap = DefaultFileService.initActualFileService(applicationContext);
+    public DefaultFileServiceImpl(ApplicationContext applicationContext, SmartFileProperties fileProperties) {
+        this.actualFileServiceMap = DefaultFileServiceImpl.initActualFileService(applicationContext);
         this.fileProperties = fileProperties;
     }
 

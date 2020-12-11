@@ -2,7 +2,7 @@ package com.gc.module.file;
 
 import com.gc.file.common.properties.SmartFileProperties;
 import com.gc.module.file.service.SysFileService;
-import com.gc.module.file.service.impl.DefaultFileService;
+import com.gc.module.file.service.impl.DefaultFileServiceImpl;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.ApplicationContext;
@@ -28,6 +28,6 @@ public class ModuleFileAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean(SysFileService.class)
     public SysFileService sysFileService(ApplicationContext applicationContext, SmartFileProperties properties) {
-        return new DefaultFileService(applicationContext, properties);
+        return new DefaultFileServiceImpl(applicationContext, properties);
     }
 }
