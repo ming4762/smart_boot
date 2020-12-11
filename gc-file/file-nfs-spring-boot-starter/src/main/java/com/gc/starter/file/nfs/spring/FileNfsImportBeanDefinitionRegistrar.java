@@ -10,6 +10,7 @@ import org.springframework.core.type.AnnotationMetadata;
 import org.springframework.lang.NonNull;
 
 /**
+ * ActualFileServiceNfsImpl 注册类
  * @author shizhongming
  * 2020/12/7 10:41 下午
  */

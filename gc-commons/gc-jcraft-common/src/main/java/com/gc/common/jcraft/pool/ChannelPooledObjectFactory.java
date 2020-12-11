@@ -37,7 +37,7 @@ public class ChannelPooledObjectFactory<T extends Channel> implements PooledObje
     }
 
     @Override
-    public void destroyObject(PooledObject<T> pooledObject) throws Exception {
+    public void destroyObject(PooledObject<T> pooledObject) {
         Optional.ofNullable(pooledObject.getObject())
                 .ifPresent(Channel :: disconnect);
     }
@@ -57,7 +57,7 @@ public class ChannelPooledObjectFactory<T extends Channel> implements PooledObje
     }
 
     @Override
-    public void passivateObject(PooledObject<T> pooledObject) throws Exception {
+    public void passivateObject(PooledObject<T> pooledObject) {
         final Channel object = pooledObject.getObject();
         if (Objects.nonNull(object) && object.isConnected()) {
             object.disconnect();
