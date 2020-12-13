@@ -1,6 +1,7 @@
-package com.gc.starter.file.disk.pojo.bo;
+package com.gc.file.common.pojo.bo;
 
 import com.gc.common.base.utils.Base64Util;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.springframework.lang.NonNull;
@@ -36,6 +37,7 @@ public class DiskFilePathBO {
 
     private String md5;
 
+    @Getter
     private String filename;
 
     public DiskFilePathBO(String basePath, String md5, String filename) {
@@ -58,7 +60,15 @@ public class DiskFilePathBO {
      * @return 文件路径
      */
     public String getFilePath() {
-        String path = this.getFolderPath() + File.separator + md5;
+        return this.getFolderPath() + File.separator + this.getActualFilename();
+    }
+
+    /**
+     * 获取文件名
+     * @return 文件名
+     */
+    public String getActualFilename() {
+        String path = md5;
         if (!StringUtils.isEmpty(this.filename)) {
             path = path + ID_CUT + this.filename;
         }
