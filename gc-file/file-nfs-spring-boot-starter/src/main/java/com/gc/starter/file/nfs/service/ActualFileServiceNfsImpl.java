@@ -73,7 +73,7 @@ public class ActualFileServiceNfsImpl implements ActualFileService {
             // 创建并进入路径
             JcraftUtils.createDirectories(channelSftp, diskFilePath.getFolderPath());
             // 执行保存
-            channelSftp.put(new ByteArrayInputStream(outputStream.toByteArray()), diskFilePath.getActualFilename());
+            channelSftp.put(new ByteArrayInputStream(outputStream.toByteArray()), diskFilePath.getDiskFilename());
             // 归还连接
             this.jcraftChannelProvider.returnChannel(channelSftp);
             return diskFilePath.getFileId();
@@ -95,7 +95,7 @@ public class ActualFileServiceNfsImpl implements ActualFileService {
             final ChannelSftp channelSftp = this.jcraftChannelProvider.getChannel();
             final DiskFilePathBO diskFile = DiskFilePathBO.createById(id, this.basePath);
             channelSftp.cd(diskFile.getFolderPath());
-            channelSftp.rm(diskFile.getActualFilename());
+            channelSftp.rm(diskFile.getDiskFilename());
             // 归还连接
             this.jcraftChannelProvider.returnChannel(channelSftp);
         } catch (SftpException e) {
@@ -124,7 +124,7 @@ public class ActualFileServiceNfsImpl implements ActualFileService {
             final ChannelSftp channelSftp = this.jcraftChannelProvider.getChannel();
             final DiskFilePathBO diskFile = DiskFilePathBO.createById(id, this.basePath);
             channelSftp.cd(diskFile.getFolderPath());
-            final InputStream inputStream = channelSftp.get(diskFile.getActualFilename());
+            final InputStream inputStream = channelSftp.get(diskFile.getDiskFilename());
             // 归还连接
             this.jcraftChannelProvider.returnChannel(channelSftp);
             return inputStream;
@@ -145,7 +145,7 @@ public class ActualFileServiceNfsImpl implements ActualFileService {
             final ChannelSftp channelSftp = this.jcraftChannelProvider.getChannel();
             final DiskFilePathBO diskFile = DiskFilePathBO.createById(id, this.basePath);
             channelSftp.cd(diskFile.getFolderPath());
-            try (final InputStream inputStream = channelSftp.get(diskFile.getActualFilename())) {
+            try (final InputStream inputStream = channelSftp.get(diskFile.getDiskFilename())) {
                 IOUtils.copy(inputStream, outputStream);
             }
             // 归还连接
