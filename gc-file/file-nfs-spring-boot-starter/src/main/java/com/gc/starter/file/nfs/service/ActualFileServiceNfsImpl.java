@@ -13,7 +13,7 @@ import com.gc.file.common.service.ActualFileService;
 import com.gc.starter.file.nfs.provider.JcraftChannelProvider;
 import com.jcraft.jsch.ChannelSftp;
 import com.jcraft.jsch.SftpException;
-import org.apache.tomcat.util.http.fileupload.IOUtils;
+import org.apache.commons.io.IOUtils;
 import org.springframework.lang.NonNull;
 import org.springframework.util.StringUtils;
 
@@ -118,7 +118,7 @@ public class ActualFileServiceNfsImpl implements ActualFileService {
      * @return 文件流
      */
     @Override
-    public InputStream download(@NonNull String id) throws FileNotFoundException {
+    public InputStream download(@NonNull String id) {
         try {
             // 获取channel
             final ChannelSftp channelSftp = this.jcraftChannelProvider.getChannel();

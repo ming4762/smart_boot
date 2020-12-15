@@ -10,7 +10,6 @@ import org.apache.commons.pool2.impl.DefaultPooledObject;
 import org.apache.commons.pool2.impl.GenericObjectPool;
 
 import java.util.Objects;
-import java.util.Optional;
 
 /**
  * Jcraft channel连接池
@@ -38,9 +37,12 @@ public class ChannelPooledObjectFactory<T extends Channel> implements PooledObje
     }
 
     @Override
-    public void destroyObject(PooledObject<T> pooledObject) {
-        Optional.ofNullable(pooledObject.getObject())
-                .ifPresent(Channel :: disconnect);
+    public void destroyObject(PooledObject<T> pooledObject) throws Exception {
+        T object = pooledObject.getObject();
+        if (Objects.nonNull(object)) {
+            object.getSession().disconnect();
+            object.disconnect();
+        }
     }
 
     @Override

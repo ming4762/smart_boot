@@ -25,7 +25,6 @@ import org.springframework.util.Assert;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
@@ -173,7 +172,7 @@ public class DefaultFileServiceImpl extends BaseServiceImpl<SysFileMapper, SysFi
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public @Nullable SysFilePO deleteFile(@NonNull Long fileId) throws IOException {
+    public @Nullable SysFilePO deleteFile(@NonNull Long fileId) {
         final SysFilePO file = this.getById(fileId);
         if (ObjectUtils.isNotEmpty(file)) {
             // 删除文件信息

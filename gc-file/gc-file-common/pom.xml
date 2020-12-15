@@ -23,6 +23,11 @@
 		</dependency>
 
 		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+		</dependency>
+
+		<dependency>
 			<groupId>com.gc</groupId>
 			<artifactId>gc-jcraft-common</artifactId>
 			<version>${gc-boot.version}</version>
