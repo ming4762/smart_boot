@@ -119,17 +119,20 @@ public class ActualFileServiceNfsImpl implements ActualFileService {
      */
     @Override
     public InputStream download(@NonNull String id) {
-        try {
+        try (final ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
             // 获取channel
             final ChannelSftp channelSftp = this.jcraftChannelProvider.getChannel();
             final DiskFilePathBO diskFile = DiskFilePathBO.createById(id, this.basePath);
             channelSftp.cd(diskFile.getFolderPath());
-            final InputStream inputStream = channelSftp.get(diskFile.getDiskFilename());
+            IOUtils.copy(channelSftp.get(diskFile.getDiskFilename()), outputStream);
+            final ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(outputStream.toByteArray());
             // 归还连接
             this.jcraftChannelProvider.returnChannel(channelSftp);
-            return inputStream;
+            return byteArrayInputStream;
         } catch (SftpException e) {
             throw new SftpExceptionRuntimeException(e);
+        } catch (IOException e) {
+            throw new IORuntimeException(e);
         }
     }
 

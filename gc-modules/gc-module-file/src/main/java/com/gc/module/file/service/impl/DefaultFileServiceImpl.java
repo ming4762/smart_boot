@@ -3,6 +3,7 @@ package com.gc.module.file.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.gc.common.auth.utils.AuthUtils;
 import com.gc.common.base.exception.BaseException;
+import com.gc.common.base.exception.IORuntimeException;
 import com.gc.file.common.exception.SmartFileException;
 import com.gc.file.common.properties.SmartFileProperties;
 import com.gc.file.common.service.ActualFileService;
@@ -25,6 +26,8 @@ import org.springframework.util.Assert;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
@@ -276,6 +279,11 @@ public class DefaultFileServiceImpl extends BaseServiceImpl<SysFileMapper, SysFi
      * @return 文件ID
      */
     private String saveActualFile(SysFileBO file) {
-        return this.getActualFileService(file.getFile().getHandlerType()).save(file.getInputStream(), file.getFile().getFileName());
+        try (InputStream inputStream = file.getInputStream()) {
+            return this.getActualFileService(file.getFile().getHandlerType()).save(inputStream, file.getFile().getFileName());
+        } catch (IOException e) {
+            throw new IORuntimeException(e);
+        }
+
     }
 }
