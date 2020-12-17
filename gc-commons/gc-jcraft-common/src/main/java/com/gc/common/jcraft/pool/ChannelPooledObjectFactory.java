@@ -2,6 +2,7 @@ package com.gc.common.jcraft.pool;
 
 import com.gc.common.jcraft.constants.ChannelTypeConstants;
 import com.jcraft.jsch.Channel;
+import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
 import org.apache.commons.pool2.PooledObject;
 import org.apache.commons.pool2.PooledObjectFactory;
@@ -9,7 +10,6 @@ import org.apache.commons.pool2.impl.DefaultPooledObject;
 import org.apache.commons.pool2.impl.GenericObjectPool;
 
 import java.util.Objects;
-import java.util.Optional;
 
 /**
  * Jcraft channel连接池
@@ -38,8 +38,11 @@ public class ChannelPooledObjectFactory<T extends Channel> implements PooledObje
 
     @Override
     public void destroyObject(PooledObject<T> pooledObject) throws Exception {
-        Optional.ofNullable(pooledObject.getObject())
-                .ifPresent(Channel :: disconnect);
+        T object = pooledObject.getObject();
+        if (Objects.nonNull(object)) {
+            object.getSession().disconnect();
+            object.disconnect();
+        }
     }
 
     @Override
@@ -49,17 +52,26 @@ public class ChannelPooledObjectFactory<T extends Channel> implements PooledObje
     }
 
     @Override
-    public void activateObject(PooledObject<T> pooledObject) throws Exception {
+    public void activateObject(PooledObject<T> pooledObject) throws JSchException {
         final Channel object = pooledObject.getObject();
         if (Objects.nonNull(object) && !object.isConnected()) {
+            // 获取session，并且连接session
+            final Session session = object.getSession();
+            if (!session.isConnected()) {
+                session.connect();
+            }
             object.connect();
         }
     }
 
     @Override
-    public void passivateObject(PooledObject<T> pooledObject) throws Exception {
+    public void passivateObject(PooledObject<T> pooledObject) throws JSchException {
         final Channel object = pooledObject.getObject();
         if (Objects.nonNull(object) && object.isConnected()) {
+            final Session session = object.getSession();
+            if (session.isConnected()) {
+                session.disconnect();
+            }
             object.disconnect();
         }
     }

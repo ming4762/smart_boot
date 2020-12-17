@@ -3,6 +3,7 @@ package com.gc.module.file.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.gc.common.auth.utils.AuthUtils;
 import com.gc.common.base.exception.BaseException;
+import com.gc.common.base.exception.IORuntimeException;
 import com.gc.file.common.exception.SmartFileException;
 import com.gc.file.common.properties.SmartFileProperties;
 import com.gc.file.common.service.ActualFileService;
@@ -20,13 +21,13 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.ApplicationContext;
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
@@ -39,9 +40,8 @@ import java.util.stream.Collectors;
  * @author shizhongming
  * 2020/1/27 7:50 下午
  */
-@Service
 @Slf4j
-public class SysFileServiceImpl extends BaseServiceImpl<SysFileMapper, SysFilePO> implements SysFileService {
+public class DefaultFileServiceImpl extends BaseServiceImpl<SysFileMapper, SysFilePO> implements SysFileService {
 
 
 
@@ -49,8 +49,8 @@ public class SysFileServiceImpl extends BaseServiceImpl<SysFileMapper, SysFilePO
 
     private final SmartFileProperties fileProperties;
 
-    public SysFileServiceImpl(ApplicationContext applicationContext, SmartFileProperties fileProperties) {
-        this.actualFileServiceMap = SysFileServiceImpl.initActualFileService(applicationContext);
+    public DefaultFileServiceImpl(ApplicationContext applicationContext, SmartFileProperties fileProperties) {
+        this.actualFileServiceMap = DefaultFileServiceImpl.initActualFileService(applicationContext);
         this.fileProperties = fileProperties;
     }
 
@@ -91,6 +91,26 @@ public class SysFileServiceImpl extends BaseServiceImpl<SysFileMapper, SysFilePO
     }
 
     /**
+     * 获取相同的file
+     * @param file 比对的文件信息
+     * @return 相同的文件信息，返回null 则不存在相同的文件
+     */
+    @Override
+    public SysFilePO getSameFile(@NonNull SysFilePO file) {
+        // 根据md5判断文件是否存在
+        final List<SysFilePO> md5FileList = this.list(
+                new QueryWrapper<SysFilePO>().lambda()
+                        .eq(SysFilePO :: getMd5, file.getMd5())
+                        .eq(SysFilePO :: getFileName, file.getFileName())
+                        .eq(SysFilePO :: getFileSize, file.getFileSize())
+        );
+        if (md5FileList.isEmpty()) {
+            return null;
+        }
+        return md5FileList.iterator().next();
+    }
+
+    /**
      * 保存文件
      * @param file 文件对象
      * @return 保存的文件信息
@@ -98,28 +118,23 @@ public class SysFileServiceImpl extends BaseServiceImpl<SysFileMapper, SysFilePO
     @Override
     @Transactional(rollbackFor = Exception.class)
     public @NonNull SysFilePO saveFile(@NonNull SysFileBO file) {
-        // 根据md5判断文件是否存在
-        final List<SysFilePO> md5FileList = this.list(
-                new QueryWrapper<SysFilePO>().lambda()
-                        .eq(SysFilePO :: getMd5, file.getFile().getMd5())
-                        .eq(SysFilePO :: getFileSize, file.getFile().getFileSize())
-        );
-        if (md5FileList.isEmpty()) {
-            // 保存文件
-            file.getFile().setDbId(this.saveActualFile(file));
-            try {
-                if (StringUtils.isEmpty(file.getFile().getType())) {
-                    file.getFile().setType(FileTypeConstants.TEMP.name());
-                }
-                this.saveWithUser(file.getFile(), AuthUtils.getCurrentUserId());
-                return file.getFile();
-            } catch (Exception e) {
-                log.error("保存文件信息到数据库发生错误，删除保存的文件");
-                this.getActualFileService(file.getFile().getHandlerType()).delete(file.getFile().getDbId());
-                throw new BaseException(e);
+        // 判断是否存在相同文件
+        SysFilePO sameFile = this.getSameFile(file.getFile());
+        if (Objects.nonNull(sameFile)) {
+            return sameFile;
+        }
+        // 保存文件
+        file.getFile().setDbId(this.saveActualFile(file));
+        try {
+            if (StringUtils.isEmpty(file.getFile().getType())) {
+                file.getFile().setType(FileTypeConstants.TEMP.name());
             }
-        } else {
-            return md5FileList.iterator().next();
+            this.saveWithUser(file.getFile(), AuthUtils.getCurrentUserId());
+            return file.getFile();
+        } catch (Exception e) {
+            log.error("保存文件信息到数据库发生错误，删除保存的文件");
+            this.getActualFileService(file.getFile().getHandlerType()).delete(file.getFile().getDbId());
+            throw new BaseException(e);
         }
     }
 
@@ -160,7 +175,7 @@ public class SysFileServiceImpl extends BaseServiceImpl<SysFileMapper, SysFilePO
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public @Nullable SysFilePO deleteFile(@NonNull Long fileId) throws IOException {
+    public @Nullable SysFilePO deleteFile(@NonNull Long fileId) {
         final SysFilePO file = this.getById(fileId);
         if (ObjectUtils.isNotEmpty(file)) {
             // 删除文件信息
@@ -264,6 +279,11 @@ public class SysFileServiceImpl extends BaseServiceImpl<SysFileMapper, SysFilePO
      * @return 文件ID
      */
     private String saveActualFile(SysFileBO file) {
-        return this.getActualFileService(file.getFile().getHandlerType()).save(file.getInputStream(), file.getFile().getFileName());
+        try (InputStream inputStream = file.getInputStream()) {
+            return this.getActualFileService(file.getFile().getHandlerType()).save(inputStream, file.getFile().getFileName());
+        } catch (IOException e) {
+            throw new IORuntimeException(e);
+        }
+
     }
 }

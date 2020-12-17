@@ -10,7 +10,15 @@ import com.jcraft.jsch.Channel;
  */
 public interface JcraftChannelProvider<T extends Channel> {
 
+    /**
+     * 获取Jcraft通道
+     * @return Jcraft通道
+     */
     T getChannel();
 
+    /**
+     * 归还通道
+     * @param channel 通道
+     */
     void returnChannel(T channel);
 }

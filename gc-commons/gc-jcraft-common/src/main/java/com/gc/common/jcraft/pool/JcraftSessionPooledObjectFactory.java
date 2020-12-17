@@ -32,7 +32,7 @@ public class JcraftSessionPooledObjectFactory implements PooledObjectFactory<Ses
     }
 
     @Override
-    public void destroyObject(PooledObject<Session> pooledObject) throws Exception {
+    public void destroyObject(PooledObject<Session> pooledObject) {
         Optional.ofNullable(pooledObject.getObject())
                 .ifPresent(Session::disconnect);
     }
@@ -52,7 +52,7 @@ public class JcraftSessionPooledObjectFactory implements PooledObjectFactory<Ses
     }
 
     @Override
-    public void passivateObject(PooledObject<Session> pooledObject) throws Exception {
+    public void passivateObject(PooledObject<Session> pooledObject) {
         Session object = pooledObject.getObject();
         if (Objects.nonNull(object) && object.isConnected()) {
             object.disconnect();

@@ -60,6 +60,14 @@ public interface SysFileService extends BaseService<SysFilePO> {
     SysFilePO saveFile(@NonNull MultipartFile multipartFile, String type);
 
     /**
+     * 获取相同的file
+     * @param file 比对的文件信息
+     * @return 相同的文件信息，返回null 则不存在相同的文件
+     */
+    @Nullable
+    SysFilePO getSameFile(@NonNull SysFilePO file);
+
+    /**
      * 删除文件
      *
      * @param fileId 文件ID

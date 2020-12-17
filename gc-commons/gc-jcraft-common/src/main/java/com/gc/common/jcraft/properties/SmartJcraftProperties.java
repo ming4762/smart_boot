@@ -36,4 +36,6 @@ public class SmartJcraftProperties {
     private Integer port = 22;
 
     private String channel = "sftp";
+
+    private String basePath;
 }
