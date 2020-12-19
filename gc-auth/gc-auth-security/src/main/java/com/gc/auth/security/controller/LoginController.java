@@ -45,7 +45,7 @@ public class LoginController {
     /**
      * 登陆接口
      * @param parameter 登录参数
-     * @return
+     * @return 登录信息
      */
     @PostMapping("public/auth/login")
     public Result<LoginResult> login(@RequestBody @Valid UserLoginDTO parameter) {
@@ -55,7 +55,7 @@ public class LoginController {
     /**
      * 移动端登录接口
      * @param parameter 登录参数
-     * @return
+     * @return 登录信息
      */
     @PostMapping("public/auth/mobileLogin")
     public Result<LoginResult> mobileLogin(@RequestBody @Valid UserLoginDTO parameter) {
@@ -64,19 +64,19 @@ public class LoginController {
 
     /**
      * 登出接口
-     * @return
+     * @return 登出结果
      */
     @PostMapping("auth/logout")
-    public Result<Object> logout(HttpServletRequest request) {
+    public Result<Boolean> logout(HttpServletRequest request) {
         this.authService.logout(request);
-        return Result.success(null, "登出成功");
+        return Result.success(true, "登出成功");
     }
 
 
     /**
      * 执行登陆
      * @param parameter 登录参数
-     * @return
+     * @return 登录信息
      */
     private LoginResult doLogin(UserLoginDTO parameter, LoginTypeConstants type) {
         final Authentication authentication = this.authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(parameter.getUsername(), parameter.getPassword()));
