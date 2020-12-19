@@ -7,7 +7,6 @@ import com.gc.auth.security.matcher.ExtensionPathMatcher;
 import com.gc.common.auth.properties.AuthProperties;
 import org.apache.commons.lang3.BooleanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -27,7 +26,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
  */
 @EnableWebSecurity
 @Configuration
-@ConditionalOnMissingBean(WebSecurityConfigurerAdapter.class)
+//@ConditionalOnMissingBean(WebSecurityConfigurerAdapter.class)
 public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final AuthProperties authProperties;
