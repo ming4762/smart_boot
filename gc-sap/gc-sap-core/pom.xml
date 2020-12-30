@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.gc</groupId>
+		<artifactId>gc-sap</artifactId>
+		<version>1.0.3-SNAPSHOT</version>
+	</parent>
+	<artifactId>gc-sap-core</artifactId>
+	<version>${gc-boot.version}</version>
+	<name>gc-sap-core</name>
+	<description>sap-core</description>
+
+	<properties>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>com.gc</groupId>
+			<artifactId>gc-base-common</artifactId>
+			<version>${gc-boot.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.sap.sapjco</groupId>
+			<artifactId>sapjco3</artifactId>
+		</dependency>
+	</dependencies>
+
+
+</project>

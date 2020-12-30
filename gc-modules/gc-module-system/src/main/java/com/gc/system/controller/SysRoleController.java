@@ -1,8 +1,8 @@
 package com.gc.system.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.gc.common.auth.annotation.NonUrlCheck;
-import com.gc.common.auth.utils.AuthUtils;
+import com.gc.auth.core.annotation.NonUrlCheck;
+import com.gc.auth.core.utils.AuthUtils;
 import com.gc.common.base.message.Result;
 import com.gc.starter.crud.controller.BaseController;
 import com.gc.starter.crud.query.PageQueryParameter;

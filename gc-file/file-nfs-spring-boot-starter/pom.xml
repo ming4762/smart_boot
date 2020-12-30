@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>com.gc</groupId>
-		<version>1.0.2-SNAPSHOT</version>
+		<version>1.0.3-SNAPSHOT</version>
 		<artifactId>gc-file</artifactId>
 	</parent>
 	<artifactId>file-nfs-spring-boot-starter</artifactId>

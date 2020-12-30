@@ -1,9 +1,9 @@
 package com.gc.system.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.gc.common.auth.model.AuthUser;
-import com.gc.common.auth.model.Permission;
-import com.gc.common.auth.service.AuthUserService;
+import com.gc.auth.core.model.AuthUser;
+import com.gc.auth.core.model.Permission;
+import com.gc.auth.core.service.AuthUserService;
 import com.gc.system.constants.FunctionTypeConstants;
 import com.gc.system.model.SysRolePO;
 import com.gc.system.model.SysUserPO;

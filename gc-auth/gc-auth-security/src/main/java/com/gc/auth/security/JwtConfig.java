@@ -1,10 +1,10 @@
 package com.gc.auth.security;
 
+import com.gc.auth.core.properties.AuthProperties;
+import com.gc.auth.core.service.AuthCache;
 import com.gc.auth.security.controller.LoginController;
 import com.gc.auth.security.filter.JwtAuthenticationFilter;
 import com.gc.auth.security.service.AuthService;
-import com.gc.common.auth.properties.AuthProperties;
-import com.gc.common.auth.service.AuthCache;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;

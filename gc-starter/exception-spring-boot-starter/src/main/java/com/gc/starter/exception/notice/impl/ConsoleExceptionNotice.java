@@ -1,6 +1,6 @@
 package com.gc.starter.exception.notice.impl;
 
-import com.gc.common.auth.core.RestUserDetails;
+import com.gc.auth.core.data.RestUserDetails;
 import com.gc.starter.exception.notice.ExceptionNotice;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.lang.NonNull;

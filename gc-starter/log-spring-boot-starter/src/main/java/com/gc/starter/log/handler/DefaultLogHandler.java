@@ -1,6 +1,6 @@
 package com.gc.starter.log.handler;
 
-import com.gc.common.auth.utils.AuthUtils;
+import com.gc.auth.core.utils.AuthUtils;
 import com.gc.starter.log.annotation.Log;
 import com.gc.starter.log.model.SysLogPO;
 import com.gc.starter.log.service.SysLogService;

@@ -1,6 +1,6 @@
 package com.gc.starter.exception.handler;
 
-import com.gc.common.auth.core.RestUserDetails;
+import com.gc.auth.core.data.RestUserDetails;
 import com.gc.starter.exception.notice.ExceptionNotice;
 import org.springframework.context.ApplicationContext;
 import org.springframework.scheduling.annotation.Async;

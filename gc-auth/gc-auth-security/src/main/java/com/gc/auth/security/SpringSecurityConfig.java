@@ -1,10 +1,10 @@
 package com.gc.auth.security;
 
+import com.gc.auth.core.properties.AuthProperties;
 import com.gc.auth.security.authentication.RestAuthenticationProvider;
 import com.gc.auth.security.filter.JwtAuthenticationFilter;
 import com.gc.auth.security.handler.*;
 import com.gc.auth.security.matcher.ExtensionPathMatcher;
-import com.gc.common.auth.properties.AuthProperties;
 import org.apache.commons.lang3.BooleanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -100,7 +100,6 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-
         http.cors()
                 .and().csrf().disable().authorizeRequests()
                 // 设置自定义投票器

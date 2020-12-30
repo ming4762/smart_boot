@@ -1,11 +1,11 @@
 package com.gc.auth.security.authentication;
 
+import com.gc.auth.core.annotation.NonUrlCheck;
+import com.gc.auth.core.data.RestUserDetails;
+import com.gc.auth.core.exception.AuthException;
+import com.gc.auth.core.model.Permission;
+import com.gc.auth.core.properties.AuthProperties;
 import com.gc.auth.security.constants.RoleConstants;
-import com.gc.common.auth.annotation.NonUrlCheck;
-import com.gc.common.auth.core.RestUserDetails;
-import com.gc.common.auth.exception.AuthException;
-import com.gc.common.auth.model.Permission;
-import com.gc.common.auth.properties.AuthProperties;
 import com.gc.common.base.http.HttpStatus;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;

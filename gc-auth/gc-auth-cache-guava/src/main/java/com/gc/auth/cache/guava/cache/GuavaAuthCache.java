@@ -1,7 +1,8 @@
 package com.gc.auth.cache.guava.cache;
 
-import com.gc.common.auth.properties.AuthProperties;
-import com.gc.common.auth.service.AuthCache;
+
+import com.gc.auth.core.properties.AuthProperties;
+import com.gc.auth.core.service.AuthCache;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.collect.ImmutableList;

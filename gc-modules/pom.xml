@@ -5,10 +5,10 @@
     <parent>
         <groupId>com.gc</groupId>
         <artifactId>gc-boot</artifactId>
-        <version>1.0.2-SNAPSHOT</version>
+        <version>1.0.3-SNAPSHOT</version>
     </parent>
     <artifactId>gc-modules</artifactId>
-    <version>1.0.2-SNAPSHOT</version>
+    <version>1.0.3-SNAPSHOT</version>
     <name>gc-modules</name>
     <description>模块</description>
 

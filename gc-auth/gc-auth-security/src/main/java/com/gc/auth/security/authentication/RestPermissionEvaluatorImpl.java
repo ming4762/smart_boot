@@ -1,9 +1,9 @@
 package com.gc.auth.security.authentication;
 
+import com.gc.auth.core.model.Permission;
+import com.gc.auth.core.model.RestUserDetailsImpl;
+import com.gc.auth.core.properties.AuthProperties;
 import com.gc.auth.security.constants.RoleConstants;
-import com.gc.common.auth.model.Permission;
-import com.gc.common.auth.model.RestUserDetailsImpl;
-import com.gc.common.auth.properties.AuthProperties;
 import org.apache.commons.lang3.BooleanUtils;
 import org.springframework.security.access.PermissionEvaluator;
 import org.springframework.security.core.Authentication;

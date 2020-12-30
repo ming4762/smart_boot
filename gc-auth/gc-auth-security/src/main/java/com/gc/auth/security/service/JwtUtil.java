@@ -1,11 +1,11 @@
 package com.gc.auth.security.service;
 
-import com.gc.common.auth.core.GcGrantedAuthority;
-import com.gc.common.auth.core.PermissionGrantedAuthority;
-import com.gc.common.auth.core.RoleGrantedAuthority;
-import com.gc.common.auth.exception.AuthException;
-import com.gc.common.auth.model.Permission;
-import com.gc.common.auth.model.RestUserDetailsImpl;
+import com.gc.auth.core.data.GcGrantedAuthority;
+import com.gc.auth.core.data.PermissionGrantedAuthority;
+import com.gc.auth.core.data.RoleGrantedAuthority;
+import com.gc.auth.core.exception.AuthException;
+import com.gc.auth.core.model.Permission;
+import com.gc.auth.core.model.RestUserDetailsImpl;
 import com.gc.common.base.exception.IllegalAccessRuntimeException;
 import com.gc.common.base.exception.InvocationTargetRuntimeException;
 import com.gc.common.base.http.HttpStatus;

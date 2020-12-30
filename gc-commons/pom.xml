@@ -5,17 +5,16 @@
     <parent>
         <artifactId>gc-boot</artifactId>
         <groupId>com.gc</groupId>
-        <version>1.0.2-SNAPSHOT</version>
+        <version>1.0.3-SNAPSHOT</version>
     </parent>
     <artifactId>gc-commons</artifactId>
-    <version>1.0.2-SNAPSHOT</version>
+    <version>1.0.3-SNAPSHOT</version>
     <name>gc-commons</name>
     <description>Demo project for Spring Boot</description>
 
     <packaging>pom</packaging>
 
     <modules>
-        <module>gc-auth-common</module>
         <module>gc-base-common</module>
         <module>gc-cache-common</module>
         <module>gc-commons-txt</module>

@@ -1,6 +1,6 @@
 package com.gc.starter.exception.handler;
 
-import com.gc.common.auth.utils.AuthUtils;
+import com.gc.auth.core.utils.AuthUtils;
 import com.gc.common.base.exception.BaseException;
 import com.gc.common.base.http.HttpStatus;
 import com.gc.common.base.message.Result;

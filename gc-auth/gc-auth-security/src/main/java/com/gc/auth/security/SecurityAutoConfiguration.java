@@ -1,9 +1,9 @@
 package com.gc.auth.security;
 
+import com.gc.auth.core.properties.AuthProperties;
+import com.gc.auth.core.service.AuthUserService;
 import com.gc.auth.security.authentication.DynamicUrlCheckProvider;
 import com.gc.auth.security.service.RestUserDetailsServiceImpl;
-import com.gc.common.auth.properties.AuthProperties;
-import com.gc.common.auth.service.AuthUserService;
 import com.google.common.collect.ImmutableList;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;

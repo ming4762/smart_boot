@@ -1,7 +1,7 @@
 package com.gc.module.file.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.gc.common.auth.utils.AuthUtils;
+import com.gc.auth.core.utils.AuthUtils;
 import com.gc.common.base.exception.BaseException;
 import com.gc.common.base.exception.IORuntimeException;
 import com.gc.file.common.exception.SmartFileException;

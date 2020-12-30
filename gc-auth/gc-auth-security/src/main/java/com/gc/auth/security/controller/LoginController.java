@@ -1,11 +1,11 @@
 package com.gc.auth.security.controller;
 
+import com.gc.auth.core.constants.LoginTypeConstants;
+import com.gc.auth.core.data.RestUserDetails;
+import com.gc.auth.core.model.LoginResult;
+import com.gc.auth.core.model.Permission;
 import com.gc.auth.security.pojo.dto.UserLoginDTO;
 import com.gc.auth.security.service.AuthService;
-import com.gc.common.auth.constants.LoginTypeConstants;
-import com.gc.common.auth.core.RestUserDetails;
-import com.gc.common.auth.model.LoginResult;
-import com.gc.common.auth.model.Permission;
 import com.gc.common.base.message.Result;
 import com.google.common.collect.Sets;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -45,7 +45,7 @@ public class LoginController {
     /**
      * 登陆接口
      * @param parameter 登录参数
-     * @return
+     * @return 登录结果
      */
     @PostMapping("public/auth/login")
     public Result<LoginResult> login(@RequestBody @Valid UserLoginDTO parameter) {
@@ -55,7 +55,7 @@ public class LoginController {
     /**
      * 移动端登录接口
      * @param parameter 登录参数
-     * @return
+     * @return 登录结果
      */
     @PostMapping("public/auth/mobileLogin")
     public Result<LoginResult> mobileLogin(@RequestBody @Valid UserLoginDTO parameter) {
@@ -64,7 +64,7 @@ public class LoginController {
 
     /**
      * 登出接口
-     * @return
+     * @return 登出结果
      */
     @PostMapping("auth/logout")
     public Result<Object> logout(HttpServletRequest request) {
@@ -76,7 +76,7 @@ public class LoginController {
     /**
      * 执行登陆
      * @param parameter 登录参数
-     * @return
+     * @return 登录结果
      */
     private LoginResult doLogin(UserLoginDTO parameter, LoginTypeConstants type) {
         final Authentication authentication = this.authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(parameter.getUsername(), parameter.getPassword()));
@@ -91,7 +91,7 @@ public class LoginController {
                 .roles(userDetails.getRoles())
                 .permissions(
                         Optional.ofNullable(userDetails.getPermissions())
-                        .map(item -> item.stream().map(Permission ::getAuthority).collect(Collectors.toSet()))
+                        .map(item -> item.stream().map(Permission::getAuthority).collect(Collectors.toSet()))
                         .orElse(Sets.newHashSet())
                 )
                 .build();

@@ -1,7 +1,7 @@
 package com.gc.system.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.gc.common.auth.utils.AuthUtils;
+import com.gc.auth.core.utils.AuthUtils;
 import com.gc.common.base.constants.TransactionManagerConstants;
 import com.gc.starter.crud.service.impl.BaseServiceImpl;
 import com.gc.system.mapper.SysRoleMapper;

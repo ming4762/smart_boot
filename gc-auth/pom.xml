@@ -5,10 +5,10 @@
     <parent>
         <groupId>com.gc</groupId>
         <artifactId>gc-boot</artifactId>
-        <version>1.0.2-SNAPSHOT</version>
+        <version>1.0.3-SNAPSHOT</version>
     </parent>
     <artifactId>gc-auth</artifactId>
-    <version>1.0.2-SNAPSHOT</version>
+    <version>1.0.3-SNAPSHOT</version>
     <name>gc-auth</name>
     <description>权限模块</description>
 
@@ -20,16 +20,13 @@
     <modules>
         <module>gc-auth-cache-guava</module>
         <module>gc-auth-cache-redis</module>
+        <module>gc-auth-core</module>
         <module>gc-auth-security</module>
         <module>gc-auth-shiro</module>
     </modules>
 
     <dependencies>
-        <dependency>
-            <groupId>com.gc</groupId>
-            <artifactId>gc-auth-common</artifactId>
-            <version>${gc-boot.version}</version>
-        </dependency>
+
     </dependencies>
 
 

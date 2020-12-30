@@ -1,12 +1,12 @@
 package com.gc.auth.security.filter;
 
+import com.gc.auth.core.exception.AuthException;
+import com.gc.auth.core.model.RestUserDetailsImpl;
+import com.gc.auth.core.properties.AuthProperties;
 import com.gc.auth.security.handler.RestJsonWriter;
 import com.gc.auth.security.matcher.ExtensionPathMatcher;
 import com.gc.auth.security.service.AuthService;
 import com.gc.auth.security.service.JwtUtil;
-import com.gc.common.auth.exception.AuthException;
-import com.gc.common.auth.model.RestUserDetailsImpl;
-import com.gc.common.auth.properties.AuthProperties;
 import com.gc.common.base.http.HttpStatus;
 import com.gc.common.base.message.Result;
 import com.google.common.collect.Sets;
@@ -18,7 +18,6 @@ import org.springframework.security.authentication.InternalAuthenticationService
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
@@ -36,11 +35,6 @@ import java.util.Set;
  */
 @Slf4j
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
-
-    /**
-     * 文件前缀开头
-     */
-    private static final String PREFIX_SUFFIX = "*.";
 
     private final AuthService authService;
 

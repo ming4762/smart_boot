@@ -1,12 +1,12 @@
 package com.gc.auth.security.service;
 
-import com.gc.common.auth.constants.LoginTypeConstants;
-import com.gc.common.auth.core.RestUserDetails;
-import com.gc.common.auth.exception.AuthException;
-import com.gc.common.auth.model.RestUserDetailsImpl;
-import com.gc.common.auth.properties.AuthProperties;
-import com.gc.common.auth.service.AuthCache;
-import com.gc.common.auth.utils.AuthUtils;
+import com.gc.auth.core.constants.LoginTypeConstants;
+import com.gc.auth.core.data.RestUserDetails;
+import com.gc.auth.core.exception.AuthException;
+import com.gc.auth.core.model.RestUserDetailsImpl;
+import com.gc.auth.core.properties.AuthProperties;
+import com.gc.auth.core.service.AuthCache;
+import com.gc.auth.core.utils.AuthUtils;
 import com.gc.common.base.http.HttpStatus;
 import com.gc.common.base.utils.HttpServletUtils;
 import org.apache.commons.lang3.ObjectUtils;

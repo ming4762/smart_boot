@@ -1,11 +1,11 @@
 package com.gc.auth.security.service;
 
-import com.gc.common.auth.core.GcGrantedAuthority;
-import com.gc.common.auth.core.PermissionGrantedAuthority;
-import com.gc.common.auth.core.RoleGrantedAuthority;
-import com.gc.common.auth.model.AuthUser;
-import com.gc.common.auth.model.RestUserDetailsImpl;
-import com.gc.common.auth.service.AuthUserService;
+import com.gc.auth.core.data.GcGrantedAuthority;
+import com.gc.auth.core.data.PermissionGrantedAuthority;
+import com.gc.auth.core.data.RoleGrantedAuthority;
+import com.gc.auth.core.model.AuthUser;
+import com.gc.auth.core.model.RestUserDetailsImpl;
+import com.gc.auth.core.service.AuthUserService;
 import com.google.common.collect.Sets;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.lang.NonNull;

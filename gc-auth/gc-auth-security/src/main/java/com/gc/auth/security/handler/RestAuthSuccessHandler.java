@@ -1,7 +1,7 @@
 package com.gc.auth.security.handler;
 
-import com.gc.common.auth.model.RestUserDetailsImpl;
-import com.gc.common.auth.properties.AuthProperties;
+import com.gc.auth.core.model.RestUserDetailsImpl;
+import com.gc.auth.core.properties.AuthProperties;
 import com.gc.common.base.message.Result;
 import com.google.common.collect.ImmutableMap;
 import org.apache.commons.lang3.StringUtils;

@@ -1,6 +1,7 @@
 package com.gc.starter.exception.notice;
 
-import com.gc.common.auth.core.RestUserDetails;
+
+import com.gc.auth.core.data.RestUserDetails;
 
 import javax.servlet.http.HttpServletRequest;
 

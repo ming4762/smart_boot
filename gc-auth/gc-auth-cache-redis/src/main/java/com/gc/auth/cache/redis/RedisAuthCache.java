@@ -1,7 +1,7 @@
 package com.gc.auth.cache.redis;
 
+import com.gc.auth.core.service.AuthCache;
 import com.gc.cache.service.CacheService;
-import com.gc.common.auth.service.AuthCache;
 import com.google.common.collect.Sets;
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
