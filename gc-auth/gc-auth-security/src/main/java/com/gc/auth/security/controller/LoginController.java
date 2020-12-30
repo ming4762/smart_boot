@@ -67,9 +67,9 @@ public class LoginController {
      * @return 登出结果
      */
     @PostMapping("auth/logout")
-    public Result<Object> logout(HttpServletRequest request) {
+    public Result<Boolean> logout(HttpServletRequest request) {
         this.authService.logout(request);
-        return Result.success(null, "登出成功");
+        return Result.success(true, "登出成功");
     }
 
 
