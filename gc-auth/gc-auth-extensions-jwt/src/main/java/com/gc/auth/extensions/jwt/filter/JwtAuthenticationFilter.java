@@ -1,12 +1,12 @@
-package com.gc.auth.security.filter;
+package com.gc.auth.extensions.jwt.filter;
 
 import com.gc.auth.core.exception.AuthException;
+import com.gc.auth.core.matcher.ExtensionPathMatcher;
 import com.gc.auth.core.model.RestUserDetailsImpl;
 import com.gc.auth.core.properties.AuthProperties;
-import com.gc.auth.security.handler.RestJsonWriter;
-import com.gc.auth.security.matcher.ExtensionPathMatcher;
-import com.gc.auth.security.service.AuthService;
-import com.gc.auth.security.service.JwtUtil;
+import com.gc.auth.core.utils.RestJsonWriter;
+import com.gc.auth.extensions.jwt.service.JwtService;
+import com.gc.auth.extensions.jwt.utils.JwtUtil;
 import com.gc.common.base.http.HttpStatus;
 import com.gc.common.base.message.Result;
 import com.google.common.collect.Sets;
@@ -36,12 +36,12 @@ import java.util.Set;
 @Slf4j
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-    private final AuthService authService;
+    private final JwtService jwtService;
 
     private final AuthProperties authProperties;
 
-    public JwtAuthenticationFilter(AuthService authService, AuthProperties authProperties) {
-        this.authService = authService;
+    public JwtAuthenticationFilter(JwtService authService, AuthProperties authProperties) {
+        this.jwtService = authService;
         this.authProperties = authProperties;
     }
 
@@ -54,7 +54,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 String jwt = JwtUtil.getJwt(request);
                 if (StringUtils.isNotEmpty(jwt)) {
                     // 刷新jwt的过期时间
-                    RestUserDetailsImpl user = this.authService.refreshJwt(jwt);
+                    RestUserDetailsImpl user = this.jwtService.refreshJwt(jwt);
                     UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
                     authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                     SecurityContextHolder.getContext()

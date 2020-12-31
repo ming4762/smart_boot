@@ -1,4 +1,4 @@
-package com.gc.auth.security.matcher;
+package com.gc.auth.core.matcher;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;

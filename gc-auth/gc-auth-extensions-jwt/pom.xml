@@ -7,16 +7,15 @@
 		<artifactId>gc-auth</artifactId>
 		<version>1.0.3-SNAPSHOT</version>
 	</parent>
-	<artifactId>gc-auth-security</artifactId>
-	<version>${gc-boot.version}</version>
-	<name>gc-auth-security</name>
-	<description>spring security 安全框架</description>
+	<artifactId>gc-auth-extensions-jwt</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>gc-auth-extensions-jwt</name>
+	<description>JWT扩展模块</description>
 
 	<properties>
 	</properties>
 
 	<dependencies>
-
 		<dependency>
 			<groupId>com.gc</groupId>
 			<artifactId>gc-auth-core</artifactId>
@@ -24,24 +23,15 @@
 		</dependency>
 
 		<dependency>
-			<groupId>com.gc</groupId>
-			<artifactId>gc-i18n-common</artifactId>
-			<version>${gc-boot.version}</version>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt</artifactId>
 		</dependency>
 
+		<!--   认证模块	-->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-security</artifactId>
 		</dependency>
-
-		<!--引入web支持-->
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-web</artifactId>
-		</dependency>
-
-
-
 	</dependencies>
 
 

@@ -30,9 +30,6 @@ public class AuthService {
     private final AuthCache<String, Object> authCache;
 
 
-    private static final String TOKE_KEY_PREFIX = "gc:session:user";
-
-    private static final String DATA_KEY_PREFIX = "gc:session:attribute";
 
     public AuthService(AuthProperties authProperties, AuthCache<String, Object> authCache) {
         this.authProperties = authProperties;

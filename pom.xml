@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>com.gc</groupId>
 		<artifactId>gc-boot-dependencies</artifactId>
-		<version>0.0.3-RELEASE</version>
+		<version>0.0.4-RELEASE</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<artifactId>gc-boot</artifactId>

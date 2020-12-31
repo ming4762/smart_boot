@@ -1,4 +1,4 @@
-package com.gc.auth.security.service;
+package com.gc.auth.extensions.jwt.utils;
 
 import com.gc.auth.core.data.GcGrantedAuthority;
 import com.gc.auth.core.data.PermissionGrantedAuthority;
@@ -45,7 +45,7 @@ public class JwtUtil {
     private static final String PERMISSION_KEY = "permission";
 
     static {
-        ConvertUtils.register(new DateConverter(null), java.util.Date.class);
+        ConvertUtils.register(new DateConverter(null), Date.class);
     }
 
     /**
@@ -83,9 +83,9 @@ public class JwtUtil {
 
     /**
      * 获取用户名
-     * @param jwt
-     * @param key
-     * @return
+     * @param jwt JWT
+     * @param key key
+     * @return 用户名
      */
     public static String getUsername(String jwt, String key) {
         return parseJwt(jwt, key).getSubject();
@@ -93,9 +93,9 @@ public class JwtUtil {
 
     /**
      * 获取用户信息
-     * @param jwt
-     * @param key
-     * @return
+     * @param jwt jwt
+     * @param key key
+     * @return 用户信息
      */
     @SuppressWarnings("unchecked")
     public static RestUserDetailsImpl getUser(String jwt, String key) {
@@ -131,8 +131,8 @@ public class JwtUtil {
 
     /**
      * 获取jwt
-     * @param request
-     * @return
+     * @param request 请求体
+     * @return JWT
      */
     @Nullable
     public static String getJwt(HttpServletRequest request) {

@@ -1,4 +1,4 @@
-package com.gc.auth.security.handler;
+package com.gc.auth.core.utils;
 
 import com.gc.common.base.message.Result;
 import com.gc.common.base.utils.JsonUtils;
