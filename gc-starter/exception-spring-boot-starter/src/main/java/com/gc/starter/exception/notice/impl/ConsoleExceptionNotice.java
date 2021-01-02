@@ -17,7 +17,7 @@ import java.util.Optional;
 public class ConsoleExceptionNotice implements ExceptionNotice {
     @Override
     public void notice(@NonNull Exception e, RestUserDetails user, HttpServletRequest request) {
-        log.info("系统发生异常\n异常信息：{}\n当前用户：{}", e.getMessage(), Optional.ofNullable(user).map(RestUserDetails::getRealname).orElse("未登录"));
+        log.info("系统发生异常\n异常信息：{}\n当前用户：{}", e.getMessage(), Optional.ofNullable(user).map(RestUserDetails::getRealName).orElse("未登录"));
         log.error("错误信息", e);
     }
 }

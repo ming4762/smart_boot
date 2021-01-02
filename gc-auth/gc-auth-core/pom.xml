@@ -27,6 +27,12 @@
 		</dependency>
 
 		<dependency>
+			<groupId>com.gc</groupId>
+			<artifactId>gc-i18n-common</artifactId>
+			<version>${gc-boot.version}</version>
+		</dependency>
+
+		<dependency>
 			<groupId>com.google.guava</groupId>
 			<artifactId>guava</artifactId>
 		</dependency>

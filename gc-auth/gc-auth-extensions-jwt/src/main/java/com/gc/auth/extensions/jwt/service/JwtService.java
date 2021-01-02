@@ -1,12 +1,19 @@
 package com.gc.auth.extensions.jwt.service;
 
+import com.gc.auth.core.constants.LoginTypeConstants;
+import com.gc.auth.core.data.RestUserDetails;
 import com.gc.auth.core.exception.AuthException;
+import com.gc.auth.core.model.LoginParameter;
 import com.gc.auth.core.model.RestUserDetailsImpl;
+import com.gc.auth.core.properties.AuthProperties;
 import com.gc.auth.core.service.AuthCache;
 import com.gc.auth.extensions.jwt.utils.JwtUtil;
 import com.gc.common.base.http.HttpStatus;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.lang.NonNull;
+import org.springframework.security.core.Authentication;
+
+import java.util.Objects;
 
 /**
  * JWT服务层
@@ -20,13 +27,30 @@ public class JwtService {
 
     private static final String DATA_KEY_PREFIX = "gc:session:attribute";
 
-    private final String jwtKey;
 
     private final AuthCache<String, Object> authCache;
 
-    public JwtService(String jwtKey, AuthCache<String, Object> authCache) {
-        this.jwtKey = jwtKey;
+    private final AuthProperties authProperties;
+
+    public JwtService(AuthProperties authProperties, AuthCache<String, Object> authCache) {
         this.authCache = authCache;
+        this.authProperties = authProperties;
+    }
+
+    public String createJwt(Authentication authentication, LoginParameter parameter) {
+        final RestUserDetails userDetails = (RestUserDetails) authentication.getPrincipal();
+        // 创建jwt
+        final String jwt = JwtUtil.createJwt(authentication, this.authProperties.getJwtKey());
+        // 获取有效期
+        long timeout = authProperties.getSession().getTimeout().getGlobal();
+        if (Objects.equals(parameter.getLoginType(), LoginTypeConstants.MOBILE)) {
+            timeout = authProperties.getSession().getTimeout().getMobile();
+        } else if (Objects.equals(parameter.getLoginType(), LoginTypeConstants.REMEMBER)) {
+            timeout = authProperties.getSession().getTimeout().getRemember();
+        }
+        // 保存jwt到cache中
+        this.authCache.put(this.getTokenKey(userDetails.getUsername(), jwt), timeout, timeout);
+        return jwt;
     }
 
 
@@ -36,7 +60,7 @@ public class JwtService {
      */
     public RestUserDetailsImpl refreshJwt(String jwt) {
         // 解析jwt
-        RestUserDetailsImpl user = JwtUtil.getUser(jwt, this.jwtKey);
+        RestUserDetailsImpl user = JwtUtil.getUser(jwt, this.authProperties.getJwtKey());
 
         String jwtKey = this.getTokenKey(user.getUsername(), jwt);
 

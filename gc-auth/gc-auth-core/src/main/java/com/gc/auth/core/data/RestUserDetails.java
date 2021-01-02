@@ -22,7 +22,7 @@ public interface RestUserDetails extends UserDetails {
      * 获取用户姓名
      * @return 姓名
      */
-    String getRealname();
+    String getRealName();
 
     /**
      * 获取角色
@@ -37,4 +37,16 @@ public interface RestUserDetails extends UserDetails {
      */
     @NonNull
     Set<Permission> getPermissions();
+
+    /**
+     * 设置token
+     * @param token token
+     */
+    void setToken(String token);
+
+    /**
+     * 获取token
+     * @return
+     */
+    String getToken();
 }

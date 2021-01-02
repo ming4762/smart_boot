@@ -35,7 +35,10 @@ public class RestUserDetailsImpl implements RestUserDetails, Serializable {
     private String password;
 
     @Getter
-    private String realname;
+    private String realName;
+
+    @Getter
+    private String token;
 
     private Set<GcGrantedAuthority> authorities;
 
@@ -76,6 +79,17 @@ public class RestUserDetailsImpl implements RestUserDetails, Serializable {
                 .filter(GcGrantedAuthority :: isPermission)
                 .map(item -> ((PermissionGrantedAuthority)item).getPermission())
                 .collect(Collectors.toSet());
+    }
+
+    @Override
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+    @Override
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    public String getToken() {
+        return this.token;
     }
 
     @Override

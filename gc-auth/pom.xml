@@ -23,6 +23,7 @@
         <module>gc-auth-core</module>
         <module>gc-auth-extensions-jwt</module>
         <module>gc-auth-security</module>
+        <module>gc-auth-security2</module>
         <module>gc-auth-shiro</module>
     </modules>
 

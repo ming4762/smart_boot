@@ -1,4 +1,4 @@
-package com.gc.auth.security.service;
+package com.gc.auth.security2.service;
 
 import com.gc.auth.core.data.GcGrantedAuthority;
 import com.gc.auth.core.data.PermissionGrantedAuthority;
@@ -17,14 +17,15 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
- * @author jackson
+ * 默认的UserDetailsService
+ * @author shizhongming
  * 2020/1/23 7:34 下午
  */
-public class RestUserDetailsServiceImpl implements UserDetailsService{
+public class DefaultUserDetailsServiceImpl implements UserDetailsService{
 
     private final AuthUserService userService;
 
-    public RestUserDetailsServiceImpl(AuthUserService userService) {
+    public DefaultUserDetailsServiceImpl(AuthUserService userService) {
         this.userService = userService;
     }
 
@@ -62,7 +63,7 @@ public class RestUserDetailsServiceImpl implements UserDetailsService{
     protected static RestUserDetailsImpl createByUser(@NonNull AuthUser user) {
         final RestUserDetailsImpl restUserDetails = new RestUserDetailsImpl();
         restUserDetails.setUserId(user.getUserId());
-        restUserDetails.setRealname(user.getRealname());
+        restUserDetails.setRealName(user.getRealname());
         restUserDetails.setUsername(user.getUsername());
         restUserDetails.setPassword(user.getPassword());
         return restUserDetails;

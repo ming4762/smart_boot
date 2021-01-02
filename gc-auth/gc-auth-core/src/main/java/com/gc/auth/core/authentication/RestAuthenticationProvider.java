@@ -1,4 +1,4 @@
-package com.gc.auth.security.authentication;
+package com.gc.auth.core.authentication;
 
 import com.gc.common.i18n.utils.I18nUtils;
 import org.apache.commons.lang3.ObjectUtils;
@@ -8,14 +8,12 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.authentication.dao.AbstractUserDetailsAuthenticationProvider;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.stereotype.Component;
 
 /**
  * 登录管理
- * @author jackson
+ * @author shizhongming
  * 2020/1/23 8:17 下午
  */
-@Component
 public class RestAuthenticationProvider extends AbstractUserDetailsAuthenticationProvider {
 
     private static final String USERNAME_PASSWORD_NULL = "用户名密码不能为空";

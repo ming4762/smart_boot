@@ -1,14 +1,12 @@
 package com.gc.auth.extensions.jwt.filter;
 
-import com.gc.auth.core.exception.AuthException;
+import com.gc.auth.core.data.RestUserDetails;
 import com.gc.auth.core.matcher.ExtensionPathMatcher;
-import com.gc.auth.core.model.RestUserDetailsImpl;
 import com.gc.auth.core.properties.AuthProperties;
-import com.gc.auth.core.utils.RestJsonWriter;
+import com.gc.auth.extensions.jwt.context.JwtContext;
 import com.gc.auth.extensions.jwt.service.JwtService;
 import com.gc.auth.extensions.jwt.utils.JwtUtil;
 import com.gc.common.base.http.HttpStatus;
-import com.gc.common.base.message.Result;
 import com.google.common.collect.Sets;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -38,40 +36,43 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtService jwtService;
 
-    private final AuthProperties authProperties;
+    private final JwtContext jwtContext;
 
-    public JwtAuthenticationFilter(JwtService authService, AuthProperties authProperties) {
+    public JwtAuthenticationFilter(JwtService authService, JwtContext jwtContext) {
         this.jwtService = authService;
-        this.authProperties = authProperties;
+        this.jwtContext = jwtContext;
     }
 
     @Override
     protected void doFilterInternal(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull FilterChain filterChain) throws ServletException, IOException {
-        if (Objects.equals(this.authProperties.getDevelopment(), Boolean.TRUE) || checkIgnores(request)) {
-            filterChain.doFilter(request, response);
-        } else {
-            try {
-                String jwt = JwtUtil.getJwt(request);
-                if (StringUtils.isNotEmpty(jwt)) {
-                    // 刷新jwt的过期时间
-                    RestUserDetailsImpl user = this.jwtService.refreshJwt(jwt);
-                    UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
-                    authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                    SecurityContextHolder.getContext()
-                            .setAuthentication(authentication);
-                    filterChain.doFilter(request, response);
-                } else {
-                    RestJsonWriter.writeJson(response, Result.failure(HttpStatus.UNAUTHORIZED.getCode(), "未登录"));
-                }
-            } catch (AuthException e) {
-                log.error(e.getMessage(), e.getE());
-                RestJsonWriter.writeJson(response, Result.failure(e.getCode(), e.getMessage()));
-            } catch (InternalAuthenticationServiceException e) {
-                log.error(e.getMessage(), e);
-                RestJsonWriter.writeJson(response, Result.failure(HttpStatus.UNAUTHORIZED.getCode(), e.getMessage()));
-            }
-
+        String jwt = JwtUtil.getJwt(request);
+        if (StringUtils.isBlank(jwt)) {
+            throw new InternalAuthenticationServiceException(HttpStatus.UNAUTHORIZED.getMessage());
         }
+        // 刷新jwt的过期时间
+        RestUserDetails user = this.jwtService.refreshJwt(jwt);
+        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
+        authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+        SecurityContextHolder.getContext()
+                .setAuthentication(authentication);
+        filterChain.doFilter(request, response);
+//        try {
+//            if (StringUtils.isNotEmpty(jwt)) {
+//            } else {
+//                RestJsonWriter.writeJson(response, Result.failure(HttpStatus.UNAUTHORIZED.getCode(), "未登录"));
+//            }
+//        } catch (AuthException e) {
+//            log.error(e.getMessage(), e.getE());
+//            RestJsonWriter.writeJson(response, Result.failure(e.getCode(), e.getMessage()));
+//        } catch (InternalAuthenticationServiceException e) {
+//            log.error(e.getMessage(), e);
+//            RestJsonWriter.writeJson(response, Result.failure(HttpStatus.UNAUTHORIZED.getCode(), e.getMessage()));
+//        }
+    }
+
+    @Override
+    protected boolean shouldNotFilter(@NonNull HttpServletRequest request) {
+        return Objects.equals(this.jwtContext.getAuthProperties().getDevelopment(), Boolean.TRUE) || checkIgnores(request);
     }
 
     /**
@@ -81,14 +82,15 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
      * @return true - 忽略，false - 不忽略
      */
     private boolean checkIgnores(HttpServletRequest request) {
+        final AuthProperties authProperties = this.jwtContext.getAuthProperties();
         String method = request.getMethod();
         HttpMethod httpMethod = HttpMethod.resolve(method);
         if (Objects.isNull(httpMethod)) {
             httpMethod = HttpMethod.GET;
         }
-
         Set<String> ignores = Sets.newHashSet();
-
+        // 添加登录地址, TODO:可以优化
+        ignores.add(JwtLoginFilter.getLoginUrl(this.jwtContext));
         switch (httpMethod) {
             case GET:
                 ignores.addAll(authProperties.getIgnores()
@@ -128,7 +130,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         ignores.addAll(authProperties.getIgnores()
                 .getPattern());
-
         if (!ignores.isEmpty()) {
             for (String ignore : ignores) {
                 ExtensionPathMatcher extensionPathMatcher = new ExtensionPathMatcher(httpMethod, ignore);

@@ -1,5 +1,6 @@
 package com.gc.auth.extensions.jwt.context;
 
+import com.gc.auth.core.properties.AuthProperties;
 import lombok.*;
 
 /**
@@ -17,4 +18,6 @@ public class JwtContext {
     private String loginUrl;
 
     private String logoutUrl;
+
+    private AuthProperties authProperties;
 }

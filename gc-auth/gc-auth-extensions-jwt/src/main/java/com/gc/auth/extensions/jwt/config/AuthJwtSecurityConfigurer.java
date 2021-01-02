@@ -1,15 +1,27 @@
 package com.gc.auth.extensions.jwt.config;
 
+import com.gc.auth.core.handler.AuthHandlerBuilder;
 import com.gc.auth.core.properties.AuthProperties;
 import com.gc.auth.core.service.AuthCache;
 import com.gc.auth.extensions.jwt.context.JwtContext;
 import com.gc.auth.extensions.jwt.filter.JwtAuthenticationFilter;
+import com.gc.auth.extensions.jwt.filter.JwtLoginFilter;
 import com.gc.auth.extensions.jwt.service.JwtService;
-import lombok.Getter;
+import com.google.common.collect.Lists;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.config.annotation.ObjectPostProcessor;
 import org.springframework.security.config.annotation.SecurityConfigurerAdapter;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.DefaultSecurityFilterChain;
+import org.springframework.security.web.FilterChainProxy;
+import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.util.Assert;
+
+import java.util.List;
+import java.util.Optional;
 
 /**
  * JWT配置类
@@ -21,7 +33,28 @@ public class AuthJwtSecurityConfigurer extends SecurityConfigurerAdapter<Default
 
     private final ServiceProvider serviceProvider = new ServiceProvider();
 
+    private JwtService jwtService;
+
     private JwtContext jwtContext;
+
+    private AuthHandlerBuilder authHandlerBuilder;
+
+    private final ObjectPostProcessor<Object> objectPostProcessor = new ObjectPostProcessor<Object>() {
+        @Override
+        public <O> O postProcess(O object) {
+            return object;
+        }
+    };
+
+    private AuthJwtSecurityConfigurer() {}
+
+    /**
+     * jwt 初始化
+     * @return jwt
+     */
+    public static AuthJwtSecurityConfigurer jwt() {
+        return new AuthJwtSecurityConfigurer();
+    }
 
     /**
      * 初始化函数
@@ -31,14 +64,46 @@ public class AuthJwtSecurityConfigurer extends SecurityConfigurerAdapter<Default
     @Override
     public void init(HttpSecurity builder) throws Exception {
         Assert.notNull(this.serviceProvider.authProperties, "properties is null, please init properties");
+        Assert.notNull(this.serviceProvider.authCache, "auth cache is null, please init it");
         // 创建上下文
         this.jwtContext = this.createJwtContext();
-        // 创建JWT服务
-        final JwtService jwtService = new JwtService(this.serviceProvider.authProperties.getJwtKey(), this.serviceProvider.authCache);
-        // 创建JWT认证Filter
-        final JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(jwtService, this.serviceProvider.authProperties);
+        this.jwtService = new JwtService(this.serviceProvider.authProperties, this.serviceProvider.authCache);
+        this.authHandlerBuilder = Optional.ofNullable(this.serviceProvider.authHandlerBuilder).orElse(new AuthHandlerBuilder(this.serviceProvider.authProperties));
+        // 构建
+        builder
+                .formLogin().disable()
+                .addFilterAfter(this.createJwtFilterChainProxy(), BasicAuthenticationFilter.class);
+
+    }
+
+    /**
+     * 创建jwt 拦截器链
+     * @return 拦截器链
+     * @throws Exception Exception
+     */
+    private FilterChainProxy createJwtFilterChainProxy() throws Exception {
+        final List<SecurityFilterChain> chains = Lists.newArrayList();
         // 创建登录过滤器
-        super.init(builder);
+        final JwtLoginFilter jwtLoginFilter = this.jwtLoginFilter();
+        chains.add(new DefaultSecurityFilterChain(new AntPathRequestMatcher(JwtLoginFilter.getLoginUrl(this.jwtContext)), jwtLoginFilter));
+
+        // 创建JWT认证Filter
+        final JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(this.jwtService, this.jwtContext);
+        chains.add(new DefaultSecurityFilterChain(new AntPathRequestMatcher("/**"), jwtAuthenticationFilter));
+
+        // TODO：创建登出拦截器
+
+        return new FilterChainProxy(chains);
+    }
+
+    private JwtLoginFilter jwtLoginFilter() throws Exception {
+        final JwtLoginFilter jwtLoginFilter = new JwtLoginFilter(this.jwtContext, this.jwtService);
+        AuthenticationManagerBuilder authenticationManagerBuilder = new AuthenticationManagerBuilder(objectPostProcessor);
+        authenticationManagerBuilder.authenticationProvider(this.serviceProvider.authenticationProvider);
+        jwtLoginFilter.setAuthenticationManager(authenticationManagerBuilder.build());
+        // 设置登录成功handler
+        jwtLoginFilter.setAuthenticationSuccessHandler(this.authHandlerBuilder.getAuthenticationSuccessHandler());
+        return jwtLoginFilter;
     }
 
     /**
@@ -57,15 +122,14 @@ public class AuthJwtSecurityConfigurer extends SecurityConfigurerAdapter<Default
         return JwtContext.builder()
                 .loginUrl(this.serviceProvider.loginUrl)
                 .logoutUrl(this.serviceProvider.logoutUrl)
+                .authProperties(this.serviceProvider.authProperties)
                 .build();
     }
-
 
     /**
      * 服务配置类
      */
-    @Getter
-    public static class ServiceProvider {
+    public class ServiceProvider {
         private AuthProperties authProperties;
 
         private AuthCache<String, Object> authCache;
@@ -73,6 +137,24 @@ public class AuthJwtSecurityConfigurer extends SecurityConfigurerAdapter<Default
         private String loginUrl;
 
         private String logoutUrl;
+
+        private AuthHandlerBuilder authHandlerBuilder;
+
+        private AuthenticationProvider authenticationProvider;
+
+        public AuthJwtSecurityConfigurer and() {
+            return AuthJwtSecurityConfigurer.this;
+        }
+
+        public ServiceProvider handlerBuilder(AuthHandlerBuilder handlerBuilder) {
+            this.authHandlerBuilder = handlerBuilder;
+            return this;
+        }
+
+        public ServiceProvider authenticationProvider(AuthenticationProvider authenticationProvider) {
+            this.authenticationProvider = authenticationProvider;
+            return this;
+        }
 
         public ServiceProvider properties(AuthProperties authProperties) {
             this.authProperties = authProperties;

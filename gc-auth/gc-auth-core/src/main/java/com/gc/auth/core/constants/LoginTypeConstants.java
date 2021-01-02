@@ -12,5 +12,7 @@ public enum LoginTypeConstants {
     /**
      * 移动端
      */
-    MOBILE
+    MOBILE,
+
+    REMEMBER
 }
