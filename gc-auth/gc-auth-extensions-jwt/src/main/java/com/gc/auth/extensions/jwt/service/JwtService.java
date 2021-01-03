@@ -7,12 +7,17 @@ import com.gc.auth.core.model.LoginParameter;
 import com.gc.auth.core.model.RestUserDetailsImpl;
 import com.gc.auth.core.properties.AuthProperties;
 import com.gc.auth.core.service.AuthCache;
+import com.gc.auth.core.utils.AuthUtils;
 import com.gc.auth.extensions.jwt.utils.JwtUtil;
 import com.gc.common.base.http.HttpStatus;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.lang.NonNull;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.web.authentication.logout.LogoutHandler;
+import org.springframework.util.Assert;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.Objects;
 
 /**
@@ -21,7 +26,7 @@ import java.util.Objects;
  * 2020/12/31 15:43
  * @since 1.0
  */
-public class JwtService {
+public class JwtService implements LogoutHandler {
 
     private static final String TOKE_KEY_PREFIX = "gc:session:user";
 
@@ -89,5 +94,21 @@ public class JwtService {
 
     public String getAttributeKey(@NonNull String jwt) {
         return String.format("%s:%s", DATA_KEY_PREFIX, jwt);
+    }
+
+    /**
+     * 执行登出操作
+     * @param request request
+     * @param response response
+     * @param authentication authentication
+     */
+    @Override
+    public void logout(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
+        String jwt = JwtUtil.getJwt(request);
+        final RestUserDetails user = AuthUtils.getCurrentUser();
+        Assert.notNull(user, "系统发生未知异常：未找到当前用户");
+        Assert.notNull(jwt, "系统发生未知异常，未找到token");
+        this.authCache.remove(this.getTokenKey(user.getUsername(), jwt));
+        this.authCache.remove(this.getAttributeKey(jwt));
     }
 }

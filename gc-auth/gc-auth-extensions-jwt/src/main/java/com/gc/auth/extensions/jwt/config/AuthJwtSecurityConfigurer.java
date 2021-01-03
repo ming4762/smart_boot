@@ -6,6 +6,7 @@ import com.gc.auth.core.service.AuthCache;
 import com.gc.auth.extensions.jwt.context.JwtContext;
 import com.gc.auth.extensions.jwt.filter.JwtAuthenticationFilter;
 import com.gc.auth.extensions.jwt.filter.JwtLoginFilter;
+import com.gc.auth.extensions.jwt.filter.JwtLogoutFilter;
 import com.gc.auth.extensions.jwt.service.JwtService;
 import com.google.common.collect.Lists;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -16,6 +17,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.DefaultSecurityFilterChain;
 import org.springframework.security.web.FilterChainProxy;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.logout.LogoutHandler;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.util.Assert;
@@ -68,7 +70,13 @@ public class AuthJwtSecurityConfigurer extends SecurityConfigurerAdapter<Default
         // 创建上下文
         this.jwtContext = this.createJwtContext();
         this.jwtService = new JwtService(this.serviceProvider.authProperties, this.serviceProvider.authCache);
-        this.authHandlerBuilder = Optional.ofNullable(this.serviceProvider.authHandlerBuilder).orElse(new AuthHandlerBuilder(this.serviceProvider.authProperties));
+        this.authHandlerBuilder = Optional.ofNullable(this.serviceProvider.authHandlerBuilder).orElseGet(() -> {
+            final AuthHandlerBuilder handlerBuilder = new AuthHandlerBuilder(this.serviceProvider.authProperties);
+            // 设置登出执行器
+            handlerBuilder.logoutHandlers(Lists.newArrayList(this.jwtService));
+            return handlerBuilder;
+        });
+        // 设置默认的
         // 构建
         builder
                 .formLogin().disable()
@@ -87,17 +95,24 @@ public class AuthJwtSecurityConfigurer extends SecurityConfigurerAdapter<Default
         final JwtLoginFilter jwtLoginFilter = this.jwtLoginFilter();
         chains.add(new DefaultSecurityFilterChain(new AntPathRequestMatcher(JwtLoginFilter.getLoginUrl(this.jwtContext)), jwtLoginFilter));
 
+        // 创建logout过滤器
+        chains.add(new DefaultSecurityFilterChain(new AntPathRequestMatcher(this.getLogoutUrl()), this.jwtLogoutFilter()));
+
         // 创建JWT认证Filter
         final JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(this.jwtService, this.jwtContext);
         chains.add(new DefaultSecurityFilterChain(new AntPathRequestMatcher("/**"), jwtAuthenticationFilter));
 
-        // TODO：创建登出拦截器
-
         return new FilterChainProxy(chains);
     }
 
+    /**
+     * 创建登录过滤器
+     * @return 登录过滤器
+     * @throws Exception Exception
+     */
     private JwtLoginFilter jwtLoginFilter() throws Exception {
         final JwtLoginFilter jwtLoginFilter = new JwtLoginFilter(this.jwtContext, this.jwtService);
+        jwtLoginFilter.setFilterProcessesUrl(JwtLoginFilter.getLoginUrl(this.jwtContext));
         AuthenticationManagerBuilder authenticationManagerBuilder = new AuthenticationManagerBuilder(objectPostProcessor);
         authenticationManagerBuilder.authenticationProvider(this.serviceProvider.authenticationProvider);
         jwtLoginFilter.setAuthenticationManager(authenticationManagerBuilder.build());
@@ -106,6 +121,24 @@ public class AuthJwtSecurityConfigurer extends SecurityConfigurerAdapter<Default
         // 设置登录失败handler
         jwtLoginFilter.setAuthenticationFailureHandler(this.authHandlerBuilder.getAuthenticationFailureHandler());
         return jwtLoginFilter;
+    }
+
+    /**
+     * 创建登出过滤器
+     * @return 登出过滤器
+     */
+    private JwtLogoutFilter jwtLogoutFilter() {
+        final JwtLogoutFilter logoutFilter = new JwtLogoutFilter(this.authHandlerBuilder.getLogoutSuccessHandler(), this.authHandlerBuilder.getLogoutHandlers().toArray(new LogoutHandler[]{}));
+        logoutFilter.setFilterProcessesUrl(this.getLogoutUrl());
+        return logoutFilter;
+    }
+
+    /**
+     * 获取登出地址
+     * @return 登出地址
+     */
+    protected String getLogoutUrl() {
+        return Optional.ofNullable(this.serviceProvider.logoutUrl).orElse(JwtLogoutFilter.LOGOUT_URL);
     }
 
     /**

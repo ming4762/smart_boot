@@ -28,7 +28,7 @@ import java.util.Set;
 
 /**
  * jwt拦截器
- * @author jackson
+ * @author shizhongming
  * 2020/2/15 10:58 上午
  */
 @Slf4j
@@ -90,7 +90,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
         Set<String> ignores = Sets.newHashSet();
         // 添加登录地址, TODO:可以优化
-        ignores.add(JwtLoginFilter.getLoginUrl(this.jwtContext));
+//        ignores.add(JwtLoginFilter.getLoginUrl(this.jwtContext));
         switch (httpMethod) {
             case GET:
                 ignores.addAll(authProperties.getIgnores()

@@ -26,7 +26,7 @@ public class JwtLoginFilter extends AbstractAuthenticationProcessingFilter {
     /**
      * 默认的登录地址
      */
-    private static final String LOGIN_URL = "/jwt/login";
+    private static final String LOGIN_URL = "/auth/login";
 
     private final JwtService jwtService;
     private final JwtContext jwtContext;
@@ -36,9 +36,6 @@ public class JwtLoginFilter extends AbstractAuthenticationProcessingFilter {
         this.jwtService = jwtService;
         this.jwtContext = jwtContext;
     }
-
-
-
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws AuthenticationException, IOException, ServletException {
@@ -53,7 +50,6 @@ public class JwtLoginFilter extends AbstractAuthenticationProcessingFilter {
         ((RestUserDetails)authentication.getPrincipal()).setToken(jwt);
         return authentication;
     }
-
 
     /**
      * 获取登录地址
