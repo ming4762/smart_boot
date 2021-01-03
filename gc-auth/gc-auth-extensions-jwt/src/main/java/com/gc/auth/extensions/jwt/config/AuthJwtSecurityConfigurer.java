@@ -103,6 +103,8 @@ public class AuthJwtSecurityConfigurer extends SecurityConfigurerAdapter<Default
         jwtLoginFilter.setAuthenticationManager(authenticationManagerBuilder.build());
         // 设置登录成功handler
         jwtLoginFilter.setAuthenticationSuccessHandler(this.authHandlerBuilder.getAuthenticationSuccessHandler());
+        // 设置登录失败handler
+        jwtLoginFilter.setAuthenticationFailureHandler(this.authHandlerBuilder.getAuthenticationFailureHandler());
         return jwtLoginFilter;
     }
 
