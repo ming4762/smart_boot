@@ -4,10 +4,8 @@ import com.gc.auth.core.constants.LoginTypeConstants;
 import com.gc.auth.core.data.RestUserDetails;
 import com.gc.auth.core.exception.AuthException;
 import com.gc.auth.core.model.LoginParameter;
-import com.gc.auth.core.model.RestUserDetailsImpl;
 import com.gc.auth.core.properties.AuthProperties;
 import com.gc.auth.core.service.AuthCache;
-import com.gc.auth.core.utils.AuthUtils;
 import com.gc.auth.extensions.jwt.utils.JwtUtil;
 import com.gc.common.base.http.HttpStatus;
 import org.apache.commons.lang3.ObjectUtils;
@@ -63,9 +61,9 @@ public class JwtService implements LogoutHandler {
      * 刷新jwt
      * @param jwt jwt
      */
-    public RestUserDetailsImpl refreshJwt(String jwt) {
+    public RestUserDetails refreshJwt(String jwt) {
         // 解析jwt
-        RestUserDetailsImpl user = JwtUtil.getUser(jwt, this.authProperties.getJwtKey());
+        RestUserDetails user = JwtUtil.getUser(jwt, this.authProperties.getJwtKey());
 
         String jwtKey = this.getTokenKey(user.getUsername(), jwt);
 
@@ -105,7 +103,7 @@ public class JwtService implements LogoutHandler {
     @Override
     public void logout(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
         String jwt = JwtUtil.getJwt(request);
-        final RestUserDetails user = AuthUtils.getCurrentUser();
+        final RestUserDetails user = JwtUtil.getUser(jwt, this.authProperties.getJwtKey());
         Assert.notNull(user, "系统发生未知异常：未找到当前用户");
         Assert.notNull(jwt, "系统发生未知异常，未找到token");
         this.authCache.remove(this.getTokenKey(user.getUsername(), jwt));

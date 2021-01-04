@@ -1,6 +1,8 @@
 package com.gc.auth.extensions.jwt.config;
 
+import com.gc.auth.core.handler.AuthAccessDeniedHandler;
 import com.gc.auth.core.handler.AuthHandlerBuilder;
+import com.gc.auth.core.handler.RestAuthenticationEntryPoint;
 import com.gc.auth.core.properties.AuthProperties;
 import com.gc.auth.core.service.AuthCache;
 import com.gc.auth.extensions.jwt.context.JwtContext;
@@ -17,6 +19,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.DefaultSecurityFilterChain;
 import org.springframework.security.web.FilterChainProxy;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.ExceptionTranslationFilter;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
@@ -80,7 +83,15 @@ public class AuthJwtSecurityConfigurer extends SecurityConfigurerAdapter<Default
         // 构建
         builder
                 .formLogin().disable()
-                .addFilterAfter(this.createJwtFilterChainProxy(), BasicAuthenticationFilter.class);
+                // 设置异常信息拦截
+                .exceptionHandling()
+                .authenticationEntryPoint(new RestAuthenticationEntryPoint())
+                .accessDeniedHandler(new AuthAccessDeniedHandler())
+                .and()
+                // 添加登录 等处过滤器
+                .addFilterAfter(this.createJwtFilterChainProxy(), BasicAuthenticationFilter.class)
+                // 添加认证过滤器
+                .addFilterAfter(new JwtAuthenticationFilter(this.jwtService, this.jwtContext), ExceptionTranslationFilter.class);
 
     }
 
@@ -97,10 +108,6 @@ public class AuthJwtSecurityConfigurer extends SecurityConfigurerAdapter<Default
 
         // 创建logout过滤器
         chains.add(new DefaultSecurityFilterChain(new AntPathRequestMatcher(this.getLogoutUrl()), this.jwtLogoutFilter()));
-
-        // 创建JWT认证Filter
-        final JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(this.jwtService, this.jwtContext);
-        chains.add(new DefaultSecurityFilterChain(new AntPathRequestMatcher("/**"), jwtAuthenticationFilter));
 
         return new FilterChainProxy(chains);
     }

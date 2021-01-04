@@ -11,7 +11,7 @@ import org.springframework.security.web.authentication.logout.LogoutSuccessHandl
  */
 public class JwtLogoutFilter extends LogoutFilter {
 
-    public static final String LOGOUT_URL = "/auth/login";
+    public static final String LOGOUT_URL = "/auth/logout";
 
     public JwtLogoutFilter(LogoutSuccessHandler logoutSuccessHandler, LogoutHandler... handlers) {
         super(logoutSuccessHandler, handlers);
