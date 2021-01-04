@@ -21,6 +21,12 @@
 			<artifactId>gc-auth-core</artifactId>
 			<version>${gc-boot.version}</version>
 		</dependency>
+
+		<!--   认证模块	-->
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-config</artifactId>
+		</dependency>
 	</dependencies>
 
 </project>
