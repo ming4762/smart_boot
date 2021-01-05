@@ -30,7 +30,7 @@ import java.util.stream.Collectors;
  * 2021/1/4 17:03
  * @since 1.0
  */
-public class DefaultUrlAuthenticationProviderImpl implements UrlAuthenticationProvider, InitializingBean {
+public class DefaultUrlAuthenticationProviderImpl extends AbstractUrlAuthenticationProvider implements InitializingBean {
 
     private final RequestMappingHandlerMapping mapping;
 
@@ -79,6 +79,7 @@ public class DefaultUrlAuthenticationProviderImpl implements UrlAuthenticationPr
         }
         return check;
     }
+
 
     /**
      * 判断是否是忽略地址

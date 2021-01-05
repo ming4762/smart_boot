@@ -1,5 +1,7 @@
 package com.gc.auth.core.authentication;
 
+import org.springframework.beans.factory.BeanNameAware;
+import org.springframework.lang.NonNull;
 import org.springframework.security.core.Authentication;
 
 import javax.servlet.http.HttpServletRequest;
@@ -10,7 +12,7 @@ import javax.servlet.http.HttpServletRequest;
  * 2021/1/4 16:59
  * @since 1.0
  */
-public interface UrlAuthenticationProvider {
+public interface UrlAuthenticationProvider extends BeanNameAware {
 
     /**
      * 是否拥有权限
@@ -19,4 +21,7 @@ public interface UrlAuthenticationProvider {
      * @return 是否拥有权限
      */
     boolean hasPermission(HttpServletRequest request, Authentication authentication);
+
+    @NonNull
+    String getBeanName();
 }

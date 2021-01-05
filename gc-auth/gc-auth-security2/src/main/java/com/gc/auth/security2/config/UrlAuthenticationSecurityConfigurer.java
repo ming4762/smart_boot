@@ -7,20 +7,28 @@ import org.springframework.security.web.DefaultSecurityFilterChain;
 import org.springframework.util.Assert;
 
 /**
+ * 动态URL校验
  * @author ShiZhongMing
  * 2021/1/4 16:20
  * @since 1.0
  */
-public class DynamicUrlSecurityConfigurer extends SecurityConfigurerAdapter<DefaultSecurityFilterChain, HttpSecurity> {
+public class UrlAuthenticationSecurityConfigurer extends SecurityConfigurerAdapter<DefaultSecurityFilterChain, HttpSecurity> {
 
     private final ServiceProvider serviceProvider = new ServiceProvider();
+
+    private UrlAuthenticationSecurityConfigurer() {}
+
+    public static UrlAuthenticationSecurityConfigurer urlAuth() {
+        return new UrlAuthenticationSecurityConfigurer();
+    };
 
     @Override
     public void init(HttpSecurity builder) throws Exception {
         Assert.notNull(this.serviceProvider.authenticationProvider, "authenticationProvider is null, please init it");
+        String access = String.format("@%s.hasPermission(request, authentication)", this.serviceProvider.authenticationProvider.getBeanName());
         builder.authorizeRequests()
                 .anyRequest()
-                .access("@serviceProvider.authenticationProvider.hasPermission(request, authentication)");
+                .access(access);
     }
 
     public ServiceProvider serviceProvider() {
@@ -33,6 +41,10 @@ public class DynamicUrlSecurityConfigurer extends SecurityConfigurerAdapter<Defa
         public ServiceProvider authenticationProvider(UrlAuthenticationProvider authenticationProvider) {
             this.authenticationProvider = authenticationProvider;
             return this;
+        }
+
+        public UrlAuthenticationSecurityConfigurer and() {
+            return UrlAuthenticationSecurityConfigurer.this;
         }
     }
 }

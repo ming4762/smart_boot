@@ -19,6 +19,6 @@ import java.io.IOException;
 public class RestAuthenticationEntryPoint implements AuthenticationEntryPoint {
     @Override
     public void commence(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AuthenticationException e) throws IOException, ServletException {
-        RestJsonWriter.writeJson(httpServletResponse, Result.failure(HttpStatus.UNAUTHORIZED.value(), "未登录，无权限访问"));
+        RestJsonWriter.writeJson(httpServletResponse, Result.failure(HttpStatus.UNAUTHORIZED.value(), e.getMessage()));
     }
 }

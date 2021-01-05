@@ -2,14 +2,13 @@ package com.gc.auth.extensions.jwt.service;
 
 import com.gc.auth.core.constants.LoginTypeConstants;
 import com.gc.auth.core.data.RestUserDetails;
-import com.gc.auth.core.exception.AuthException;
 import com.gc.auth.core.model.LoginParameter;
 import com.gc.auth.core.properties.AuthProperties;
 import com.gc.auth.core.service.AuthCache;
 import com.gc.auth.extensions.jwt.utils.JwtUtil;
-import com.gc.common.base.http.HttpStatus;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.lang.NonNull;
+import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
 import org.springframework.util.Assert;
@@ -75,7 +74,7 @@ public class JwtService implements LogoutHandler {
             this.authCache.expire(jwtKey, timeout);
             this.authCache.expire(attributeKey, timeout);
         } else {
-            throw new AuthException(HttpStatus.UNAUTHORIZED, "token已过期，请重新登录");
+            throw new InternalAuthenticationServiceException("token已过期，请重新登录");
         }
         return user;
     }

@@ -16,6 +16,7 @@ import org.springframework.security.config.annotation.ObjectPostProcessor;
 import org.springframework.security.config.annotation.SecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.DefaultSecurityFilterChain;
 import org.springframework.security.web.FilterChainProxy;
 import org.springframework.security.web.SecurityFilterChain;
@@ -83,6 +84,11 @@ public class AuthJwtSecurityConfigurer extends SecurityConfigurerAdapter<Default
         // 构建
         builder
                 .formLogin().disable()
+                .httpBasic().disable()
+                .logout().disable()
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
                 // 设置异常信息拦截
                 .exceptionHandling()
                 .authenticationEntryPoint(new RestAuthenticationEntryPoint())
