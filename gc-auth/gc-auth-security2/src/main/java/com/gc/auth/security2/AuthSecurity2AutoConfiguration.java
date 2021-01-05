@@ -1,15 +1,19 @@
 package com.gc.auth.security2;
 
 import com.gc.auth.core.authentication.DefaultUrlAuthenticationProviderImpl;
+import com.gc.auth.core.authentication.MethodPermissionEvaluatorImpl;
 import com.gc.auth.core.authentication.UrlAuthenticationProvider;
 import com.gc.auth.core.properties.AuthProperties;
 import com.gc.auth.core.service.AuthUserService;
+import com.gc.auth.security2.config.AuthMethodSecurityConfig;
 import com.gc.auth.security2.service.DefaultUserDetailsServiceImpl;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+import org.springframework.security.access.PermissionEvaluator;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
@@ -20,6 +24,7 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandl
  */
 @Configuration
 @EnableConfigurationProperties(AuthProperties.class)
+@Import(AuthMethodSecurityConfig.class)
 public class AuthSecurity2AutoConfiguration {
 
     /**
@@ -43,5 +48,17 @@ public class AuthSecurity2AutoConfiguration {
     @ConditionalOnMissingBean(UrlAuthenticationProvider.class)
     public UrlAuthenticationProvider urlAuthenticationProvider(RequestMappingHandlerMapping mapping, AuthProperties authProperties) {
         return new DefaultUrlAuthenticationProviderImpl(mapping, authProperties);
+    }
+
+    /**
+     * 自定义方法级权限认证器
+     * @param authProperties 参数
+     * @return 方法级权限认证器
+     */
+    @Bean
+    @ConditionalOnProperty(prefix = "gc.auth", name = "method", havingValue = "true")
+    @ConditionalOnMissingBean(PermissionEvaluator.class)
+    public PermissionEvaluator permissionEvaluator(AuthProperties authProperties) {
+        return new MethodPermissionEvaluatorImpl(authProperties);
     }
 }

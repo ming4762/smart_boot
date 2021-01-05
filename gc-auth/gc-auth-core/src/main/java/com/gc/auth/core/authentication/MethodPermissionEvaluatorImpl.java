@@ -1,30 +1,28 @@
-package com.gc.auth.security.authentication;
+package com.gc.auth.core.authentication;
 
+import com.gc.auth.core.constants.RoleConstants;
+import com.gc.auth.core.data.RestUserDetails;
 import com.gc.auth.core.model.Permission;
-import com.gc.auth.core.model.RestUserDetailsImpl;
 import com.gc.auth.core.properties.AuthProperties;
-import com.gc.auth.security.constants.RoleConstants;
 import org.apache.commons.lang3.BooleanUtils;
 import org.springframework.security.access.PermissionEvaluator;
 import org.springframework.security.core.Authentication;
-import org.springframework.stereotype.Component;
 
 import java.io.Serializable;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
- * 自定义的权限认证器
+ * 自定义的方法权限认证其
  * @author jackson
  * 2020/1/24 10:53 上午
  */
-@Component
-public class RestPermissionEvaluatorImpl implements PermissionEvaluator {
+public class MethodPermissionEvaluatorImpl implements PermissionEvaluator {
 
 
     private final AuthProperties authProperties;
 
-    public RestPermissionEvaluatorImpl(AuthProperties authProperties) {
+    public MethodPermissionEvaluatorImpl(AuthProperties authProperties) {
         this.authProperties = authProperties;
     }
 
@@ -35,7 +33,7 @@ public class RestPermissionEvaluatorImpl implements PermissionEvaluator {
             return true;
         }
         // 验证角色，超级管理员角色不拦截
-        final RestUserDetailsImpl user = (RestUserDetailsImpl) authentication.getPrincipal();
+        final RestUserDetails user = (RestUserDetails) authentication.getPrincipal();
         if (user.getRoles().contains(RoleConstants.ROLE_SUPERADMIN.getRole())) {
             return true;
         }

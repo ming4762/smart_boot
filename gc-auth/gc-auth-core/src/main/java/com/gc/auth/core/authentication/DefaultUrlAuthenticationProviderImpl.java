@@ -1,13 +1,17 @@
 package com.gc.auth.core.authentication;
 
 import com.gc.auth.core.annotation.NonUrlCheck;
+import com.gc.auth.core.constants.RoleConstants;
+import com.gc.auth.core.data.RestUserDetails;
 import com.gc.auth.core.exception.AuthException;
+import com.gc.auth.core.model.Permission;
 import com.gc.auth.core.properties.AuthProperties;
 import com.gc.common.base.http.HttpStatus;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.core.annotation.AnnotationUtils;
@@ -48,6 +52,42 @@ public class DefaultUrlAuthenticationProviderImpl extends AbstractUrlAuthenticat
 
     @Override
     public boolean hasPermission(HttpServletRequest request, Authentication authentication) {
+        // 判断是否需要校验URL
+        boolean check = this.hasCheck(request);
+        if (!check) {
+            return true;
+        }
+        boolean hasPermission = false;
+        Object userInfo = authentication.getPrincipal();
+        if (userInfo instanceof RestUserDetails) {
+            RestUserDetails restUserDetails = (RestUserDetails) userInfo;
+            if (restUserDetails.getRoles().contains(RoleConstants.ROLE_SUPERADMIN.getRole())) {
+                return true;
+            }
+            Set<Permission> permissionList = restUserDetails.getPermissions();
+            if (ObjectUtils.isNotEmpty(permissionList)) {
+                for (Permission permission : permissionList) {
+                    if (StringUtils.isBlank(permission.getUrl())) {
+                        continue;
+                    }
+                    AntPathRequestMatcher antPathMatcher = new AntPathRequestMatcher(permission.getUrl(), Optional.ofNullable(permission.getMethod()).map(HttpMethod::name).orElse(null));
+                    if (antPathMatcher.matches(request)) {
+                        hasPermission = true;
+                        break;
+                    }
+                }
+            }
+        }
+
+        return hasPermission;
+    }
+
+    /**
+     * 判断请求是否需要校验
+     * @param request 请求信息
+     * @return true or false
+     */
+    private boolean hasCheck(HttpServletRequest request) {
         boolean check = true;
         boolean match = false;
         // 获取请求方法

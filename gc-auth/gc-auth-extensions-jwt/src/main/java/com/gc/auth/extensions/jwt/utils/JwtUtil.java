@@ -3,12 +3,10 @@ package com.gc.auth.extensions.jwt.utils;
 import com.gc.auth.core.data.GcGrantedAuthority;
 import com.gc.auth.core.data.PermissionGrantedAuthority;
 import com.gc.auth.core.data.RoleGrantedAuthority;
-import com.gc.auth.core.exception.AuthException;
 import com.gc.auth.core.model.Permission;
 import com.gc.auth.core.model.RestUserDetailsImpl;
 import com.gc.common.base.exception.IllegalAccessRuntimeException;
 import com.gc.common.base.exception.InvocationTargetRuntimeException;
-import com.gc.common.base.http.HttpStatus;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
@@ -19,6 +17,7 @@ import org.apache.commons.beanutils.ConvertUtils;
 import org.apache.commons.beanutils.converters.DateConverter;
 import org.springframework.http.HttpHeaders;
 import org.springframework.lang.Nullable;
+import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.core.Authentication;
 
 import javax.servlet.http.HttpServletRequest;
@@ -125,7 +124,8 @@ public class JwtUtil {
             restUserDetails.setAuthorities(authorities);
             return restUserDetails;
         } catch (Exception e) {
-            throw new AuthException(HttpStatus.UNAUTHORIZED, "JWT解析失败", e);
+            log.error(e.getMessage(), e);
+            throw new InternalAuthenticationServiceException( "JWT解析失败", e);
         }
     }
 

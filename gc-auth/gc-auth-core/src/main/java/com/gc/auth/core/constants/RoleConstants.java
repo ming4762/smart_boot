@@ -1,4 +1,4 @@
-package com.gc.auth.security.constants;
+package com.gc.auth.core.constants;
 
 import lombok.Getter;
 
@@ -13,7 +13,7 @@ public enum RoleConstants {
     ROLE_SUPERADMIN("SUPERADMIN");
 
     @Getter
-    private String role;
+    private final String role;
 
     RoleConstants(String role) {
         this.role = role;
