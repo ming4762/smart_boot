@@ -26,6 +26,8 @@ public class AuthProperties {
 
     private Session session = new Session();
 
+    private Saml2 saml2 = new Saml2();
+
     private IgnoreConfig ignores = new IgnoreConfig();
 
     /**
@@ -110,5 +112,40 @@ public class AuthProperties {
          * 需要忽略的 TRACE 请求
          */
         private List<String> trace = Lists.newArrayList();
+    }
+
+    /**
+     * SAML配置
+     */
+    @Getter
+    @Setter
+    public static class Saml2 {
+
+        private String entityId;
+
+        private KeyStore key = new KeyStore();
+
+        private Identity identity = new Identity();
+
+        /**
+         * key 配置
+         */
+        @Getter
+        @Setter
+        public static class KeyStore {
+            private String name;
+
+            private String password;
+
+            private String filePath;
+        }
+
+        @Getter
+        @Setter
+        public static class Identity {
+            private Boolean discoveryEnabled = Boolean.TRUE;
+
+            private String metadataFilePath;
+        }
     }
 }

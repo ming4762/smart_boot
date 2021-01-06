@@ -22,6 +22,7 @@
         <module>gc-auth-cache-redis</module>
         <module>gc-auth-core</module>
         <module>gc-auth-extensions-jwt</module>
+        <module>gc-auth-extensions-saml2</module>
         <module>gc-auth-security</module>
         <module>gc-auth-security2</module>
         <module>gc-auth-shiro</module>
