@@ -3,6 +3,8 @@ package com.gc.auth.security2;
 import com.gc.auth.core.authentication.DefaultUrlAuthenticationProviderImpl;
 import com.gc.auth.core.authentication.MethodPermissionEvaluatorImpl;
 import com.gc.auth.core.authentication.UrlAuthenticationProvider;
+import com.gc.auth.core.handler.AuthLoginFailureHandler;
+import com.gc.auth.core.handler.AuthLoginSuccessHandler;
 import com.gc.auth.core.properties.AuthProperties;
 import com.gc.auth.core.service.AuthUserService;
 import com.gc.auth.security2.config.AuthMethodSecurityConfig;
@@ -15,6 +17,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.security.access.PermissionEvaluator;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
 /**
@@ -36,6 +39,27 @@ public class AuthSecurity2AutoConfiguration {
     @ConditionalOnMissingBean(UserDetailsService.class)
     public DefaultUserDetailsServiceImpl defaultUserDetailsService(AuthUserService authUserService) {
         return new DefaultUserDetailsServiceImpl(authUserService);
+    }
+
+    /**
+     * 创建 AuthenticationSuccessHandler
+     * @param authProperties 认证参数
+     * @return AuthenticationSuccessHandler
+     */
+    @Bean
+    @ConditionalOnMissingBean(AuthenticationSuccessHandler.class)
+    public AuthenticationSuccessHandler authenticationSuccessHandler(AuthProperties authProperties) {
+        return new AuthLoginSuccessHandler(authProperties);
+    }
+
+    /**
+     * 创建登录失败执行器
+     * @return AuthLoginFailureHandler
+     */
+    @Bean
+    @ConditionalOnMissingBean(AuthLoginFailureHandler.class)
+    public AuthLoginFailureHandler authLoginFailureHandler() {
+        return new AuthLoginFailureHandler();
     }
 
     /**

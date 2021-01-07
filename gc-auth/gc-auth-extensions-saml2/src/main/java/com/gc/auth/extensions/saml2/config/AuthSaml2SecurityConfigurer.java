@@ -1,21 +1,26 @@
 package com.gc.auth.extensions.saml2.config;
 
 import com.google.common.collect.Lists;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.context.ApplicationContext;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.SecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.saml.SAMLEntryPoint;
-import org.springframework.security.saml.SAMLLogoutFilter;
+import org.springframework.security.saml.*;
 import org.springframework.security.saml.context.SAMLContextProvider;
 import org.springframework.security.saml.log.SAMLLogger;
 import org.springframework.security.saml.metadata.MetadataGenerator;
 import org.springframework.security.saml.metadata.MetadataGeneratorFilter;
 import org.springframework.security.saml.metadata.MetadataManager;
+import org.springframework.security.saml.processor.SAMLProcessor;
 import org.springframework.security.saml.websso.SingleLogoutProfile;
 import org.springframework.security.web.DefaultSecurityFilterChain;
 import org.springframework.security.web.FilterChainProxy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.channel.ChannelProcessingFilter;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
@@ -30,11 +35,12 @@ import java.util.List;
  * 2021/1/6 10:26
  * @since 1.0
  */
+@Slf4j
 public class AuthSaml2SecurityConfigurer extends SecurityConfigurerAdapter<DefaultSecurityFilterChain, HttpSecurity> {
 
     private final ServiceProvider serviceProvider = new ServiceProvider();
 
-    private static AuthSaml2SecurityConfigurer authSaml2SecurityConfigurer = new AuthSaml2SecurityConfigurer();
+    private static final AuthSaml2SecurityConfigurer authSaml2SecurityConfigurer = new AuthSaml2SecurityConfigurer();
 
     @Override
     public void init(HttpSecurity builder) throws Exception {
@@ -44,7 +50,9 @@ public class AuthSaml2SecurityConfigurer extends SecurityConfigurerAdapter<Defau
                 .formLogin().disable()
                 .httpBasic().disable()
                 .authorizeRequests()
-                .antMatchers("/saml/**").permitAll();
+                .antMatchers("/saml/**").permitAll()
+                .and()
+                .authenticationProvider(this.getBean(SAMLAuthenticationProvider.class));
         // 添加Filter
         builder.addFilterBefore(this.createMetadataGeneratorFilter(), ChannelProcessingFilter.class)
                 .addFilterAfter(this.createSamlFilter(), BasicAuthenticationFilter.class);
@@ -72,7 +80,7 @@ public class AuthSaml2SecurityConfigurer extends SecurityConfigurerAdapter<Defau
 
     /**
      * 创建SAML过滤器链
-     * @return
+     * @return FilterChainProxy
      */
     private FilterChainProxy createSamlFilter() {
         List<SecurityFilterChain> chains = Lists.newArrayList();
@@ -82,7 +90,33 @@ public class AuthSaml2SecurityConfigurer extends SecurityConfigurerAdapter<Defau
         // 登出过滤器
         chains.add(new DefaultSecurityFilterChain(new AntPathRequestMatcher("/saml/logout/**"), this.samlLogoutFilter()));
 
+        // 添加 SAMLDiscovery
+        chains.add(new DefaultSecurityFilterChain(new AntPathRequestMatcher("/saml/discovery/**"), this.createSAMLDiscovery()));
+
+        // 添加登录拦截器
+        chains.add(new DefaultSecurityFilterChain(new AntPathRequestMatcher("/saml/SSO/**"), this.createSamlProcessingFilter()));
         return new FilterChainProxy(chains);
+    }
+
+    private SAMLDiscovery createSAMLDiscovery() {
+        final SAMLDiscovery samlDiscovery = new SAMLDiscovery();
+        samlDiscovery.setMetadata(this.getBean(MetadataManager.class));
+        samlDiscovery.setContextProvider(this.getBean(SAMLContextProvider.class));
+        return samlDiscovery;
+    }
+
+    /**
+     * 创建 SAMLProcessingFilter
+     * @return SAMLProcessingFilter
+     */
+    private SAMLProcessingFilter createSamlProcessingFilter() {
+        final SAMLProcessingFilter filter = new SAMLProcessingFilter();
+        filter.setAuthenticationManager(this.getBean(AuthenticationManager.class));
+        filter.setContextProvider(this.getBean(SAMLContextProvider.class));
+        filter.setSAMLProcessor(this.getBean(SAMLProcessor.class));
+        filter.setAuthenticationSuccessHandler(this.getBean(AuthenticationSuccessHandler.class));
+        filter.setAuthenticationFailureHandler(this.getBean(AuthenticationFailureHandler.class));
+        return filter;
     }
 
     /**
@@ -108,7 +142,12 @@ public class AuthSaml2SecurityConfigurer extends SecurityConfigurerAdapter<Defau
      * @return bean实体
      */
     private <T> T getBean(Class<T> clazz) {
-        return this.serviceProvider.applicationContext.getBean(clazz);
+       try {
+           return this.serviceProvider.applicationContext.getBean(clazz);
+       } catch (NoSuchBeanDefinitionException e) {
+           log.error("未找到Bean", e);
+           throw e;
+       }
     }
 
     /**

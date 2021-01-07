@@ -23,7 +23,7 @@ import java.io.IOException;
 public class AuthLoginFailureHandler implements AuthenticationFailureHandler {
     @Override
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
-        log.error("登录时发生错误: {}", exception.getMessage());
+        log.error("登录时发生错误: " + exception.getMessage(), exception);
         if (exception instanceof InternalAuthenticationServiceException) {
             RestJsonWriter.writeJson(response, Result.failure(HttpStatus.UNAUTHORIZED.value(), String.format("登录失败：%s", exception.getMessage())));
         } else if (exception instanceof BadCredentialsException) {

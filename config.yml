@@ -70,3 +70,20 @@ gc:
       serverUrl:
 #      外网访问项目的域名，支付通知中会使用
       domain:
+  api:
+#    标题
+    title:
+#    描述
+    description:
+#    版本
+    version:
+    license:
+    licenseUrl:
+    termsOfServiceUrl:
+#    扫描包
+    basePackage:
+#    联系人信息
+    contact:
+      name:
+      url:
+      email:

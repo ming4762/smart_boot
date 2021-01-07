@@ -2,6 +2,8 @@ package com.gc.auth.extensions.saml2.config;
 
 import com.gc.auth.core.handler.AuthLogoutSuccessHandler;
 import com.gc.auth.core.properties.AuthProperties;
+import com.gc.auth.core.service.AuthUserService;
+import com.gc.auth.extensions.saml2.service.DefaultSamlUserDetailsServiceImpl;
 import com.google.common.collect.Lists;
 import org.apache.commons.httpclient.HttpClient;
 import org.opensaml.saml2.metadata.provider.FilesystemMetadataProvider;
@@ -18,6 +20,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
+import org.springframework.security.saml.SAMLAuthenticationProvider;
 import org.springframework.security.saml.SAMLEntryPoint;
 import org.springframework.security.saml.context.SAMLContextProvider;
 import org.springframework.security.saml.context.SAMLContextProviderImpl;
@@ -28,6 +31,7 @@ import org.springframework.security.saml.log.SAMLLogger;
 import org.springframework.security.saml.metadata.*;
 import org.springframework.security.saml.processor.*;
 import org.springframework.security.saml.trust.PKIXInformationResolver;
+import org.springframework.security.saml.userdetails.SAMLUserDetailsService;
 import org.springframework.security.saml.util.VelocityFactory;
 import org.springframework.security.saml.websso.*;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
@@ -84,7 +88,7 @@ public class AuthSaml2BeanConfiguration implements InitializingBean {
      */
     @Bean
     @ConditionalOnMissingBean(MetadataGenerator.class)
-    public MetadataGenerator metadataGenerator(ExtendedMetadata extendedMetadata, SAMLEntryPoint samlEntryPoint) {
+    public MetadataGenerator metadataGenerator(ExtendedMetadata extendedMetadata) {
         final MetadataGenerator metadataGenerator = new MetadataGenerator();
         metadataGenerator.setEntityId(this.saml2Properties.getEntityId());
         metadataGenerator.setIncludeDiscoveryExtension(false);
@@ -162,7 +166,43 @@ public class AuthSaml2BeanConfiguration implements InitializingBean {
     }
 
     @Bean
-    @ConditionalOnMissingBean(ExtendedMetadataDelegate.class)
+    @ConditionalOnMissingBean(SAMLUserDetailsService.class)
+    public SAMLUserDetailsService samlUserDetailsService(AuthUserService authUserService) {
+        return new DefaultSamlUserDetailsServiceImpl(authUserService);
+    }
+
+    /**
+     * SAML 2.0 WebSSO Assertion Consumer
+     * @return WebSSOProfileConsumer
+     */
+    @Bean("webSSOprofileConsumer")
+    @ConditionalOnMissingBean(WebSSOProfileConsumer.class)
+    public WebSSOProfileConsumer webSSOProfileConsumer() {
+        return new WebSSOProfileConsumerImpl();
+    }
+
+    @Bean("hokWebSSOprofileConsumer")
+    @ConditionalOnMissingBean(WebSSOProfileConsumerHoKImpl.class)
+    public WebSSOProfileConsumerHoKImpl hokWebSSOprofileConsumer() {
+        return new WebSSOProfileConsumerHoKImpl();
+    }
+
+    /**
+     * SAML Authentication Provider responsible for validating of received SAML
+     * @param samlUserDetailsService SAMLUserDetailsService
+     * @return SAMLAuthenticationProvider
+     */
+    @Bean
+    @ConditionalOnMissingBean(SAMLAuthenticationProvider.class)
+    public SAMLAuthenticationProvider samlAuthenticationProvider(SAMLUserDetailsService samlUserDetailsService) {
+        SAMLAuthenticationProvider samlAuthenticationProvider = new SAMLAuthenticationProvider();
+        samlAuthenticationProvider.setUserDetails(samlUserDetailsService);
+        samlAuthenticationProvider.setForcePrincipalAsString(false);
+        return samlAuthenticationProvider;
+    }
+
+//    @Bean
+//    @ConditionalOnMissingBean(ExtendedMetadataDelegate.class)
     public ExtendedMetadataDelegate extendedMetadataDelegate(MetadataProvider metadataProvider, ExtendedMetadata extendedMetadata) {
         ExtendedMetadataDelegate extendedMetadataDelegate = new ExtendedMetadataDelegate(metadataProvider, extendedMetadata);
         extendedMetadataDelegate.setMetadataTrustCheck(false);
@@ -213,10 +253,12 @@ public class AuthSaml2BeanConfiguration implements InitializingBean {
 
     @Bean
     @ConditionalOnMissingBean(MetadataManager.class)
-    public MetadataManager metadataManager() throws MetadataProviderException {
-        final List<MetadataProvider> providers = Lists.newArrayList();
-        final CachingMetadataManager metadataManager = new CachingMetadataManager(providers);
-        return metadataManager;
+    public MetadataManager metadataManager(MetadataProvider metadataProvider, ExtendedMetadata extendedMetadata) throws MetadataProviderException {
+        ExtendedMetadataDelegate extendedMetadataDelegate = new ExtendedMetadataDelegate(metadataProvider, extendedMetadata);
+        extendedMetadataDelegate.setMetadataTrustCheck(false);
+        extendedMetadataDelegate.setMetadataRequireSignature(false);
+        final List<MetadataProvider> providers = Lists.newArrayList(extendedMetadataDelegate);
+        return new CachingMetadataManager(providers);
     }
 
     /**
@@ -257,7 +299,7 @@ public class AuthSaml2BeanConfiguration implements InitializingBean {
 
 
     @Override
-    public void afterPropertiesSet() throws Exception {
+    public void afterPropertiesSet() {
         Assert.notNull(this.saml2Properties.getEntityId(), "entityId is null, please init it, [gc.auth.saml2.entity-id]");
         Assert.notNull(this.saml2Properties.getIdentity().getMetadataFilePath(), "MetadataFilePath is null, please inti it, [gc.auth.saml2.identity.metadataFilePath]");
         Assert.notNull(this.saml2Properties.getKey().getFilePath(), "key file path is null, please init it, [gc.auth.saml2.key.filePath]");
