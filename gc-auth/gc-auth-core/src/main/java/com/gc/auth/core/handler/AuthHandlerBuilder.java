@@ -40,7 +40,6 @@ public class AuthHandlerBuilder {
      * 初始化默认的执行器
      */
     private void init() {
-        this.authenticationSuccessHandler = new AuthLoginSuccessHandler(this.authProperties);
         this.authenticationFailureHandler = new AuthLoginFailureHandler();
         this.logoutSuccessHandler = new AuthLogoutSuccessHandler();
     }

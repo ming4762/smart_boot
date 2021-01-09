@@ -1,7 +1,5 @@
 package com.gc.auth.extensions.jwt.filter;
 
-import com.gc.auth.core.data.RestUserDetails;
-import com.gc.auth.core.handler.AuthLoginSuccessHandler;
 import com.gc.auth.core.model.LoginParameter;
 import com.gc.auth.extensions.jwt.context.JwtContext;
 import com.gc.auth.extensions.jwt.service.JwtService;
@@ -40,13 +38,12 @@ public class JwtLoginFilter extends AbstractAuthenticationProcessingFilter {
         // 创建请求参数
         final LoginParameter loginParameter = LoginParameter.create(httpServletRequest);
         final UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(loginParameter.getUsername(), loginParameter.getPassword());
-        Authentication authentication = this.getAuthenticationManager().authenticate(authenticationToken);
-        // 创建JWT
-        String jwt = this.jwtService.createJwt(authentication, loginParameter);
-        this.setAuthenticationSuccessHandler(new AuthLoginSuccessHandler(this.jwtContext.getAuthProperties()));
-        // 设置token
-        ((RestUserDetails)authentication.getPrincipal()).setToken(jwt);
-        return authentication;
+        return this.getAuthenticationManager().authenticate(authenticationToken);
+//        // 创建JWT
+//        String jwt = this.jwtService.createJwt((RestUserDetails)authentication, loginParameter.getLoginType());
+//        // 设置token
+//        ((RestUserDetails)authentication.getPrincipal()).setToken(jwt);
+//        return authentication;
     }
 
     /**

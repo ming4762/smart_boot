@@ -44,6 +44,7 @@ import java.io.IOException;
 import java.util.*;
 
 /**
+ * SAML相关bean 配置
  * @author ShiZhongMing
  * 2021/1/6 17:05
  * @since 1.0

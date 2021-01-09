@@ -43,13 +43,12 @@ public class AuthSecurity2AutoConfiguration {
 
     /**
      * 创建 AuthenticationSuccessHandler
-     * @param authProperties 认证参数
      * @return AuthenticationSuccessHandler
      */
     @Bean
     @ConditionalOnMissingBean(AuthenticationSuccessHandler.class)
-    public AuthenticationSuccessHandler authenticationSuccessHandler(AuthProperties authProperties) {
-        return new AuthLoginSuccessHandler(authProperties);
+    public AuthenticationSuccessHandler authenticationSuccessHandler() {
+        return new AuthLoginSuccessHandler();
     }
 
     /**

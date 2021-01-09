@@ -9,8 +9,11 @@ import com.gc.auth.core.properties.AuthProperties;
 import com.gc.auth.core.utils.RestJsonWriter;
 import com.gc.common.base.message.Result;
 import com.google.common.collect.Sets;
+import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.util.Assert;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -25,19 +28,16 @@ import java.util.stream.Collectors;
  * @author shizhongming
  * 2021/1/1 3:49 上午
  */
-public class AuthLoginSuccessHandler implements AuthenticationSuccessHandler {
+public class AuthLoginSuccessHandler implements AuthenticationSuccessHandler, InitializingBean {
 
 
-    private final AuthProperties authProperties;
+    private AuthProperties authProperties;
 
-    public AuthLoginSuccessHandler(AuthProperties authProperties) {
-        this.authProperties = authProperties;
-    }
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) throws IOException, ServletException {
         this.setSessionMaxInactiveInterval(httpServletRequest);
-        RestJsonWriter.writeJson(httpServletResponse, this.successData(authentication, httpServletRequest));
+        RestJsonWriter.writeJson(httpServletResponse, Result.success(this.successData(authentication, httpServletRequest)));
     }
 
     /**
@@ -46,10 +46,10 @@ public class AuthLoginSuccessHandler implements AuthenticationSuccessHandler {
      * @param httpServletRequest request
      * @return 登录信息
      */
-    private Result<LoginResult> successData(Authentication authentication, HttpServletRequest httpServletRequest) {
+    protected LoginResult successData(Authentication authentication, HttpServletRequest httpServletRequest) {
         final RestUserDetails userDetails = (RestUserDetails) authentication.getPrincipal();
         // 处理用户权限信息
-        final LoginResult loginResult = LoginResult.builder()
+        return LoginResult.builder()
                 .user(userDetails)
                 .token(userDetails.getToken())
                 .roles(userDetails.getRoles())
@@ -58,14 +58,13 @@ public class AuthLoginSuccessHandler implements AuthenticationSuccessHandler {
                                 .map(item -> item.stream().map(Permission::getAuthority).collect(Collectors.toSet()))
                                 .orElse(Sets.newHashSet())
                 ).build();
-        return Result.success(loginResult);
     }
 
     /**
      * 设置session过期时间
      * @param request 请求信息
      */
-    private void setSessionMaxInactiveInterval(HttpServletRequest request) {
+    protected void setSessionMaxInactiveInterval(HttpServletRequest request) {
         final LoginParameter loginParameter = LoginParameter.create(request);
 
         // 获取有效期
@@ -76,5 +75,15 @@ public class AuthLoginSuccessHandler implements AuthenticationSuccessHandler {
             timeout = authProperties.getSession().getTimeout().getRemember();
         }
         request.getSession().setMaxInactiveInterval(timeout.intValue());
+    }
+
+    @Autowired
+    public void setAuthProperties(AuthProperties authProperties) {
+        this.authProperties = authProperties;
+    }
+
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        Assert.notNull(this.authProperties, "authProperties is null, please init it");
     }
 }

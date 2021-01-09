@@ -9,6 +9,7 @@ import com.gc.auth.extensions.jwt.context.JwtContext;
 import com.gc.auth.extensions.jwt.filter.JwtAuthenticationFilter;
 import com.gc.auth.extensions.jwt.filter.JwtLoginFilter;
 import com.gc.auth.extensions.jwt.filter.JwtLogoutFilter;
+import com.gc.auth.extensions.jwt.handler.JwtAuthLoginSuccessHandler;
 import com.gc.auth.extensions.jwt.service.JwtService;
 import com.google.common.collect.Lists;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -78,6 +79,11 @@ public class AuthJwtSecurityConfigurer extends SecurityConfigurerAdapter<Default
             final AuthHandlerBuilder handlerBuilder = new AuthHandlerBuilder(this.serviceProvider.authProperties);
             // 设置登出执行器
             handlerBuilder.logoutHandlers(Lists.newArrayList(this.jwtService));
+            // 设置登陆成功handler
+            JwtAuthLoginSuccessHandler jwtAuthLoginSuccessHandler = new JwtAuthLoginSuccessHandler();
+            jwtAuthLoginSuccessHandler.setJwtService(this.jwtService);
+            jwtAuthLoginSuccessHandler.setAuthProperties(this.serviceProvider.authProperties);
+            handlerBuilder.authenticationSuccessHandler(jwtAuthLoginSuccessHandler);
             return handlerBuilder;
         });
         // 设置默认的

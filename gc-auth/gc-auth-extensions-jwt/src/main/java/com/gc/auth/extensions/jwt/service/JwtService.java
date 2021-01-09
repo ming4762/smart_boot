@@ -2,7 +2,6 @@ package com.gc.auth.extensions.jwt.service;
 
 import com.gc.auth.core.constants.LoginTypeConstants;
 import com.gc.auth.core.data.RestUserDetails;
-import com.gc.auth.core.model.LoginParameter;
 import com.gc.auth.core.properties.AuthProperties;
 import com.gc.auth.core.service.AuthCache;
 import com.gc.auth.extensions.jwt.utils.JwtUtil;
@@ -39,15 +38,14 @@ public class JwtService implements LogoutHandler {
         this.authProperties = authProperties;
     }
 
-    public String createJwt(Authentication authentication, LoginParameter parameter) {
-        final RestUserDetails userDetails = (RestUserDetails) authentication.getPrincipal();
+    public String createJwt(RestUserDetails userDetails, LoginTypeConstants loginType) {
         // 创建jwt
-        final String jwt = JwtUtil.createJwt(authentication, this.authProperties.getJwtKey());
+        final String jwt = JwtUtil.createJwt(userDetails, this.authProperties.getJwtKey());
         // 获取有效期
         long timeout = authProperties.getSession().getTimeout().getGlobal();
-        if (Objects.equals(parameter.getLoginType(), LoginTypeConstants.MOBILE)) {
+        if (Objects.equals(loginType, LoginTypeConstants.MOBILE)) {
             timeout = authProperties.getSession().getTimeout().getMobile();
-        } else if (Objects.equals(parameter.getLoginType(), LoginTypeConstants.REMEMBER)) {
+        } else if (Objects.equals(loginType, LoginTypeConstants.REMEMBER)) {
             timeout = authProperties.getSession().getTimeout().getRemember();
         }
         // 保存jwt到cache中

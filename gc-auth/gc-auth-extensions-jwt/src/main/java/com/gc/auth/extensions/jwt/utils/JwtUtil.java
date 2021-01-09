@@ -2,6 +2,7 @@ package com.gc.auth.extensions.jwt.utils;
 
 import com.gc.auth.core.data.GcGrantedAuthority;
 import com.gc.auth.core.data.PermissionGrantedAuthority;
+import com.gc.auth.core.data.RestUserDetails;
 import com.gc.auth.core.data.RoleGrantedAuthority;
 import com.gc.auth.core.model.Permission;
 import com.gc.auth.core.model.RestUserDetailsImpl;
@@ -18,7 +19,6 @@ import org.apache.commons.beanutils.converters.DateConverter;
 import org.springframework.http.HttpHeaders;
 import org.springframework.lang.Nullable;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
-import org.springframework.security.core.Authentication;
 
 import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.InvocationTargetException;
@@ -49,11 +49,10 @@ public class JwtUtil {
 
     /**
      * 创建jwt
-     * @param authentication 认证信息
+     * @param userDetails 用户信息
      * @return jwt
      */
-    public static String createJwt(Authentication authentication, String key) {
-        final RestUserDetailsImpl userDetails = (RestUserDetailsImpl) authentication.getPrincipal();
+    public static String createJwt(RestUserDetails userDetails, String key) {
         final Date now = new Date();
         final JwtBuilder builder = Jwts.builder()
                 .setId(userDetails.getUserId().toString())

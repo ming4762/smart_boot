@@ -8,6 +8,7 @@ import com.gc.auth.core.model.RestUserDetailsImpl;
 import com.gc.auth.core.service.AuthUserService;
 import com.google.common.collect.Sets;
 import org.springframework.lang.NonNull;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.saml.SAMLCredential;
 import org.springframework.security.saml.userdetails.SAMLUserDetailsService;
@@ -36,7 +37,7 @@ public class DefaultSamlUserDetailsServiceImpl implements SAMLUserDetailsService
         // 查询用户
         final AuthUser user = this.userService.getByUsername(username);
         if (Objects.isNull(user)) {
-            return null;
+            throw new BadCredentialsException(String.format("not found user, please create user in DB, username: [%s]", username));
         }
         Set<GcGrantedAuthority> grantedAuthoritySet = Sets.newHashSet();
         // 添加角色
