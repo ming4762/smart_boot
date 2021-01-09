@@ -1,6 +1,5 @@
 package com.gc.auth.core.handler;
 
-import com.gc.auth.core.properties.AuthProperties;
 import lombok.Getter;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
@@ -16,13 +15,6 @@ import java.util.List;
  */
 public class AuthHandlerBuilder {
 
-    private final AuthProperties authProperties;
-
-    public AuthHandlerBuilder(AuthProperties authProperties) {
-        this.authProperties = authProperties;
-        this.init();
-    }
-
     @Getter
     private AuthenticationSuccessHandler authenticationSuccessHandler;
 
@@ -35,14 +27,14 @@ public class AuthHandlerBuilder {
     @Getter
     private List<LogoutHandler> logoutHandlers;
 
-    /**
-     * 初始化函数
-     * 初始化默认的执行器
-     */
-    private void init() {
-        this.authenticationFailureHandler = new AuthLoginFailureHandler();
-        this.logoutSuccessHandler = new AuthLogoutSuccessHandler();
-    }
+//    /**
+//     * 初始化函数
+//     * 初始化默认的执行器
+//     */
+//    private void init() {
+//        this.authenticationFailureHandler = new AuthLoginFailureHandler();
+//        this.logoutSuccessHandler = new AuthLogoutSuccessHandler();
+//    }
 
     /**
      * 设置登录成功执行器

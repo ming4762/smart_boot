@@ -6,8 +6,6 @@ import com.gc.auth.core.data.RestUserDetails;
 import com.gc.auth.core.data.RoleGrantedAuthority;
 import com.gc.auth.core.model.Permission;
 import com.gc.auth.core.model.RestUserDetailsImpl;
-import com.gc.common.base.exception.IllegalAccessRuntimeException;
-import com.gc.common.base.exception.InvocationTargetRuntimeException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
@@ -16,12 +14,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.ConvertUtils;
 import org.apache.commons.beanutils.converters.DateConverter;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.lang.Nullable;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 
 import javax.servlet.http.HttpServletRequest;
-import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -105,15 +104,14 @@ public class JwtUtil {
             final List<Map<String, String>> permissionMap = claims.get(PERMISSION_KEY, List.class);
             final List<Permission> permissions = permissionMap.stream()
                     .map(item -> {
-                        try {
-                            Permission permission = new Permission();
-                            BeanUtils.populate(permission, item);
-                            return permission;
-                        } catch (IllegalAccessException e) {
-                            throw new IllegalAccessRuntimeException(e);
-                        } catch (InvocationTargetException e) {
-                            throw new InvocationTargetRuntimeException(e);
+                        Permission permission = new Permission();
+                        permission.setAuthority(item.get("authority"));
+                        permission.setUrl(item.get("url"));
+                        String method = item.get("method");
+                        if (StringUtils.isNotBlank(method)) {
+                            permission.setMethod(HttpMethod.resolve(method));
                         }
+                        return permission;
                     }).collect(Collectors.toList());
             // 设置角色
             final List<String> roles = claims.get(ROLE_KEY, List.class);

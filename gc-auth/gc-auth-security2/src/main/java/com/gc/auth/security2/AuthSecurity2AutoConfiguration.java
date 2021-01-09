@@ -25,7 +25,7 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandl
  * @author shizhongming
  * 2021/1/2 9:28 上午
  */
-@Configuration
+@Configuration("AuthSecurity2AutoConfiguration")
 @EnableConfigurationProperties(AuthProperties.class)
 @Import(AuthMethodSecurityConfig.class)
 public class AuthSecurity2AutoConfiguration {
