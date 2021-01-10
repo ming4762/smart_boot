@@ -2,10 +2,13 @@ package com.gc.auth.extensions.jwt.service;
 
 import com.gc.auth.core.constants.LoginTypeConstants;
 import com.gc.auth.core.data.RestUserDetails;
+import com.gc.auth.core.exception.AuthException;
 import com.gc.auth.core.properties.AuthProperties;
 import com.gc.auth.core.service.AuthCache;
 import com.gc.auth.extensions.jwt.utils.JwtUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.core.Authentication;
@@ -22,6 +25,7 @@ import java.util.Objects;
  * 2020/12/31 15:43
  * @since 1.0
  */
+@Slf4j
 public class JwtService implements LogoutHandler {
 
     private static final String TOKE_KEY_PREFIX = "gc:session:user";
@@ -100,10 +104,18 @@ public class JwtService implements LogoutHandler {
     @Override
     public void logout(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
         String jwt = JwtUtil.getJwt(request);
+        if (StringUtils.isBlank(jwt)) {
+            throw new AuthException("JWT为null，无法登录");
+        }
         final RestUserDetails user = JwtUtil.getUser(jwt, this.authProperties.getJwtKey());
-        Assert.notNull(user, "系统发生未知异常：未找到当前用户");
-        Assert.notNull(jwt, "系统发生未知异常，未找到token");
-        this.authCache.remove(this.getTokenKey(user.getUsername(), jwt));
-        this.authCache.remove(this.getAttributeKey(jwt));
+        if (Objects.nonNull(this.authCache.get(this.getTokenKey(user.getUsername(), jwt)))) {
+            Assert.notNull(user, "系统发生未知异常：未找到当前用户");
+            Assert.notNull(jwt, "系统发生未知异常，未找到token");
+            this.authCache.remove(this.getTokenKey(user.getUsername(), jwt));
+            this.authCache.remove(this.getAttributeKey(jwt));
+        } else {
+            log.debug("用户已登出");
+        }
+
     }
 }
