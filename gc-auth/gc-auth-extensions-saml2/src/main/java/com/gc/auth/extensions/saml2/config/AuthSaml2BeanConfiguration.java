@@ -1,5 +1,6 @@
 package com.gc.auth.extensions.saml2.config;
 
+import com.gc.auth.core.exception.AuthException;
 import com.gc.auth.core.handler.AuthLogoutSuccessHandler;
 import com.gc.auth.core.properties.AuthProperties;
 import com.gc.auth.core.service.AuthUserService;
@@ -50,6 +51,10 @@ import java.util.*;
  * @since 1.0
  */
 public class AuthSaml2BeanConfiguration implements InitializingBean {
+
+    private static final String FILE_PATH_START = "file://";
+
+    private static final String HTTP_PATH_START = "http";
 
     private final AuthProperties.Saml2 saml2Properties;
 
@@ -202,19 +207,10 @@ public class AuthSaml2BeanConfiguration implements InitializingBean {
         return samlAuthenticationProvider;
     }
 
-//    @Bean
-//    @ConditionalOnMissingBean(ExtendedMetadataDelegate.class)
-    public ExtendedMetadataDelegate extendedMetadataDelegate(MetadataProvider metadataProvider, ExtendedMetadata extendedMetadata) {
-        ExtendedMetadataDelegate extendedMetadataDelegate = new ExtendedMetadataDelegate(metadataProvider, extendedMetadata);
-        extendedMetadataDelegate.setMetadataTrustCheck(false);
-        extendedMetadataDelegate.setMetadataRequireSignature(false);
-        return extendedMetadataDelegate;
-    }
-
     @Bean
     @ConditionalOnMissingBean(MetadataProvider.class)
     public MetadataProvider metadataProvider(ParserPool parserPool) throws MetadataProviderException, IOException {
-        if (this.saml2Properties.getIdentity().getMetadataFilePath().startsWith("http")) {
+        if (this.saml2Properties.getIdentity().getMetadataFilePath().startsWith(HTTP_PATH_START)) {
             return this.createHttpMetadataProvider(parserPool);
         } else {
             return this.createFilesystemMetadataProvider(parserPool);
@@ -285,15 +281,15 @@ public class AuthSaml2BeanConfiguration implements InitializingBean {
         final AuthProperties.Saml2.KeyStore keyStore = this.saml2Properties.getKey();
         final DefaultResourceLoader loader = new DefaultResourceLoader();
         Resource storeFile = loader.getResource(keyStore.getFilePath());
-        if (keyStore.getFilePath().startsWith("file://")) {
+        if (keyStore.getFilePath().startsWith(FILE_PATH_START)) {
             try {
                 storeFile = new FileSystemResource(storeFile.getFile());
             } catch (IOException e) {
                 e.printStackTrace();
-                throw new RuntimeException("Cannot load file system resource: " + keyStore.getFilePath(), e);
+                throw new AuthException("Cannot load file system resource: " + keyStore.getFilePath(), e);
             }
         }
-        Map<String, String> passwords = new HashMap<>();
+        Map<String, String> passwords = new HashMap<>(1);
         passwords.put(keyStore.getName(), keyStore.getPassword());
         return new JKSKeyManager(storeFile, keyStore.getPassword(), passwords, keyStore.getName());
     }

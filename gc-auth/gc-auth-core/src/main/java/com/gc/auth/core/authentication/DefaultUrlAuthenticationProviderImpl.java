@@ -5,7 +5,6 @@ import com.gc.auth.core.constants.RoleConstants;
 import com.gc.auth.core.data.RestUserDetails;
 import com.gc.auth.core.exception.AuthException;
 import com.gc.auth.core.model.Permission;
-import com.gc.auth.core.properties.AuthProperties;
 import com.gc.common.base.http.HttpStatus;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
@@ -38,16 +37,13 @@ public class DefaultUrlAuthenticationProviderImpl extends AbstractUrlAuthenticat
 
     private final RequestMappingHandlerMapping mapping;
 
-    private final AuthProperties authProperties;
-
     /**
      * 所有URL映射
      */
     private Multimap<String, UrlMapping> allUrlMapping = null;
 
-    public DefaultUrlAuthenticationProviderImpl(RequestMappingHandlerMapping mapping, AuthProperties authProperties) {
+    public DefaultUrlAuthenticationProviderImpl(RequestMappingHandlerMapping mapping) {
         this.mapping = mapping;
-        this.authProperties = authProperties;
     }
 
     @Override
@@ -59,17 +55,14 @@ public class DefaultUrlAuthenticationProviderImpl extends AbstractUrlAuthenticat
         }
         boolean hasPermission = false;
         Object userInfo = authentication.getPrincipal();
-        if (userInfo instanceof RestUserDetails) {
-            RestUserDetails restUserDetails = (RestUserDetails) userInfo;
-            if (restUserDetails.getRoles().contains(RoleConstants.ROLE_SUPERADMIN.getRole())) {
-                return true;
-            }
-            Set<Permission> permissionList = restUserDetails.getPermissions();
-            if (ObjectUtils.isNotEmpty(permissionList)) {
-                for (Permission permission : permissionList) {
-                    if (StringUtils.isBlank(permission.getUrl())) {
-                        continue;
-                    }
+        RestUserDetails restUserDetails = (RestUserDetails) userInfo;
+        if (restUserDetails.getRoles().contains(RoleConstants.ROLE_SUPERADMIN.getRole())) {
+            return true;
+        }
+        Set<Permission> permissionList = restUserDetails.getPermissions();
+        if (ObjectUtils.isNotEmpty(permissionList)) {
+            for (Permission permission : permissionList) {
+                if (StringUtils.isNotBlank(permission.getUrl())) {
                     AntPathRequestMatcher antPathMatcher = new AntPathRequestMatcher(permission.getUrl(), Optional.ofNullable(permission.getMethod()).map(HttpMethod::name).orElse(null));
                     if (antPathMatcher.matches(request)) {
                         hasPermission = true;
@@ -78,7 +71,6 @@ public class DefaultUrlAuthenticationProviderImpl extends AbstractUrlAuthenticat
                 }
             }
         }
-
         return hasPermission;
     }
 
@@ -118,72 +110,6 @@ public class DefaultUrlAuthenticationProviderImpl extends AbstractUrlAuthenticat
             return false;
         }
         return check;
-    }
-
-
-    /**
-     * 判断是否是忽略地址
-     * @param request 请求体
-     * @return 是否忽略
-     */
-    private boolean isIgnore(HttpServletRequest request) {
-        // 判断pattern
-        final AuthProperties.IgnoreConfig ignores = this.authProperties.getIgnores();
-        for (String url : ignores.getPattern()) {
-            AntPathRequestMatcher antPathMatcher = new AntPathRequestMatcher(url);
-            if (antPathMatcher.matches(request)) {
-                return true;
-            }
-        }
-        for (String url : ignores.getPost()) {
-            AntPathRequestMatcher antPathMatcher = new AntPathRequestMatcher(url, HttpMethod.POST.name());
-            if (antPathMatcher.matches(request)) {
-                return true;
-            }
-        }
-
-        for (String url : ignores.getDelete()) {
-            AntPathRequestMatcher antPathMatcher = new AntPathRequestMatcher(url, HttpMethod.DELETE.name());
-            if (antPathMatcher.matches(request)) {
-                return true;
-            }
-        }
-
-        for (String url : ignores.getPut()) {
-            AntPathRequestMatcher antPathMatcher = new AntPathRequestMatcher(url, HttpMethod.PUT.name());
-            if (antPathMatcher.matches(request)) {
-                return true;
-            }
-        }
-
-        for (String url : ignores.getHead()) {
-            AntPathRequestMatcher antPathMatcher = new AntPathRequestMatcher(url, HttpMethod.HEAD.name());
-            if (antPathMatcher.matches(request)) {
-                return true;
-            }
-        }
-
-        for (String url : ignores.getPatch()) {
-            AntPathRequestMatcher antPathMatcher = new AntPathRequestMatcher(url, HttpMethod.PATCH.name());
-            if (antPathMatcher.matches(request)) {
-                return true;
-            }
-        }
-
-        for (String url : ignores.getOptions()) {
-            AntPathRequestMatcher antPathMatcher = new AntPathRequestMatcher(url, HttpMethod.OPTIONS.name());
-            if (antPathMatcher.matches(request)) {
-                return true;
-            }
-        }
-
-        for (String url : ignores.getTrace()) {
-            AntPathRequestMatcher antPathMatcher = new AntPathRequestMatcher(url, HttpMethod.TRACE.name());
-            if (antPathMatcher.matches(request)) {
-                return true;
-            }
-        }
-        return false;
     }
 
     /**

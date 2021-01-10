@@ -56,18 +56,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         SecurityContextHolder.getContext()
                 .setAuthentication(authentication);
         filterChain.doFilter(request, response);
-//        try {
-//            if (StringUtils.isNotEmpty(jwt)) {
-//            } else {
-//                RestJsonWriter.writeJson(response, Result.failure(HttpStatus.UNAUTHORIZED.getCode(), "未登录"));
-//            }
-//        } catch (AuthException e) {
-//            log.error(e.getMessage(), e.getE());
-//            RestJsonWriter.writeJson(response, Result.failure(e.getCode(), e.getMessage()));
-//        } catch (InternalAuthenticationServiceException e) {
-//            log.error(e.getMessage(), e);
-//            RestJsonWriter.writeJson(response, Result.failure(HttpStatus.UNAUTHORIZED.getCode(), e.getMessage()));
-//        }
     }
 
     @Override
@@ -89,8 +77,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             httpMethod = HttpMethod.GET;
         }
         Set<String> ignores = Sets.newHashSet();
-        // 添加登录地址, TODO:可以优化
-//        ignores.add(JwtLoginFilter.getLoginUrl(this.jwtContext));
         switch (httpMethod) {
             case GET:
                 ignores.addAll(authProperties.getIgnores()

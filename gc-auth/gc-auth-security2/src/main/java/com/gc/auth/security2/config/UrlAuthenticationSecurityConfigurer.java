@@ -20,7 +20,7 @@ public class UrlAuthenticationSecurityConfigurer extends SecurityConfigurerAdapt
 
     public static UrlAuthenticationSecurityConfigurer urlAuth() {
         return new UrlAuthenticationSecurityConfigurer();
-    };
+    }
 
     @Override
     public void init(HttpSecurity builder) throws Exception {

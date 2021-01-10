@@ -40,7 +40,7 @@ public class AuthSaml2SecurityConfigurer extends SecurityConfigurerAdapter<Defau
 
     private final ServiceProvider serviceProvider = new ServiceProvider();
 
-    private static final AuthSaml2SecurityConfigurer authSaml2SecurityConfigurer = new AuthSaml2SecurityConfigurer();
+    private static final AuthSaml2SecurityConfigurer AUTH_SAML_2_SECURITY_CONFIGURER = new AuthSaml2SecurityConfigurer();
 
     @Override
     public void init(HttpSecurity builder) throws Exception {
@@ -61,7 +61,7 @@ public class AuthSaml2SecurityConfigurer extends SecurityConfigurerAdapter<Defau
     }
 
     public static AuthSaml2SecurityConfigurer saml2() {
-        return authSaml2SecurityConfigurer;
+        return AUTH_SAML_2_SECURITY_CONFIGURER;
     }
 
     public ServiceProvider serviceProvider() {
@@ -91,14 +91,14 @@ public class AuthSaml2SecurityConfigurer extends SecurityConfigurerAdapter<Defau
         chains.add(new DefaultSecurityFilterChain(new AntPathRequestMatcher("/saml/logout/**"), this.samlLogoutFilter()));
 
         // 添加 SAMLDiscovery
-        chains.add(new DefaultSecurityFilterChain(new AntPathRequestMatcher("/saml/discovery/**"), this.createSAMLDiscovery()));
+        chains.add(new DefaultSecurityFilterChain(new AntPathRequestMatcher("/saml/discovery/**"), this.createSamlDiscovery()));
 
         // 添加登录拦截器
         chains.add(new DefaultSecurityFilterChain(new AntPathRequestMatcher("/saml/SSO/**"), this.createSamlProcessingFilter()));
         return new FilterChainProxy(chains);
     }
 
-    private SAMLDiscovery createSAMLDiscovery() {
+    private SAMLDiscovery createSamlDiscovery() {
         final SAMLDiscovery samlDiscovery = new SAMLDiscovery();
         samlDiscovery.setMetadata(this.getBean(MetadataManager.class));
         samlDiscovery.setContextProvider(this.getBean(SAMLContextProvider.class));

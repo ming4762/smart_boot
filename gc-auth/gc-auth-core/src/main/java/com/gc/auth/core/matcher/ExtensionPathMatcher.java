@@ -45,11 +45,9 @@ public class ExtensionPathMatcher implements RequestMatcher {
             return false;
         }
         // 判断是否是文件扩展名
-        if (StringUtils.startsWith(this.pattern, PREFIX_SUFFIX)) {
+        if (StringUtils.startsWith(this.pattern, PREFIX_SUFFIX) && StringUtils.endsWith(request.getRequestURI(),this.pattern.substring(1))) {
             // 判断文件结尾
-            if (StringUtils.endsWith(request.getRequestURI(),this.pattern.substring(1))) {
-                return true;
-            }
+            return true;
         }
         // 验证路径
         AntPathRequestMatcher matcher = new AntPathRequestMatcher(this.pattern);

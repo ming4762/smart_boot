@@ -2,10 +2,8 @@ package com.gc.auth.extensions.jwt.filter;
 
 import com.gc.auth.core.model.LoginParameter;
 import com.gc.auth.extensions.jwt.context.JwtContext;
-import com.gc.auth.extensions.jwt.service.JwtService;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 
 import javax.servlet.http.HttpServletRequest;
@@ -24,26 +22,16 @@ public class JwtLoginFilter extends AbstractAuthenticationProcessingFilter {
      */
     private static final String LOGIN_URL = "/auth/login";
 
-    private final JwtService jwtService;
-    private final JwtContext jwtContext;
-
-    public JwtLoginFilter(JwtContext jwtContext, JwtService jwtService) {
+    public JwtLoginFilter(JwtContext jwtContext) {
         super(getLoginUrl(jwtContext));
-        this.jwtService = jwtService;
-        this.jwtContext = jwtContext;
     }
 
     @Override
-    public Authentication attemptAuthentication(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws AuthenticationException {
+    public Authentication attemptAuthentication(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
         // 创建请求参数
         final LoginParameter loginParameter = LoginParameter.create(httpServletRequest);
         final UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(loginParameter.getUsername(), loginParameter.getPassword());
         return this.getAuthenticationManager().authenticate(authenticationToken);
-//        // 创建JWT
-//        String jwt = this.jwtService.createJwt((RestUserDetails)authentication, loginParameter.getLoginType());
-//        // 设置token
-//        ((RestUserDetails)authentication.getPrincipal()).setToken(jwt);
-//        return authentication;
     }
 
     /**

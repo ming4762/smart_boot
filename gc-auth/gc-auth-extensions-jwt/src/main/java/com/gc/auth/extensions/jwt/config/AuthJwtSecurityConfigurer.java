@@ -149,7 +149,7 @@ public class AuthJwtSecurityConfigurer extends SecurityConfigurerAdapter<Default
      * @throws Exception Exception
      */
     private JwtLoginFilter jwtLoginFilter() throws Exception {
-        final JwtLoginFilter jwtLoginFilter = new JwtLoginFilter(this.jwtContext, this.jwtService);
+        final JwtLoginFilter jwtLoginFilter = new JwtLoginFilter(this.jwtContext);
         jwtLoginFilter.setFilterProcessesUrl(JwtLoginFilter.getLoginUrl(this.jwtContext));
         AuthenticationManagerBuilder authenticationManagerBuilder = new AuthenticationManagerBuilder(objectPostProcessor);
         authenticationManagerBuilder.authenticationProvider(this.getBean(AuthenticationProvider.class, this.serviceProvider.authenticationProvider));

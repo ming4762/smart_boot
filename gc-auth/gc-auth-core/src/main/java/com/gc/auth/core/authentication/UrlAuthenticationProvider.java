@@ -22,6 +22,10 @@ public interface UrlAuthenticationProvider extends BeanNameAware {
      */
     boolean hasPermission(HttpServletRequest request, Authentication authentication);
 
+    /**
+     * 获取bean 名称
+     * @return BeanName
+     */
     @NonNull
     String getBeanName();
 }

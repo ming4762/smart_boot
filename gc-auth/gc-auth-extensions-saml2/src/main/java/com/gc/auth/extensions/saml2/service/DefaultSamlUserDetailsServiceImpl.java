@@ -9,7 +9,6 @@ import com.gc.auth.core.service.AuthUserService;
 import com.google.common.collect.Sets;
 import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.saml.SAMLCredential;
 import org.springframework.security.saml.userdetails.SAMLUserDetailsService;
 
@@ -31,7 +30,7 @@ public class DefaultSamlUserDetailsServiceImpl implements SAMLUserDetailsService
     }
 
     @Override
-    public Object loadUserBySAML(SAMLCredential credential) throws UsernameNotFoundException {
+    public Object loadUserBySAML(SAMLCredential credential) {
         // 获取用户名
         String username = credential.getNameID().getValue();
         // 查询用户

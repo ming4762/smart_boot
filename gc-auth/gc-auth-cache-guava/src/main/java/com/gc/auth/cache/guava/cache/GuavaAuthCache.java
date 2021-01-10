@@ -22,7 +22,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class GuavaAuthCache implements AuthCache<String, Object> {
 
-    private final Cache<String, CacheObject> CACHE;
+    private final Cache<String, CacheObject> cache;
 
     public GuavaAuthCache(AuthProperties authProperties) {
         // 求最大超时时间
@@ -30,7 +30,7 @@ public class GuavaAuthCache implements AuthCache<String, Object> {
         final Long maxTime = ImmutableList.of(sessionTimeout.getMobile(), sessionTimeout.getGlobal(), sessionTimeout.getRemember()).stream()
                 .max(Long::compareTo).orElse(Long.MAX_VALUE);
         // 创建缓存起
-        CACHE = CacheBuilder.newBuilder()
+        cache = CacheBuilder.newBuilder()
                 .expireAfterAccess(maxTime, TimeUnit.SECONDS)
                 .build();
     }
@@ -42,29 +42,27 @@ public class GuavaAuthCache implements AuthCache<String, Object> {
                 .timeout(timeout)
                 .data(value)
                 .build();
-        CACHE.put(key, cacheObject);
+        cache.put(key, cacheObject);
     }
 
     @Override
     public void expire(@NonNull String key, long timeout) {
-        final CacheObject cacheObject = CACHE.getIfPresent(key);
+        final CacheObject cacheObject = cache.getIfPresent(key);
         if (Objects.nonNull(cacheObject)) {
             cacheObject.setOperationTime(LocalDateTime.now());
             cacheObject.setTimeout(timeout);
-            CACHE.put(key, cacheObject);
+            cache.put(key, cacheObject);
         }
     }
 
     @Override
     public Object get(@NonNull String key) {
-        final CacheObject cacheObject = CACHE.getIfPresent(key);
+        final CacheObject cacheObject = cache.getIfPresent(key);
         if (Objects.nonNull(cacheObject)) {
-            if (Objects.nonNull(cacheObject.getTimeout())) {
+            if (Objects.nonNull(cacheObject.getTimeout()) && cacheObject.getOperationTime().plusSeconds(cacheObject.getTimeout()).isBefore(LocalDateTime.now())) {
                 // 判断是否超时
-                if (cacheObject.getOperationTime().plusSeconds(cacheObject.getTimeout()).isBefore(LocalDateTime.now())) {
-                    CACHE.invalidate(key);
-                    return null;
-                }
+                cache.invalidate(key);
+                return null;
             }
             return cacheObject.getData();
         }
@@ -73,12 +71,12 @@ public class GuavaAuthCache implements AuthCache<String, Object> {
 
     @Override
     public void remove(@NonNull String key) {
-        CACHE.invalidate(key);
+        cache.invalidate(key);
     }
 
     @Override
     public Set<String> keys() {
-        return CACHE.asMap().keySet();
+        return cache.asMap().keySet();
     }
 
     /**
@@ -90,7 +88,7 @@ public class GuavaAuthCache implements AuthCache<String, Object> {
     @NonNull
     public Set<Object> matchGet(@NonNull String patternKey) {
         final Set<Object> result = Sets.newHashSet();
-        this.CACHE.asMap().forEach((key, value) -> {
+        this.cache.asMap().forEach((key, value) -> {
             if (key.startsWith(patternKey)) {
                 result.add(this.get(key));
             }
@@ -107,7 +105,7 @@ public class GuavaAuthCache implements AuthCache<String, Object> {
     @NonNull
     public Set<Object> batchGet(@NonNull Collection<String> keys) {
         final Set<Object> result = Sets.newHashSet();
-        this.CACHE.asMap().forEach((key, value) -> {
+        this.cache.asMap().forEach((key, value) -> {
             if (keys.contains(key)) {
                 result.add(this.get(key));
             }

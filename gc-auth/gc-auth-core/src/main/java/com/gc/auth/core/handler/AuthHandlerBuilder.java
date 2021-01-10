@@ -27,15 +27,6 @@ public class AuthHandlerBuilder {
     @Getter
     private List<LogoutHandler> logoutHandlers;
 
-//    /**
-//     * 初始化函数
-//     * 初始化默认的执行器
-//     */
-//    private void init() {
-//        this.authenticationFailureHandler = new AuthLoginFailureHandler();
-//        this.logoutSuccessHandler = new AuthLogoutSuccessHandler();
-//    }
-
     /**
      * 设置登录成功执行器
      * @param authenticationSuccessHandler 登录成功

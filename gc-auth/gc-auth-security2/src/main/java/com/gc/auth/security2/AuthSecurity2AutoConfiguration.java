@@ -69,8 +69,8 @@ public class AuthSecurity2AutoConfiguration {
     @Bean
     @ConditionalOnProperty(prefix = "gc.auth", name = "urlCheck", havingValue = "true")
     @ConditionalOnMissingBean(UrlAuthenticationProvider.class)
-    public UrlAuthenticationProvider urlAuthenticationProvider(RequestMappingHandlerMapping mapping, AuthProperties authProperties) {
-        return new DefaultUrlAuthenticationProviderImpl(mapping, authProperties);
+    public UrlAuthenticationProvider urlAuthenticationProvider(RequestMappingHandlerMapping mapping) {
+        return new DefaultUrlAuthenticationProviderImpl(mapping);
     }
 
     /**
