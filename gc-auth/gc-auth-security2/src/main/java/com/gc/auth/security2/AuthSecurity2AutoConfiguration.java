@@ -13,6 +13,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.security.access.PermissionEvaluator;
@@ -28,6 +29,7 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandl
 @Configuration("AuthSecurity2AutoConfiguration")
 @EnableConfigurationProperties(AuthProperties.class)
 @Import(AuthMethodSecurityConfig.class)
+@ComponentScan(basePackages = "com.gc.auth.security2.controller")
 public class AuthSecurity2AutoConfiguration {
 
     /**

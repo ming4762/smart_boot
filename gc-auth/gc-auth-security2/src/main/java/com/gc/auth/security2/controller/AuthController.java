@@ -1,4 +1,4 @@
-package com.gc.auth.security.controller;
+package com.gc.auth.security2.controller;
 
 import com.gc.auth.core.annotation.NonUrlCheck;
 import com.gc.auth.core.data.RestUserDetails;
