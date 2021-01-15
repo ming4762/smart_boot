@@ -8,7 +8,7 @@
         <version>1.0.3-SNAPSHOT</version>
     </parent>
     <artifactId>gc-module-code</artifactId>
-    <version>${gc-boot.version}</version>
+    <version>1.0.3-SNAPSHOT</version>
     <name>gc-module-code</name>
     <description>代码生成器模块</description>
 

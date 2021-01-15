@@ -8,7 +8,7 @@
         <version>1.0.3-SNAPSHOT</version>
     </parent>
     <artifactId>gc-monitor-server</artifactId>
-    <version>${gc-boot.version}</version>
+    <version>1.0.3-SNAPSHOT</version>
     <name>gc-monitor-server</name>
     <description>监控服务</description>
 
