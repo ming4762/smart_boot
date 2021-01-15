@@ -11,6 +11,8 @@ import com.gc.starter.log.constants.LogIdentConstant;
 import com.gc.starter.log.handler.LogHandler;
 import com.gc.starter.log.model.SysLogPO;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.ObjectUtils;
@@ -26,11 +28,10 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.annotation.PostConstruct;
+import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Method;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -41,6 +42,8 @@ import java.util.stream.Collectors;
 @Aspect
 @Slf4j
 public final class LogAspect {
+
+    private static final Set<Class<?>> EXCLUDE_CLASS = Sets.newHashSet(ServletRequest.class);
 
     /**
      * 保存日志的编码集合
@@ -185,7 +188,7 @@ public final class LogAspect {
         final String className = point.getTarget().getClass().getName();
         final String methodName = signature.getName();
         // 设置请求参数
-        String parameter = JsonUtils.toJsonString(AopUtils.getParameterMap(point));
+        String parameter = JsonUtils.toJsonString(this.getParameter(point));
         final SysLogPO sysLog = SysLogPO.builder()
                 .operation(logAnnotation.value())
                 .useTime(time)
@@ -204,6 +207,22 @@ public final class LogAspect {
             sysLog.setResult(JsonUtils.toJsonString(result));
         }
         this.logHandler.save(sysLog, point, logAnnotation, time, code, result, errorMessage);
+    }
+
+    /**
+     * 获取请求参数
+     * @param point point
+     * @return parameter
+     */
+    private Map<String, Object> getParameter(ProceedingJoinPoint point) {
+        final Map<String, Object> parameter = AopUtils.getParameterMap(point);
+        final Map<String, Object> result = Maps.newHashMap();
+        parameter.forEach((key, value) -> {
+            if (Objects.isNull(value) || EXCLUDE_CLASS.stream().noneMatch(item -> item.isAssignableFrom(value.getClass()))) {
+                result.put(key, value);
+            }
+        });
+        return result;
     }
 
     /**
