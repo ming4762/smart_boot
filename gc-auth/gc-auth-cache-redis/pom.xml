@@ -8,7 +8,7 @@
         <version>1.0.3-SNAPSHOT</version>
     </parent>
     <artifactId>gc-auth-cache-redis</artifactId>
-    <version>${gc-boot.version}</version>
+    <version>1.0.3-SNAPSHOT</version>
     <name>gc-auth-cache-redis</name>
     <description>认证模块的缓存工具</description>
 

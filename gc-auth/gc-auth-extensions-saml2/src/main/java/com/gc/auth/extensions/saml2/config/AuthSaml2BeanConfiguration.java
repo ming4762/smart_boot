@@ -4,20 +4,25 @@ import com.gc.auth.core.exception.AuthException;
 import com.gc.auth.core.handler.AuthLogoutSuccessHandler;
 import com.gc.auth.core.properties.AuthProperties;
 import com.gc.auth.core.service.AuthUserService;
+import com.gc.auth.extensions.saml2.metadata.provider.JarClassPathMetadataProvider;
 import com.gc.auth.extensions.saml2.service.DefaultSamlUserDetailsServiceImpl;
 import com.google.common.collect.Lists;
 import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.lang3.StringUtils;
 import org.opensaml.saml2.metadata.provider.FilesystemMetadataProvider;
 import org.opensaml.saml2.metadata.provider.HTTPMetadataProvider;
 import org.opensaml.saml2.metadata.provider.MetadataProvider;
 import org.opensaml.saml2.metadata.provider.MetadataProviderException;
 import org.opensaml.security.MetadataCredentialResolver;
+import org.opensaml.util.resource.ResourceException;
 import org.opensaml.xml.parse.ParserPool;
 import org.opensaml.xml.parse.StaticBasicParserPool;
 import org.opensaml.xml.security.x509.CertPathPKIXTrustEvaluator;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
@@ -50,11 +55,14 @@ import java.util.*;
  * 2021/1/6 17:05
  * @since 1.0
  */
+@Configuration("AuthSaml2BeanConfiguration")
 public class AuthSaml2BeanConfiguration implements InitializingBean {
 
     private static final String FILE_PATH_START = "file://";
 
     private static final String HTTP_PATH_START = "http";
+
+    private static final String CLASS_PATH_START = "classpath:";
 
     private final AuthProperties.Saml2 saml2Properties;
 
@@ -209,9 +217,11 @@ public class AuthSaml2BeanConfiguration implements InitializingBean {
 
     @Bean
     @ConditionalOnMissingBean(MetadataProvider.class)
-    public MetadataProvider metadataProvider(ParserPool parserPool) throws MetadataProviderException, IOException {
+    public MetadataProvider metadataProvider(ParserPool parserPool) throws MetadataProviderException, IOException, ResourceException {
         if (this.saml2Properties.getIdentity().getMetadataFilePath().startsWith(HTTP_PATH_START)) {
             return this.createHttpMetadataProvider(parserPool);
+        } else if (this.saml2Properties.getIdentity().getMetadataFilePath().startsWith(CLASS_PATH_START)) {
+            return this.createClassPathMetadataProvider(parserPool);
         } else {
             return this.createFilesystemMetadataProvider(parserPool);
         }
@@ -231,8 +241,24 @@ public class AuthSaml2BeanConfiguration implements InitializingBean {
     private MetadataProvider createFilesystemMetadataProvider(ParserPool parserPool) throws IOException, MetadataProviderException {
         final DefaultResourceLoader loader = new DefaultResourceLoader();
         final Resource metadataResource = loader.getResource(this.saml2Properties.getIdentity().getMetadataFilePath());
+
         final File samlMetadata = metadataResource.getFile();
         final FilesystemMetadataProvider metadataProvider = new FilesystemMetadataProvider(samlMetadata);
+        metadataProvider.setParserPool(parserPool);
+        return metadataProvider;
+    }
+
+    /**
+     * 创建classPath MetadataProvider
+     * @param parserPool parserPool
+     * @return ResourceBackedMetadataProvider
+     * @throws ResourceException ResourceException
+     * @throws MetadataProviderException MetadataProviderException
+     */
+    private MetadataProvider createClassPathMetadataProvider(ParserPool parserPool) throws ResourceException, MetadataProviderException {
+        String path = StringUtils.substringAfter(this.saml2Properties.getIdentity().getMetadataFilePath(), CLASS_PATH_START);
+        final ClassPathResource classPathResource = new ClassPathResource(path);
+        JarClassPathMetadataProvider metadataProvider = new JarClassPathMetadataProvider(classPathResource);
         metadataProvider.setParserPool(parserPool);
         return metadataProvider;
     }

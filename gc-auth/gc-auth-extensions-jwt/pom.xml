@@ -8,7 +8,7 @@
 		<version>1.0.3-SNAPSHOT</version>
 	</parent>
 	<artifactId>gc-auth-extensions-jwt</artifactId>
-	<version>${gc-boot.version}</version>
+	<version>1.0.3-SNAPSHOT</version>
 	<name>gc-auth-extensions-jwt</name>
 	<description>JWT扩展模块</description>
 

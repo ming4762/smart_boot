@@ -8,7 +8,7 @@
 		<version>1.0.3-SNAPSHOT</version>
 	</parent>
 	<artifactId>gc-cache-common</artifactId>
-	<version>${gc-boot.version}</version>
+	<version>1.0.3-SNAPSHOT</version>
 	<name>gc-cache-common</name>
 	<description>Demo project for Spring Boot</description>
 

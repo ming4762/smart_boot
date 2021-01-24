@@ -8,7 +8,7 @@
         <version>1.0.3-SNAPSHOT</version>
     </parent>
     <artifactId>gc-auth-cache-guava</artifactId>
-    <version>${gc-boot.version}</version>
+    <version>1.0.3-SNAPSHOT</version>
     <name>gc-auth-cache-guava</name>
     <description>auth 模块 guava缓存</description>
 

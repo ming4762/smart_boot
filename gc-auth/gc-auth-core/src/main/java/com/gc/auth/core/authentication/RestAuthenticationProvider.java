@@ -3,6 +3,7 @@ package com.gc.auth.core.authentication;
 import com.gc.common.i18n.utils.I18nUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.authentication.dao.AbstractUserDetailsAuthenticationProvider;
@@ -14,7 +15,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
  * @author shizhongming
  * 2020/1/23 8:17 下午
  */
-public class RestAuthenticationProvider extends AbstractUserDetailsAuthenticationProvider {
+public class RestAuthenticationProvider extends AbstractUserDetailsAuthenticationProvider implements InitializingBean {
 
     private static final String USERNAME_PASSWORD_NULL = "用户名密码不能为空";
 

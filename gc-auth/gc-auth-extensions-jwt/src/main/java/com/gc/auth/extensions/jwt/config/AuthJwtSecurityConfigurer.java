@@ -81,7 +81,8 @@ public class AuthJwtSecurityConfigurer extends SecurityConfigurerAdapter<Default
         if (Objects.isNull(this.getAuthCache())) {
             Assert.notNull(this.serviceProvider.authCache, "auth cache is null, please init it");
         }
-        if (Objects.isNull(this.getBean(JwtService.class, this.jwtService))) {
+        this.jwtService = this.getBean(JwtService.class, this.jwtService);
+        if (Objects.isNull(this.jwtService)) {
             this.jwtService = new JwtService(this.getAuthProperties(), this.getAuthCache());
         }
 
@@ -219,7 +220,7 @@ public class AuthJwtSecurityConfigurer extends SecurityConfigurerAdapter<Default
         try {
             return Optional.ofNullable(this.serviceProvider.applicationContext).map(item -> item.getBean(clazz)).orElse(null);
         } catch (NoSuchBeanDefinitionException e) {
-            log.warn("未找到Bean: " + e.getMessage());
+            log.warn("获取bean发生错误: " + e.getMessage());
             return null;
         }
     }

@@ -8,7 +8,7 @@
 		<version>1.0.3-SNAPSHOT</version>
 	</parent>
 	<artifactId>gc-base-common</artifactId>
-	<version>${gc-boot.version}</version>
+	<version>1.0.3-SNAPSHOT</version>
 	<name>gc-base-common</name>
 	<description>基础核心包</description>
 

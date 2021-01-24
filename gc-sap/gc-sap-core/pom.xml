@@ -8,7 +8,7 @@
 		<version>1.0.3-SNAPSHOT</version>
 	</parent>
 	<artifactId>gc-sap-core</artifactId>
-	<version>${gc-boot.version}</version>
+	<version>1.0.3-SNAPSHOT</version>
 	<name>gc-sap-core</name>
 	<description>sap-core</description>
 

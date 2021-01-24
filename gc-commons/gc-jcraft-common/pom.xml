@@ -8,7 +8,7 @@
 		<version>1.0.3-SNAPSHOT</version>
 	</parent>
 	<artifactId>gc-jcraft-common</artifactId>
-	<version>${gc-boot.version}</version>
+	<version>1.0.3-SNAPSHOT</version>
 	<name>gc-jcraft-common</name>
 	<description>jcraft模块</description>
 
