@@ -2,6 +2,7 @@ package com.gc.auth.core.data;
 
 import com.gc.auth.core.model.Permission;
 import lombok.NonNull;
+import org.springframework.lang.Nullable;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Set;
@@ -46,7 +47,14 @@ public interface RestUserDetails extends UserDetails {
 
     /**
      * 获取token
-     * @return
+     * @return token
      */
     String getToken();
+
+    /**
+     * 获取区域信息
+     * @return 区域信息
+     */
+    @Nullable
+    String getLocale();
 }

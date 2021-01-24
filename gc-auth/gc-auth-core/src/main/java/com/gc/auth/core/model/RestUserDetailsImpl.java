@@ -37,8 +37,9 @@ public class RestUserDetailsImpl implements RestUserDetails, Serializable {
     @Getter
     private String realName;
 
-    @Getter
     private String token;
+
+    private String locale;
 
     private Set<GcGrantedAuthority> authorities;
 
@@ -90,6 +91,11 @@ public class RestUserDetailsImpl implements RestUserDetails, Serializable {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     public String getToken() {
         return this.token;
+    }
+
+    @Override
+    public String getLocale() {
+        return this.locale;
     }
 
     @Override

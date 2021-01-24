@@ -40,7 +40,6 @@ public final class AuthUtils {
                 .map(Authentication :: getPrincipal)
                 .orElse(null);
         if (Objects.isNull(principal) || StringUtils.equals(principal.toString(), NOT_LOGIN_USER)) {
-            log.warn("用户未登录");
             return null;
         }
         return (RestUserDetails)principal;
