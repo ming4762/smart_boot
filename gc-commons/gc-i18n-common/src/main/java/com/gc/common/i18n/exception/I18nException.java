@@ -24,6 +24,10 @@ public class I18nException extends BaseException {
         this.i18nMessage = i18nMessage;
     }
 
+    public I18nException(I18nMessage i18nMessage) {
+        this.i18nMessage = i18nMessage;
+    }
+
     public I18nException(Integer code, I18nMessage i18nMessage, Throwable e) {
         super(code, null, e);
         this.i18nMessage = i18nMessage;

@@ -101,6 +101,7 @@ public final class LogAspect {
             log.info("Time-Consuming : {} ms", time);
         }
         if (ObjectUtils.isNotEmpty(exception)) {
+            // 待完善
             result = GlobalExceptionHandler.doException(exception);
         }
         this.saveLog(point, time, result);
