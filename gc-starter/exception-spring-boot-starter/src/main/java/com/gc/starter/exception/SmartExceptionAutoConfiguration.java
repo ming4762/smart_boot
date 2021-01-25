@@ -1,6 +1,8 @@
 package com.gc.starter.exception;
 
 import com.gc.starter.exception.handler.AsyncNoticeHandler;
+import com.gc.starter.exception.handler.DefaultExceptionMessageHandler;
+import com.gc.starter.exception.handler.ExceptionMessageHandler;
 import com.gc.starter.exception.handler.GlobalExceptionHandler;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.ApplicationContext;
@@ -25,14 +27,24 @@ public class SmartExceptionAutoConfiguration {
     }
 
     /**
+     * 创建异常信息处理类
+     * @return 异常信息处理类
+     */
+    @Bean
+    @ConditionalOnMissingBean(ExceptionMessageHandler.class)
+    public ExceptionMessageHandler defaultExceptionMessageHandler() {
+        return new DefaultExceptionMessageHandler();
+    }
+
+    /**
      * 创建全局异常拦截器
      * @param asyncNoticeHandler 创建异步通知执行器
      * @return 创建全局异常拦截器
      */
     @Bean
     @ConditionalOnMissingBean(GlobalExceptionHandler.class)
-    public GlobalExceptionHandler globalExceptionHandler(AsyncNoticeHandler asyncNoticeHandler) {
-        return new GlobalExceptionHandler(asyncNoticeHandler);
+    public GlobalExceptionHandler globalExceptionHandler(AsyncNoticeHandler asyncNoticeHandler, ExceptionMessageHandler exceptionMessageHandler) {
+        return new GlobalExceptionHandler(asyncNoticeHandler, exceptionMessageHandler);
     }
 
 }

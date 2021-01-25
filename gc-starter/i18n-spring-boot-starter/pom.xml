@@ -24,6 +24,12 @@
 
         <dependency>
             <groupId>com.gc</groupId>
+            <artifactId>gc-auth-core</artifactId>
+            <version>${gc-boot.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.gc</groupId>
             <artifactId>gc-i18n-common</artifactId>
             <version>${gc-boot.version}</version>
         </dependency>
