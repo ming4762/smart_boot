@@ -3,10 +3,6 @@ gc:
   auth:
 #    jwt存储的key
     jwt-key: gc-it
-#    是否使用jwt
-    jwt: false
-#    是否开启URL校验
-    url-check: false
 #    是否开启开发模式，开发模式不校验
     development: fasle
 #    session配置
@@ -31,6 +27,17 @@ gc:
       patch:
       options:
       trace:
+#    saml2配置
+    saml2:
+      entityId:
+      key:
+        name:
+        password:
+        filePath:
+      identity:
+        discoveryEnabled: true
+        metadataFilePath:
+
 #  文件系统配置
   file:
 #    文件系统类型，可选值：MONGO_DB、LOCAL

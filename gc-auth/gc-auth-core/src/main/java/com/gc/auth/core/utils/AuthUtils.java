@@ -17,7 +17,7 @@ import java.util.Optional;
 
 /**
  * 认证工具类
- * @author jackson
+ * @author
  * 2020/1/22 7:07 下午
  */
 @Slf4j
