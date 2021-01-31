@@ -102,7 +102,7 @@ public abstract class AbstractDefaultDatabaseExecutor implements DatabaseExecuto
 
     /**
      * 测试数据库连接
-     * @param databaseConnection
+     * @param databaseConnection 数据库连接信息
      * @return
      * @throws SQLException
      */
