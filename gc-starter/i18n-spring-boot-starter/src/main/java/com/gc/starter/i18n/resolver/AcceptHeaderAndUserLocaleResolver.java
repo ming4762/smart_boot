@@ -24,6 +24,9 @@ public class AcceptHeaderAndUserLocaleResolver extends AcceptHeaderLocaleResolve
     public Locale resolveLocale(@NonNull HttpServletRequest request) {
         final Locale locale = super.resolveLocale(request);
         if (Objects.nonNull(request.getHeader(HttpHeaders.ACCEPT_LANGUAGE))) {
+            if (StringUtils.isBlank(locale.getLanguage())) {
+                return Locale.forLanguageTag(request.getHeader(HttpHeaders.ACCEPT_LANGUAGE));
+            }
             return locale;
         }
         // 获取用户语言信息
