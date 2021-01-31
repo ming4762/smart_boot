@@ -6,6 +6,7 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.context.support.DelegatingMessageSource;
 import org.springframework.util.Assert;
 
+import java.util.Locale;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -54,6 +55,26 @@ public class I18nUtils {
     }
 
     /**
+     * 获取I18N信息
+     * @param i18nMessage I18nMessage
+     * @return I18N
+     */
+    public static String get(I18nMessage i18nMessage, Object[] args) {
+        validate();
+        return messageSource.getMessage(i18nMessage.getI18nCode(), args, LocaleContextHolder.getLocale());
+    }
+
+    /**
+     * 获取I18N信息
+     * @param i18nMessage I18nMessage
+     * @return I18N
+     */
+    public static String get(I18nMessage i18nMessage, Object[] args, Locale locale) {
+        validate();
+        return messageSource.getMessage(i18nMessage.getI18nCode(), args, locale);
+    }
+
+    /**
      * 判断是否支持I18N
      * @return 是否支持I18N
      */
@@ -61,6 +82,10 @@ public class I18nUtils {
        return Objects.nonNull(messageSource) && !(messageSource instanceof DelegatingMessageSource && Objects.isNull(((DelegatingMessageSource) messageSource).getParentMessageSource()));
     }
 
+    /**
+     * 获取I18N MessageSource
+     * @return MessageSource
+     */
     public static MessageSource getMessageSource() {
         return messageSource;
     }

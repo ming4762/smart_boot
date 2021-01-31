@@ -32,4 +32,15 @@ public class I18nException extends BaseException {
         super(code, null, e);
         this.i18nMessage = i18nMessage;
     }
+
+    /**
+     * 跑出异常
+     * @param message 异常信息
+     */
+    public static void of(I18nMessage message) {
+        throw new I18nException(message);
+    }
+    public static void of(I18nMessage message, Throwable e) {
+        throw new I18nException(message, e);
+    }
 }
