@@ -17,7 +17,7 @@ import java.util.Map;
  * @author shizhongming
  * 2021/2/1 11:24 下午
  */
-public class DefaultMessageSource implements MapArgsMessageSource {
+public class DefaultMessageSource implements MapArgsMessageSource, ReloadableMessageSource {
 
     private ResourceCache resourceCache;
 
@@ -86,5 +86,10 @@ public class DefaultMessageSource implements MapArgsMessageSource {
     @Autowired
     public void setResourceReader(ResourceReader resourceReader) {
         this.resourceReader = resourceReader;
+    }
+
+    @Override
+    public void reload() {
+        this.resourceCache.clear();
     }
 }

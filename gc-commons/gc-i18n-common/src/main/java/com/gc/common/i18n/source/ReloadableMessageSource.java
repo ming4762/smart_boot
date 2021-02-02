@@ -1,4 +1,4 @@
-package com.gc.common.i18n;
+package com.gc.common.i18n.source;
 
 import org.springframework.context.MessageSource;
 
