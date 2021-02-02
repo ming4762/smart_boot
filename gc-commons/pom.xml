@@ -17,6 +17,7 @@
     <modules>
         <module>gc-base-common</module>
         <module>gc-cache-common</module>
+        <module>gc-commons-io</module>
         <module>gc-commons-txt</module>
         <module>gc-i18n-common</module>
         <module>gc-jcraft-common</module>
