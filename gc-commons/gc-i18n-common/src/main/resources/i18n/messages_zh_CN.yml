@@ -1,0 +1,6 @@
+common:
+  test2: 测试123
+validator:
+  message:
+    test:
+      test2: 这是测试

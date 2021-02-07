@@ -1,7 +1,6 @@
 package com.gc.common.i18n.source;
 
 import org.springframework.context.MessageSource;
-import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 
 import java.util.Locale;
@@ -22,7 +21,6 @@ public interface MapArgsMessageSource extends MessageSource {
      * @param locale locale
      * @return 资源信息
      */
-    @NonNull
     String getMessage(String code, @Nullable Map<String, Object> args, @Nullable String defaultMessage, Locale locale);
 
     /**
@@ -32,7 +30,6 @@ public interface MapArgsMessageSource extends MessageSource {
      * @param locale locale
      * @return 资源信息
      */
-    @NonNull
     default String getMessage(String code, @Nullable Map<String, Object> args, Locale locale) {
         return this.getMessage(code, args, null, locale);
     }

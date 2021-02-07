@@ -3,6 +3,7 @@ package com.gc.common.i18n.source;
 import com.gc.common.i18n.cache.ResourceCache;
 import com.gc.common.i18n.format.MessageFormat;
 import com.gc.common.i18n.reader.ResourceReader;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSourceResolvable;
@@ -10,6 +11,7 @@ import org.springframework.context.NoSuchMessageException;
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 
+import java.io.IOException;
 import java.util.Locale;
 import java.util.Map;
 
@@ -17,6 +19,7 @@ import java.util.Map;
  * @author shizhongming
  * 2021/2/1 11:24 下午
  */
+@Slf4j
 public class DefaultMessageSource implements MapArgsMessageSource, ReloadableMessageSource {
 
     private ResourceCache resourceCache;
@@ -26,17 +29,25 @@ public class DefaultMessageSource implements MapArgsMessageSource, ReloadableMes
     private ResourceReader resourceReader;
 
     @Override
-    @NonNull
     public String getMessage(String code, Map<String, Object> args, String defaultMessage, Locale locale) {
-        final String message = this.doGetMessage(code, locale, defaultMessage);
-        return messageFormat.format(message, args);
+        try {
+            final String message = this.doGetMessage(code, locale, defaultMessage);
+            return messageFormat.format(message, args);
+        } catch (IOException e) {
+            log.warn("读取资源失败", e);
+            return null;
+        }
     }
 
     @Override
-    @NonNull
     public String getMessage(@NonNull String code, Object[] args, String defaultMessage, @Nullable Locale locale) {
-        final String message = this.doGetMessage(code, locale, defaultMessage);
-        return messageFormat.format(message, args);
+        try {
+            final String message = this.doGetMessage(code, locale, defaultMessage);
+            return messageFormat.format(message, args);
+        } catch (IOException e) {
+            log.warn("读取资源失败", e);
+            return null;
+        }
     }
 
     @NonNull
@@ -51,19 +62,17 @@ public class DefaultMessageSource implements MapArgsMessageSource, ReloadableMes
         throw new NoSuchMessageException("no support", locale);
     }
 
-    private String doGetMessage(String code, Locale locale, String defaultMessage) {
+    private String doGetMessage(String code, Locale locale, String defaultMessage) throws IOException {
         // 从缓存获取
-        String message = this.resourceCache.get(locale, code);
-        if (StringUtils.isNotBlank(message)) {
-            return message;
+        if (this.resourceCache.contain(locale)) {
+            return this.resourceCache.get(locale, code);
         }
         // 缓存没有读到 从资源库读
         final Map<String, String> messages = this.resourceReader.read(locale);
-        if (!this.resourceCache.contain(locale)) {
-            // 设置缓存
-            this.resourceCache.putAll(locale, messages);
-        }
-        message = messages.get(code);
+        // 设置缓存
+        this.resourceCache.putAll(locale, messages);
+
+        String message = messages.get(code);
         if (StringUtils.isNotBlank(message)) {
             return message;
         }
