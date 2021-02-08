@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -21,6 +22,9 @@ public class DefaultMessageFormat implements MessageFormat {
 
     @Override
     public String format(String formValue, Map<String, Object> args) {
+        if (Objects.isNull(args)) {
+            return formValue;
+        }
         final Matcher matcher = PATTERN.matcher(formValue);
         final Set<String> matchValues = Sets.newHashSet();
         while (matcher.find()) {
@@ -38,6 +42,9 @@ public class DefaultMessageFormat implements MessageFormat {
 
     @Override
     public String format(String formValue, Object[] args) {
+        if (Objects.isNull(args)) {
+            return formValue;
+        }
         final Matcher matcher = PATTERN.matcher(formValue);
         final Set<String> matchValues = Sets.newHashSet();
         while (matcher.find()) {
