@@ -58,8 +58,8 @@ public class DefaultMessageSource implements MapArgsMessageSource, ReloadableMes
 
     @NonNull
     @Override
-    public String getMessage(@NonNull MessageSourceResolvable resolvable, @Nullable Locale locale) throws NoSuchMessageException {
-        throw new NoSuchMessageException("no support", locale);
+    public String getMessage(@NonNull MessageSourceResolvable resolvable, @NonNull Locale locale) throws NoSuchMessageException {
+        throw new  NoSuchMessageException("no support", locale);
     }
 
     /**

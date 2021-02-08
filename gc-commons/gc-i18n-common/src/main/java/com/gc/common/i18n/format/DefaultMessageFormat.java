@@ -20,16 +20,22 @@ public class DefaultMessageFormat implements MessageFormat {
 
     private static final Pattern PATTERN = Pattern.compile("\\{.*?}");
 
-    @Override
-    public String format(String formValue, Map<String, Object> args) {
-        if (Objects.isNull(args)) {
-            return formValue;
-        }
+    private Set<String> matchValues(String formValue) {
         final Matcher matcher = PATTERN.matcher(formValue);
         final Set<String> matchValues = Sets.newHashSet();
         while (matcher.find()) {
             matchValues.add(matcher.group());
         }
+        return matchValues;
+    }
+
+
+    @Override
+    public String format(String formValue, Map<String, Object> args) {
+        if (Objects.isNull(args)) {
+            return formValue;
+        }
+        final Set<String> matchValues = this.matchValues(formValue);
         final String[] result = {formValue};
         matchValues.forEach(matchValue -> {
             final String key = StringUtils.remove(StringUtils.remove(matchValue, "{"), "}");
@@ -45,11 +51,7 @@ public class DefaultMessageFormat implements MessageFormat {
         if (Objects.isNull(args)) {
             return formValue;
         }
-        final Matcher matcher = PATTERN.matcher(formValue);
-        final Set<String> matchValues = Sets.newHashSet();
-        while (matcher.find()) {
-            matchValues.add(matcher.group());
-        }
+        final Set<String> matchValues = this.matchValues(formValue);
         final String[] result = {formValue};
         matchValues.forEach(matchValue -> {
             final String keyValue = StringUtils.remove(StringUtils.remove(matchValue, "{"), "}");
