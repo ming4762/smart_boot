@@ -5,10 +5,10 @@
 	<parent>
 		<groupId>com.gc</groupId>
 		<artifactId>gc-starter</artifactId>
-		<version>1.0.3-SNAPSHOT</version>
+		<version>1.0.4-SNAPSHOT</version>
 	</parent>
 	<artifactId>redis-sping-boot-starter</artifactId>
-	<version>1.0.3-SNAPSHOT</version>
+	<version>1.0.4-SNAPSHOT</version>
 	<name>redis-sping-boot-starter</name>
 	<description>redis启动器</description>
 

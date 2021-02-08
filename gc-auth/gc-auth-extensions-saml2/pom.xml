@@ -5,10 +5,10 @@
 	<parent>
 		<groupId>com.gc</groupId>
 		<artifactId>gc-auth</artifactId>
-		<version>1.0.3-SNAPSHOT</version>
+		<version>1.0.4-SNAPSHOT</version>
 	</parent>
 	<artifactId>gc-auth-extensions-saml2</artifactId>
-	<version>1.0.3-SNAPSHOT</version>
+	<version>1.0.4-SNAPSHOT</version>
 	<name>gc-auth-extensions-saml2</name>
 	<description>SAML2扩展</description>
 

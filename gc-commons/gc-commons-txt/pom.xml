@@ -5,10 +5,10 @@
     <parent>
         <groupId>com.gc</groupId>
         <artifactId>gc-commons</artifactId>
-        <version>1.0.3-SNAPSHOT</version>
+        <version>1.0.4-SNAPSHOT</version>
     </parent>
     <artifactId>gc-commons-txt</artifactId>
-    <version>1.0.3-SNAPSHOT</version>
+    <version>1.0.4-SNAPSHOT</version>
     <name>gc-commons-txt</name>
     <description>txt工具包</description>
 
