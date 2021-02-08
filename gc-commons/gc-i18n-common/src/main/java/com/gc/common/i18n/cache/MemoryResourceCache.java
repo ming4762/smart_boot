@@ -59,4 +59,14 @@ public class MemoryResourceCache implements ResourceCache {
         }
         return null;
     }
+
+    /**
+     * 删除缓存
+     * @param locale Locale
+     * @return 移除的值
+     */
+    @Override
+    public Map<String, String> remove(@NonNull Locale locale) {
+        return CACHE.remove(locale);
+    }
 }

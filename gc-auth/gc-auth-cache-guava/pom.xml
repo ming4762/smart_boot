@@ -5,10 +5,10 @@
     <parent>
         <groupId>com.gc</groupId>
         <artifactId>gc-auth</artifactId>
-        <version>1.0.3-SNAPSHOT</version>
+        <version>1.0.4-SNAPSHOT</version>
     </parent>
     <artifactId>gc-auth-cache-guava</artifactId>
-    <version>1.0.3-SNAPSHOT</version>
+    <version>1.0.4-SNAPSHOT</version>
     <name>gc-auth-cache-guava</name>
     <description>auth 模块 guava缓存</description>
 

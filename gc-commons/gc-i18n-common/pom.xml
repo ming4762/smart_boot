@@ -5,10 +5,10 @@
     <parent>
         <groupId>com.gc</groupId>
         <artifactId>gc-commons</artifactId>
-        <version>1.0.3-SNAPSHOT</version>
+        <version>1.0.4-SNAPSHOT</version>
     </parent>
     <artifactId>gc-i18n-common</artifactId>
-    <version>1.0.3-SNAPSHOT</version>
+    <version>1.0.4-SNAPSHOT</version>
     <name>gc-i18n-common</name>
     <description>i18n工具包</description>
 
@@ -19,6 +19,12 @@
         <dependency>
             <groupId>com.gc</groupId>
             <artifactId>gc-base-common</artifactId>
+            <version>${gc-boot.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.gc</groupId>
+            <artifactId>gc-commons-io</artifactId>
             <version>${gc-boot.version}</version>
         </dependency>
 

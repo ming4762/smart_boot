@@ -4,7 +4,7 @@ import com.gc.common.base.message.Result;
 import com.gc.common.base.utils.AopUtils;
 import com.gc.common.base.utils.IpUtils;
 import com.gc.common.base.utils.JsonUtils;
-import com.gc.starter.exception.handler.GlobalExceptionHandler;
+import com.gc.starter.exception.handler.ExceptionMessageHandler;
 import com.gc.starter.log.LogProperties;
 import com.gc.starter.log.annotation.Log;
 import com.gc.starter.log.constants.LogIdentConstant;
@@ -56,6 +56,9 @@ public final class LogAspect {
     @Autowired
     private LogHandler logHandler;
 
+    @Autowired
+    private ExceptionMessageHandler exceptionMessageHandler;
+
     @PostConstruct
     public void init() {
         if (this.codeList == null) {
@@ -102,7 +105,7 @@ public final class LogAspect {
         }
         if (ObjectUtils.isNotEmpty(exception)) {
             // 待完善
-            result = GlobalExceptionHandler.doException(exception);
+            result = this.exceptionMessageHandler.message(exception, null);
         }
         this.saveLog(point, time, result);
         // 保存日志

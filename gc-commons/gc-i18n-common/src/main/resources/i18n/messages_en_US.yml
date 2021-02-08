@@ -1,0 +1,6 @@
+common:
+  test2: test exception
+validator:
+  message:
+    test:
+      test2: this is test

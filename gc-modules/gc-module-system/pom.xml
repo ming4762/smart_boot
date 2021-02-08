@@ -5,10 +5,10 @@
 	<parent>
 		<groupId>com.gc</groupId>
 		<artifactId>gc-modules</artifactId>
-		<version>1.0.3-SNAPSHOT</version>
+		<version>1.0.4-SNAPSHOT</version>
 	</parent>
 	<artifactId>gc-module-system</artifactId>
-	<version>1.0.3-SNAPSHOT</version>
+	<version>1.0.4-SNAPSHOT</version>
 	<name>gc-module-system</name>
 	<description>系统模块</description>
 

@@ -59,7 +59,7 @@ public class I18nUtils {
      * @param i18nMessage I18nMessage
      * @return I18N
      */
-    public static String get(I18nMessage i18nMessage, Object[] args) {
+    public static String get(I18nMessage i18nMessage, Object ...args) {
         validate();
         return messageSource.getMessage(i18nMessage.getI18nCode(), args, LocaleContextHolder.getLocale());
     }

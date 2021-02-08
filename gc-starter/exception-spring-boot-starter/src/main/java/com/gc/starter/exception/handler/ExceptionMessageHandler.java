@@ -1,5 +1,7 @@
 package com.gc.starter.exception.handler;
 
+import org.springframework.lang.Nullable;
+
 import javax.servlet.http.HttpServletRequest;
 
 /**
@@ -15,5 +17,5 @@ public interface ExceptionMessageHandler {
      * @param request HttpServletRequest
      * @return 信息
      */
-    Object message(Exception e, HttpServletRequest request);
+    Object message(Exception e, @Nullable HttpServletRequest request);
 }
