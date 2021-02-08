@@ -49,14 +49,11 @@ public class I18nExceptionMessageHandler implements ExceptionMessageHandler {
             Set<ConstraintViolation<?>> constraintViolations =  ((ConstraintViolationException) e).getConstraintViolations();
             String message = constraintViolations.isEmpty() ? "未知异常" : constraintViolations.iterator().next().getMessage();
             return this.getMessage(HttpStatus.BAD_REQUEST);
-//            return Result.failure(HttpStatus.BAD_REQUEST.getCode(), message, null);
         } else if (e instanceof MethodArgumentTypeMismatchException) {
             log.error("MethodArgumentTypeMismatchException: 参数名 {}, 异常信息 {}", ((MethodArgumentTypeMismatchException) e).getName(), ((MethodArgumentTypeMismatchException) e).getMessage());
-//            return Result.ofExceptionStatus(HttpStatus.PARAM_NOT_MATCH, e);
             return this.getMessage(HttpStatus.PARAM_NOT_MATCH);
         } else if (e instanceof HttpMessageNotReadableException) {
             log.error("HttpMessageNotReadableException: 错误信息 {}", ((HttpMessageNotReadableException) e).getMessage());
-//            return Result.ofExceptionStatus(HttpStatus.PARAM_NOT_NULL, e);
             return this.getMessage(HttpStatus.PARAM_NOT_NULL);
         } else if (e instanceof I18nException) {
             log.error(String.format("DataManagerException: 状态码 %s, 异常信息 %s", ((I18nException) e).getCode(), e.getMessage()), ((I18nException) e).getE());
