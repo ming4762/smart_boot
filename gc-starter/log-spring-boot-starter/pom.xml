@@ -22,11 +22,6 @@
             <artifactId>gc-auth-core</artifactId>
             <version>${gc-boot.version}</version>
         </dependency>
-        <dependency>
-            <groupId>com.gc</groupId>
-            <artifactId>crud-spring-boot-starter</artifactId>
-            <version>${gc-boot.version}</version>
-        </dependency>
 
         <!--AOP支持-->
         <dependency>

@@ -1,10 +1,5 @@
 package com.gc.starter.log.model;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
-import com.gc.starter.crud.model.BaseModelCreateUserTime;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,19 +9,16 @@ import lombok.Setter;
  * @author jackson
  * 2020/1/22 2:19 下午
  */
-@TableName("sys_log")
 @Getter
 @Setter
 @Builder
-public class SysLogPO extends BaseModelCreateUserTime {
+public class SysLogPO {
 
-    @TableField(exist = false)
     private static final long serialVersionUID = 7634433741019323407L;
 
     /**
      * 日志ID
      */
-    @TableId(type = IdType.ASSIGN_ID)
     private Long logId;
 
     /**
