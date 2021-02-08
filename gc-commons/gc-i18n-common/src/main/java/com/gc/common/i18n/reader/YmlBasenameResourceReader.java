@@ -57,7 +57,6 @@ public class YmlBasenameResourceReader extends AbstractBasenameResourceReader {
     /**
      * 读取内容
      * @param path
-     * @return"common.test2" -> "test exception"
      * @throws IOException
      */
     protected Map<String, String> doRead(String path) throws IOException {

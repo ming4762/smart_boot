@@ -62,13 +62,41 @@ public class DefaultMessageSource implements MapArgsMessageSource, ReloadableMes
         throw new NoSuchMessageException("no support", locale);
     }
 
-    private String doGetMessage(String code, Locale locale, String defaultMessage) throws IOException {
+    /**
+     * 缓存是否有效
+     * @param locale Locale
+     * @return 缓存是否有效
+     */
+    protected boolean cacheValid(Locale locale) {
+        return this.resourceCache.contain(locale);
+    }
+
+    /**
+     * 读取资源
+     * @param locale Locale
+     * @return 读取的资源信息
+     * @throws IOException IOException
+     */
+    protected Map<String, String> readMessage(Locale locale) throws IOException {
+        return this.resourceReader.read(locale);
+    }
+
+
+    /**
+     * 获取信息
+     * @param code 编码
+     * @param locale Locale
+     * @param defaultMessage 默认信息
+     * @return I18N 信息
+     * @throws IOException IOException
+     */
+    protected String doGetMessage(String code, Locale locale, String defaultMessage) throws IOException {
         // 从缓存获取
-        if (this.resourceCache.contain(locale)) {
+        if (this.cacheValid(locale)) {
             return this.resourceCache.get(locale, code);
         }
         // 缓存没有读到 从资源库读
-        final Map<String, String> messages = this.resourceReader.read(locale);
+        final Map<String, String> messages = this.readMessage(locale);
         // 设置缓存
         this.resourceCache.putAll(locale, messages);
 
@@ -95,6 +123,11 @@ public class DefaultMessageSource implements MapArgsMessageSource, ReloadableMes
     @Autowired
     public void setResourceReader(ResourceReader resourceReader) {
         this.resourceReader = resourceReader;
+    }
+
+    @Override
+    public void reload(Locale locale) {
+        this.resourceCache.remove(locale);
     }
 
     @Override

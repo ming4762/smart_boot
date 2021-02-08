@@ -2,7 +2,6 @@ package com.gc.starter.i18n;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.convert.DurationUnit;
 
 import java.nio.charset.Charset;
@@ -17,7 +16,6 @@ import java.util.Locale;
  */
 @Getter
 @Setter
-@ConfigurationProperties("gc.i18n")
 public class I18nProperties {
 
     /**
@@ -36,6 +34,6 @@ public class I18nProperties {
     public static class Cache {
 
         @DurationUnit(ChronoUnit.SECONDS)
-        private Duration duration;
+        private Duration duration = Duration.ofSeconds(3600);
     }
 }

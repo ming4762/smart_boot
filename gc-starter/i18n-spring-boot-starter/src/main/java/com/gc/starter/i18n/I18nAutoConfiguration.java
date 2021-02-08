@@ -6,10 +6,11 @@ import com.gc.common.i18n.format.DefaultMessageFormat;
 import com.gc.common.i18n.format.MessageFormat;
 import com.gc.common.i18n.reader.ResourceBundleResourceReader;
 import com.gc.common.i18n.reader.ResourceReader;
-import com.gc.common.i18n.source.DefaultMessageSource;
+import com.gc.common.i18n.source.AutoReloadMessageSource;
 import com.gc.common.i18n.utils.I18nUtils;
 import com.gc.starter.i18n.resolver.AcceptHeaderAndUserLocaleResolver;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
@@ -24,14 +25,20 @@ import javax.annotation.PostConstruct;
  * 2020/5/12 5:57 下午
  */
 @Configuration
-@EnableConfigurationProperties(I18nProperties.class)
+@EnableConfigurationProperties
 public class I18nAutoConfiguration {
 
+
+    @Bean
+    @ConfigurationProperties("gc.i18n")
+    public I18nProperties i18nProperties() {
+        return new I18nProperties();
+    }
 
 
     @PostConstruct
     public void init() {
-        I18nUtils.setMessageSource(messageSource());
+        I18nUtils.setMessageSource(messageSource(i18nProperties()));
     }
 
     /**
@@ -84,8 +91,16 @@ public class I18nAutoConfiguration {
     }
 
 
+    /**
+     * 创建message Source
+     * @param properties 参数
+     * @return MessageSource
+     */
     @Bean
-    public MessageSource messageSource() {
-        return new DefaultMessageSource();
+    @ConditionalOnMissingBean(MessageSource.class)
+    public MessageSource messageSource(I18nProperties properties) {
+        AutoReloadMessageSource autoReloadMessageSource =  new AutoReloadMessageSource();
+        autoReloadMessageSource.setDuration(properties.getCache().getDuration());
+        return autoReloadMessageSource;
     }
 }

@@ -59,6 +59,14 @@ public interface ResourceCache {
      * 删除缓存
      * @param locale locale
      * @param key key
+     * @return 移除的值
      */
     String remove(@NonNull Locale locale, @NonNull String key);
+
+    /**
+     * 删除缓存
+     * @param locale Locale
+     * @return 移除的值
+     */
+    Map<String, String> remove(@NonNull Locale locale);
 }

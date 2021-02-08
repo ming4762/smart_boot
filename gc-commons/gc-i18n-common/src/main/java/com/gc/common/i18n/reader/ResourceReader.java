@@ -17,6 +17,7 @@ public interface ResourceReader {
      * 读取资源
      * @param locale 语言
      * @return 资源信息
+     * @throws IOException IOException
      */
     Map<String, String> read(Locale locale) throws IOException;
 }
