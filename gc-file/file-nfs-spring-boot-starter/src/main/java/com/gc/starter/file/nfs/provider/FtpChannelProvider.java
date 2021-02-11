@@ -9,6 +9,7 @@ import com.jcraft.jsch.ChannelSftp;
 import com.jcraft.jsch.Session;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.pool2.impl.GenericObjectPool;
+import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
 
 /**
@@ -18,7 +19,7 @@ import org.springframework.beans.factory.InitializingBean;
  * @since 1.0
  */
 @Slf4j
-public class FtpChannelProvider implements JcraftChannelProvider<ChannelSftp>, InitializingBean {
+public class FtpChannelProvider implements JcraftChannelProvider<ChannelSftp>, InitializingBean, DisposableBean {
 
     private GenericObjectPool<ChannelSftp> objectPool;
 
@@ -55,5 +56,13 @@ public class FtpChannelProvider implements JcraftChannelProvider<ChannelSftp>, I
         // 创建channel连接池
         final ChannelPooledObjectFactory<ChannelSftp> channelPooledObjectFactory = new ChannelPooledObjectFactory<>(sessionObjectPool, ChannelTypeConstants.sftp);
         this.objectPool = new GenericObjectPool<>(channelPooledObjectFactory);
+    }
+
+    /**
+     * 销毁对象，关闭连接池
+     */
+    @Override
+    public void destroy() {
+        this.objectPool.close();
     }
 }
