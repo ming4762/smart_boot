@@ -1,7 +1,7 @@
 package com.gc.database.generator.service;
 
 import com.gc.database.generator.model.TemplateElement;
-import com.gc.database.message.pojo.bo.DatabaseConnectionBO;
+import com.gc.database.message.pool.model.DbConnectionConfig;
 import org.springframework.lang.NonNull;
 
 import java.io.OutputStream;
@@ -14,17 +14,17 @@ public interface DatabaseGeneratorService {
 
     /**
      * 创建数据库字典
-     * @param databaseConnection 数据库连接信息
+     * @param config 数据库连接信息
      * @param outputStream 输出流
      */
-    void createDatabaseDic(@NonNull DatabaseConnectionBO databaseConnection, @NonNull OutputStream outputStream);
+    void createDatabaseDic(@NonNull DbConnectionConfig config, @NonNull OutputStream outputStream);
 
 
     /**
      * 创建数据库字典
-     * @param databaseConnection 数据库连接信息
+     * @param config 数据库连接信息
      * @param outputStream 输出流
      * @param templateElement 模板信息
      */
-    void createDatabaseDic(@NonNull DatabaseConnectionBO databaseConnection, @NonNull OutputStream outputStream, @NonNull TemplateElement templateElement);
+    void createDatabaseDic(@NonNull DbConnectionConfig config, @NonNull OutputStream outputStream, @NonNull TemplateElement templateElement);
 }

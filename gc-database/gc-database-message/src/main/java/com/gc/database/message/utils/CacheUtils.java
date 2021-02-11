@@ -10,7 +10,6 @@ import org.springframework.lang.Nullable;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
-import java.sql.Connection;
 import java.util.Map;
 import java.util.concurrent.ConcurrentMap;
 
@@ -24,11 +23,6 @@ public class CacheUtils {
     private CacheUtils() {
         throw new IllegalStateException("Utility class");
     }
-
-    /**
-     * 数据库连接缓存
-     */
-    private static final ConcurrentMap<String, Connection> CONNECTION_CACHE = Maps.newConcurrentMap();
 
     /**
      * 数据库字段与Field映射缓存
@@ -73,25 +67,6 @@ public class CacheUtils {
     @Nullable
     public static Converter getAutoConverter(String key) {
         return AUTO_CONVERTER_CACHE.get(key);
-    }
-
-
-    /**
-     * 缓存数据库连接
-     * @param key key
-     * @param connection 数据库连接
-     */
-    public static void setConnectionCache(@NonNull String key, @NonNull Connection connection) {
-        CONNECTION_CACHE.put(key, connection);
-    }
-
-    @Nullable
-    public static Connection getConnection(String key) {
-        return CONNECTION_CACHE.get(key);
-    }
-
-    public static void removeConnection(@NonNull String key) {
-        CONNECTION_CACHE.remove(key);
     }
 
 

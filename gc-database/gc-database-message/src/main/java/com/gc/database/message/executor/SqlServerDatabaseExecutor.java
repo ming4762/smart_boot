@@ -2,11 +2,10 @@ package com.gc.database.message.executor;
 
 import com.gc.database.message.constants.TableTypeConstants;
 import com.gc.database.message.converter.DbJavaTypeConverter;
-import com.gc.database.message.pojo.bo.DatabaseConnectionBO;
 import com.gc.database.message.pojo.dbo.ColumnDO;
 import com.gc.database.message.pojo.dbo.TableViewDO;
+import com.gc.database.message.pool.model.DbConnectionConfig;
 import org.springframework.lang.NonNull;
-import org.springframework.stereotype.Component;
 
 import java.util.List;
 
@@ -14,7 +13,6 @@ import java.util.List;
  * @author shizhongming
  * 2020/1/19 8:18 下午
  */
-@Component
 public class SqlServerDatabaseExecutor extends AbstractDefaultDatabaseExecutor implements DatabaseExecutor {
 
     private final DbJavaTypeConverter dbJavaTypeConverter;
@@ -35,11 +33,6 @@ public class SqlServerDatabaseExecutor extends AbstractDefaultDatabaseExecutor i
     private static final String COLUMN_COMMENTS_SQL = "select a.NAME COLUMN_NAME, c.name TABLE_NAME,cast(isnull(e.[value],'') as nvarchar(100)) as REMARK from sys.columns a inner join sys.objects c on a.object_id=c.object_id and c.type='u' left join sys.extended_properties e on e.major_id=c.object_id and e.minor_id=a.column_id and e.class=1 where c.name in %in";
 
 
-    @Override
-    public String getUrl(@NonNull DatabaseConnectionBO databaseConnection) {
-        return String.format("%s;database=%s", databaseConnection.getUrl(), databaseConnection.getDatabaseName());
-    }
-
     /**
      * 获取表格信息
      * @param databaseConnection 数据库连接信息
@@ -49,7 +42,7 @@ public class SqlServerDatabaseExecutor extends AbstractDefaultDatabaseExecutor i
      */
     @Override
     @NonNull
-    public List<TableViewDO> listBaseTable(@NonNull DatabaseConnectionBO databaseConnection, String tableNamePattern, TableTypeConstants... types) {
+    public List<TableViewDO> listBaseTable(@NonNull DbConnectionConfig databaseConnection, String tableNamePattern, TableTypeConstants... types) {
         List<TableViewDO> tableList = super.listBaseTable(databaseConnection, tableNamePattern, types);
         this.queryTableRemark(databaseConnection, tableList, TABLE_COMMENTS_SQL);
         return tableList;
@@ -63,7 +56,7 @@ public class SqlServerDatabaseExecutor extends AbstractDefaultDatabaseExecutor i
      */
     @NonNull
     @Override
-    public List<ColumnDO> listBaseColumn(@NonNull DatabaseConnectionBO databaseConnection, @NonNull String tableName) {
+    public List<ColumnDO> listBaseColumn(@NonNull DbConnectionConfig databaseConnection, @NonNull String tableName) {
         List<ColumnDO> columnList = super.listBaseColumn(databaseConnection, tableName);
         this.queryColumnRemark(databaseConnection, columnList, COLUMN_COMMENTS_SQL);
         return columnList;

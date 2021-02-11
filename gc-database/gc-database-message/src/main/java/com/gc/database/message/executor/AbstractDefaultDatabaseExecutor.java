@@ -10,8 +10,9 @@ import com.gc.database.message.constants.TypeMappingConstant;
 import com.gc.database.message.converter.DbJavaTypeConverter;
 import com.gc.database.message.exception.SmartDatabaseException;
 import com.gc.database.message.pojo.bo.ColumnBO;
-import com.gc.database.message.pojo.bo.DatabaseConnectionBO;
 import com.gc.database.message.pojo.dbo.*;
+import com.gc.database.message.pool.DbConnectionProvider;
+import com.gc.database.message.pool.model.DbConnectionConfig;
 import com.gc.database.message.utils.CacheUtils;
 import com.gc.database.message.utils.DatabaseUtils;
 import com.google.common.collect.Lists;
@@ -22,6 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang3.ArrayUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
@@ -42,6 +44,8 @@ public abstract class AbstractDefaultDatabaseExecutor implements DatabaseExecuto
 
     private final DbJavaTypeConverter dbJavaTypeConverter;
 
+    private DbConnectionProvider dbConnectionProvider;
+
     public AbstractDefaultDatabaseExecutor(DbJavaTypeConverter dbJavaTypeConverter) {
         this.dbJavaTypeConverter = dbJavaTypeConverter;
     }
@@ -56,38 +60,7 @@ public abstract class AbstractDefaultDatabaseExecutor implements DatabaseExecuto
      */
     private static final String IN_PLACEHOLDER = "%in";
 
-    /**
-     * 获取数据库连接
-     * @param databaseConnection 数据库连接信息
-     * @return 数据库连接
-     */
-    @Override
-    public @NonNull
-    Connection getConnection(@NonNull DatabaseConnectionBO databaseConnection) throws SQLException {
-        final String key = databaseConnection.createConnectionKey();
-        Connection connection = CacheUtils.getConnection(key);
-        if (connection == null || connection.isClosed()) {
-            connection = this.createConnection(databaseConnection);
-            CacheUtils.setConnectionCache(key, connection);
-        }
-        return connection;
-    }
 
-    /**
-     * 创建数据库连接
-     * @param databaseConnection 数据库连接信息
-     * @return 数据库连接
-     */
-    @Override
-    public Connection createConnection(@NonNull DatabaseConnectionBO databaseConnection) throws SQLException {
-        final Driver driver = databaseConnection.doGetDriver();
-        final Properties properties = new Properties();
-        properties.setProperty("user", databaseConnection.getUsername());
-        properties.setProperty("remarks", Boolean.TRUE.toString());
-        properties.setProperty("useInformationSchema", Boolean.TRUE.toString());
-        properties.setProperty("password", databaseConnection.getPassword());
-        return driver.connect(this.getUrl(databaseConnection), properties);
-    }
 
     /**
      * 测试数据库连接
@@ -101,34 +74,14 @@ public abstract class AbstractDefaultDatabaseExecutor implements DatabaseExecuto
     }
 
     /**
-     * 测试数据库连接
-     * @param databaseConnection 数据库连接信息
-     * @return
-     * @throws SQLException
-     */
-    @Override
-    public @NonNull Boolean checkConnection(@NonNull DatabaseConnectionBO databaseConnection) throws SQLException {
-        final String key = databaseConnection.createConnectionKey();
-        if (StringUtils.isEmpty(key)) {
-            return Boolean.FALSE;
-        }
-        final Connection connection = this.getConnection(databaseConnection);
-        boolean result = this.checkConnection(connection);
-        if (!result) {
-            CacheUtils.removeConnection(key);
-        }
-        return result;
-    }
-
-    /**
      * 获取表格信息
      * @param types 类型
      */
     @Override
-    public @NonNull List<TableViewDO> listBaseTable(@NonNull DatabaseConnectionBO databaseConnection, @Nullable String tableNamePattern, TableTypeConstants... types) {
+    public @NonNull List<TableViewDO> listBaseTable(@NonNull DbConnectionConfig connectionConfig, @Nullable String tableNamePattern, TableTypeConstants... types) {
         ResultSet resultSet = null;
+        Connection connection = this.dbConnectionProvider.getConnection(connectionConfig);;
         try {
-            final Connection connection = this.getConnection(databaseConnection);
             if (!this.checkConnection(connection)|| ArrayUtils.isEmpty(types)) {
                 return Lists.newArrayList();
             }
@@ -144,20 +97,21 @@ public abstract class AbstractDefaultDatabaseExecutor implements DatabaseExecuto
             throw new SqlRuntimeException(e);
         } finally {
             close(resultSet);
+            this.dbConnectionProvider.returnConnection(connectionConfig, connection);
         }
     }
 
     /**
      * 查询主键信息
-     * @param databaseConnection 数据库连接信息
+     * @param connectionConfig 数据库连接信息
      * @param tableName 标明
      * @return 主键列表
      */
     @Override
-    public List<PrimaryKeyDO> listPrimaryKey(@NonNull DatabaseConnectionBO databaseConnection, String tableName)  {
+    public List<PrimaryKeyDO> listPrimaryKey(@NonNull DbConnectionConfig connectionConfig, String tableName)  {
         ResultSet resultSet = null;
+        Connection connection = this.dbConnectionProvider.getConnection(connectionConfig);;
         try {
-            Connection connection = this.getConnection(databaseConnection);
             if (!this.checkConnection(connection)) {
                 return Lists.newArrayList();
             }
@@ -171,20 +125,21 @@ public abstract class AbstractDefaultDatabaseExecutor implements DatabaseExecuto
             throw new SqlRuntimeException(e);
         } finally {
             close(resultSet);
+            this.dbConnectionProvider.returnConnection(connectionConfig, connection);
         }
     }
 
     /**
      * 查询外键信息
-     * @param databaseConnection 数据库连接信息
+     * @param connectionConfig 数据库连接信息
      * @param tableName 表名
      * @return 外键列表
      */
     @Override
-    public List<ImportKeyDO> listImportedKeys(@NonNull DatabaseConnectionBO databaseConnection, String tableName){
+    public List<ImportKeyDO> listImportedKeys(@NonNull DbConnectionConfig connectionConfig, String tableName){
         ResultSet resultSet = null;
+        Connection connection = this.dbConnectionProvider.getConnection(connectionConfig);
         try {
-            Connection connection = this.getConnection(databaseConnection);
             if (!this.checkConnection(connection)) {
                 return Lists.newArrayList();
             }
@@ -198,22 +153,23 @@ public abstract class AbstractDefaultDatabaseExecutor implements DatabaseExecuto
             throw new SqlRuntimeException(e);
         } finally {
             close(resultSet);
+            this.dbConnectionProvider.returnConnection(connectionConfig, connection);
         }
     }
 
     /**
      * 查询主键信息
-     * @param databaseConnection 数据库连接信息
+     * @param connectionConfig 数据库连接信息
      * @param tableName 表名
      * @param unique 是否查询唯一索引
      * @param approximate
      * @return
      */
     @Override
-    public List<IndexDO> listIndex(@NonNull DatabaseConnectionBO databaseConnection, String tableName, Boolean unique, Boolean approximate) {
+    public List<IndexDO> listIndex(@NonNull DbConnectionConfig connectionConfig, String tableName, Boolean unique, Boolean approximate) {
         ResultSet resultSet = null;
+        final Connection connection = this.dbConnectionProvider.getConnection(connectionConfig);
         try {
-            Connection connection = this.getConnection(databaseConnection);
             if (!this.checkConnection(connection)) {
                 return Lists.newArrayList();
             }
@@ -233,28 +189,29 @@ public abstract class AbstractDefaultDatabaseExecutor implements DatabaseExecuto
             throw new SqlRuntimeException(e);
         } finally {
             close(resultSet);
+            this.dbConnectionProvider.returnConnection(connectionConfig, connection);
         }
     }
 
     /**
      * 查询列信息
-     * @param databaseConnection 数据库连接信息
+     * @param connectionConfig 数据库连接信息
      * @param tableName 表名
      * @return 列信息
      */
     @Override
     @NonNull
-    public List<ColumnBO> listColumn(@NonNull DatabaseConnectionBO databaseConnection, @NonNull String tableName) {
+    public List<ColumnBO> listColumn(@NonNull DbConnectionConfig connectionConfig, @NonNull String tableName) {
 
         log.debug("读取表【{}】列信息", tableName);
 
         final String join = "#";
-        final List<ColumnDO> baseColumnList = this.listBaseColumn(databaseConnection, tableName);
+        final List<ColumnDO> baseColumnList = this.listBaseColumn(connectionConfig, tableName);
         final List<ColumnBO> columnList = ColumnBO.batchCreateFromDo(baseColumnList);
         if (!columnList.isEmpty()) {
             Map<String, ColumnBO> columnMap = columnList.stream().collect(Collectors.toMap(column -> String.join(join, column.getTableName(), column.getColumnName()), item -> item));
             // 查询主键信息并设置
-            List<PrimaryKeyDO> primaryKeyList = this.listPrimaryKey(databaseConnection, tableName);
+            List<PrimaryKeyDO> primaryKeyList = this.listPrimaryKey(connectionConfig, tableName);
             primaryKeyList.forEach(item -> {
                 String key = String.join(join, item.getTableName(), item.getColumnName());
                 ColumnBO column = columnMap.get(key);
@@ -265,7 +222,7 @@ public abstract class AbstractDefaultDatabaseExecutor implements DatabaseExecuto
                 }
             });
             // 查询外键信息并设置
-            List<ImportKeyDO> importKeyList = this.listImportedKeys(databaseConnection, tableName);
+            List<ImportKeyDO> importKeyList = this.listImportedKeys(connectionConfig, tableName);
             importKeyList.forEach(item -> {
                 ColumnBO column = columnMap.get(String.join(join, item.getFktableName(), item.getPkcolumnName()));
                 if (column != null) {
@@ -274,7 +231,7 @@ public abstract class AbstractDefaultDatabaseExecutor implements DatabaseExecuto
                 }
             });
             // 查询索引信息并设置
-            List<IndexDO> indexList = this.listUniqueIndex(databaseConnection, tableName);
+            List<IndexDO> indexList = this.listUniqueIndex(connectionConfig, tableName);
             indexList.forEach(item -> {
                 ColumnBO column = columnMap.get(String.join(join, item.getTableName(), item.getColumnName()));
                 if (column != null) {
@@ -303,15 +260,15 @@ public abstract class AbstractDefaultDatabaseExecutor implements DatabaseExecuto
 
     /**
      * 查询列基本信息
-     * @param databaseConnection 数据库连接
+     * @param connectionConfig 数据库连接
      * @param tableName 表名
      * @return 列基本信息
      */
     @Override
-    public List<ColumnDO> listBaseColumn(@NonNull DatabaseConnectionBO databaseConnection, @NonNull String tableName) {
+    public List<ColumnDO> listBaseColumn(@NonNull DbConnectionConfig connectionConfig, @NonNull String tableName) {
         ResultSet resultSet = null;
+        final Connection connection = this.dbConnectionProvider.getConnection(connectionConfig);
         try {
-            Connection connection = this.getConnection(databaseConnection);
             if (!this.checkConnection(connection)) {
                 return Lists.newArrayList();
             }
@@ -325,18 +282,19 @@ public abstract class AbstractDefaultDatabaseExecutor implements DatabaseExecuto
             throw new SqlRuntimeException(sqlException);
         } finally {
             close(resultSet);
+            this.dbConnectionProvider.returnConnection(connectionConfig, connection);
         }
     }
 
     /**
      * 查询唯一索引
-     * @param databaseConnection 数据库连接信息
+     * @param connectionConfig 数据库连接信息
      * @param tableName 表名
      * @return 唯一索引列表
      */
     @Override
-    public List<IndexDO> listUniqueIndex(@NonNull DatabaseConnectionBO databaseConnection, String tableName) {
-        return this.listIndex(databaseConnection, tableName, true, true);
+    public List<IndexDO> listUniqueIndex(@NonNull DbConnectionConfig connectionConfig, String tableName) {
+        return this.listIndex(connectionConfig, tableName, true, true);
     }
 
     /**
@@ -370,8 +328,8 @@ public abstract class AbstractDefaultDatabaseExecutor implements DatabaseExecuto
 
     /**
      * 映射实体类属性
-     * @param clazz
-     * @return
+     * @param clazz Class
+     * @return 实体类属性映射
      */
     private static Map<String, Field> mappingDatabaseField(Class<? extends AbstractDatabaseBaseDO> clazz) {
         final Map<String, Field> mapping = Maps.newHashMap();
@@ -397,20 +355,19 @@ public abstract class AbstractDefaultDatabaseExecutor implements DatabaseExecuto
      * @param commentSql 查询sql
      */
     @SneakyThrows
-    protected void queryTableRemark(@NonNull DatabaseConnectionBO databaseConnection, @NonNull List<TableViewDO> tableList, @NonNull String commentSql) {
+    protected void queryTableRemark(@NonNull DbConnectionConfig connectionConfig, @NonNull List<TableViewDO> tableList, @NonNull String commentSql) {
         if (tableList.isEmpty()) {
             return;
         }
         // 获取数据库连接
-        final Connection connection = this.getConnection(databaseConnection);
+        final Connection connection = this.dbConnectionProvider.getConnection(connectionConfig);
         // 获取表名
         List<String> tableNameList = tableList.stream()
                 .map(TableViewDO::getTableName).collect(Collectors.toList());
-        PreparedStatement psmt = null;
-        ResultSet rs = null;
-        try {
-            psmt = this.setInParameter(connection, commentSql, tableNameList);
-            rs = psmt.executeQuery();
+        try (
+                PreparedStatement psmt = this.setInParameter(connection, commentSql, tableNameList);
+                ResultSet rs = psmt.executeQuery();
+        ) {
             final List<TableRemarkDO> tableRemarkList = DatabaseUtils.resultSetToModel(rs, TableRemarkDO.class, this.getDatabaseMapping(TableRemarkDO.class));
             // 转为map
             if (CollectionUtils.isNotEmpty(tableRemarkList)) {
@@ -420,32 +377,30 @@ public abstract class AbstractDefaultDatabaseExecutor implements DatabaseExecuto
                 tableList.forEach(table -> table.setRemarks(tableRemarkMap.get(table.getTableName())));
             }
         } finally {
-            close(rs);
-            close(psmt);
+            this.dbConnectionProvider.returnConnection(connectionConfig, connection);
         }
     }
 
     /**
      * 查询列备注
-     * @param databaseConnection 数据库连接
+     * @param connectionConfig 数据库连接
      * @param columnList 表格列表
      * @param commentSql 查询sql
      */
     @SneakyThrows
-    protected void queryColumnRemark(@NonNull DatabaseConnectionBO databaseConnection, @NonNull List<ColumnDO> columnList, @NonNull String commentSql) {
+    protected void queryColumnRemark(@NonNull DbConnectionConfig connectionConfig, @NonNull List<ColumnDO> columnList, @NonNull String commentSql) {
         if (columnList.isEmpty()) {
             return;
         }
         // 获取数据库连接
-        final Connection connection = this.getConnection(databaseConnection);
+        final Connection connection = this.dbConnectionProvider.getConnection(connectionConfig);
         // 获取表名
         Set<String> tableNames = columnList.stream()
                 .map(ColumnDO::getTableName).collect(Collectors.toSet());
-        PreparedStatement psmt = null;
-        ResultSet rs = null;
-        try {
-            psmt = this.setInParameter(connection, commentSql, tableNames);
-            rs = psmt.executeQuery();
+        try (
+                PreparedStatement psmt = this.setInParameter(connection, commentSql, tableNames);
+                ResultSet rs = psmt.executeQuery();
+                ) {
             final List<ColumnRemarkDO> columnRemarkList = DatabaseUtils.resultSetToModel(rs, ColumnRemarkDO.class, this.getDatabaseMapping(ColumnRemarkDO.class));
             if (CollectionUtils.isNotEmpty(columnRemarkList)) {
                 Map<String, String> columnRemarkMap = columnRemarkList.stream()
@@ -453,8 +408,7 @@ public abstract class AbstractDefaultDatabaseExecutor implements DatabaseExecuto
                 columnList.forEach(column -> column.setRemarks(columnRemarkMap.get(column.getTableName() + column.getColumnName())));
             }
         } finally {
-            close(rs);
-            close(psmt);
+            this.dbConnectionProvider.returnConnection(connectionConfig, connection);
         }
     }
 
@@ -519,5 +473,10 @@ public abstract class AbstractDefaultDatabaseExecutor implements DatabaseExecuto
         } catch (SQLException e) {
             log.info(e.getMessage(), e);
         }
+    }
+
+    @Autowired
+    public void setDbConnectionProvider(DbConnectionProvider dbConnectionProvider) {
+        this.dbConnectionProvider = dbConnectionProvider;
     }
 }

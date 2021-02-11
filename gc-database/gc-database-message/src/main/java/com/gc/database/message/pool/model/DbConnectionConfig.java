@@ -3,9 +3,7 @@ package com.gc.database.message.pool.model;
 import com.gc.database.message.constants.DatabaseTypeConstant;
 import com.gc.database.message.constants.ExceptionConstant;
 import com.gc.database.message.exception.SmartDatabaseException;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
@@ -20,6 +18,8 @@ import java.sql.Driver;
 @Getter
 @Setter
 @EqualsAndHashCode
+@AllArgsConstructor
+@NoArgsConstructor
 public class DbConnectionConfig implements Serializable {
     private static final long serialVersionUID = -4218462921900208047L;
 
@@ -50,4 +50,5 @@ public class DbConnectionConfig implements Serializable {
     public String doGetDriverClass() {
         return this.getType().getDriverClass();
     }
+
 }

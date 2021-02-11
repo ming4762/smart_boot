@@ -5,8 +5,9 @@ import com.gc.database.generator.model.TemplateElement;
 import com.gc.database.generator.pojo.bo.DatabaseTemplateModel;
 import com.gc.database.generator.service.DatabaseGeneratorService;
 import com.gc.database.message.executor.DatabaseExecutor;
-import com.gc.database.message.pojo.bo.DatabaseConnectionBO;
+import com.gc.database.message.executor.DbExecutorProvider;
 import com.gc.database.message.pojo.bo.TableViewBO;
+import com.gc.database.message.pool.model.DbConnectionConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
@@ -28,8 +29,11 @@ public class DatabaseGeneratorServiceImpl implements DatabaseGeneratorService {
 
     private final TemplateEngine templateEngine;
 
-    public DatabaseGeneratorServiceImpl(TemplateEngine templateEngine) {
+    private final DbExecutorProvider dbExecutorProvider;
+
+    public DatabaseGeneratorServiceImpl(TemplateEngine templateEngine, DbExecutorProvider dbExecutorProvider) {
         this.templateEngine = templateEngine;
+        this.dbExecutorProvider = dbExecutorProvider;
     }
 
     /**
@@ -38,7 +42,7 @@ public class DatabaseGeneratorServiceImpl implements DatabaseGeneratorService {
      * @param outputStream 输出流
      */
     @Override
-    public void createDatabaseDic(@NonNull DatabaseConnectionBO databaseConnection, @NonNull OutputStream outputStream) {
+    public void createDatabaseDic(@NonNull DbConnectionConfig databaseConnection, @NonNull OutputStream outputStream) {
         // 获取默认的模板信息
         final TemplateElement defaultTemplateElement = new TemplateElement(DEFAULT_DIC_TEMPLATE, null);
         this.createDatabaseDic(databaseConnection, outputStream, defaultTemplateElement);
@@ -51,12 +55,11 @@ public class DatabaseGeneratorServiceImpl implements DatabaseGeneratorService {
      * @param templateElement 模板信息
      */
     @Override
-    public void createDatabaseDic(@NonNull DatabaseConnectionBO databaseConnection, @NonNull OutputStream outputStream, @NonNull TemplateElement templateElement) {
+    public void createDatabaseDic(@NonNull DbConnectionConfig databaseConnection, @NonNull OutputStream outputStream, @NonNull TemplateElement templateElement) {
         // 获取数据库执行器
-        final DatabaseExecutor databaseExecutor = databaseConnection.getDatabaseExecutor();
+        final DatabaseExecutor databaseExecutor = this.dbExecutorProvider.getDatabaseExecutor(databaseConnection);
         // 获取所有数据
-        final List<TableViewBO> tableList = databaseExecutor.listTable(databaseConnection, "TB_PLAN");
-
+        final List<TableViewBO> tableList = databaseExecutor.listTable(databaseConnection, null);
         final DatabaseTemplateModel model = DatabaseTemplateModel.builder()
                 .tableList(tableList)
                 .currentDate(LocalDate.now().format(DateTimeFormatter.ISO_DATE))

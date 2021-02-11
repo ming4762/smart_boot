@@ -3,6 +3,7 @@ package com.gc.database.message.exception;
 import com.gc.database.message.constants.ExceptionConstant;
 
 /**
+ * TODO：支持I18N
  * @author shizhongming
  * 2020/1/19 8:21 下午
  */
