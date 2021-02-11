@@ -5,8 +5,6 @@ import com.gc.database.message.pojo.bo.ColumnBO;
 import com.gc.database.message.pojo.bo.DatabaseConnectionBO;
 import com.gc.database.message.pojo.bo.TableViewBO;
 import com.gc.database.message.pojo.dbo.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 
@@ -35,7 +33,7 @@ public interface DatabaseExecutor {
      * @throws SQLException 连接失败错误
      * @return 是否连接成功
      */
-    boolean testConnection(Connection connection) throws SQLException;
+    boolean checkConnection(Connection connection) throws SQLException;
 
     /**
      * 测试数据库连接
@@ -44,7 +42,7 @@ public interface DatabaseExecutor {
      * @return 是否连接成功
      */
     @NonNull
-    Boolean testConnection(@NonNull DatabaseConnectionBO databaseConnection) throws SQLException;
+    Boolean checkConnection(@NonNull DatabaseConnectionBO databaseConnection) throws SQLException;
 
     /**
      * 获取数据库表格

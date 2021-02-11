@@ -2,16 +2,12 @@ package com.gc.database.message.pojo.bo;
 
 import com.gc.common.base.spring.ApplicationContextRegister;
 import com.gc.database.message.constants.DatabaseTypeConstant;
-import com.gc.database.message.constants.ExceptionConstant;
-import com.gc.database.message.exception.SmartDatabaseException;
 import com.gc.database.message.executor.DatabaseExecutor;
 import lombok.SneakyThrows;
 import lombok.ToString;
 import org.springframework.lang.NonNull;
 import org.springframework.util.Assert;
 
-import java.lang.reflect.InvocationTargetException;
-import java.sql.Driver;
 import java.text.MessageFormat;
 
 /**
@@ -39,22 +35,6 @@ public class DatabaseConnectionBO extends AbstractDatabaseConnectionBaseBO {
         Assert.notNull(this.getUsername(), "数据库用户名不能为null");
         Assert.notNull(this.getPassword(), "数据库密码不能为null");
         return MessageFormat.format("{0}_{1}_{2}_{3}", this.getDatabaseName(), this.getUrl(), this.getUsername(), this.getPassword());
-    }
-
-    public Driver doGetDriver() {
-        final String driverClass = this.doGetDriverClass();
-        try {
-            final Class clazz = Class.forName(driverClass);
-            return (Driver) clazz.getDeclaredConstructor().newInstance();
-        } catch (ClassNotFoundException e) {
-            throw new SmartDatabaseException(ExceptionConstant.DIRVER_CLASS_NOT_FOUND, driverClass);
-        } catch (IllegalAccessException | InstantiationException | NoSuchMethodException | InvocationTargetException e) {
-            throw new SmartDatabaseException(ExceptionConstant.DIRVER_CLASS_INSTANCE, driverClass);
-        }
-    }
-
-    public String doGetDriverClass() {
-        return this.getType().getDriverClass();
     }
 
     /**

@@ -96,7 +96,7 @@ public abstract class AbstractDefaultDatabaseExecutor implements DatabaseExecuto
      * @throws SQLException SQLException
      */
     @Override
-    public boolean testConnection(Connection connection) throws SQLException {
+    public boolean checkConnection(Connection connection) throws SQLException {
         return connection != null && !connection.isClosed();
     }
 
@@ -107,13 +107,13 @@ public abstract class AbstractDefaultDatabaseExecutor implements DatabaseExecuto
      * @throws SQLException
      */
     @Override
-    public @NonNull Boolean testConnection(@NonNull DatabaseConnectionBO databaseConnection) throws SQLException {
+    public @NonNull Boolean checkConnection(@NonNull DatabaseConnectionBO databaseConnection) throws SQLException {
         final String key = databaseConnection.createConnectionKey();
         if (StringUtils.isEmpty(key)) {
             return Boolean.FALSE;
         }
         final Connection connection = this.getConnection(databaseConnection);
-        boolean result = this.testConnection(connection);
+        boolean result = this.checkConnection(connection);
         if (!result) {
             CacheUtils.removeConnection(key);
         }
@@ -129,7 +129,7 @@ public abstract class AbstractDefaultDatabaseExecutor implements DatabaseExecuto
         ResultSet resultSet = null;
         try {
             final Connection connection = this.getConnection(databaseConnection);
-            if (!this.testConnection(connection)|| ArrayUtils.isEmpty(types)) {
+            if (!this.checkConnection(connection)|| ArrayUtils.isEmpty(types)) {
                 return Lists.newArrayList();
             }
             // 转换类型
@@ -158,7 +158,7 @@ public abstract class AbstractDefaultDatabaseExecutor implements DatabaseExecuto
         ResultSet resultSet = null;
         try {
             Connection connection = this.getConnection(databaseConnection);
-            if (!this.testConnection(connection)) {
+            if (!this.checkConnection(connection)) {
                 return Lists.newArrayList();
             }
             resultSet = connection.getMetaData().getPrimaryKeys(connection.getCatalog(), null, tableName);
@@ -185,7 +185,7 @@ public abstract class AbstractDefaultDatabaseExecutor implements DatabaseExecuto
         ResultSet resultSet = null;
         try {
             Connection connection = this.getConnection(databaseConnection);
-            if (!this.testConnection(connection)) {
+            if (!this.checkConnection(connection)) {
                 return Lists.newArrayList();
             }
             resultSet  = connection.getMetaData().getImportedKeys(connection.getCatalog(), connection.getSchema(), tableName);
@@ -214,7 +214,7 @@ public abstract class AbstractDefaultDatabaseExecutor implements DatabaseExecuto
         ResultSet resultSet = null;
         try {
             Connection connection = this.getConnection(databaseConnection);
-            if (!this.testConnection(connection)) {
+            if (!this.checkConnection(connection)) {
                 return Lists.newArrayList();
             }
             if (approximate == null) {
@@ -312,7 +312,7 @@ public abstract class AbstractDefaultDatabaseExecutor implements DatabaseExecuto
         ResultSet resultSet = null;
         try {
             Connection connection = this.getConnection(databaseConnection);
-            if (!this.testConnection(connection)) {
+            if (!this.checkConnection(connection)) {
                 return Lists.newArrayList();
             }
             resultSet  = connection.getMetaData().getColumns(connection.getCatalog(), connection.getSchema(), tableName, null);

@@ -18,5 +18,5 @@ public @interface DatabaseField {
 
     String value();
 
-    Class<? extends Converter> converter() default AutoConverter.class;
+    Class<? extends Converter<?, ?>> converter() default AutoConverter.class;
 }
