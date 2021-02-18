@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<artifactId>gc-database</artifactId>
+		<groupId>com.gc</groupId>
+		<version>1.0.4-SNAPSHOT</version>
+	</parent>
+	<artifactId>gc-database-integrate</artifactId>
+	<version>1.0.4-SNAPSHOT</version>
+	<name>gc-database-integrate</name>
+	<description>数据库集成模块</description>
+
+	<properties>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>com.gc</groupId>
+			<artifactId>crud-spring-boot-starter</artifactId>
+			<version>${gc-boot.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.gc</groupId>
+			<artifactId>gc-database-generator</artifactId>
+			<version>${gc-boot.version}</version>
+		</dependency>
+		<!--	数据库驱动	-->
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.oracle.ojdbc</groupId>
+			<artifactId>ojdbc8</artifactId>
+			<version>19.3.0.0</version>
+		</dependency>
+		<dependency>
+			<groupId>com.microsoft.sqlserver</groupId>
+			<artifactId>mssql-jdbc</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+	</dependencies>
+
+</project>

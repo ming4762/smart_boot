@@ -75,6 +75,6 @@ public class DbConnectionProvider implements InitializingBean, DisposableBean {
 
     @Override
     public void afterPropertiesSet() {
-        log.info("============= 数据库连接池创建完毕 ==============");
+        log.info("============= 数据库连接池提供器创建完毕 ==============");
     }
 }
