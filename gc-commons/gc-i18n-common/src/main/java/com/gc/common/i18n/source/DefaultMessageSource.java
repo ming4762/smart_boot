@@ -91,14 +91,15 @@ public class DefaultMessageSource implements MapArgsMessageSource, ReloadableMes
      * @throws IOException IOException
      */
     protected String doGetMessage(String code, Locale locale, String defaultMessage) throws IOException {
-        // 从缓存获取
-        if (this.cacheValid(locale)) {
-            return this.resourceCache.get(locale, code);
-        }
+
+        boolean hasCache = this.cacheValid(locale);
+
         // 缓存没有读到 从资源库读
-        final Map<String, String> messages = this.readMessage(locale);
-        // 设置缓存
-        this.resourceCache.putAll(locale, messages);
+        final Map<String, String> messages = hasCache ? this.resourceCache.get(locale) : this.readMessage(locale);
+
+        if (!hasCache) {
+            this.resourceCache.putAll(locale, messages);
+        }
 
         String message = messages.get(code);
         if (StringUtils.isNotBlank(message)) {

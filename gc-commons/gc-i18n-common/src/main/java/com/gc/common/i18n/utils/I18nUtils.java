@@ -33,6 +33,10 @@ public class I18nUtils {
                 .map(item -> item.getMessage(key, null, LocaleContextHolder.getLocale()))
                 .orElse(defaultMessage);
     }
+    public static String get(String key, Locale locale, Object ...args) {
+        validate();
+        return messageSource.getMessage(key, args, locale);
+    }
 
     /**
      * 通过Key获取I18N信息
@@ -41,7 +45,7 @@ public class I18nUtils {
      */
     public static String get(String key) {
         validate();
-        return messageSource.getMessage(key, null, LocaleContextHolder.getLocale());
+        return get(key, LocaleContextHolder.getLocale());
     }
 
     /**
