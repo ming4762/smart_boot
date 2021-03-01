@@ -5,6 +5,8 @@ import com.gc.auth.core.authentication.MethodPermissionEvaluatorImpl;
 import com.gc.auth.core.authentication.UrlAuthenticationProvider;
 import com.gc.auth.core.handler.AuthLoginFailureHandler;
 import com.gc.auth.core.handler.AuthLoginSuccessHandler;
+import com.gc.auth.core.handler.AuthSuccessDataHandler;
+import com.gc.auth.core.handler.DefaultAuthSuccessDataHandler;
 import com.gc.auth.core.properties.AuthProperties;
 import com.gc.auth.core.service.AuthUserService;
 import com.gc.auth.security2.config.AuthMethodSecurityConfig;
@@ -73,6 +75,12 @@ public class AuthSecurity2AutoConfiguration {
     @ConditionalOnMissingBean(UrlAuthenticationProvider.class)
     public UrlAuthenticationProvider urlAuthenticationProvider(RequestMappingHandlerMapping mapping) {
         return new DefaultUrlAuthenticationProviderImpl(mapping);
+    }
+
+    @Bean
+    @ConditionalOnMissingBean(AuthSuccessDataHandler.class)
+    public AuthSuccessDataHandler defaultAuthSuccessDataHandler() {
+        return new DefaultAuthSuccessDataHandler();
     }
 
     /**

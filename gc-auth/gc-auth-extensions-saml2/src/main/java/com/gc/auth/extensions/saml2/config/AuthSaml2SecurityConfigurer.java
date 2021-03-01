@@ -1,5 +1,6 @@
 package com.gc.auth.extensions.saml2.config;
 
+import com.gc.auth.extensions.saml2.constants.SamlUrlConstants;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
@@ -38,6 +39,8 @@ import java.util.List;
 @Slf4j
 public class AuthSaml2SecurityConfigurer extends SecurityConfigurerAdapter<DefaultSecurityFilterChain, HttpSecurity> {
 
+    private static final String URL_SUFFIX = "/**";
+
     private final ServiceProvider serviceProvider = new ServiceProvider();
 
     private static final AuthSaml2SecurityConfigurer AUTH_SAML_2_SECURITY_CONFIGURER = new AuthSaml2SecurityConfigurer();
@@ -50,7 +53,7 @@ public class AuthSaml2SecurityConfigurer extends SecurityConfigurerAdapter<Defau
                 .formLogin().disable()
                 .httpBasic().disable()
                 .authorizeRequests()
-                .antMatchers("/saml/**").permitAll()
+                .antMatchers(this.getUrl(SamlUrlConstants.COMMON)).permitAll()
                 .and()
                 .authenticationProvider(this.getBean(SAMLAuthenticationProvider.class));
         // 添加Filter
@@ -60,12 +63,17 @@ public class AuthSaml2SecurityConfigurer extends SecurityConfigurerAdapter<Defau
         builder.logout().disable();
     }
 
+
     public static AuthSaml2SecurityConfigurer saml2() {
         return AUTH_SAML_2_SECURITY_CONFIGURER;
     }
 
     public ServiceProvider serviceProvider() {
         return this.serviceProvider;
+    }
+
+    private String getUrl(SamlUrlConstants samlUrlConstants) {
+        return samlUrlConstants.getUrl() + URL_SUFFIX;
     }
 
     /**
@@ -85,16 +93,16 @@ public class AuthSaml2SecurityConfigurer extends SecurityConfigurerAdapter<Defau
     private FilterChainProxy createSamlFilter() {
         List<SecurityFilterChain> chains = Lists.newArrayList();
         // 登录过滤器
-        chains.add(new DefaultSecurityFilterChain(new AntPathRequestMatcher("/saml/login/**"), this.getBean(SAMLEntryPoint.class)));
+        chains.add(new DefaultSecurityFilterChain(new AntPathRequestMatcher(this.getUrl(SamlUrlConstants.LOGIN)), this.getBean(SAMLEntryPoint.class)));
 
         // 登出过滤器
-        chains.add(new DefaultSecurityFilterChain(new AntPathRequestMatcher("/saml/logout/**"), this.samlLogoutFilter()));
+        chains.add(new DefaultSecurityFilterChain(new AntPathRequestMatcher(this.getUrl(SamlUrlConstants.LOGOUT)), this.samlLogoutFilter()));
 
         // 添加 SAMLDiscovery
-        chains.add(new DefaultSecurityFilterChain(new AntPathRequestMatcher("/saml/discovery/**"), this.createSamlDiscovery()));
+        chains.add(new DefaultSecurityFilterChain(new AntPathRequestMatcher(this.getUrl(SamlUrlConstants.DISCOVERY)), this.createSamlDiscovery()));
 
         // 添加登录拦截器
-        chains.add(new DefaultSecurityFilterChain(new AntPathRequestMatcher("/saml/SSO/**"), this.createSamlProcessingFilter()));
+        chains.add(new DefaultSecurityFilterChain(new AntPathRequestMatcher(this.getUrl(SamlUrlConstants.SSO)), this.createSamlProcessingFilter()));
         return new FilterChainProxy(chains);
     }
 
