@@ -5,10 +5,10 @@
     <parent>
         <groupId>com.gc</groupId>
         <artifactId>gc-starter</artifactId>
-        <version>1.0.4-SNAPSHOT</version>
+        <version>1.0.4-RELEASE</version>
     </parent>
     <artifactId>async-spring-boot-starter</artifactId>
-    <version>1.0.4-SNAPSHOT</version>
+    <version>1.0.4-RELEASE</version>
     <name>async-spring-boot-starter</name>
     <description>异步启动器</description>
 

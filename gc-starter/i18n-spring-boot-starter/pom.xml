@@ -5,10 +5,10 @@
     <parent>
         <groupId>com.gc</groupId>
         <artifactId>gc-starter</artifactId>
-        <version>1.0.4-SNAPSHOT</version>
+        <version>1.0.4-RELEASE</version>
     </parent>
     <artifactId>i18n-spring-boot-starter</artifactId>
-    <version>1.0.4-SNAPSHOT</version>
+    <version>1.0.4-RELEASE</version>
     <name>i18n-spring-boot-starter</name>
     <description>i18n支持</description>
 

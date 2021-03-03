@@ -5,10 +5,10 @@
 	<parent>
 		<groupId>com.gc</groupId>
 		<artifactId>gc-starter</artifactId>
-		<version>1.0.4-SNAPSHOT</version>
+		<version>1.0.4-RELEASE</version>
 	</parent>
 	<artifactId>crud-spring-boot-starter</artifactId>
-	<version>1.0.4-SNAPSHOT</version>
+	<version>1.0.4-RELEASE</version>
 	<name>crud-spring-boot-starter</name>
 	<description>crud启动器</description>
 

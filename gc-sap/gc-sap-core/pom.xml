@@ -5,10 +5,10 @@
 	<parent>
 		<groupId>com.gc</groupId>
 		<artifactId>gc-sap</artifactId>
-		<version>1.0.4-SNAPSHOT</version>
+		<version>1.0.4-RELEASE</version>
 	</parent>
 	<artifactId>gc-sap-core</artifactId>
-	<version>1.0.4-SNAPSHOT</version>
+	<version>1.0.4-RELEASE</version>
 	<name>gc-sap-core</name>
 	<description>sap-core</description>
 

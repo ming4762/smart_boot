@@ -5,11 +5,11 @@
 	<parent>
 		<artifactId>gc-boot</artifactId>
 		<groupId>com.gc</groupId>
-		<version>1.0.4-SNAPSHOT</version>
+		<version>1.0.4-RELEASE</version>
 	</parent>
 	<packaging>pom</packaging>
 	<artifactId>gc-file</artifactId>
-	<version>1.0.4-SNAPSHOT</version>
+	<version>1.0.4-RELEASE</version>
 	<name>gc-file</name>
 	<description>文件管理模块</description>
 

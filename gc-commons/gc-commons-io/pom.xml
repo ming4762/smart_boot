@@ -5,10 +5,10 @@
 	<parent>
 		<groupId>com.gc</groupId>
 		<artifactId>gc-commons</artifactId>
-		<version>1.0.4-SNAPSHOT</version>
+		<version>1.0.4-RELEASE</version>
 	</parent>
 	<artifactId>gc-commons-io</artifactId>
-	<version>1.0.4-SNAPSHOT</version>
+	<version>1.0.4-RELEASE</version>
 	<name>gc-commons-io</name>
 	<description>IO扩展模块</description>
 	<properties>

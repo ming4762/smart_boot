@@ -5,10 +5,10 @@
 	<parent>
 		<groupId>com.gc</groupId>
 		<artifactId>gc-boot</artifactId>
-		<version>1.0.4-SNAPSHOT</version>
+		<version>1.0.4-RELEASE</version>
 	</parent>
 	<artifactId>gc-sap</artifactId>
-	<version>1.0.4-SNAPSHOT</version>
+	<version>1.0.4-RELEASE</version>
 	<name>gc-sap</name>
 	<description>SAP模块</description>
 	<packaging>pom</packaging>

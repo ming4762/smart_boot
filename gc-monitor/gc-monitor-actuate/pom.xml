@@ -5,10 +5,10 @@
     <parent>
         <groupId>com.gc</groupId>
         <artifactId>gc-monitor</artifactId>
-        <version>1.0.4-SNAPSHOT</version>
+        <version>1.0.4-RELEASE</version>
     </parent>
     <artifactId>gc-monitor-actuate</artifactId>
-    <version>1.0.4-SNAPSHOT</version>
+    <version>1.0.4-RELEASE</version>
     <name>gc-monitor-actuate</name>
     <description>监控端点</description>
 

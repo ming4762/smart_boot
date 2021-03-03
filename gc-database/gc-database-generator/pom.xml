@@ -5,10 +5,10 @@
     <parent>
         <groupId>com.gc</groupId>
         <artifactId>gc-database</artifactId>
-        <version>1.0.4-SNAPSHOT</version>
+        <version>1.0.4-RELEASE</version>
     </parent>
     <artifactId>gc-database-generator</artifactId>
-    <version>1.0.4-SNAPSHOT</version>
+    <version>1.0.4-RELEASE</version>
     <name>gc-database-generator</name>
     <description>数据库生成器</description>
 

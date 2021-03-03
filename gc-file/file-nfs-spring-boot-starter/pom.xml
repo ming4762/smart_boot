@@ -4,11 +4,11 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>com.gc</groupId>
-		<version>1.0.4-SNAPSHOT</version>
+		<version>1.0.4-RELEASE</version>
 		<artifactId>gc-file</artifactId>
 	</parent>
 	<artifactId>file-nfs-spring-boot-starter</artifactId>
-	<version>1.0.4-SNAPSHOT</version>
+	<version>1.0.4-RELEASE</version>
 	<name>file-nfs-spring-boot-starter</name>
 	<description>NFS文件系统</description>
 
