@@ -128,6 +128,11 @@ public class AuthProperties {
         private Identity identity = new Identity();
 
         /**
+         * 重试次数
+         */
+        private Integer retry = 5;
+
+        /**
          * key 配置
          */
         @Getter

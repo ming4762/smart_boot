@@ -1,6 +1,7 @@
 package com.gc.auth.extensions.saml2.handler;
 
 import com.gc.auth.core.handler.AuthLoginFailureHandler;
+import com.gc.auth.core.properties.AuthProperties;
 import com.gc.auth.extensions.saml2.constants.SamlUrlConstants;
 import com.gc.auth.extensions.saml2.utils.SamlRetryTimerHolder;
 import com.gc.common.base.utils.IpUtils;
@@ -21,13 +22,19 @@ import java.io.IOException;
 @Slf4j
 public class SamlRetryAuthLoginFailureHandler extends AuthLoginFailureHandler {
 
+    private final AuthProperties authProperties;
+
+    public SamlRetryAuthLoginFailureHandler(AuthProperties authProperties) {
+        this.authProperties = authProperties;
+    }
+
     @Override
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
         if (exception.getCause() instanceof SAMLException) {
             log.warn("SAML登录失败，进行重试", exception);
             final String key = IpUtils.getIpAddr(request);
             int timer = SamlRetryTimerHolder.get(key);
-            if (timer > 5) {
+            if (timer > this.authProperties.getSaml2().getRetry()) {
                 super.onAuthenticationFailure(request, response, exception);
             } else {
                 SamlRetryTimerHolder.add(key);
